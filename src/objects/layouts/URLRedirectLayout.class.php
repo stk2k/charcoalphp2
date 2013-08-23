@@ -1,0 +1,51 @@
+<?php
+/**
+* URLにリダイレクトするレイアウト
+*
+* PHP version 5
+*
+* @package    core
+* @author     CharcoalPHP Development Team
+* @copyright  2008 - 2013 CharcoalPHP Development Team
+*/
+
+class Charcoal_URLRedirectLayout extends Charcoal_Layout implements Charcoal_IRedirectLayout
+{
+	private $_url;
+
+	/*
+	 *	コンストラクタ
+	 */
+	public function __construct( Charcoal_String $url )
+	{
+		parent::__construct( p(array()) );
+
+		$this->_url = $url;
+	}
+
+	/**
+	 *	リダイレクト先URLを取得
+	 */
+	public function getURL()
+	{
+		return $this->_url;
+	}
+
+	/**
+	 *	リダイレクト時のURLを取得
+	 */
+	public function makeRedirectURL()
+	{
+		return $this->_url;
+	}
+
+	/*
+	 *	文字列化
+	 */
+	public function toString()
+	{
+		return "[RedirectWebPage:" . us($this->_obj_path->getPathString()) . "]";
+	}
+}
+
+return __FILE__;

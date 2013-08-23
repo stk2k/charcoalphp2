@@ -1,0 +1,42 @@
+<?php
+/**
+* システムイベント用マーカークラス
+*
+* PHP version 5
+*
+* @package    events
+* @author     CharcoalPHP Development Team
+* @copyright  2008 - 2013 CharcoalPHP Development Team
+*/
+
+abstract class Charcoal_SystemEvent extends Charcoal_Event implements Charcoal_IEvent
+{
+	/**
+	 *  ターゲットタスクの一覧を取得
+	 */
+	public function getTargetTaskList()
+	{
+		return new Vector();
+	}
+
+	/**
+	 * Initialize instance
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function configure( Charcoal_Config $config )
+	{
+		$config->set( s('priority'), Charcoal_EnumEventPriority::SYSTEM );
+
+		parent::configure( $config );
+	}
+
+	/**
+	 *  自動投入するか
+	 */
+	public function isAutoInjected()
+	{
+		return FALSE;
+	}
+}
+return __FILE__;
