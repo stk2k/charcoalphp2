@@ -75,4 +75,4 @@ class Charcoal_FunctionSpec extends Charcoal_Object
 		return $str;
 	}
 }
-return __FILE__;
+

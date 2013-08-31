@@ -103,4 +103,4 @@ class Charcoal_Date extends Charcoal_Primitive
 		return date( 'Y-m-d', $this->_timestamp );
 	}
 }
-return __FILE__;
+

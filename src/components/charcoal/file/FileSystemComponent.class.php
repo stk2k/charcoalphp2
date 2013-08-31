@@ -93,4 +93,4 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 		}
 	}
 }
-return __FILE__;
+

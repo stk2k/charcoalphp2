@@ -28,4 +28,3 @@ interface Charcoal_IProcedure extends Charcoal_ICharcoalObject
 	public function execute( Charcoal_IRequest $request, Charcoal_IResponse $response, Charcoal_Session $session );
 }
 
-return __FILE__;

@@ -10,8 +10,6 @@
 */
 class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_IModule
 {
-	private $_module_name;
-	private $_description;
 	private $_tasks;
 	private $_extends;
 	private $_required_modules;
@@ -31,27 +29,13 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	public function configure( Charcoal_Config $config )
 	{
-		$this->_module_name        = $config->getString( s('module_name'), s('') );
-		$this->_description        = $config->getString( s('description'), s('') );
 		$this->_tasks              = $config->getArray( s('tasks'), v(array()) );
 		$this->_events             = $config->getArray( s('events'), v(array()) );
-		$this->_extends            = $config->getArray( s('extends'), v(array()) );
 		$this->_required_modules   = $config->getArray( s('required_modules'), v(array()) );
 
-//		log_info( "system, debug", "module", "module_name:" . $this->_module_name );
-//		log_info( "system, debug", "module", "description:" . $this->_description );
 //		log_info( "system, debug", "module", "tasks:" . print_r($this->_tasks,true) );
 //		log_info( "system, debug", "module", "events:" . print_r($this->_events,true) );
-//		log_info( "system, debug", "module", "extends:" . print_r($this->_extends,true) );
 //		log_info( "system, debug", "module", "required_modules:" . print_r($this->_extends,true) );
-	}
-
-	/*
-	 * get module name
-	 */
-	public function getModuleName()
-	{
-		return $this->_module_name;
 	}
 
 	/*
@@ -155,7 +139,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// build object path for the event
 		$obj_name = $event->getObjectName();
-		$event_path = s($obj_name . '@' . $obj_path->getVirtualPath());
+		$event_path = $obj_name . '@' . $obj_path->getVirtualPath();
 		$event_path = new Charcoal_ObjectPath(s($event_path));
 //		log_info( "system,debug,event", "module", "event[$event] path: [$event_path]");
 
@@ -193,56 +177,52 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$real_path = $root_path->getRealPath();
 
-		$webapp_path = Charcoal_ResourceLocator::getApplicationPath( s('modules' . $real_path) );
-		$project_path = Charcoal_ResourceLocator::getProjectPath( s('modules' . $real_path) );
+		$webapp_path    = Charcoal_ResourceLocator::getApplicationPath( s('modules' . $real_path) );
+		$project_path   = Charcoal_ResourceLocator::getProjectPath( s('modules' . $real_path) );
 		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( s('modules' . $real_path) );
 
-		// include source files under 'web_app' directory
-		$webapp_path .= '/*Task' . CHARCOAL_CLASS_FILE_SUFFIX;
-//		log_info( "system,debug", "module", "finding module task like: [$webapp_path]");
+		$task_class_suffix = 'Task' . CHARCOAL_CLASS_FILE_SUFFIX;
 
-		$file_list = glob($webapp_path);
-//		log_info( "system,debug", "module", "files found: " . print_r($file_list,true) );
-
-		foreach( $file_list as $file )
+		if ( $dh = opendir($webapp_path) )
 		{
-//			log_info( "system,debug", "module", "loading task class file: $file" );
-			$task = $this->loadTask( $root_path, $file, $task_manager );
-			if ( $task ){
-				$loaded_tasks[] = $task;
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				if ( strpos($file,$task_class_suffix) !== FALSE ){
+					$task = $this->loadTask( $root_path, "$webapp_path/$file", $task_manager );
+					if ( $task ){
+						$loaded_tasks[] = $task;
+					}
+				}
 			}
+			closedir($dh);
 		}
 
-		// include source files under 'project' directory
-		$project_path .= '/*Task' . CHARCOAL_CLASS_FILE_SUFFIX;
-//		log_info( "system,debug", "module", "finding module task like: [$project_path]");
-
-		$file_list = glob($project_path);
-//		log_info( "system,debug", "module", "files found: " . print_r($file_list,true) );
-
-		foreach( $file_list as $file )
+		if ( $dh = opendir($project_path) )
 		{
-//			log_info( "system,debug", "module", "loading task class file: $file" );
-			$task = $this->loadTask( $root_path, $file, $task_manager );
-			if ( $task ){
-				$loaded_tasks[] = $task;
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				if ( strpos($file,$task_class_suffix) !== FALSE ){
+					$task = $this->loadTask( $root_path, "$project_path/$file", $task_manager );
+					if ( $task ){
+						$loaded_tasks[] = $task;
+					}
+				}
 			}
+			closedir($dh);
 		}
 
-		// include source files under 'framework' directory
-		$framework_path .= '/*Task' . CHARCOAL_CLASS_FILE_SUFFIX;
-//		log_info( "system,debug", "module", "finding module task like: [$framework_path]");
-
-		$file_list = glob($framework_path);
-//		log_info( "system,debug", "module", "files found: " . print_r($file_list,true) );
-
-		foreach( $file_list as $file )
+		if ( $dh = opendir($framework_path) )
 		{
-//			log_info( "system,debug", "module", "loading task class file: $file" );
-			$task = $this->loadTask( $root_path, $file, $task_manager );
-			if ( $task ){
-				$loaded_tasks[] = $task;
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				if ( strpos($file,$task_class_suffix) !== FALSE ){
+					$task = $this->loadTask( $root_path, "$framework_path/$file", $task_manager );
+					if ( $task ){
+						$loaded_tasks[] = $task;
+					}
+				}
 			}
+			closedir($dh);
 		}
 
 		//==================================
@@ -254,7 +234,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		if ( $this->_tasks ){
 			foreach( $this->_tasks as $task ){
-				$task_path = s($task . '@' . $root_path->getVirtualPath());
+				$task_path = $task . '@' . $root_path->getVirtualPath();
 //				log_info( "system,debug", "module", "creating task[$task_path] in module[$root_path]");
 
 				$task = Charcoal_Factory::createObject( s($task_path), s('task') );
@@ -287,56 +267,52 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$real_path = $root_path->getRealPath();
 
-		$webapp_path = Charcoal_ResourceLocator::getApplicationPath( s('modules' . $real_path) );
-		$project_path = Charcoal_ResourceLocator::getProjectPath( s('modules' . $real_path) );
+		$webapp_path    = Charcoal_ResourceLocator::getApplicationPath( s('modules' . $real_path) );
+		$project_path   = Charcoal_ResourceLocator::getProjectPath( s('modules' . $real_path) );
 		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( s('modules' . $real_path) );
 
-		// include source files under 'web_app' directory
-		$webapp_path .= '/*Event' . CHARCOAL_CLASS_FILE_SUFFIX;
-//		log_info( "system,debug", "module", "finding module event like: [$webapp_path]");
+		$event_class_suffix = 'Event' . CHARCOAL_CLASS_FILE_SUFFIX;
 
-		$file_list = glob($webapp_path);
-//		log_info( "system,debug", "module", "files found: " . print_r($file_list,true) );
-
-		foreach( $file_list as $file )
+		if ( $dh = opendir($webapp_path) )
 		{
-//			log_info( "system,debug", "module", "loading event class file: $file" );
-			$event = $this->loadEvent( $root_path, $file, $task_manager );
-			if ( $event ){
-				$loaded_events[] = $event;
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				if ( strpos($file,$event_class_suffix) !== FALSE ){
+					$task = $this->loadEvent( $root_path, "$webapp_path/$file", $task_manager );
+					if ( $task ){
+						$loaded_events[] = $task;
+					}
+				}
 			}
+			closedir($dh);
 		}
 
-		// include source files under 'project' directory
-		$project_path .= '/*Event' . CHARCOAL_CLASS_FILE_SUFFIX;
-//		log_info( "system,debug", "module", "finding module event like: [$project_path]");
-
-		$file_list = glob($project_path);
-//		log_info( "system,debug", "module", "files found: " . print_r($file_list,true) );
-
-		foreach( $file_list as $file )
+		if ( $dh = opendir($project_path) )
 		{
-//			log_info( "system,debug", "module", "loading event class file: $file" );
-			$event = $this->loadEvent( $root_path, $file, $task_manager );
-			if ( $event ){
-				$loaded_events[] = $event;
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				if ( strpos($file,$event_class_suffix) !== FALSE ){
+					$task = $this->loadEvent( $root_path, "$project_path/$file", $task_manager );
+					if ( $task ){
+						$loaded_events[] = $task;
+					}
+				}
 			}
+			closedir($dh);
 		}
 
-		// include source files under 'framework' directory
-		$framework_path .= '/*Event' . CHARCOAL_CLASS_FILE_SUFFIX;
-//		log_info( "system,debug", "module", "finding module event like: [$framework_path]");
-
-		$file_list = glob($framework_path);
-//		log_info( "system,debug", "module", "files found: " . print_r($file_list,true) );
-
-		foreach( $file_list as $file )
+		if ( $dh = opendir($framework_path) )
 		{
-//			log_info( "system,debug", "module", "loading event class file: $file" );
-			$event = $this->loadEvent( $root_path, $file, $task_manager );
-			if ( $event ){
-				$loaded_events[] = $event;
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				if ( strpos($file,$event_class_suffix) !== FALSE ){
+					$task = $this->loadEvent( $root_path, "$framework_path/$file", $task_manager );
+					if ( $task ){
+						$loaded_events[] = $task;
+					}
+				}
 			}
+			closedir($dh);
 		}
 
 		//==================================
@@ -348,7 +324,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		if ( $this->_events ){
 			foreach( $this->_events as $event ){
-				$event_path = s($event . '@' . $root_path->getVirtualPath());
+				$event_path = $event . '@' . $root_path->getVirtualPath();
 
 				$event = Charcoal_Factory::createObject( s($event_path), s('event') );
 
@@ -367,4 +343,3 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 }
 
-return __FILE__;

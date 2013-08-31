@@ -66,4 +66,4 @@ class Charcoal_URLUtil
 
 }
 
-return __FILE__;
+

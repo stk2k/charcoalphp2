@@ -578,25 +578,8 @@ HTML_HEADER;
 	/**
 	 * Render debug trace
 	 *
-	 * @param Charcoal_String $title  title
 	 */
-	public function render( Exception $e, Charcoal_String $title = NULL )
-	{
-		list( $file, $line ) = Charcoal_System::caller(0);
-
-		if ( $title === NULL ){
-			$title = 'CharcoalPHP: Exception List';
-		}
-
-		echo $this->_output( $e, s($title), s($file), i($line) );
-	}
-
-	/**
-	 * Output HTML
-	 *
-	 * @param Charcoal_String $title  title
-	 */
-	public function output( Exception $e, Charcoal_String $title = NULL )
+	public function render( Exception $e )
 	{
 		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_DEBUGTRACE_RENDERER) );
 
@@ -606,9 +589,28 @@ HTML_HEADER;
 
 		list( $file, $line ) = Charcoal_System::caller(0);
 
-		if ( $title === NULL ){
-			$title = 'CharcoalPHP: Exception List';
+		$title = 'CharcoalPHP: Exception List';
+
+		echo $this->_output( $e, s($title), s($file), i($line) );
+
+		return b(TRUE);
+	}
+
+	/**
+	 * Output HTML
+	 *
+	 */
+	public function output( Exception $e )
+	{
+		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_DEBUGTRACE_RENDERER) );
+
+		if ( $echo ){
+			echo "[debugtrace_renderer] " . __CLASS__ . "#output(" . get_class($e) . ", '$title'): " . eol();
 		}
+
+		list( $file, $line ) = Charcoal_System::caller(0);
+
+		$title = 'CharcoalPHP: Exception List';
 
 		return $this->_output( $e, s($title), s($file), i($line) );
 	}
@@ -644,4 +646,4 @@ HTML_HEADER;
 	}
 
 }
-return __FILE__;
+

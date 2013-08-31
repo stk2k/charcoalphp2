@@ -73,4 +73,4 @@ class Charcoal_PopupDebugWindow
 		echo '--></script>';
 	}
 }
-return __FILE__;
+

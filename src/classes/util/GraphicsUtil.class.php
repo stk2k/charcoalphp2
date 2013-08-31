@@ -85,4 +85,4 @@ class Charcoal_GraphicsUtil
 
 }
 
-return __FILE__;
+

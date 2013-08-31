@@ -28,4 +28,3 @@ class Charcoal_NonIntegerException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

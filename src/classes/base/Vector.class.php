@@ -204,9 +204,6 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function __get( $name )
 	{
-if ( !is_string($name) ){
-	_throw( new NonStringException( $offset ) );
-}
 		$data =  isset($this->_value[ $name ]) ? $this->_value[ $name ] : NULL;
 		return $data;
 	}
@@ -379,4 +376,4 @@ if ( !is_string($name) ){
 	}
 
 }
-return __FILE__;
+

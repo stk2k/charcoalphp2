@@ -106,4 +106,3 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	}
 }
 
-return __FILE__;

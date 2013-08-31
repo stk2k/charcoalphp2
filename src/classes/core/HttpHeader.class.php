@@ -75,4 +75,4 @@ class Charcoal_HttpHeader extends Charcoal_Object
 		return $this->_header;
 	}
 }
-return __FILE__;
+

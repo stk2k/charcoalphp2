@@ -62,4 +62,4 @@ class Charcoal_Interface extends Charcoal_Object
 		return __CLASS__ . '[' . $this->interface_name . ']';
 	}
 }
-return __FILE__;
+

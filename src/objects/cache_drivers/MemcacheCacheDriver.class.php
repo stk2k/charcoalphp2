@@ -123,4 +123,4 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_CharcoalObject implements Ch
 	}
 
 }
-return __FILE__;
+

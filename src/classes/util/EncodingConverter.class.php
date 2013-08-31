@@ -80,7 +80,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 			}
 		}
 		else if ( is_string($data) ){
-			$data = $this->convertEncoding( $data );
+			$data = $this->convert( $data );
 		}
 
 		return $data;
@@ -158,4 +158,3 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 
 }
 
-return __FILE__;

@@ -41,4 +41,4 @@ class Charcoal_URL extends Charcoal_Object
 		return $this->_url;
 	}
 }
-return __FILE__;
+

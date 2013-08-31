@@ -20,4 +20,3 @@ class EnumPDFFontFamily
 
 }
 
-return __FILE__;

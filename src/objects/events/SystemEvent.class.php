@@ -39,4 +39,4 @@ abstract class Charcoal_SystemEvent extends Charcoal_Event implements Charcoal_I
 		return FALSE;
 	}
 }
-return __FILE__;
+

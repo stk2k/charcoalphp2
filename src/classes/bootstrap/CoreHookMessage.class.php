@@ -50,4 +50,4 @@ class Charcoal_CoreHookMessage extends Charcoal_Object
 	}
 }
 
-return __FILE__;
+

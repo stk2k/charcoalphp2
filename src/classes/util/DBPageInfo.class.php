@@ -89,4 +89,4 @@ class Charcoal_DBPageInfo extends Charcoal_Object
 				" page_max=" . $this->_page_max . " total=" . $this->_total . "]";
 	}
 }
-return __FILE__;
+

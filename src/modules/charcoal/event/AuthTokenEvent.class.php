@@ -24,4 +24,4 @@ class Charcoal_AuthTokenEvent extends Charcoal_SystemEvent implements Charcoal_I
 	}
 
 }
-return __FILE__;
+

@@ -173,4 +173,3 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 
 }
 
-return __FILE__;

@@ -19,4 +19,4 @@ class Charcoal_SecurityFaultEvent extends Charcoal_SystemEvent
 		parent::__construct();
 	}
 }
-return __FILE__;
+

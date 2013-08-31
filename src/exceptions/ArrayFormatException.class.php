@@ -24,4 +24,3 @@ class Charcoal_ArrayFormatException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

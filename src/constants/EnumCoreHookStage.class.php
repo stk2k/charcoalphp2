@@ -21,9 +21,9 @@ class Charcoal_EnumCoreHookStage
 	const CREATE_CLASS_LOADER             = 7;
 	const REG_CLASS_LOADER                = 8;
 	const AFTER_REG_CLASS_LOADERS         = 9;
-	const BEFORE_REG_EXCEPTION_HANDLERS   = 10;
-	const CREATE_EXCEPTION_HANDLER        = 11;
-	const AFTER_REG_EXCEPTION_HANDLERS    = 12;
+//	const BEFORE_REG_EXCEPTION_HANDLERS   = 10;
+//	const CREATE_EXCEPTION_HANDLER        = 11;
+//	const AFTER_REG_EXCEPTION_HANDLERS    = 12;
 	const BEFORE_REG_USER_LOGGERS         = 13;
 	const CREATE_USER_LOGGER              = 14;
 	const AFTER_REG_USER_LOGGERS          = 15;
@@ -63,4 +63,4 @@ class Charcoal_EnumCoreHookStage
 	const AFTER_TERMINATE_LOGGERS         = 49;
 	const END_OF_SHUTDOWN                 = 50;
 }
-return __FILE__;
+

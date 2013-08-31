@@ -19,4 +19,3 @@ class Charcoal_InvalidMailAddressException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

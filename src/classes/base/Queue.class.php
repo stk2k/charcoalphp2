@@ -29,4 +29,4 @@ class Charcoal_Queue extends Charcoal_Vector
 		$this->add( $item );
 	}
 }
-return __FILE__;
+

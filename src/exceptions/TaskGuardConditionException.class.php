@@ -19,4 +19,3 @@ class Charcoal_TaskGuardConditionException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

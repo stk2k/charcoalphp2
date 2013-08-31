@@ -22,4 +22,3 @@ class Charcoal_ComponentConfigException extends Charcoal_ConfigException
 	}
 }
 
-return __FILE__;

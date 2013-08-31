@@ -122,4 +122,3 @@ class Charcoal_SimpleRouter extends Charcoal_CharcoalObject implements Charcoal_
 
 }
 
-return __FILE__;

@@ -84,4 +84,3 @@ interface Charcoal_IEventContext extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

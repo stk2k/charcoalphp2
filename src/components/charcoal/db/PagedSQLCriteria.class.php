@@ -32,4 +32,4 @@ class Charcoal_PagedSQLCriteria extends Charcoal_SQLCriteria
 	}
 
 }
-return __FILE__;
+

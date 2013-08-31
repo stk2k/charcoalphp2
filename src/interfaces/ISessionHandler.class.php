@@ -43,4 +43,3 @@ interface Charcoal_ISessionHandler extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

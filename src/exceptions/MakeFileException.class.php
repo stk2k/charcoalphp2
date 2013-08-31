@@ -20,4 +20,3 @@ class Charcoal_MakeFileException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

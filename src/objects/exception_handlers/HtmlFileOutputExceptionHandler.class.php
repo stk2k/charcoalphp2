@@ -61,4 +61,4 @@ class Charcoal_HtmlFileOutputExceptionHandler extends Charcoal_CharcoalObject im
 	}
 
 }
-return __FILE__;
+

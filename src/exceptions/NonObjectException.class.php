@@ -27,4 +27,3 @@ class Charcoal_NonObjectException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

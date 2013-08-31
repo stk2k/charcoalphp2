@@ -114,4 +114,4 @@ class Charcoal_Number extends Charcoal_Primitive
 		return strval($this->_value);
 	}
 }
-return __FILE__;
+

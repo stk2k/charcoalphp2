@@ -19,4 +19,4 @@ class Charcoal_FileUploadPartialException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

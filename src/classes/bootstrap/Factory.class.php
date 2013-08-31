@@ -29,6 +29,7 @@ class Charcoal_Factory
 			// load configure file
 			$config = new Charcoal_Config();
 			Charcoal_ConfigLoader::loadConfig( $obj_path, $type_name, $config );
+
 //			log_info( 'system', "factory", "[Factory]loaded config of {$type_name}[{$obj_path_string}]:" . print_r($config,true) );
 
 			// get class name from configure file
@@ -112,14 +113,16 @@ class Charcoal_Factory
 		$obj_path = new Charcoal_ObjectPath($obj_path);
 
 		if( $default_class ){
-			return self::_create( $obj_path, $type_name, new Charcoal_Interface($interface_name), new Charcoal_Class($default_class) );
+			$object = self::_create( $obj_path, $type_name, new Charcoal_Interface($interface_name), new Charcoal_Class($default_class) );
 		}
 		else if( $interface_name ){
-			return self::_create( $obj_path, $type_name, new Charcoal_Interface($interface_name) );
+			$object = self::_create( $obj_path, $type_name, new Charcoal_Interface($interface_name) );
 		}
 		else {
-			return self::_create( $obj_path, $type_name );
+			$object = self::_create( $obj_path, $type_name );
 		}
+
+		return $object;
 	}
 
 	/*
@@ -132,11 +135,6 @@ class Charcoal_Factory
 		// Configをロード
 		$config = new Charcoal_Config();
 		Charcoal_ConfigLoader::loadConfig( $object_path, s('class_loader'), $config );
-
-		// 設定バリデータで検証
-		$validator = Charcoal_ConfigValidator::loadValidator( s('class_loader') );
-
-		$validator->validate( $config );
 
 		// クラス名を取得
 		$class_name = $config->getString( s('class_name') );
@@ -229,4 +227,3 @@ class Charcoal_Factory
 
 }
 
-return __FILE__;

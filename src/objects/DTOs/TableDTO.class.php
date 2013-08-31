@@ -20,4 +20,4 @@ class Charcoal_TableDTO extends Charcoal_DTO
 	}
 
 }
-return __FILE__;
+

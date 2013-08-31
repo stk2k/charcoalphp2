@@ -16,14 +16,6 @@ interface Charcoal_IDebugtraceRenderer extends Charcoal_ICharcoalObject
 	 *
 	 * @param Charcoal_String $title  title
 	 */
-	public function render( Exception $e, Charcoal_String $title = NULL );
-
-	/**
-	 * Output
-	 *
-	 * @param Charcoal_String $title  title
-	 */
-	public function output( Exception $e, Charcoal_String $title = NULL );
+	public function render( Exception $e );
 }
 
-return __FILE__;

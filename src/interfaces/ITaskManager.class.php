@@ -51,4 +51,3 @@ interface Charcoal_ITaskManager extends Charcoal_ICharcoalObject
 	public function restoreStatefulTasks( Charcoal_Session $session );
 }
 
-return __FILE__;

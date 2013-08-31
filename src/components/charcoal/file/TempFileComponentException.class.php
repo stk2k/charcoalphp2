@@ -20,4 +20,4 @@ class Charcoal_TempFileComponentException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;
+

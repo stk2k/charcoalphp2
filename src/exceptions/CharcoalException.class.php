@@ -40,4 +40,4 @@ class Charcoal_CharcoalException extends Exception
 		return get_class($this) . '(' . $this->getMessage() . ')';
 	}
 }
-return __FILE__;
+

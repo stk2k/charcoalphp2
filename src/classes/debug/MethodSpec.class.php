@@ -65,4 +65,3 @@ class Charcoal_MethodSpec extends Charcoal_Object
 	}
 }
 
-return __FILE__;

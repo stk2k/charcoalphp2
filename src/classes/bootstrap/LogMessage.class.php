@@ -94,4 +94,4 @@ class Charcoal_LogMessage extends Charcoal_Object
 	}
 }
 
-return __FILE__;
+

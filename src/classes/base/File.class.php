@@ -313,9 +313,8 @@ class Charcoal_File extends Charcoal_Object
 		if ( is_file($path) )	return NULL;
 
 
-		$all_files = glob($path.'/*');
-		$files = NULL;
-		foreach( $all_files as $file_name ){
+		$dh = opendir($path);
+		while( ($file_name = readdir($dh)) !== FALSE ){
 			$file = new Charcoal_File( s($file_name) );
 			if ( $filter ){
 				if ( $filter->accept($file) ){
@@ -341,4 +340,3 @@ class Charcoal_File extends Charcoal_Object
 	}
 }
 
-return __FILE__;

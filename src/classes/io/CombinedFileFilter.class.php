@@ -40,4 +40,4 @@ class Charcoal_CombinedFileFilter implements Charcoal_IFileFilter
 	}
 }
 
-return __FILE__;
+

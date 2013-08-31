@@ -152,4 +152,4 @@ class Charcoal_Cache extends Charcoal_Object
 	}
 
 }
-return __FILE__;
+

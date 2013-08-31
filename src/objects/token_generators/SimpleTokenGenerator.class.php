@@ -56,4 +56,3 @@ class Charcoal_SimpleTokenGenerator extends Charcoal_CharcoalObject implements C
 
 }
 
-return __FILE__;

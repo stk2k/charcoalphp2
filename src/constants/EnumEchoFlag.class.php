@@ -23,4 +23,4 @@ class Charcoal_EnumEchoFlag
 	const ECHO_EXCEPTION_HANDLER   = 0x00000100;
 	const ECHO_DEBUGTRACE_RENDERER = 0x00000200;
 }
-return __FILE__;
+

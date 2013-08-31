@@ -25,4 +25,4 @@ class Charcoal_EnumSmtpStatusCode extends Charcoal_Object
 	const BAD_SEQUENCE_OF_COMMANDS          = 503;	// Bad sequence of commands
 	const SYNTAX_ERROR                      = 555;	// syntax error
 }
-return __FILE__;
+

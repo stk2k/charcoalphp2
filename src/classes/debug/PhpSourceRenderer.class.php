@@ -73,4 +73,4 @@ class Charcoal_PhpSourceRenderer
 
 
 }
-return __FILE__;
+

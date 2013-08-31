@@ -184,4 +184,4 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 	}
 
 }
-return __FILE__;
+

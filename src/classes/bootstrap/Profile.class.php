@@ -315,4 +315,3 @@ class Charcoal_Profile
 
 }
 
-return __FILE__;

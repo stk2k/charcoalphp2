@@ -17,4 +17,4 @@ class Charcoal_DBBeginTransactionException extends Charcoal_DBException
 	}
 
 }
-return __FILE__;
+

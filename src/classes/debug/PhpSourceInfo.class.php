@@ -64,4 +64,4 @@ class Charcoal_PhpSourceInfo extends Charcoal_Object
 		return $html;
 	}
 }
-return __FILE__;
+

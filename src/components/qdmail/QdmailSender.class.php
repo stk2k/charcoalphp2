@@ -247,4 +247,4 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 	}
 
 }
-return __FILE__;
+

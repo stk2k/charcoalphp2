@@ -67,4 +67,4 @@ class Charcoal_PhpConfigProvider extends Charcoal_Object implements Charcoal_ICo
 	}
 
 }
-return __FILE__;
+

@@ -93,4 +93,4 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		return FALSE;
 	}
 }
-return __FILE__;
+

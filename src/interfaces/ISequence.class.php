@@ -39,4 +39,3 @@ interface Charcoal_ISequence extends Charcoal_IProperties
 
 }
 
-return __FILE__;

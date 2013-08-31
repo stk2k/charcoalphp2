@@ -209,4 +209,3 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 	}
 }
 
-return __FILE__;

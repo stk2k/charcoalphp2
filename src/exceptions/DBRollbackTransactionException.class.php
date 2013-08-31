@@ -17,4 +17,4 @@ class Charcoal_DBRollbackTransactionException extends Charcoal_DBException
 	}
 
 }
-return __FILE__;
+

@@ -17,4 +17,3 @@ interface Charcoal_ITokenGenerator extends Charcoal_ICharcoalObject
 	public function generateToken( Charcoal_HashMap $options = NULL );
 }
 
-return __FILE__;

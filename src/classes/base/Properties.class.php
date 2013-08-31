@@ -190,4 +190,4 @@ class Charcoal_Properties extends Charcoal_Primitive implements Charcoal_IProper
 
 
 }
-return __FILE__;
+

@@ -19,4 +19,3 @@ interface Charcoal_IRouter extends Charcoal_ICharcoalObject
 	public function route( Charcoal_IRequest $request, Charcoal_IRoutingRule $rule );
 }
 
-return __FILE__;

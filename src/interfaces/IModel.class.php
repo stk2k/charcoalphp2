@@ -35,4 +35,4 @@ interface Charcoal_IModel extends Charcoal_ICharcoalObject
 	 */
 	public function createDTO();
 }
-return __FILE__;
+

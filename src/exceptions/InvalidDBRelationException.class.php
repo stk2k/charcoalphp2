@@ -25,4 +25,3 @@ class Charcoal_InvalidDBRelationException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

@@ -60,4 +60,4 @@ class Charcoal_TableModelCache
 
 }
 
-return __FILE__;
+

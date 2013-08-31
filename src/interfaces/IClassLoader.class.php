@@ -18,4 +18,3 @@ interface Charcoal_IClassLoader
 
 }
 
-return __FILE__;

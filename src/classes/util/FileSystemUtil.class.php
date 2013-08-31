@@ -50,4 +50,4 @@ class Charcoal_FileSystemUtil
 	}
 }
 
-return __FILE__;
+

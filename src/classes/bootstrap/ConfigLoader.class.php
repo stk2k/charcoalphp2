@@ -17,16 +17,10 @@ class Charcoal_ConfigLoader
 	public static function loadConfig( 
 							Charcoal_ObjectPath $object_path, 
 							Charcoal_String $type_name, 
-							Charcoal_Config $config, 
-							Charcoal_Boolean $exception = NULL
+							Charcoal_Config $config
 						)
 	{
-		if ( $exception === NULL ){
-			$exception = b(FALSE);
-		}
-
 		$object_name = $object_path->getObjectName();
-		$type_name = us($type_name);
 
 //		log_info( "system", "config", "loading object config: path=[$object_path] type=[$type_name]" );
 
@@ -91,7 +85,7 @@ class Charcoal_ConfigLoader
 		$config_target_list[] = array( $root_project . '/config', $config_name );
 		$config_target_list[] = array( $root_webapp . '/config', $config_name );
 
-		// read under modules directory
+		// read under modules directory(current object path)
 		if ( $object_name ){
 			$config_name = strlen($real_path) > 0 ? $real_path . '/' . $object_name . '.' . $type_name : '/' . $object_name . '.' . $type_name;
 		}
@@ -102,53 +96,43 @@ class Charcoal_ConfigLoader
 		$config_target_list[] = array( $root_project_modules, $config_name );
 		$config_target_list[] = array( $root_webapp_modules, $config_name );
 
-		// read under modules config directory
-		if ( $object_name ){
-			$config_name = strlen($real_path) > 0 ? $real_path . '/' . $object_name . '.' . $type_name : '/' . $object_name . '.' . $type_name;
-		}
-		else{
-			$config_name = strlen($real_path) > 0 ? $real_path . '/' . $type_name : $type_name;
-		}
-		$config_target_list[] = array( $root_framework_modules . '/config', $config_name );
-		$config_target_list[] = array( $root_project_modules . '/config', $config_name );
-		$config_target_list[] = array( $root_webapp_modules . '/config', $config_name );
+		// read under modules directory(current procedure path)
+		$request = Charcoal_Framework::getRequest();
+		if ( $request )
+		{
+			$request_path = $request->getProcedurePath();
 
-		// load config
-		$config_tmp = new Charcoal_Config();
+			$pos = strpos( $request_path, '@' );
+			if ( $pos !== FALSE ){
+				$proc_dir = str_replace( ':', '/', substr( $request_path, $pos+1 ) );
+				if ( $object_name ){
+					$config_name = '/' . $object_name . '.' . $type_name;
+				}
+				else{
+					$config_name = '/' . $type_name;
+				}
+				$config_target_list[] = array( $root_webapp_modules . $proc_dir, $config_name );
+			}
+		}
 
-		$loaded = 0;
-		$error_sources = NULL;
+		// load all config files
 		foreach( $config_target_list as $target ){
 			list($root, $name) = $target;
-			$source = new Charcoal_String('');
-			if ( $provider->loadConfigByName( s($root), s($name), $config_tmp, $source ) ){
-				$loaded ++;
-			}
-			else{
-				$error_sources[] = $source;
-			}
-		}
-		if ( $loaded < 1 && $exception->isTrue() ){
-			_throw( new Charcoal_ConfigNotFoundException($object_path, s($type_name), v($error_sources)) );
-		}
-
-		// validate config file
-		$config_validator_name = $config_tmp->getString( s('config_validator') );
-		if ( $config_validator_name && !$config_validator_name->isEmpty() ){
-			$config_validator = Charcoal_Factory::createObject( s($config_validator_name), s('config_validator'), s('Charcoal_IConfigValidator') );
-
-			$config_validator->validate( $config_tmp );
+			$provider->loadConfigByName( s($root), s($name), $config );
 		}
 
 		// import
-		$import = $config_tmp->getString( s("import"), s('') );
-		if ( !$import->isEmpty() ){
+		$import = $config->getString( s("import") );
+		if ( $import ){
 			$import_path = new Charcoal_ObjectPath(s($import));
-			$config_tmp->import( $import_path, s($type_name) );
-		}
 
-		$config->mergeHashMap( $config_tmp );
+			$config_to_import = new Charcoal_Config();
+
+			self::loadConfig( $import_path, $type_name, $config_to_import );
+
+			$config->mergeHashMap( $config_to_import );
+		}
 	}
 
 }
-return __FILE__;
+

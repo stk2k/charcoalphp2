@@ -33,15 +33,25 @@ class Charcoal_ExceptionHandlerList
 		return $singleton_;
 	}
 
-	/*
-	 * 例外ハンドラを追加
+	/**
+	 * initialize exception handler list
 	 */
-	public static function addExceptionHandler( Charcoal_IExceptionHandler $handler )
+	public static function init()
 	{
-		// インスタンスの取得
+		// get singleton instance
 		$ins = self::getInstance();
 
-		$ins->_list[] = $handler;
+		if ( $ins->_list ){
+			return;
+		}
+
+		$exception_handlers = Charcoal_Profile::getArray( s('EXCEPTION_HANDLERS') );
+		if ( $exception_handlers ){
+			foreach( $exception_handlers as $handler_name ) 	{
+				$handler = Charcoal_Factory::createObject( s($handler_name), s('exception_handler'), s('Charcoal_IExceptionHandler') );
+				$ins->_list[] = $handler;
+			}
+		}
 	}
 
 	/*
@@ -49,6 +59,8 @@ class Charcoal_ExceptionHandlerList
 	 */
 	public static function handleFrameworkException( Charcoal_CharcoalException $e )
 	{
+		self::init();
+
 		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_EXCEPTION_HANDLER) );
 
 		if ( $echo ){
@@ -91,6 +103,8 @@ class Charcoal_ExceptionHandlerList
 	 */
 	public static function handleException( Exception $e )
 	{
+		self::init();
+
 		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_EXCEPTION_HANDLER) );
 
 		if ( $echo ){
@@ -127,15 +141,4 @@ class Charcoal_ExceptionHandlerList
 
 		return $result;
 	}
-
-	/**
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return implode( ",", $this->_list );
-	}
 }
-return __FILE__;

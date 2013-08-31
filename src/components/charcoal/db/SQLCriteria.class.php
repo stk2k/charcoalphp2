@@ -174,4 +174,4 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 		return $str;
 	}
 }
-return __FILE__;
+

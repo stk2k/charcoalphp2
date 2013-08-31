@@ -30,4 +30,3 @@ class Charcoal_TableModelException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

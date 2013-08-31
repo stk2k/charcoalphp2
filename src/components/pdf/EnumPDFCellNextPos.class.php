@@ -17,4 +17,3 @@ class EnumPDFCellNextPos
 
 }
 
-return __FILE__;

@@ -32,4 +32,3 @@ interface Charcoal_ILogger extends Charcoal_ICharcoalObject
 	public function writeln( Charcoal_LogMessage $message );
 }
 
-return __FILE__;

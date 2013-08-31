@@ -272,4 +272,4 @@ class Charcoal_PhpSourceParser
 
 
 }
-return __FILE__;
+

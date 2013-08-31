@@ -57,4 +57,4 @@ class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_CharcoalObject imp
 	}
 
 }
-return __FILE__;
+

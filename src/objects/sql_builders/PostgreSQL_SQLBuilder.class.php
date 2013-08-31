@@ -109,4 +109,3 @@ class Charcoal_PostgreSQL_SQLBuilder extends Charcoal_DefaultSQLBuilder
 
 }
 
-return __FILE__;

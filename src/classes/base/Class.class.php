@@ -72,4 +72,4 @@ class Charcoal_Class extends Charcoal_Object
 		return __CLASS__ . '[' . $this->class_name . ']';
 	}
 }
-return __FILE__;
+

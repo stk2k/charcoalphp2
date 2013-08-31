@@ -134,13 +134,20 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	public function getObject( Charcoal_String $obj_path, Charcoal_String $type_name, Charcoal_Config $config = NULL )
 	{
-		$object = Charcoal_Factory::createObject( $obj_path, $type_name );
+		try{
+			$object = Charcoal_Factory::createObject( $obj_path, $type_name );
 
-		if ( $config ){
-			$object->configure( $config );
+			if ( $config ){
+				$object->configure( $config );
+			}
+
+			return $object;
 		}
-
-		return $object;
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+			_throw( new Charcoal_EventContextException( s('getObject'), $ex ) );
+		}
 	}
 
 	/**
@@ -150,13 +157,20 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	public function getComponent( Charcoal_String $obj_path, Charcoal_Config $config = NULL )
 	{
-		$component = Charcoal_DIContainer::getComponent( $obj_path );
+		try{
+			$component = Charcoal_DIContainer::getComponent( $obj_path );
 
-		if ( $config ){
-			$component->configure( $config );
+			if ( $config ){
+				$component->configure( $config );
+			}
+
+			return $component;
 		}
-
-		return $component;
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+			_throw( new Charcoal_EventContextException( s('getComponent'), $ex ) );
+		}
 	}
 
 
@@ -168,27 +182,34 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	public function getCache( Charcoal_String $key, Charcoal_String $type_name_checked = NULL )
 	{
-		$type_name_checked = us($type_name_checked);
+		try{
+			$type_name_checked = us($type_name_checked);
 
-		$cached_data = Charcoal_Cache::get( $key );
+			$cached_data = Charcoal_Cache::get( $key );
 
-		$type_check = $cached_data instanceof Charcoal_Object;
-		if ( !$type_check ){
-			$actual_type = get_class($cached_data);
-			log_warning( "system, debug, cache", "cache", "cache type mismatch: expected=[Charcoal_Object] actual=[$actual_type]" );
-			return FALSE;
-		}
-
-		if ( $cached_data !== FALSE && $type_name_checked !== NULL ){
-			$type_check = $cached_data instanceof $type_name_checked;
+			$type_check = $cached_data instanceof Charcoal_Object;
 			if ( !$type_check ){
 				$actual_type = get_class($cached_data);
-				log_warning( "system, debug, cache", "cache", "cache type mismatch: expected=[$type_name_checked] actual=[$actual_type]" );
+				log_warning( "system, debug, cache", "cache", "cache type mismatch: expected=[Charcoal_Object] actual=[$actual_type]" );
 				return FALSE;
 			}
-		}
 
-		return $cached_data;
+			if ( $cached_data !== FALSE && $type_name_checked !== NULL ){
+				$type_check = $cached_data instanceof $type_name_checked;
+				if ( !$type_check ){
+					$actual_type = get_class($cached_data);
+					log_warning( "system, debug, cache", "cache", "cache type mismatch: expected=[$type_name_checked] actual=[$actual_type]" );
+					return FALSE;
+				}
+			}
+
+			return $cached_data;
+		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+			_throw( new Charcoal_EventContextException( s('getCache'), $ex ) );
+		}
 	}
 
 	/**
@@ -199,7 +220,14 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	public function setCache( Charcoal_String $key, Charcoal_Object $value )
 	{
-		Charcoal_Cache::set( $key, $value );
+		try{
+			Charcoal_Cache::set( $key, $value );
+		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+			_throw( new Charcoal_EventContextException( s('setCache'), $ex ) );
+		}
 	}
 
 
@@ -261,4 +289,4 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 	}
 }
 
-return __FILE__;
+

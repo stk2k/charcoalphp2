@@ -17,4 +17,4 @@ class Charcoal_DBConnectException extends Charcoal_DBDataSourceException
 	}
 
 }
-return __FILE__;
+

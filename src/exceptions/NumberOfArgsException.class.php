@@ -24,4 +24,3 @@ class Charcoal_NumberOfArgsException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

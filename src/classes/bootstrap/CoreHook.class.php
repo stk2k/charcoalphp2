@@ -33,7 +33,7 @@ class Charcoal_CoreHook
 			return;
 		}
 
-		foreach( self::$hook_list as $key => $hook ){
+		foreach( self::$hook_list as $hook ){
 			foreach( self::$message_queue as $msg ){
 				$hook->process( $msg );
 			}
@@ -49,4 +49,4 @@ class Charcoal_CoreHook
 		self::$message_queue[] = $msg;
 	}
 }
-return __FILE__;
+

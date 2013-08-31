@@ -54,14 +54,15 @@ class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogge
 			_throw( new Charcoal_ComponentConfigException( s('file_name'), s('mandatory') ) );
 		}
 
+		$file_name = parent::formatFileName( $file_name );
+
 		if ( $logs_dir !== NULL ){
-			$file_name = $logs_dir . DIRECTORY_SEPARATOR . $file_name;
+			$this->_file_name = $logs_dir . DIRECTORY_SEPARATOR . $file_name;
 		}
 		else{
-			$file_name = Charcoal_ResourceLocator::getApplicationPath( s('logs'), $file_name );
+			$this->_file_name = Charcoal_ResourceLocator::getApplicationPath( s('logs'), $file_name );
 		}
 
-		$this->_file_name = parent::formatFileName( s($file_name) );
 		$this->_line_end  = $config->getString( s('line_end'), s(self::CRLF) );
 	}
 
@@ -160,4 +161,3 @@ class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogge
 
 }
 
-return __FILE__;

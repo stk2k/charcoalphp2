@@ -493,4 +493,4 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 		return $this->_pdf->Output( us($file_name), 'F' );
 	}
 }
-return __FILE__;
+

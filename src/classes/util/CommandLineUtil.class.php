@@ -126,4 +126,4 @@ class Charcoal_CommandLineUtil
 	}
 
 }
-return __FILE__;
+

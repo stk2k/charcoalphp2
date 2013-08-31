@@ -22,4 +22,3 @@ class Charcoal_ClassLoaderConfigException extends Charcoal_ConfigException
 	}
 }
 
-return __FILE__;

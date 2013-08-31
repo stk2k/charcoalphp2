@@ -51,4 +51,4 @@ class Charcoal_URLRedirectEvent extends Charcoal_SystemEvent
 		return '[class=' . get_class($this) . ' hash=' . $this->hash() . ' url=' . $this->_url . ' priority=' . $this->getPriority() . ']';
 	}
 }
-return __FILE__;
+

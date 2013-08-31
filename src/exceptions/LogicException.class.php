@@ -17,4 +17,4 @@ class Charcoal_LogicException extends Charcoal_CharcoalException
 	}
 
 }
-return __FILE__;
+

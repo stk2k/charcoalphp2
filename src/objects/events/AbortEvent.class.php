@@ -41,4 +41,4 @@ class Charcoal_AbortEvent extends Charcoal_SystemEvent
 		return $this->_abort_type;
 	}
 }
-return __FILE__;
+

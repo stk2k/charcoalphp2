@@ -417,7 +417,7 @@ class Charcoal_System
 
 		if ( $pieces && is_array($pieces) )
 		{
-			foreach( $pieces as $key => $p ){
+			foreach( $pieces as $p ){
 				if ( strlen($ret) > 0 ){
 					$ret .= $glue;
 				}
@@ -801,4 +801,4 @@ class Charcoal_System
 	}
 }
 
-return __FILE__;
+

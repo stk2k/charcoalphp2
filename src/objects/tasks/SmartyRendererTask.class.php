@@ -175,4 +175,3 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 	}
 }
 
-return __FILE__;

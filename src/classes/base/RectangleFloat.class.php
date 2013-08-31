@@ -97,4 +97,4 @@ class Charcoal_RectangleFloat extends Charcoal_Object
 
 
 }
-return __FILE__;
+

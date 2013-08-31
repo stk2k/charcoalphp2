@@ -54,4 +54,4 @@ class Charcoal_HttpRequestEvent extends Charcoal_SystemEvent implements Charcoal
 	}
 
 }
-return __FILE__;
+

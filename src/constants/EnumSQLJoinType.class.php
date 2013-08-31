@@ -15,4 +15,4 @@ class Charcoal_EnumSQLJoinType extends Charcoal_Object
 	const LEFT_JOIN       = 2;	// LEFT JOIN
 	const RIGHT_JOIN      = 3;	// RIGHT JOIN
 }
-return __FILE__;
+

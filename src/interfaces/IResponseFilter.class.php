@@ -16,4 +16,3 @@ interface Charcoal_IResponseFilter extends Charcoal_ICharcoalObject
 	public function apply( $value );
 }
 
-return __FILE__;

@@ -23,4 +23,4 @@ class Charcoal_DateFormatException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

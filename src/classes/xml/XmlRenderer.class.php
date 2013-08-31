@@ -83,4 +83,4 @@ class Charcoal_XmlRenderer
 	}
 
 }
-return __FILE__;
+

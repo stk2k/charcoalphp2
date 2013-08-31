@@ -56,4 +56,4 @@ class Charcoal_TransformerCache
 
 }
 
-return __FILE__;
+

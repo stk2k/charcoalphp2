@@ -49,4 +49,4 @@ class Charcoal_RenderLayoutEvent extends Charcoal_UserEvent implements Charcoal_
 		$this->_layout = $layout;
 	}
 }
-return __FILE__;
+

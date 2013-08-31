@@ -80,4 +80,3 @@ interface Charcoal_IRequest extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

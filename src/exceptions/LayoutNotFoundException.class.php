@@ -21,4 +21,3 @@ class Charcoal_LayoutNotFoundException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

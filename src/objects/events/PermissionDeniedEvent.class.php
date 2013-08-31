@@ -21,4 +21,4 @@ class Charcoal_PermissionDeniedEvent extends Charcoal_UserEvent implements Charc
 
 
 }
-return __FILE__;
+

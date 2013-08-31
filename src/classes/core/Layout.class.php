@@ -40,4 +40,4 @@ class Charcoal_Layout extends Charcoal_Object
 	}
 }
 
-return __FILE__;
+

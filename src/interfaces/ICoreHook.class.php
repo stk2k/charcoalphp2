@@ -16,4 +16,3 @@ interface Charcoal_ICoreHook extends Charcoal_ICharcoalObject
 	public function process( Charcoal_CoreHookMessage $msg );
 }
 
-return __FILE__;

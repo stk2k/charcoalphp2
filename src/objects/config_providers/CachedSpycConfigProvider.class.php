@@ -92,4 +92,3 @@ class Charcoal_CachedSpycConfigProvider extends Charcoal_Object implements Charc
 
 }
 
-return __FILE__;

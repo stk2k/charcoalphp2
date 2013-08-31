@@ -353,4 +353,4 @@ class Charcoal_FileCacheDriver extends Charcoal_CharcoalObject implements Charco
 	}
 
 }
-return __FILE__;
+

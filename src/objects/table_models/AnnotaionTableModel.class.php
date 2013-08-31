@@ -247,4 +247,3 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 
 }
 
-return __FILE__;

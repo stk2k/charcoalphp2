@@ -118,4 +118,3 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

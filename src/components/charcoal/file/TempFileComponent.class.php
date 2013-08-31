@@ -172,4 +172,4 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 		}
 	}
 }
-return __FILE__;
+

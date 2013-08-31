@@ -81,4 +81,3 @@ class Charcoal_FrameworkExceptionStack extends Charcoal_Object
 		return implode( ",", $this->_stack );
 	}
 }
-return __FILE__;

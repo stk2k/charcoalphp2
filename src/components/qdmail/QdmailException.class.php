@@ -38,4 +38,4 @@ class Charcoal_QdmailException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;
+

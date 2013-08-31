@@ -24,4 +24,3 @@ class Charcoal_IntegerFormatException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

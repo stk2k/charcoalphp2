@@ -193,4 +193,4 @@ class Charcoal_ResourceLocator
 
 
 }
-return __FILE__;
+

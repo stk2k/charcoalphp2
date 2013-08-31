@@ -20,4 +20,4 @@ class Charcoal_Float extends Charcoal_Number
 	}
 
 }
-return __FILE__;
+

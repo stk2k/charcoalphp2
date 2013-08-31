@@ -1,6 +1,6 @@
 <?php
 /**
-* 文字列クラス
+*  String primitive class(immutable)
 *
 * PHP version 5
 *
@@ -12,12 +12,11 @@
 class Charcoal_String extends Charcoal_Primitive
 {
 	private $_value;
-	private $_encoding;
 
-	/*
-	 *	コンストラクタ
+	/**
+	 *	Constructor
 	 */
-	public function __construct( $value, $encoding = NULL )
+	public function __construct( $value )
 	{
 		parent::__construct();
 
@@ -31,14 +30,12 @@ class Charcoal_String extends Charcoal_Primitive
 			else if ( $value === NULL ){
 				$value = '';
 			}
+			else{
+				_throw( new Charcoal_NonStringException( $value ) );
+			}
 		}
 
-		if ( !is_string($value) ){
-			_throw( new Charcoal_NonStringException( $value ) );
-		}
-
-		$this->_value      = $value;
-		$this->_encoding   = $encoding;
+		$this->_value = $value;
 	}
 
 	/**
@@ -49,73 +46,30 @@ class Charcoal_String extends Charcoal_Primitive
 		return $this->_value;
 	}
 
-	/*
-	 *	エンコーディング変換
-	 */
-	public function convertEncoding( $to_encoding )
-	{
-		$encoding = $this->_encoding ? $this->_encoding : Profile::getString('PHP_CODE');
-
-		// 変換元エンコーディングを決定
-		switch ( $this->_encoding ){
-		case 'HTML_CODE':
-		case 'DB_CODE':
-		case 'PHP_CODE':
-		case 'LOG_CODE':
-			$from_encoding = chacoal_Profile::getString( $this->_encoding );
-		default:
-			$from_encoding = $this->_encoding;
-		}
-
-		// 変換先エンコーディングを決定
-		switch ( $to_encoding ){
-		case 'HTML_CODE':
-		case 'DB_CODE':
-		case 'PHP_CODE':
-		case 'LOG_CODE':
-			$to_encoding = Profile::getString( $to_encoding );
-		}
-
-		$str = mb_convert_encoding( $this->_value, $to_encoding, $from_encoding );
-
-		return new Charcoal_String( $str, $to_encoding );
-	}
-
-	/*
-	 *	値を取得
+	/**
+	 *	get raw value
+	 *
+	 * @return string
 	 */
 	public function getValue()
 	{
 		return $this->_value;
 	}
 
-	/*
-	 *	値を設定
-	 */
-	public function setValue( $value, $encoding = NULL )
-	{
-		if ( $value instanceof Charcoal_Object ){
-			$value = us( $value );
-		}
-		else if ( !is_string($value) ){
-			$value = strval($value);
-		}
-
-		$this->_value      = $value;
-		$this->_encoding   = $encoding;
-	}
-
-
-	/*
-	 *	長さを取得
+	/**
+	 *	get string length
+	 *
+	 * @return integer       length of the string or -1 if fails
 	 */
 	public function length()
 	{
 		return $this->_value && is_string($this->_value) ? strlen($this->_value) : -1;
 	}
 
-	/*
-	 *	文字列で分割する
+	/**
+	 *	split by delimiter
+	 *
+	 * @param Charcoal_String $delimiter      delimiter string
 	 */
 	public function split( Charcoal_String $delimiter )
 	{
@@ -126,8 +80,10 @@ class Charcoal_String extends Charcoal_Primitive
 		return new Charcoal_Vector( $explode );
 	}
 
-	/*
-	 *	正規表現で分割する
+	/**
+	 *	split by regular expression
+	 *
+	 * @param Charcoal_String $regex      regular expression string
 	 */
 	public function splitRegEx( Charcoal_String $regex )
 	{
@@ -154,8 +110,10 @@ class Charcoal_String extends Charcoal_Primitive
 		return $split_word_list;
 	}
 
-	/*
-	 *	比較
+	/**
+	 *	compare to another string
+	 *
+	 * @return boolean    TRUE if this object is equal to the string which is passed by argument
 	 */
 	public function equals( Charcoal_Object $obj )
 	{
@@ -174,8 +132,10 @@ class Charcoal_String extends Charcoal_Primitive
 		return strcmp($str1,$str2) === 0;
 	}
 
-	/*
-	 *	空か
+	/**
+	 *	check if this object is empty
+	 *
+	 * @return boolean    TRUE if this object is empty, otherwise returns FALSE
 	 */
 	public function isEmpty()
 	{
@@ -188,24 +148,27 @@ class Charcoal_String extends Charcoal_Primitive
 		return TRUE;
 	}
 
-	/*
-	 *	大文字化
+	/**
+	 *	covert this string to upper case
+	 *
 	 */
 	public function toUpper()
 	{
 		return $this->_value ? strtoupper($this->_value) : NULL;
 	}
 
-	/*
-	 *	小文字化
+	/**
+	 *	covert this string to lower case
+	 *
 	 */
 	public function toLower()
 	{
 		return $this->_value ? strtolower($this->_value) : NULL;
 	}
 
-	/*
-	 *	空白を除去
+	/**
+	 *	erase white spaces within this object
+	 *
 	 */
 	public function trim(String $charlist = NULL)
 	{
@@ -224,4 +187,4 @@ class Charcoal_String extends Charcoal_Primitive
 		return $this->_value;
 	}
 }
-return __FILE__;
+

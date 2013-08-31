@@ -20,4 +20,3 @@ class Charcoal_FileOutputException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

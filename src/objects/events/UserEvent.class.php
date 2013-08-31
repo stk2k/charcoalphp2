@@ -12,4 +12,4 @@
 class Charcoal_UserEvent extends Charcoal_Event implements Charcoal_IEvent
 {
 }
-return __FILE__;
+

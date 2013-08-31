@@ -147,4 +147,3 @@ HTML_STYLE;
 	}
 }
 
-return __FILE__;

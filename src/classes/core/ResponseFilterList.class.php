@@ -49,4 +49,3 @@ class Charcoal_ResponseFilterList
 	}
 
 }
-return __FILE__;

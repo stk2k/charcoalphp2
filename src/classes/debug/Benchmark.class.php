@@ -11,6 +11,7 @@
 
 class Charcoal_Benchmark
 {
+	private $_precision;
 	private $_start;
 	private $_stop;
 	private $_score;
@@ -19,11 +20,9 @@ class Charcoal_Benchmark
 	/*
 	 *    コンストラクタ
 	 */
-	public function __construct( $auto_start = TRUE )
+	public function __construct( $precision = 2, $auto_start = TRUE )
 	{
-		$this->_start = 0;
-		$this->_stop = 0;
-		$this->_score = 0;
+		$this->_precision = $precision;
 
 		if ( $auto_start ){
 			$this->start();
@@ -41,9 +40,9 @@ class Charcoal_Benchmark
 	/*
 	 *    経過時間
 	 */
-	public function getElapsedTime()
+	public function nowScore()
 	{
-		return $this->_stop - $this->_start;
+  		return round( self::nowTime() - $this->_start, $this->_precision );
 	}
 
 	/*
@@ -60,7 +59,7 @@ class Charcoal_Benchmark
 	public function stop()
 	{
 		$this->_stop = self::nowTime();
-  		$this->_score = round( $this->_stop - $this->_start, 5 );
+  		$this->_score = round( $this->_stop - $this->_start, $this->_precision );
 		return $this->_score;
 	}
 
@@ -69,9 +68,8 @@ class Charcoal_Benchmark
 	 */
 	public static function nowTime()
 	{ 
-		list($msec,$sec) = explode(' ',microtime()); 
-		return ( (float)$msec + (float)$sec );
+		return microtime(true) * 1000;
 	}
 
 }
-return __FILE__;
+

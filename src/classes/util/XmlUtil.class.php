@@ -33,4 +33,4 @@ class Charcoal_XmlUtil
 
 }
 
-return __FILE__;
+

@@ -42,9 +42,9 @@ class Charcoal_DIContainer
 	/**
 	 * DIコンテナを作成
 	**/
-	public static function createContainer( Charcoal_IProcedure $procedure )
+	public static function createContainer()
 	{
-		log_info( "system,container", "container", "Starting creating container.");
+//		log_info( "system,container", "container", "Starting creating container.");
 
 		// インスタンスの取得
 		$container = self::getInstance();
@@ -67,8 +67,7 @@ class Charcoal_DIContainer
 		// 設定を保存
 		$container->component_config_files = $config;
 
-		log_info( "system,container", "container", "Finished creating container.");
-
+//		log_info( "system,container", "container", "Finished creating container.");
 	}
 
 	/*
@@ -76,7 +75,7 @@ class Charcoal_DIContainer
 	 */
 	public static function destroy()
 	{
-		log_info( "system,container", "container", "Starting destroying container.");
+//		log_info( "system,container", "container", "Starting destroying container.");
 
 		// インスタンスの取得
 		$container = self::getInstance();
@@ -84,7 +83,7 @@ class Charcoal_DIContainer
 		// コンポーネントの破棄
 		$container->destroyComponents();
 
-		log_info( "system,container", "container", "Finished destroying container.");
+//		log_info( "system,container", "container", "Finished destroying container.");
 	}
 
 	/*
@@ -94,7 +93,7 @@ class Charcoal_DIContainer
 	{
 		$component_name = us( $component_name );
 
-		log_info( "system,container", "container", "Loading component: [$component_name]");
+//		log_info( "system,container", "container", "Loading component: [$component_name]");
 
 		// コンポーネント設定ファイルの読み込み
 		$obj_path = new Charcoal_ObjectPath( s($component_name) );
@@ -155,7 +154,7 @@ class Charcoal_DIContainer
 		}
 
 		// コンポーネントを初期化
-		log_info( "system,container", "container", "configuring component: [$component_name]");
+//		log_info( "system,container", "container", "configuring component: [$component_name]");
 		$component->configure( $config );
 
 		// コンポーネントを配列に登録
@@ -163,7 +162,7 @@ class Charcoal_DIContainer
 			$this->_components[ $component_name ] = $component;
 		}
 
-		log_info( "system,container", "container", "loaded component: [$component_name]");
+//		log_info( "system,container", "container", "loaded component: [$component_name]");
 
 		// ロードしたコンポーネントを返却
 		return $component;
@@ -233,8 +232,7 @@ class Charcoal_DIContainer
 	 */
 	public function destroyComponents()
 	{
-		log_info( "system,container", "container", "Starting destroying all components.");
-
+//		log_info( "system,container", "container", "Starting destroying all components.");
 		
 		// インスタンスの取得
 		$container = self::getInstance();
@@ -263,16 +261,14 @@ class Charcoal_DIContainer
 					// セッションにインスタンスをセット
 					$_SESSION[ $component_name ] = serialize( $component );
 
-					log_info( "system,container", "container", "Component($component_name) is stored in session.");
+//					log_info( "system,container", "container", "Component($component_name) is stored in session.");
 				}
 				break;
 			}
 
 		}
 
-		log_info( "system,container", "container", "Finished destroying all components.");
-
+//		log_info( "system,container", "container", "Finished destroying all components.");
 	}
 }
 
-return __FILE__;

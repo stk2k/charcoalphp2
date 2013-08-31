@@ -81,4 +81,4 @@ class Charcoal_QueryJoin extends Charcoal_Object
 
 
 }
-return __FILE__;
+

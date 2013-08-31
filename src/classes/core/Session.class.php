@@ -20,7 +20,7 @@ class Charcoal_Session extends Charcoal_Object
 	{
 		$this->_data = array();
 
-		$req_path = Charcoal_Framework::getRequestPath();
+//		$req_path = Charcoal_Framework::getRequestPath();
 //		log_info( "debug, session", "session", "request_path=" . $req_path );
 	}
 
@@ -73,11 +73,11 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function regenerateID()
 	{
-		$old_id = session_id();
+//		$old_id = session_id();
 
 		$result = session_regenerate_id( TRUE );
 
-		$new_id = session_id();
+//		$new_id = session_id();
 
 //		log_info( "debug, session", "session", "regenerateID() old=$old_id new=$new_id result=" . ($result ? "TRUE" : "FALSE") );
 	}
@@ -229,4 +229,3 @@ class Charcoal_Session extends Charcoal_Object
 		return Charcoal_System::arrayToString( $this->_data );
 	}
 }
-return __FILE__;

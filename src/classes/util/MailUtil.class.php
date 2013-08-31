@@ -26,4 +26,4 @@ class Charcoal_MailUtil
 	}
 }
 
-return __FILE__;
+

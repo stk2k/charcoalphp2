@@ -38,4 +38,4 @@ class Charcoal_CharcoalComponent extends Charcoal_CharcoalObject
 		$this->_component_name = us($component_name);
 	}
 }
-return __FILE__;
+

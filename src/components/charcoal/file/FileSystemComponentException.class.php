@@ -20,4 +20,4 @@ class Charcoal_FileSystemComponentException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;
+

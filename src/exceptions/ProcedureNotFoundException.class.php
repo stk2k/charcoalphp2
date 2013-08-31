@@ -20,4 +20,3 @@ class Charcoal_ProcedureNotFoundException extends Charcoal_ConfigException
 }
 
 
-return __FILE__;

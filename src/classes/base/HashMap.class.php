@@ -265,4 +265,4 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 	}
 
 }
-return __FILE__;
+

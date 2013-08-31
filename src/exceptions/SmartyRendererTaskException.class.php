@@ -17,4 +17,3 @@ class Charcoal_SmartyRendererTaskException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

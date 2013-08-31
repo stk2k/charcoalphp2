@@ -33,4 +33,3 @@ interface Charcoal_ICharcoalObject
 	public function configure( Charcoal_Config $config );
 }
 
-return __FILE__;

@@ -21,4 +21,4 @@ class Charcoal_AnnotaionMandatoryException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

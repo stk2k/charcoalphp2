@@ -133,4 +133,3 @@ class Charcoal_CharcoalRendererTask extends Charcoal_Task implements Charcoal_IT
 	}
 }
 
-return __FILE__;

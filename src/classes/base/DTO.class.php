@@ -269,4 +269,3 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 
 }
 
-return __FILE__;

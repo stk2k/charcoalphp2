@@ -21,4 +21,3 @@ interface Charcoal_IExceptionHandler extends Charcoal_ICharcoalObject
 	public function handleException( Exception $e );
 }
 
-return __FILE__;

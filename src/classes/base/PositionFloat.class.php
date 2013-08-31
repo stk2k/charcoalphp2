@@ -58,4 +58,4 @@ class Charcoal_PositionFloat extends Charcoal_Object
 	}
 
 }
-return __FILE__;
+

@@ -16,4 +16,4 @@ class Charcoal_ShellException extends Charcoal_RuntimeException
 		if ( $previous === NULL ) parent::__construct( $message ); else parent::__construct( $message, $previous );
 	}
 }
-return __FILE__;
+

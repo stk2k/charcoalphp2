@@ -23,4 +23,4 @@ class Charcoal_BooleanFormatException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

@@ -16,4 +16,3 @@ class EnumPDFPaperSize
 
 }
 
-return __FILE__;

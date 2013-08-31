@@ -17,4 +17,4 @@ class Charcoal_NotImplementedException extends Charcoal_LogicException
 	}
 
 }
-return __FILE__;
+

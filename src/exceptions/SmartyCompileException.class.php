@@ -29,4 +29,3 @@ class Charcoal_SmartyCompileException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

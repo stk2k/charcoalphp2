@@ -20,4 +20,3 @@ class Charcoal_ProfileConfigFileNotFoundException extends Charcoal_RuntimeExcept
 }
 
 
-return __FILE__;

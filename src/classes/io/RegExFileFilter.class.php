@@ -51,4 +51,4 @@ class Charcoal_RegExFileFilter implements Charcoal_IFileFilter
 	}
 }
 
-return __FILE__;
+

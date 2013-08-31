@@ -50,4 +50,4 @@ class Charcoal_WildcardFileFilter implements Charcoal_IFileFilter
 	}
 }
 
-return __FILE__;
+

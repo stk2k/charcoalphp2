@@ -18,4 +18,4 @@ class Charcoal_HtmlEscapeResponseFilter extends Charcoal_CharcoalObject implemen
 		return Charcoal_System::escape( $value );
 	}
 }
-return __FILE__;
+

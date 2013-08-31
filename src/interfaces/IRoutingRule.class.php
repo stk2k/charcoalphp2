@@ -26,4 +26,3 @@ interface Charcoal_IRoutingRule extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

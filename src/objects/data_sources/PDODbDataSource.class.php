@@ -50,7 +50,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		$this->_db_name   = $config->getString( s('db_name'), s('') );
 		$this->_server    = $config->getString( s('server'), s('') );
 		$this->_charset   = $config->getString( s('charset'), s('') );
-		$this->_autocommit = $config->getBoolean( s('autocommit'), b(TRUE) );
+		$this->_autocommit = $config->getBoolean( s('autocommit'), b(FALSE) );
 /*
 		log_debug( "data_source", "data_source", "[PearDbDataSource]backend=" . $this->_backend );
 		log_debug( "data_source", "data_source", "[PearDbDataSource]user=" . $this->_user );
@@ -369,7 +369,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		// ログ
 		$now = Charcoal_Benchmark::nowTime();
 		$elapse = round( $now - $start, 4 );
-		log_debug( 'data_source,sql,debug', "data_source", "[ID]$command_id prepareExecute() end. time=[$elapse]sec.");
+		log_debug( 'data_source,sql,debug', "data_source", "[ID]$command_id prepareExecute() end. time=[$elapse]msec.");
 
 		return $stmt;
 	}
@@ -487,4 +487,3 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 
 }
 
-return __FILE__;

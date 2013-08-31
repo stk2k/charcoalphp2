@@ -63,4 +63,4 @@ abstract class Charcoal_Event extends Charcoal_CharcoalObject implements Charcoa
 	}
 
 }
-return __FILE__;
+

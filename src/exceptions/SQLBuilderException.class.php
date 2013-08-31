@@ -18,4 +18,3 @@ class Charcoal_SQLBuilderException extends Charcoal_DBException
 }
 
 
-return __FILE__;

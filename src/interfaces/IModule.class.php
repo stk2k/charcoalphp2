@@ -12,11 +12,6 @@
 interface Charcoal_IModule extends Charcoal_ICharcoalObject
 {
 	/*
-	 * get module name
-	 */
-	public function getModuleName();
-
-	/*
 	 * get required module names
 	 */
 	public function getRequiredModules();
@@ -32,4 +27,3 @@ interface Charcoal_IModule extends Charcoal_ICharcoalObject
 	public function loadEvents( Charcoal_ITaskManager $task_manager );
 }
 
-return __FILE__;

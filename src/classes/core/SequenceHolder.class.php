@@ -293,4 +293,4 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	}
 }
 
-return __FILE__;
+

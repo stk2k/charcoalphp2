@@ -481,11 +481,18 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 						->from(s("blogs"),s("b"))
 						->leftJoin(s("posts"),s("p"))->on( s('b.blog_id = p.blog_id') )
 						->where()
-						->gt(s("b.post_total"), i(6))
+						->gt(s("b.post_total"), i(1))
 						->orderBy(s("b.post_total DESC"))
+						->limit(i(5))
+						->offset(i(0))
 						->prepare()
-						->findAll()->result();
+						->findFirst()->result();
 
+			echo print_r($rs,true) . eol();
+
+			echo "last SQL:" . $this->gw->getLastSQL() . eol();
+				
+			echo "last params:" . $this->gw->getLastParams() . eol();
 				
 			return TRUE;
 		}

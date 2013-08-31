@@ -100,4 +100,4 @@ class Charcoal_SmartGatewaySessionHandler extends Charcoal_CharcoalObject implem
 	}
 
 }
-return __FILE__;
+

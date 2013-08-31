@@ -19,4 +19,3 @@ class Charcoal_ObjectPathFormatException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

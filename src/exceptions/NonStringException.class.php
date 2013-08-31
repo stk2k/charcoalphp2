@@ -27,4 +27,3 @@ class Charcoal_NonStringException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

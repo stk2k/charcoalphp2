@@ -105,4 +105,4 @@ class Charcoal_Stack extends Charcoal_Object
 	}
 
 }
-return __FILE__;
+

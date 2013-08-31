@@ -63,4 +63,4 @@ class Charcoal_DebugProfiler
 	}
 }
 
-return __FILE__;
+

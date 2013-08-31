@@ -68,4 +68,3 @@ class Charcoal_ConsoleLogger extends Charcoal_CharcoalObject implements Charcoal
 	}
 }
 
-return __FILE__;

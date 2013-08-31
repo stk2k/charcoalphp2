@@ -115,4 +115,3 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_DefaultSQLBuilder
 
 }
 
-return __FILE__;

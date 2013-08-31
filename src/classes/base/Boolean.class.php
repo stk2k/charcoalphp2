@@ -77,4 +77,4 @@ class Charcoal_Boolean extends Charcoal_Primitive
 		return $this->_value ? 'TRUE' : 'FALSE';
 	}
 }
-return __FILE__;
+

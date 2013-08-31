@@ -152,7 +152,7 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 			$override = up($override);
 
 			$field_list = $model->getFieldList();
-//			log_debug( "debug, smart_gateway", "field_list:" . print_r($field_list,true) );
+//			log_debug( "debug, smart_gateway", 'sql_builder', "field_list:" . print_r($field_list,true) );
 
 			foreach( $field_list as $name ) 
 			{
@@ -161,6 +161,7 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 				if ( $override && isset($override[$name]) ){
 					$update = isset($override[$name]['update']) ? $override[$name]['update'] : $update;
 				}
+//				log_debug( "debug, smart_gateway", 'sql_builder', "override:" . print_r($override,true) );
 
 				if ( !$update ){
 					// 無指定の場合エラー
@@ -178,6 +179,7 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 
 				// @updateアノテーションの値によって分岐
 				$update_anno = us($update->getValue());
+//				log_debug( "debug, smart_gateway", 'sql_builder', "[$name] update_anno:" . print_r($update_anno,true) );
 				switch ( $update_anno ){
 				case 'value':
 					// 値で更新
@@ -450,4 +452,3 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 
 }
 
-return __FILE__;

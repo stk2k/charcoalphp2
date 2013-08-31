@@ -70,4 +70,3 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

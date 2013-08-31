@@ -18,4 +18,3 @@ class Charcoal_MakeDirectoryException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

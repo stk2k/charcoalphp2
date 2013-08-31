@@ -23,4 +23,3 @@ class Charcoal_SQLBuilderConfigException extends Charcoal_ConfigException
 }
 
 
-return __FILE__;

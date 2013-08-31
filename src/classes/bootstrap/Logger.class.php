@@ -11,13 +11,6 @@
 
 class Charcoal_Logger extends Charcoal_Object
 {
-	const LOGLEVEL_FATAL     = 100;		// FATAL
-	const LOGLEVEL_ERROR     = 200;		// ERROR
-	const LOGLEVEL_WARNING   = 300;		// WARNING
-	const LOGLEVEL_DEBUG     = 400;		// DEBUG
-	const LOGLEVEL_INFO      = 500;		// INFO
-	const LOGLEVEL_TRACE     = 600;		// TRACE
-
 	static $loggers = array();
 	static $buffer = array();
 	static $profile_level;
@@ -143,8 +136,8 @@ class Charcoal_Logger extends Charcoal_Object
 
 		$loggers = self::$loggers;
 
-		foreach( $loggers as $key => $logger ){
-
+		foreach( $loggers as $logger )
+		{
 			// output footer
 			$logger->writeFooter();
 
@@ -181,61 +174,67 @@ class Charcoal_Logger extends Charcoal_Object
 	 */
 	public static function writeln( Charcoal_String $target, Charcoal_String $tag, Charcoal_String $message, Charcoal_Integer $echo_flag = NULL )
 	{
-		// get caller
-		list( $file, $line ) = Charcoal_System::caller(1);
-		
-		// force echo
-		if ( $echo_flag && Charcoal_Framework::testEchoFlag($echo_flag) ){
-			echo "$message    $file($line)" . eol();
+		try{
+			// get caller
+			list( $file, $line ) = Charcoal_System::caller(1);
+			
+			// force echo
+			if ( $echo_flag && Charcoal_Framework::testEchoFlag($echo_flag) ){
+				echo "$message    $file($line)" . eol();
+			}
+
+			// get log level and logger names
+			list( $level, $logger_names ) = self::_getLevelAndTargetList( $target );
+
+			// create log message object
+			$msg = new Charcoal_LogMessage( s($level), s($tag), s($message), s($file), i($line), v($logger_names) );
+
+			// get LOG_NO_BUFFER flag
+			$log_no_buffer = self::$log_no_buffer;
+
+			if ( $log_no_buffer ){
+				// flush immediately
+				self::flushMessage( $msg );
+			}
+			else{
+				// store log message to buffer
+				self::$buffer[] = $msg;
+			}
 		}
-
-		// get log level and logger names
-		list( $level, $logger_names ) = self::_getLevelAndTargetList( $target );
-
-		// create log message object
-		$msg = new Charcoal_LogMessage( s($level), s($tag), s($message), s($file), i($line), v($logger_names) );
-
-		// get LOG_NO_BUFFER flag
-		$log_no_buffer = self::$log_no_buffer;
-
-		if ( $log_no_buffer ){
-			// flush immediately
-			self::flushMessage( $msg );
+		catch ( Exception $e )
+		{
+			echo '<textarea style="width:100%; height:300px">';
+			echo print_r($e,true);
+			echo '</textarea>';
+			exit;
 		}
-		else{
-			// store log message to buffer
-			self::$buffer[] = $msg;
-		}
-
-		return true;
 	}
 
-	/*
-	 *	ログレベル値の取得
+	/**
+	 *
+	 * compare log levels
 	 *
 	 */
-	private static function _getLogLevelValue( Charcoal_String $level )
+	private static function _compareLogLevel( $lv1, $lv2 )
 	{
-		switch( $level->getValue() ){
-		case 'F':	$ret = self::LOGLEVEL_FATAL;		break;		// FATAL
-		case 'E':	$ret = self::LOGLEVEL_ERROR;		break;		// ERROR
-		case 'W':	$ret = self::LOGLEVEL_WARNING;		break;		// WARNING
-		case 'I':	$ret = self::LOGLEVEL_INFO;			break;		// INFO
-		case 'D':	$ret = self::LOGLEVEL_DEBUG;		break;		// DEBUG
-		case 'T':	$ret = self::LOGLEVEL_TRACE;		break;		// TRACE
-		default:	$ret = self::LOGLEVEL_INFO;			break;		// as INFO
-		}
-		return $ret;
-	}
+		static $defs;
 
-	/*
-	 *	ログレベルの比較
-	 *
-	 */
-	private static function _compareLogLevel( Charcoal_String $lv1, Charcoal_String $lv2 )
-	{
-		$lv1 = self::_getLogLevelValue($lv1);
-		$lv2 = self::_getLogLevelValue($lv2);
+		if ( !$defs ){
+			$defs = array(
+					'F' => 100,
+					'E' => 200,
+					'W' => 300,
+					'D' => 400,
+					'I' => 500,
+					'T' => 600,
+				);
+		}
+
+		$lv1 = us($lv1);
+		$lv2 = us($lv2);
+
+		$lv1 = isset($defs[$lv1]) ? $defs[$lv1] : self::LOGLEVEL_INFO;
+		$lv2 = isset($defs[$lv2]) ? $defs[$lv2] : self::LOGLEVEL_INFO;
 
 		return ($lv1 - $lv2);
 	}
@@ -265,4 +264,4 @@ class Charcoal_Logger extends Charcoal_Object
 	}
 
 }
-return __FILE__;
+

@@ -59,4 +59,3 @@ interface Charcoal_ICacheDriver extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

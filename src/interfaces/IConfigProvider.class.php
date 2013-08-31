@@ -22,10 +22,8 @@ interface Charcoal_IConfigProvider
 	public function loadConfigByName( 
 						Charcoal_String $config_root, 
 						Charcoal_String $config_name, 
-						Charcoal_Config& $config, 
-						Charcoal_String& $source = NULL
+						Charcoal_Config& $config
 					);
 
 }
 
-return __FILE__;

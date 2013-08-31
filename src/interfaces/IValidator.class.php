@@ -17,4 +17,3 @@ interface Charcoal_IValidator extends Charcoal_ICharcoalObject
 	public function validate( $value );
 }
 
-return __FILE__;

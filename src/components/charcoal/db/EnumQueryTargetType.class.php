@@ -20,4 +20,4 @@ class Charcoal_EnumQueryTargetType extends Charcoal_Object
 	const TARGET_ON            = 6;	// on
 	const TARGET_ON_CONDITION  = 7;	// on condition
 }
-return __FILE__;
+

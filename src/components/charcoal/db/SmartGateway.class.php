@@ -11,12 +11,23 @@
 */
 require_once( 'EnumQueryOption' . CHARCOAL_CLASS_FILE_SUFFIX );
 
+function qt( $value )
+{
+	if ( $value instanceof Charcoal_QueryTarget ){
+		return $value;
+	}
+	return new Charcoal_QueryTarget( s($value) );
+}
+
 class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
 	private $_data_source;
 	private $_builder;
 
 	private $_data_source_name;
+
+	private $_last_sql;
+	private $_last_params;
 
 	/*
 	 *	コンストラクタ
@@ -96,6 +107,22 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function getSQLBuilder()
 	{
 		return $this->_sql_builder;
+	}
+
+	/*
+	 *	get last executed SQL
+	 */
+	public function getLastSQL()
+	{
+		return $this->_last_sql;
+	}
+
+	/*
+	 *	get last executed parameters
+	 */
+	public function getLastParams()
+	{
+		return $this->_last_params;
 	}
 
 	/*
@@ -560,7 +587,6 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 					) 
 	{
 		$ret_val = array();
-		$ret_id = spl_object_hash($ret_val);
 
 		// データソースの準備
 		$this->initDataSource();
@@ -635,6 +661,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			// 実行
 			$result = $ds->prepareExecute( s($sql), v($params) );
 
+			$this->_last_sql = $sql;
+			$this->_last_params = $params;
+
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "executed SQL: $sql" );
 
 			// 実行結果件数取得
@@ -666,7 +695,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	最初の１件取得
 	 */
 	public  function findFirst( 
-						Charcoal_String $query_target, 
+						Charcoal_QueryTarget $query_target, 
 						Charcoal_SQLCriteria $criteria, 
 						Charcoal_Vector $fields = NULL
 					) 
@@ -694,7 +723,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	最初の１件を更新用に取得
 	 */
 	public  function findFirstForUpdate(
-						Charcoal_String $query_target, 
+						Charcoal_QueryTarget $query_target, 
 						Charcoal_SQLCriteria $criteria, 
 						Charcoal_Vector $fields = NULL
 					) 
@@ -723,7 +752,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	全件取得
 	 */
 	public  function findAll( 
-						Charcoal_String $query_target, 
+						Charcoal_QueryTarget $query_target, 
 						Charcoal_SQLCriteria $criteria, 
 						Charcoal_Vector $fields = NULL
 					) 
@@ -734,14 +763,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		try{
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( s($query_target) );
-
 			// 検索実行
 			if ( $fields )
-				$result = $this->find( $query_target_list, i(0), $criteria, $fields );
+				$result = $this->find( $query_target, i(0), $criteria, $fields );
 			else
-				$result = $this->find( $query_target_list, i(0), $criteria );
+				$result = $this->find( $query_target, i(0), $criteria );
 
 			return $result;
 		}
@@ -756,7 +782,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	全件取得（更新用）
 	 */
 	public  function findAllForUpdate( 
-						Charcoal_String $query_target, 
+						Charcoal_QueryTarget $query_target, 
 						Charcoal_SQLCriteria $criteria, 
 						Charcoal_Vector $fields = NULL
 					) 
@@ -767,15 +793,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		try{
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( s($query_target) );
-
 			// 検索実行
 			$options = Charcoal_EnumQueryOption::FOR_UPDATE;
 			if ( $fields )
-				$result = $this->find( $query_target_list, i($options), $criteria, $fields );
+				$result = $this->find( $query_target, i($options), $criteria, $fields );
 			else
-				$result = $this->find( $query_target_list, i($options), $criteria );
+				$result = $this->find( $query_target, i($options), $criteria );
 
 			return $result;
 		}
@@ -790,7 +813,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	全件取得（重複削除）
 	 */
 	public  function findDistinct( 
-						Charcoal_String $query_target, 
+						Charcoal_QueryTarget $query_target, 
 						Charcoal_Vector $fields, 
 						Charcoal_SQLCriteria $criteria, 
 						Charcoal_Vector $fields = NULL
@@ -802,15 +825,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		try{
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( s($query_target) );
-
 			// 検索実行
 			$options = Charcoal_EnumQueryOption::DISTINCT;
 			if ( $fields )
-				$result = $this->find( $query_target_list, i($options), $criteria, $fields );
+				$result = $this->find( $query_target, i($options), $criteria, $fields );
 			else
-				$result = $this->find( $query_target_list, i($options), $criteria );
+				$result = $this->find( $query_target, i($options), $criteria );
 
 			return $result;
 		}
@@ -825,7 +845,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	１つのフィールドのみで検索
 	 */
 	public  function findAllBy( 
-						Charcoal_String $query_target, 
+						Charcoal_QueryTarget $query_target, 
 						Charcoal_String $field, 
 						Charcoal_String $value, 
 						Charcoal_Vector $fields = NULL
@@ -881,7 +901,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 			$criteria = new Charcoal_SQLCriteria( $where_clause, $params );
 
-			$result = $this->findAll( $model_name, $criteria );
+			$result = $this->findAll( qt($model_name), $criteria );
 
 			return $result ? array_shift( $result ) : NULL;
 
@@ -1327,4 +1347,4 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		return new Charcoal_SelectContext( $context );
 	}
 }
-return __FILE__;
+

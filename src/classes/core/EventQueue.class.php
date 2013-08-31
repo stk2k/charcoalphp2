@@ -49,4 +49,4 @@ class Charcoal_EventQueue extends Charcoal_Queue
 		$this->setValue( $array );
 	}
 }
-return __FILE__;
+

@@ -13,8 +13,9 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 {
 	private $_log_format;
 	private $_converter;
+	private $_value_cache;
 
-	const DEFAULT_LOG_FORMAT = '%Y4%-%M2%-%D2% %H2%:%M%:%S% [%LEVEL%] [%TAG%] %MESSAGE%       @%FILENAME%(%LINE%)';
+	const DEFAULT_LOG_FORMAT = '%Y4%-%M2%-%D2% %H2%:%M%:%S% [%REMOTE_ADDR%] [%LEVEL%] [%TAG%] %MESSAGE%       @%FILENAME%(%LINE%)';
 
 	/*
 	 *	Construct object
@@ -24,6 +25,26 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 		parent::__construct();
 
 		$this->_converter = Charcoal_EncodingConverter::fromString( s('PHP'), s('LOG') );
+
+		$now_time = time();
+
+		$this->_value_cache = array(
+				'%Y4%' => date("Y",$now_time),
+				'%Y2%' => date("y",$now_time),
+				'%M2%' => date("m",$now_time),
+				'%M1%' => date("n",$now_time),
+				'%D2%' => date("d",$now_time),
+				'%D1%' => date("j",$now_time),
+				'%H2%' => date("H",$now_time),
+				'%H1%' => date("G",$now_time),
+				'%h2%' => date("h",$now_time),
+				'%h1%' => date("g",$now_time),
+				'%M%'  => date("i",$now_time),
+				'%S%'  => date("s",$now_time),
+				'%REMOTE_ADDR%' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : NULL,
+				'%REQUEST_ID%' => Charcoal_Framework::getRequestID(),
+				'%REQUEST_PATH%' => Charcoal_Framework::getRequestPath(),
+			);
 	}
 
 	/**
@@ -89,18 +110,6 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 
 		// formatted date values
 		$formatted_values = array(
-				'%Y4%' => date("Y",$now_time),
-				'%Y2%' => date("y",$now_time),
-				'%M2%' => date("m",$now_time),
-				'%M1%' => date("n",$now_time),
-				'%D2%' => date("d",$now_time),
-				'%D1%' => date("j",$now_time),
-				'%H2%' => date("H",$now_time),
-				'%H1%' => date("G",$now_time),
-				'%h2%' => date("h",$now_time),
-				'%h1%' => date("g",$now_time),
-				'%M%'  => date("i",$now_time),
-				'%S%'  => date("s",$now_time),
 				'%LEVEL%' => $level,
 				'%TAG%' => $tag,
 				'%MESSAGE%' => $message,
@@ -109,11 +118,15 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 				'%LINE%' => $line,
 			);
 
-		// format message
+		// merge values
+		$formatted_values = array_merge( $formatted_values, $this->_value_cache );
+
+		// set log format string as initial value
 		$out = $this->_log_format;
 
-		foreach( $formatted_values as $search => $replace ){
-			$out = str_replace( $search, $replace, $out );
+		// replace keyword
+		foreach( $formatted_values as $key => $value ){
+			$out = str_replace( $key, $value, $out );
 		}
 
 		return $out;
@@ -124,39 +137,16 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 	 */
 	public function formatFileName( Charcoal_String $file_name )
 	{
-		$req_id   = Charcoal_Framework::getRequestID();
-		$req_path = str_replace(':','-',Charcoal_Framework::getRequestPath());
-		$now_time = time();
+		$out = us($file_name);
 
-		$file_name = us($file_name);
+		// replace keyword
+		foreach( $this->_value_cache as $key => $value ){
+			$value = str_replace( ':', '_', $value );
+			$out = str_replace( $key, $value, $out );
+		}
 
-		// replace request ID
-		$file_name = str_replace( '%REQUEST_ID%', $req_id, $file_name );
-
-		// replace request path
-		$file_name = str_replace( '%REQUEST_PATH%', $req_path, $file_name );
-
-		// replace year
-		$file_name = str_replace( '%Y%', date('Y',$now_time), $file_name );
-
-		// replace month
-		$file_name = str_replace( '%M%', date('m',$now_time), $file_name );
-
-		// replace day
-		$file_name = str_replace( '%D%', date('d',$now_time), $file_name );
-
-		// replace hour
-		$file_name = str_replace( '%H%', date('H',$now_time), $file_name );
-
-		// replace minute
-		$file_name = str_replace( '%I%', date('i',$now_time), $file_name );
-
-		// replace second
-		$file_name = str_replace( '%S%', date('s',$now_time), $file_name );
-
-		return s($file_name);
+		return $out;
 	}
 
 }
 
-return __FILE__;

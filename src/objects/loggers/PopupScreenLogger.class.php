@@ -120,4 +120,3 @@ class Charcoal_PopupScreenLogger extends Charcoal_CharcoalObject implements Char
 	}
 }
 
-return __FILE__;

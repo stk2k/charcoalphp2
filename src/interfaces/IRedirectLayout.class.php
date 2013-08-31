@@ -18,4 +18,3 @@ interface Charcoal_IRedirectLayout
 
 }
 
-return __FILE__;

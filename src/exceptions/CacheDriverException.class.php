@@ -20,4 +20,3 @@ class Charcoal_CacheDriverException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

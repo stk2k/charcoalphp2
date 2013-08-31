@@ -23,4 +23,3 @@ class Charcoal_TaskNotRegisteredException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

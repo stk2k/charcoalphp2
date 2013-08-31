@@ -24,4 +24,3 @@ class Charcoal_ObjectConfigException extends Charcoal_ConfigException
 }
 
 
-return __FILE__;

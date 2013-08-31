@@ -17,4 +17,3 @@ interface Charcoal_ILayoutManager extends Charcoal_ICharcoalObject
 	public function getLayout( Charcoal_String $layout_name );
 }
 
-return __FILE__;

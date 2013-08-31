@@ -23,4 +23,4 @@ class Charcoal_SetupEvent extends Charcoal_SystemEvent implements Charcoal_IEven
 		parent::configure( $config );
 	}
 }
-return __FILE__;
+

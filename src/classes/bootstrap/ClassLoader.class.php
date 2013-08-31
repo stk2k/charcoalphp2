@@ -55,7 +55,7 @@ class Charcoal_ClassLoader
 		// callback all class loaders
 		$loaders = $ins->_loaders;
 		foreach( $loaders as $loader ){
-			$loader_name = $loader->getObjectName();
+//			$loader_name = $loader->getObjectName();
 
 			if ( $loader->loadClass( s($class_name) ) ){
 //				log_debug( "debug,class_loader", "class_loader", "class($class_name) loaded by loader[$loader_name]" );
@@ -66,4 +66,3 @@ class Charcoal_ClassLoader
 		return FALSE;
 	}
 }
-return __FILE__;

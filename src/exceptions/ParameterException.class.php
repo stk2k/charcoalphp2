@@ -29,4 +29,3 @@ class Charcoal_ParameterException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

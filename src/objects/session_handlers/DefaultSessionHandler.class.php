@@ -138,15 +138,20 @@ class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements 
 	 */
 	public static function gc( $max_lifetime )
 	{
-		$find_path = self::getSessionFile( '*' );
-
-		foreach( glob($find_path) as $file ){
-			if ( filemtime($file) + $max_lifetime < time() ){
-				@unlink( $file );
+		if ( $dh = opendir(self::$save_path) )
+		{
+			while( ($file = readdir($dh)) !== FALSE )
+			{
+				$file = self::$save_path . DIRECTORY_SEPARATOR . $file;
+				if ( filemtime($file) + $max_lifetime < time() ){
+					@unlink( $file );
+				}
 			}
+			closedir($dh);
 		}
+
 		return true;
 	}
 
 }
-return __FILE__;
+

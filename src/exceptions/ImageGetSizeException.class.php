@@ -19,4 +19,4 @@ class Charcoal_ImageGetSizeException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

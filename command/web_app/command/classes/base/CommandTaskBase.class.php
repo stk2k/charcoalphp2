@@ -40,9 +40,9 @@ abstract class CommandTaskBase extends Charcoal_Task
 	public function processEvent( Charcoal_IEventContext $context )
 	{
 		$request   = $context->getRequest();
-		$response  = $context->getResponse();
-		$sequence  = $context->getSequence();
-		$procedure = $context->getProcedure();
+//		$response  = $context->getResponse();
+//		$sequence  = $context->getSequence();
+//		$procedure = $context->getProcedure();
 
 		// get paramter from command line
 		$actions       = $request->getString( s("actions") );
@@ -51,8 +51,6 @@ abstract class CommandTaskBase extends Charcoal_Task
 		$action_list = $actions->split( s(',') );
 
 		// initialize
-		$commands = 0;
-
 		try{
 			$this->setUp();
 		}

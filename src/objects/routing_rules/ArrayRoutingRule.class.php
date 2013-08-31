@@ -66,4 +66,3 @@ class Charcoal_ArrayRoutingRule extends Charcoal_CharcoalObject implements Charc
 
 }
 
-return __FILE__;

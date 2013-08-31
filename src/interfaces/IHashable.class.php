@@ -17,4 +17,3 @@ interface Charcoal_IHashable
 	public function hash();
 }
 
-return __FILE__;

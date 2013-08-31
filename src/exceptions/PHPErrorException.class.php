@@ -32,4 +32,3 @@ class Charcoal_PHPErrorException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;

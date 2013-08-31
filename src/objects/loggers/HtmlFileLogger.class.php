@@ -51,4 +51,3 @@ class Charcoal_HtmlFileLogger extends Charcoal_FileLogger implements Charcoal_IL
 
 }
 
-return __FILE__;

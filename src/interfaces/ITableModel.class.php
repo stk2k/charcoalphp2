@@ -27,4 +27,3 @@ interface Charcoal_ITableModel extends Charcoal_IModel
 	public function isPrimaryKeyValid( Charcoal_TableDTO $dto );
 }
 
-return __FILE__;

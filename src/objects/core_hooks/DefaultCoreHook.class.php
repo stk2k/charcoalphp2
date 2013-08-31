@@ -25,14 +25,14 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function process( Charcoal_CoreHookMessage $msg )
 	{
-		static $start = 0;
+		static $bench;
 
 		$stage    = $msg->getStage();
 		$data     = $msg->getData();
 
 		switch( ui($stage) ){
 		case Charcoal_EnumCoreHookStage::START_OF_BOOTSTRAP:
-			$start = Charcoal_Benchmark::nowTime();
+			$bench = new Charcoal_Benchmark();
 			// starting message
 			log_info( "system,debug", "core_hook", "[$stage] Starting framework bootstrap process." );
 			log_info( "system,debug", "core_hook", "[$stage] ===============================================" );
@@ -69,6 +69,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 		case Charcoal_EnumCoreHookStage::AFTER_REG_CLASS_LOADERS:
 			log_info( "system,debug,class_loader", "core_hook", "[$stage] Finished registering class loaders." );
 			break;
+/*
 		case Charcoal_EnumCoreHookStage::BEFORE_REG_EXCEPTION_HANDLERS:
 			log_info( "system,debug", "core_hook", "[$stage] Starting registering exception handlers." );
 			break;
@@ -78,6 +79,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 		case Charcoal_EnumCoreHookStage::AFTER_REG_EXCEPTION_HANDLERS:
 			log_info( "system,debug", "core_hook", "[$stage] Finished registering exception handlers." );
 			break;
+*/
 		case Charcoal_EnumCoreHookStage::BEFORE_REG_USER_LOGGERS:
 			log_info( "system,debug", "core_hook", "[$stage] Starting registering loggers." );
 			break;
@@ -154,8 +156,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 			log_info( "system,debug", "core_hook", "[$stage] Finished creating response filters.");
 			break;
 		case Charcoal_EnumCoreHookStage::END_OF_BOOTSTRAP:
-			$now = Charcoal_Benchmark::nowTime();
-			$elapse = round( ($now - $start) * 1000, 5 );
+			$elapse = $bench->nowScore();
 			log_info( "system,debug", "core_hook", "[$stage] Finished framework bootstrap process.");
 			log_info( "system,debug", "core_hook", "[$stage] bootstrap processing time: [$elapse] msec");
 			break;
@@ -196,8 +197,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 
 			if ( Charcoal_Framework::isDebugMode() ){
 				// whole ellapse time
-				$now = Charcoal_Benchmark::nowTime();
-				$elapse = round( $now - $start, 4 );
+				$elapse = $bench->stop();
 				log_info( "system,debug", "core_hook", "[$stage] total processing time: [$elapse] msec");
 
 				$peak_usage = memory_get_peak_usage(FALSE);
@@ -227,4 +227,4 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 		}
 	}
 }
-return __FILE__;
+

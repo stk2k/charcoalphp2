@@ -5,9 +5,9 @@
 
 define( 'PROC_KEYWORD', 'proc' );
 define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
-define( 'CHARCOAPHP_VERSION_MINOR', 16 );
-define( 'CHARCOAPHP_VERSION_REVISION', 6 );
-define( 'CHARCOAPHP_VERSION_BUILD', 137 );
+define( 'CHARCOAPHP_VERSION_MINOR', 18 );
+define( 'CHARCOAPHP_VERSION_REVISION', 0 );
+define( 'CHARCOAPHP_VERSION_BUILD', 142 );
 define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
 define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
  
@@ -72,18 +72,6 @@ function add_include_path( $path )
 ini_set( 'include_path', CHARCOAL_HOME . '/classes' );
 add_include_path( WEBAPP_DIR . '/' . APPLICATION . '/classes' );
 */
-
-//==================================================================
-// spl_object_hashのエミュレート（PHP5.2未満）
-
-function object_hash($object)
-{
-	if ( !isset($object->__oid__) )
-	{
-		$object->__oid__ = uniqid();
-	}
-	return $object->__oid__;
-}
 
 //==================================================================
 // EOL
@@ -169,12 +157,12 @@ function ad( $array, $options = NULL, $return = FALSE, $max_depth = 30 )
  *	stringをStringオブジェクトに変換
  **/
 
-function s( $value, $encoding = NULL )
+function s( $value )
 {
 	if ( $value instanceof Charcoal_String ){
 		return $value;
 	}
-	return new Charcoal_String( $value, $encoding );
+	return new Charcoal_String($value);
 }
 
 /**
@@ -352,7 +340,7 @@ function _throw( Exception $e, Charcoal_Integer $back = null )
 	if ( ENABLE_INTERNAL_EXCEPTION_TRACE ){
 		list( $file, $line ) = Charcoal_System::caller($back ? ui($back) : 0);
 		$clazz = get_class($e);
-		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : object_hash($e);
+		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
 		$message = $e->getMessage();
 		log_debug( "system,error,debug", "exception", "_throw $clazz ($id) $message @$file($line)", Charcoal_EnumEchoFlag::ECHO_EXCEPTION );
 	}
@@ -366,7 +354,7 @@ function _catch( Exception $e )
 	if ( ENABLE_INTERNAL_EXCEPTION_TRACE ){
 		list( $file, $line ) = Charcoal_System::caller();
 		$clazz = get_class($e);
-		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : object_hash($e);
+		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
 		$message = $e->getMessage();
 		log_debug( "system,error,debug", "exception", "_catch $clazz ($id) $message @$file($line)", Charcoal_EnumEchoFlag::ECHO_EXCEPTION );
 	}

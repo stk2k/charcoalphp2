@@ -45,4 +45,4 @@ class Charcoal_Integer extends Charcoal_Number
 		return new Charcoal_Integer(--$value);
 	}
 }
-return __FILE__;
+

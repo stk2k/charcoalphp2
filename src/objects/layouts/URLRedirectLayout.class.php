@@ -48,4 +48,4 @@ class Charcoal_URLRedirectLayout extends Charcoal_Layout implements Charcoal_IRe
 	}
 }
 
-return __FILE__;
+

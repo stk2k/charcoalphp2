@@ -32,21 +32,21 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_CharcoalObject implements 
 	/**
 	 * Render debug trace
 	 *
-	 * @param Charcoal_String $title  title
 	 */
-	public function render( Exception $e, Charcoal_String $title = NULL )
+	public function render( Exception $e )
 	{
-		$message = ( $title ) ? $this->output( $e, $title ) : $this->output( $e );
+		$message = $this->output( $e );
 
-		log_error( "debug,error", "debugtrace", $message );
+		log_error( "debug,error,debugtrace", "debugtrace", $message );
+
+		return b(TRUE);
 	}
 
 	/**
 	 * Output HTML
 	 *
-	 * @param Charcoal_String $title  title
 	 */
-	public function output( Exception $e, Charcoal_String $title = NULL )
+	public function output( Exception $e )
 	{
 		$out = '';
 		$version = Charcoal_Framework::getVersion();
@@ -117,4 +117,4 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_CharcoalObject implements 
 	}
 
 }
-return __FILE__;
+

@@ -152,4 +152,3 @@ class Charcoal_CsvFileLogger extends Charcoal_FileLogger implements Charcoal_ILo
 	}
 }
 
-return __FILE__;

@@ -17,4 +17,4 @@ class Charcoal_RuntimeException extends Charcoal_CharcoalException
 	}
 
 }
-return __FILE__;
+

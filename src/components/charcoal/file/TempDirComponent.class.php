@@ -119,4 +119,4 @@ class Charcoal_TempDirComponent extends Charcoal_CharcoalComponent implements Ch
 		}
 	}
 }
-return __FILE__;
+

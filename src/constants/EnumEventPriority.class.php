@@ -24,4 +24,4 @@ class Charcoal_EnumEventPriority extends Charcoal_Object
 	const PAGE_CONTROL      =  700;	// priority for page control(such as page redirection)
 	const VIEW_RENDERING    =  200;	// very low priority(such as view rendering)
 }
-return __FILE__;
+

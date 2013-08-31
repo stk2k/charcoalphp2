@@ -27,7 +27,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 		$this->obj_name = strtolower(preg_replace('/([a-z0-9])([A-Z])/', "$1_$2", $class_name));
 	}
 
-	/*
+	/**
 	 * Initialize instance
 	 *
 	 * @param Charcoal_Config $config   configuration data
@@ -97,4 +97,4 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	}
 
 }
-return __FILE__;
+

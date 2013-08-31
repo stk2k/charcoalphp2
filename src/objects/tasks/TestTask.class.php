@@ -259,4 +259,3 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	}
 }
 
-return __FILE__;

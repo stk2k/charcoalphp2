@@ -170,4 +170,4 @@ class Charcoal_ShellResponse extends Charcoal_CharcoalObject implements Charcoal
 	}
 
 }
-return __FILE__;
+

@@ -23,4 +23,3 @@ class Charcoal_DataSourceConfigException extends Charcoal_ConfigException
 }
 
 
-return __FILE__;

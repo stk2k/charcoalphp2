@@ -20,4 +20,4 @@ class Charcoal_InterfaceNotFoundException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;
+

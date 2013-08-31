@@ -82,4 +82,3 @@ class Charcoal_ImageFile extends Charcoal_File
 	}
 }
 
-return __FILE__;

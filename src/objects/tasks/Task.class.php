@@ -142,4 +142,3 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	}
 }
 
-return __FILE__;

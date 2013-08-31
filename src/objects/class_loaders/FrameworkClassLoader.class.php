@@ -64,7 +64,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_EventQueue'				=> 'classes/core',
 				'Charcoal_HttpHeader'				=> 'classes/core',
 				'Charcoal_Layout'					=> 'classes/core',
-				'Charcoal_QueryJoin'				=> 'classes/core',
 				'Charcoal_ModuleLoader'				=> 'classes/core',
 				'Charcoal_ResponseFilterList'		=> 'classes/core',
 				'Charcoal_Sequence'					=> 'classes/core',
@@ -92,7 +91,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ICharcoalObject'			=> 'interfaces',
 				'Charcoal_IClassLoader'				=> 'interfaces',
 				'Charcoal_IComponent'				=> 'interfaces',
-				'Charcoal_IConfigValidator'			=> 'interfaces',
 				'Charcoal_ICoreHook'				=> 'interfaces',
 				'Charcoal_IDataSource'				=> 'interfaces',
 				'Charcoal_IDebugtraceRenderer'		=> 'interfaces',
@@ -165,7 +163,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ComponentNotRegisteredException'		=> 'exceptions',
 				'Charcoal_ConfigException'						=> 'exceptions',
 				'Charcoal_ConfigFileNotFoundException'			=> 'exceptions',
-				'Charcoal_ConfigNotFoundException'				=> 'exceptions',
 				'Charcoal_DateFormatException'					=> 'exceptions',
 				'Charcoal_DateWithTimeFormatException'			=> 'exceptions',
 				'Charcoal_DataSourceConfigException'			=> 'exceptions',
@@ -180,6 +177,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_EmptyStackException'					=> 'exceptions',
 				'Charcoal_EncodingConverterException'			=> 'exceptions',
 				'Charcoal_EventConfigException'					=> 'exceptions',
+				'Charcoal_EventContextException'				=> 'exceptions',
 				'Charcoal_FileOpenException'					=> 'exceptions',
 				'Charcoal_FilterConfigException'				=> 'exceptions',
 				'Charcoal_FileOutputException'					=> 'exceptions',
@@ -324,22 +322,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_BreadcrumbList'					=> 'components/charcoal',
 				'Charcoal_Calendar'							=> 'components/charcoal',
 				'Charcoal_Pager'							=> 'components/charcoal',
-				'Charcoal_SmartGateway'						=> 'components/charcoal/db',
-				'Charcoal_SQLCriteria'						=> 'components/charcoal/db',
-				'Charcoal_PagedSQLCriteria'					=> 'components/charcoal/db',
-				'Charcoal_QueryTarget'						=> 'components/charcoal/db',
-				'Charcoal_QueryTargetElement'				=> 'components/charcoal/db',
-				'Charcoal_SelectContext'					=> 'components/charcoal/db',
-				'Charcoal_FromContext'						=> 'components/charcoal/db',
-				'Charcoal_WhereContext'						=> 'components/charcoal/db',
-				'Charcoal_OrderByContext'					=> 'components/charcoal/db',
-				'Charcoal_LimitContext'						=> 'components/charcoal/db',
-				'Charcoal_OffsetContext'					=> 'components/charcoal/db',
-				'Charcoal_GroupByContext'					=> 'components/charcoal/db',
-				'Charcoal_PreparedContext'					=> 'components/charcoal/db',
-				'Charcoal_BindedContext'					=> 'components/charcoal/db',
-				'Charcoal_ResultContext'					=> 'components/charcoal/db',
-				'Charcoal_QueryContext'						=> 'components/charcoal/db',
 				'Charcoal_JapanesePrefectureList'			=> 'components/charcoal/list',
 				'Charcoal_CharcoalUnitTest'					=> 'components/charcoal/test',
 				'Charcoal_CharcoalMail'						=> 'components/charcoal/mail',
@@ -352,6 +334,27 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_TempFileComponent'				=> 'components/charcoal/file',
 				'Charcoal_FormTokenComponent'				=> 'components/charcoal/form',
 				'Charcoal_PDFWriterComponent'				=> 'components/pdf',
+
+		// component classes(smart gateway)
+				'Charcoal_SmartGateway'						=> 'components/charcoal/db',
+				'Charcoal_SQLCriteria'						=> 'components/charcoal/db',
+				'Charcoal_PagedSQLCriteria'					=> 'components/charcoal/db',
+				'Charcoal_QueryJoin'						=> 'components/charcoal/db',
+				'Charcoal_QueryTarget'						=> 'components/charcoal/db',
+				'Charcoal_QueryTargetElement'				=> 'components/charcoal/db',
+
+				'Charcoal_SelectContext'					=> 'components/charcoal/db/context',
+				'Charcoal_FromContext'						=> 'components/charcoal/db/context',
+				'Charcoal_JoinContext'						=> 'components/charcoal/db/context',
+				'Charcoal_WhereContext'						=> 'components/charcoal/db/context',
+				'Charcoal_OrderByContext'					=> 'components/charcoal/db/context',
+				'Charcoal_LimitContext'						=> 'components/charcoal/db/context',
+				'Charcoal_OffsetContext'					=> 'components/charcoal/db/context',
+				'Charcoal_GroupByContext'					=> 'components/charcoal/db/context',
+				'Charcoal_PreparedContext'					=> 'components/charcoal/db/context',
+				'Charcoal_BindedContext'					=> 'components/charcoal/db/context',
+				'Charcoal_ResultContext'					=> 'components/charcoal/db/context',
+				'Charcoal_QueryContext'						=> 'components/charcoal/db/context',
 
 		// transformer classes
 				'Charcoal_SimpleTransformer'				=> 'objects/transformers',
@@ -406,16 +409,12 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 		}
 
 		// クラス名からクラスパスを取得
-		$class_path = isset($class_paths[ $class_name ]) ? $class_paths[ $class_name ] : NULL;
-		if ( $class_path === NULL ){
-			_throw( new Charcoal_ClassPathNotFoundException( $class_name ) );
-		}
 		$file_name = $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
 		$pos = strpos( $file_name, CHARCOAL_CLASS_PREFIX );
 		if ( $pos !== FALSE ){
 			$file_name = substr( $file_name, $pos + strlen(CHARCOAL_CLASS_PREFIX) );
 		}
-		$class_path = CHARCOAL_HOME . '/src/' . $class_path . '/' . $file_name;
+		$class_path = CHARCOAL_HOME . '/src/' . $class_paths[ $class_name ] . '/' . $file_name;
 //		log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] class_path=[$class_path] class_name=[$class_name]" );
 
 		// ソース読み込み
@@ -426,4 +425,4 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 		return TRUE;
 	}
 }
-return __FILE__;
+

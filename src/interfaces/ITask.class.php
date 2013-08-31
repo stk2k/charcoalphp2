@@ -47,4 +47,3 @@ interface Charcoal_ITask extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

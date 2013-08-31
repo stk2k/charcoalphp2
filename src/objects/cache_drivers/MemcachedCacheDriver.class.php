@@ -117,4 +117,4 @@ class Charcoal_MemcachedCacheDriver extends Charcoal_CharcoalObject implements C
 	public function touchRegEx( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
 }
-return __FILE__;
+

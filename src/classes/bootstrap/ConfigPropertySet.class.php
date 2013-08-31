@@ -163,4 +163,3 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 }
 
-return __FILE__;

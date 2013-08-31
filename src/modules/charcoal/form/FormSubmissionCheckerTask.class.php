@@ -58,4 +58,3 @@ class Charcoal_FormSubmissionChekerTask extends Charcoal_Task implements Charcoa
 	}
 }
 
-return __FILE__;

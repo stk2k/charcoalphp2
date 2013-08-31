@@ -17,4 +17,4 @@ class Charcoal_DBException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

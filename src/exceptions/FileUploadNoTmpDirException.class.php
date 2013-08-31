@@ -19,4 +19,4 @@ class Charcoal_FileUploadNoTmpDirException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

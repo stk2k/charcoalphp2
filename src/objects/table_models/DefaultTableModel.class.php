@@ -74,4 +74,3 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
 
 }
 
-return __FILE__;

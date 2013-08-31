@@ -16,4 +16,3 @@ class EnumPDFOrientation
 
 }
 
-return __FILE__;

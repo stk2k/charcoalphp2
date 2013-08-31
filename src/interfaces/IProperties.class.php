@@ -88,4 +88,3 @@ interface Charcoal_IProperties
 	public function getFloat( Charcoal_String $key, Charcoal_Float $default_value = NULL );
 }
 
-return __FILE__;

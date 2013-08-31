@@ -66,4 +66,4 @@ class Charcoal_SpycConfigProvider extends Charcoal_Object implements Charcoal_IC
 	}
 
 }
-return __FILE__;
+

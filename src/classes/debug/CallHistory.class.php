@@ -48,4 +48,4 @@ class Charcoal_CallHistory extends Charcoal_Object
 		return Charcoal_System::implodeArray( ',', $this->_args );
 	}
 }
-return __FILE__;
+

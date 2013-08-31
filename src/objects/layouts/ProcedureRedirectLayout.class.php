@@ -60,4 +60,4 @@ class Charcoal_ProcedureRedirectLayout extends Charcoal_Layout implements Charco
 	}
 }
 
-return __FILE__;
+

@@ -207,4 +207,4 @@ class Charcoal_Cookie extends Charcoal_Object
 
 }
 
-return __FILE__;
+

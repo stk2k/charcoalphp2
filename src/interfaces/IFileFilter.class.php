@@ -19,4 +19,3 @@ interface Charcoal_IFileFilter
 
 }
 
-return __FILE__;

@@ -21,4 +21,3 @@ class Charcoal_PhpSourceParserException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

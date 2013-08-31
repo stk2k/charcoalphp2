@@ -82,4 +82,3 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	}
 }
 
-return __FILE__;

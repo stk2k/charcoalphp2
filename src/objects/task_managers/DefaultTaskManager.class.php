@@ -173,9 +173,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 			// 最大イベント処理回数
 			$max_event_loop = Charcoal_Profile::getInteger( s("TM_MAX_EVENT_LOOP"), i(1000) )->getValue();
 
-			// 最大イベント処理時間
-			$max_event_time = Charcoal_Profile::getInteger( s("TM_MAX_EVENT_TIME"), i(100) )->getValue();
-
 			$start_total = Charcoal_Benchmark::nowTime();
 
 			$loop_id = 0;
@@ -187,7 +184,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 				$queue->sortByPriority();
 
 				// ログ
-//				log_info( "system,event", "task_manager", "[loop:$loop_id] event queue: [ " . Charcoal_System::implodeArray( ",", $queue->toArray() ) . " ]" );
+				log_info( "system,event", "task_manager", "[loop:$loop_id] event queue: [ " . Charcoal_System::implodeArray( ",", $queue->toArray() ) . " ]" );
 
 				// イベントを取得
 				$event      = $queue->dequeue();
@@ -384,13 +381,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 					break;
 				}
 
-				// 経過時間チェック
-				$now_total = Charcoal_Benchmark::nowTime();
-				if ( $now_total - $start_total > $max_event_time ){
-					log_warning( "system,event", "task_manager", "[loop:$loop_id/$event_name] aborting by overflow maximum event process time[$max_event_time].");
-					break;
-				}
-
 				// このループ終了時にアボートのフラグが成立していれば抜ける
 				if ( $abort_after_this_loop ){
 					log_warning( "system,event", "task_manager", "[loop:$loop_id/$event_name] aborting by flag.");
@@ -407,7 +397,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 			// ログ
 			$now_total = Charcoal_Benchmark::nowTime();
 			$elapse = round( $now_total - $start_total, 4 );
-			log_info( "system,event", "task_manager", "event loop end. time=[$elapse]sec.");
+			log_info( "system,event", "task_manager", "event loop end. time=[$elapse]msec.");
 //		}
 //		catch( Exception $ex ){
 //			print "catch: $ex <BR>";
@@ -422,4 +412,4 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 
 }
 
-return __FILE__;
+

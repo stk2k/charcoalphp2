@@ -1,6 +1,6 @@
 <?php
 /**
-* 設定値を保持するクラス
+* Container for configuration values
 *
 * PHP version 5
 *
@@ -11,21 +11,11 @@
 
 class Charcoal_Config extends Charcoal_ConfigPropertySet
 {
-	/*
-	 *    コンストラクタ
+	/**
+	 *  Constructor
 	 */
 	public function __construct( array $data = NULL )
 	{
 		parent::__construct( $data );
 	}
-
-	/*
-	 * 他の設定ファイルから設定値を上書きする
-	 */
-	public function import( Charcoal_ObjectPath $object_path, Charcoal_String $type_name )
-	{
-		Charcoal_ConfigLoader::loadConfig( $object_path, $type_name, $this );
-	}
-
 }
-return __FILE__;

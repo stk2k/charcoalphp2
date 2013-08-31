@@ -17,4 +17,4 @@ abstract class Charcoal_Primitive extends Charcoal_Object
 	abstract public function unbox();
 
 }
-return __FILE__;
+

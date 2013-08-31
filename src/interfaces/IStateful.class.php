@@ -26,4 +26,3 @@ interface Charcoal_IStateful extends Charcoal_ICharcoalObject
 	public function deserializeContents( $serialize_data );
 }
 
-return __FILE__;

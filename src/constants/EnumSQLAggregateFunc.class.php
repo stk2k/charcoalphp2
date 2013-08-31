@@ -17,4 +17,4 @@ class Charcoal_EnumSQLAggregateFunc extends Charcoal_Object
 	const FUNC_COUNT      = 4;	// COUNT()
 	const FUNC_AVG        = 5;	// AVG()
 }
-return __FILE__;
+

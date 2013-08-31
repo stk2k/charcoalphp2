@@ -20,4 +20,4 @@ class Charcoal_FormTokenValidationException extends Charcoal_RuntimeException
 	}
 }
 
-return __FILE__;
+

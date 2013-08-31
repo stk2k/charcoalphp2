@@ -316,4 +316,4 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 
 }
 
-return __FILE__;
+

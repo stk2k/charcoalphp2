@@ -20,4 +20,3 @@ class Charcoal_ConfigSectionNotFoundException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

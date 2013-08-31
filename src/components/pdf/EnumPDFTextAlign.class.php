@@ -20,4 +20,3 @@ class EnumPDFTextAlign
 
 }
 
-return __FILE__;

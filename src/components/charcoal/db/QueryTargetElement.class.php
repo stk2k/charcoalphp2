@@ -38,4 +38,4 @@ class Charcoal_QueryTargetElement extends Charcoal_Object
 		return $this->_string;
 	}
 }
-return __FILE__;
+

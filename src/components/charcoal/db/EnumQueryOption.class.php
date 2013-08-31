@@ -14,4 +14,4 @@ class Charcoal_EnumQueryOption extends Charcoal_Object
 	const FOR_UPDATE    = 0x00000001;	// SELECT ... FOR UPDATE
 	const DISTINCT      = 0x00000002;	// SELECT DISTINCT ...
 }
-return __FILE__;
+

@@ -11,11 +11,14 @@
 
 class Charcoal_Object
 {
+	private $_object_hash;
+
 	/**
 	 *	Constructor
 	 */
 	public function __construct()
 	{
+		$this->_object_hash = spl_object_hash($this);
 	}
 
 	/**
@@ -25,7 +28,7 @@ class Charcoal_Object
 	 */
 	public function hash()
 	{
-		return object_hash($this);
+		return $this->_object_hash;
 	}
 
 	/**
@@ -35,7 +38,7 @@ class Charcoal_Object
 	 */
 	public function equals( Charcoal_Object $object )
 	{
-		return $this->hash() === $object->hash();
+		return $this->_object_hash === $object->_object_hash;
 	}
 
 	/**
@@ -87,4 +90,4 @@ class Charcoal_Object
 		return '[class=' . get_class($this) . ' hash=' . $this->hash() . ']';
 	}
 }
-return __FILE__;
+

@@ -323,4 +323,3 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	}
 }
 
-return __FILE__;

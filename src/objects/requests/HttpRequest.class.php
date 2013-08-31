@@ -15,11 +15,12 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	private $_vars;
 	private $_id;
 	private $_cookie;
+	private $_proc_key;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct(  )
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -44,6 +45,9 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 
 		// リクエストID
 		$this->_id = Charcoal_System::hash();
+
+		// プロシージャキー
+		$this->_proc_key  = Charcoal_Profile::getString( s('PROC_KEY'), s('proc') );
 	}
 
 	/**
@@ -95,16 +99,10 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	 */
 	public function getProcedurePath()
 	{
-		$proc_key  = Charcoal_Profile::getString( s('PROC_KEY') );
-		$proc_path = $this->get( $proc_key );
+		$proc_path = $this->get( $this->_proc_key );
 
 		if ( !$proc_path ){
-			if ( defined('CHARCOAL_DEFAULT_PROCPATH') ){
-				$proc_path = CHARCOAL_DEFAULT_PROCPATH;
-			}
-			else{
-				$proc_path = Charcoal_Profile::getString( s('DEFAULT_PROCPATH') );
-			}
+			$proc_path = Charcoal_Profile::getString( s('DEFAULT_PROCPATH') );
 		}
 
 		return $proc_path;
@@ -177,6 +175,8 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	{
 		$value = $this->get( $key );
 
+		$value = us($value);
+
 		// 文字列として不正ならデフォルト値を返す
 		if ( NULL === $value || !is_string($value) ){
 			return $default_value;
@@ -191,6 +191,8 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	public function getArray( Charcoal_String $key, Charcoal_Vector $default_value = NULL )
 	{
 		$value = $this->get( $key );
+
+		$value = uv($value);
 
 		// 配列値として不正ならデフォルト値を返す
 		if ( NULL === $value || !is_array($value) ){
@@ -207,6 +209,8 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	public function getBoolean( Charcoal_String $key, Charcoal_Boolean $default_value = NULL )
 	{
 		$value = $this->get( $key );
+
+		$value = ub($value);
 
 		if ( is_string($value) ){
 			$value = (strlen($value) > 0 );
@@ -228,6 +232,8 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	{
 		$value = $this->get( $key );
 
+		$value = ui($value);
+
 		// 整数値として不正ならデフォルト値を返す
 		if ( NULL === $value || !is_numeric($value) ){
 			return $default_value;
@@ -243,6 +249,8 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	public function getFloat( Charcoal_String $key, Float $default_value = NULL )
 	{
 		$value = $this->get( $key );
+
+		$value = uf($value);
 
 		// 浮動小数点数として不正ならデフォルト値を返す
 		if ( NULL === $value || !is_numeric($value) ){
@@ -284,4 +292,3 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	}
 }
 
-return __FILE__;

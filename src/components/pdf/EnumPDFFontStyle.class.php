@@ -18,4 +18,3 @@ class EnumPDFFontStyle
 
 }
 
-return __FILE__;

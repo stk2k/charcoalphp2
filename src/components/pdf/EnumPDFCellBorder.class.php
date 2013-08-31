@@ -20,4 +20,3 @@ class EnumPDFCellBorder
 
 }
 
-return __FILE__;

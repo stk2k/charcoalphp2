@@ -20,4 +20,3 @@ class Charcoal_ProfileDirectoryNotFoundException extends Charcoal_RuntimeExcepti
 }
 
 
-return __FILE__;

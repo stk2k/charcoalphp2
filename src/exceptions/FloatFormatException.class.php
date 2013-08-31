@@ -24,4 +24,3 @@ class Charcoal_FloatFormatException extends Charcoal_RuntimeException
 
 }
 
-return __FILE__;

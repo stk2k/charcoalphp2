@@ -156,4 +156,4 @@ class Charcoal_CookieComponent extends Charcoal_CharcoalComponent implements Cha
 		return $this->_impl->writeRaw();
 	}
 }
-return __FILE__;
+

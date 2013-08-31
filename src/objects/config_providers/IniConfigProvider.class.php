@@ -31,14 +31,13 @@ class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Char
 	public function loadConfigByName( 
 							Charcoal_String $config_root, 
 							Charcoal_String $config_name, 
-							Charcoal_Config& $config, 
-							Charcoal_String& $source = NULL
+							Charcoal_Config& $config
 							)
 	{
 		$config_root = us($config_root);
 		$config_name = us($config_name);
 
-		$source = $config_root . "$config_name.ini";
+		$source = $config_root . $config_name . '.ini';
 
 		// check if ini file exists
 		if ( !is_file($source) ){	
@@ -68,4 +67,4 @@ class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Char
 	}
 
 }
-return __FILE__;
+

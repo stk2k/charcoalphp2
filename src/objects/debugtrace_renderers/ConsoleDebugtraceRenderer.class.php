@@ -30,22 +30,19 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_CharcoalObject impleme
 	/**
 	 * Render debug trace
 	 *
-	 * @param Charcoal_String $title  title
 	 */
-	public function render( Exception $e, Charcoal_String $title = NULL )
+	public function render( Exception $e )
 	{
-		if ( $title )
-			echo $this->output( $e, $title );
-		else
-			echo $this->output( $e );
+		echo $this->output( $e );
+
+		return b(TRUE);
 	}
 
 	/**
 	 * Output HTML
 	 *
-	 * @param Charcoal_String $title  title
 	 */
-	public function output( Exception $e, Charcoal_String $title = NULL )
+	public function output( Exception $e )
 	{
 		$out = '';
 		$version = Charcoal_Framework::getVersion();
@@ -116,4 +113,4 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_CharcoalObject impleme
 	}
 
 }
-return __FILE__;
+

@@ -60,4 +60,4 @@ class Charcoal_HttpErrorDocumentExceptionHandler extends Charcoal_CharcoalObject
 	}
 
 }
-return __FILE__;
+

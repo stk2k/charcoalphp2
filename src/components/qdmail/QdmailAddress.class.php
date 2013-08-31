@@ -63,4 +63,4 @@ class Charcoal_QdmailAddress
 	}
 }
 
-return __FILE__;
+

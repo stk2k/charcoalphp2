@@ -16,4 +16,3 @@ class Charcoal_RouterConfigException extends Charcoal_ConfigException
 		if ( $previous ) parent::__construct( s($message), $previous ); else parent::__construct( s($message) );
 	}
 }
-return __FILE__;

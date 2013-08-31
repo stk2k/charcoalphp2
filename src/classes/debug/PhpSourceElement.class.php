@@ -98,4 +98,4 @@ class Charcoal_PhpSourceElement extends Charcoal_Object
 		return "[$code@$type:$id:$state]";
 	}
 }
-return __FILE__;
+

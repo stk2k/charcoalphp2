@@ -313,4 +313,4 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	}
 
 }
-return __FILE__;
+

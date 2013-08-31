@@ -19,4 +19,4 @@ class Charcoal_UnsupportedImageFormatException extends Charcoal_RuntimeException
 	}
 
 }
-return __FILE__;
+

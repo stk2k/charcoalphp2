@@ -130,4 +130,4 @@ class Charcoal_DateWithTime extends Charcoal_Object
 		return date( 'Y-m-d H:i:s', $this->_timestamp );
 	}
 }
-return __FILE__;
+

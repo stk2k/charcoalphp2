@@ -187,7 +187,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	}
 
 	/*
-	 *  alias
+	 *  get alias
 	 */
 	public function getAlias()
 	{
@@ -195,7 +195,15 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	}
 
 	/*
-	 *  joins
+	 *  set alias
+	 */
+	public function setAlias( Charcoal_String $alias )
+	{
+		$this->_alias = $alias;
+	}
+
+	/*
+	 *  get joins
 	 */
 	public function getJoins()
 	{
@@ -268,4 +276,4 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	}
 
 }
-return __FILE__;
+

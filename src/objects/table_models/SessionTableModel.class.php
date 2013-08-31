@@ -17,4 +17,4 @@ class Charcoal_SessionTableModel extends Charcoal_DefaultTableModel
 	}
 }
 
-return __FILE__;
+

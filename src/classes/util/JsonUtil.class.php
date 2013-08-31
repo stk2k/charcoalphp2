@@ -33,4 +33,4 @@ class Charcoal_JsonUtil
 
 }
 
-return __FILE__;
+

@@ -631,4 +631,3 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 
 }
 
-return __FILE__;

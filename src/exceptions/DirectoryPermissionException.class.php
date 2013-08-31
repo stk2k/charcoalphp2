@@ -13,11 +13,10 @@ class Charcoal_DirectoryPermissionException extends Charcoal_RuntimeException
 {
 	public function __construct( Charcoal_String $path, Charcoal_String $desired_access, Exception $previous = NULL )
 	{
-		$msg = "[" . us($path) ."] has not permision of [" . us($access) . "]";
+		$msg = "[" . us($path) ."] has not permision of [" . us($desired_access) . "]";
 
 		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
 	}
 }
 
 
-return __FILE__;

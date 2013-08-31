@@ -78,4 +78,4 @@ class Charcoal_FileWriter
 
 }
 
-return __FILE__;
+

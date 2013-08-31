@@ -24,4 +24,3 @@ class Charcoal_InvalidClassNameException extends Charcoal_RuntimeException
 }
 
 
-return __FILE__;

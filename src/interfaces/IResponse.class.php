@@ -89,4 +89,3 @@ interface Charcoal_IResponse extends Charcoal_ICharcoalObject
 
 }
 
-return __FILE__;

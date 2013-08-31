@@ -158,4 +158,4 @@ class Charcoal_ObjectPath extends Charcoal_Object
 		}
 	}
 }
-return __FILE__;
+

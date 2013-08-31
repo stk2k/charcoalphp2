@@ -32,4 +32,4 @@ class Charcoal_SQLUtil
 
 }
 
-return __FILE__;
+
