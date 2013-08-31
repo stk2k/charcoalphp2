@@ -10,10 +10,5 @@
         "name": "Katsuki Shuto",
         "email": "stk2k@sazysoft.com"
       }
-    ],
-    "autoload": {
-      "psr-0": {
-        "stk2k\\charcoalphp": "src/"
-      }
-    }
+    ]
 }
