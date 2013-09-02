@@ -18,13 +18,8 @@ class HelloTask extends Charcoal_Task
 	 */
 	public function processEvent( Charcoal_IEventContext $context )
 	{
-		$request   = $context->getRequest();
-		$response  = $context->getResponse();
-		$sequence  = $context->getSequence();
-		$procedure = $context->getProcedure();
-
 		// show message
-		echo "Hello, World!" . eol();
+		echo "Hello, World!<br />";
 
 		// return TRUE if processing the procedure success.
 		return b(TRUE);

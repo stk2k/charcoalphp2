@@ -412,6 +412,7 @@ HTML_HEADER;
 		$html .= '' . PHP_EOL;
 		$html .= '<table cellspacing="0" cellpadding="0" id="source_files" style="display:none">' . PHP_EOL;
 		$no = 1;
+
 		foreach( $files as $file )
 		{
 			$html .= '<tr>' . PHP_EOL;

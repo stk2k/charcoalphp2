@@ -51,26 +51,25 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	private function loadTask( Charcoal_ObjectPath $obj_path, $file, Charcoal_ITaskManager $task_manager )
 	{
+		$file = new Charcoal_File( s($file) );
+
 		// ソースを取り込む
-		if ( !is_readable($file) ){
+		if ( !$file->canRead() ){
 //			log_warning( "system,debug,include,task", "module", "task class file not readable:" . $file );
-			return NULL;
+			_throw( new Charcoal_FileNotReadableException($file) );
 		}
 
 		// file base name
-		$base_name = basename($file);
+		$base_name = $file->getName();
 
 		// retrieve class name from file name
 		$pos = strpos($base_name,CHARCOAL_CLASS_FILE_SUFFIX);
-		if ( $pos === FALSE ){
-//			log_warning( "system,debug,include,task", "module", "file name does not meet framework contract:" . $file );
-			return NULL;
-		}
 
 		$class_name = substr($base_name,0,$pos);
 
 		// include source file
-		Charcoal_Framework::loadSourceFile( new Charcoal_File(s($file)) );
+		Charcoal_Framework::loadSourceFile( $file );
+
 //		log_debug( "system,debug,include,task", "module", "require_once:" . $file );
 
 		// create new instance
@@ -95,11 +94,11 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// configure task
 		$task->configure( $config );
-//		log_info( "system,debug,task", "module", "task[$event] configured.");
+//		log_info( "system,debug,task", "module", "task[$task] configured.");
 
 		// regiser task
 		$task_manager->registerTask( s($task_path->toString()), $task );
-//		log_info( "system,debug,task", "module", "task[$class_name] registered as: [$task_path]");
+		log_info( "system,debug,task", "module", "task[$class_name] registered as: [$task_path]");
 
 		return $task;
 	}
@@ -109,26 +108,24 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	private function loadEvent( Charcoal_ObjectPath $obj_path, $file, Charcoal_ITaskManager $task_manager )
 	{
+		$file = new Charcoal_File( s($file) );
+
 		// ソースを取り込む
-		if ( !is_readable($file) ){
+		if ( !$file->canRead() ){
 //			log_warning( "system,debug,include,event", "module", "event class file not readable:" . $file );
-			return NULL;
+			_throw( new Charcoal_FileNotReadableException($file) );
 		}
 
 		// file base name
-		$base_name = basename($file);
+		$base_name = $file->getName();
 
 		// retrieve class name from file name
 		$pos = strpos($base_name,CHARCOAL_CLASS_FILE_SUFFIX);
-		if ( $pos === FALSE ){
-//			log_warning( "system,debug,include,event", "module", "file name does not meet framework contract:" . $file );
-			return NULL;
-		}
 
 		$class_name = substr($base_name,0,$pos);
 
 		// include source file
-		Charcoal_Framework::loadSourceFile( new Charcoal_File(s($file)) );
+		Charcoal_Framework::loadSourceFile( $file );
 //		log_debug( "system,debug,include,event", "module", "require_once:" . $file );
 
 		// create new instance
@@ -157,7 +154,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// add event 
 		$task_manager->pushEvent( $event );
-//		log_info( "system,debug,event", "module", "event[$event] added to task manager.");
+		log_info( "system,debug,event", "module", "event[$event] added to task manager.");
 
 		return $event;
 	}
@@ -183,15 +180,15 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$task_class_suffix = 'Task' . CHARCOAL_CLASS_FILE_SUFFIX;
 
+		$task = NULL;
+
 		if ( $dh = opendir($webapp_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
+				if ( $file === '.' || $file === '..' )	continue;
 				if ( strpos($file,$task_class_suffix) !== FALSE ){
-					$task = $this->loadTask( $root_path, "$webapp_path/$file", $task_manager );
-					if ( $task ){
-						$loaded_tasks[] = $task;
-					}
+					$loaded_tasks[] = $this->loadTask( $root_path, "$webapp_path/$file", $task_manager );
 				}
 			}
 			closedir($dh);
@@ -201,11 +198,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
+				if ( $file === '.' || $file === '..' )	continue;
 				if ( strpos($file,$task_class_suffix) !== FALSE ){
-					$task = $this->loadTask( $root_path, "$project_path/$file", $task_manager );
-					if ( $task ){
-						$loaded_tasks[] = $task;
-					}
+					$loaded_tasks[] = $this->loadTask( $root_path, "$project_path/$file", $task_manager );
 				}
 			}
 			closedir($dh);
@@ -215,11 +210,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
+				if ( $file === '.' || $file === '..' )	continue;
 				if ( strpos($file,$task_class_suffix) !== FALSE ){
-					$task = $this->loadTask( $root_path, "$framework_path/$file", $task_manager );
-					if ( $task ){
-						$loaded_tasks[] = $task;
-					}
+					$loaded_tasks[] = $this->loadTask( $root_path, "$framework_path/$file", $task_manager );
 				}
 			}
 			closedir($dh);
@@ -241,7 +234,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 //				log_info( "system,debug", "module", "created task[" . get_class($task) . "/$task_path] in module[$root_path]");
 
-				$task_manager->registerTask( $task_path, $task );
+				$task_manager->registerTask( s($task_path), $task );
 
 				$loaded_tasks[] = $task;
 			}
@@ -273,43 +266,39 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$event_class_suffix = 'Event' . CHARCOAL_CLASS_FILE_SUFFIX;
 
-		if ( $dh = opendir($webapp_path) )
+		$event = NULL;
+
+		if ( !$event && $dh = opendir($webapp_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
+				if ( $file === '.' || $file === '..' )	continue;
 				if ( strpos($file,$event_class_suffix) !== FALSE ){
-					$task = $this->loadEvent( $root_path, "$webapp_path/$file", $task_manager );
-					if ( $task ){
-						$loaded_events[] = $task;
-					}
+					$loaded_events[] = $this->loadEvent( $root_path, "$webapp_path/$file", $task_manager );
 				}
 			}
 			closedir($dh);
 		}
 
-		if ( $dh = opendir($project_path) )
+		if ( !$event && $dh = opendir($project_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
+				if ( $file === '.' || $file === '..' )	continue;
 				if ( strpos($file,$event_class_suffix) !== FALSE ){
-					$task = $this->loadEvent( $root_path, "$project_path/$file", $task_manager );
-					if ( $task ){
-						$loaded_events[] = $task;
-					}
+					$loaded_events[] = $this->loadEvent( $root_path, "$project_path/$file", $task_manager );
 				}
 			}
 			closedir($dh);
 		}
 
-		if ( $dh = opendir($framework_path) )
+		if ( !$event && $dh = opendir($framework_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
+				if ( $file === '.' || $file === '..' )	continue;
 				if ( strpos($file,$event_class_suffix) !== FALSE ){
-					$task = $this->loadEvent( $root_path, "$framework_path/$file", $task_manager );
-					if ( $task ){
-						$loaded_events[] = $task;
-					}
+					$loaded_events[] = $this->loadEvent( $root_path, "$framework_path/$file", $task_manager );
 				}
 			}
 			closedir($dh);

@@ -99,13 +99,7 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	 */
 	public function getProcedurePath()
 	{
-		$proc_path = $this->get( $this->_proc_key );
-
-		if ( !$proc_path ){
-			$proc_path = Charcoal_Profile::getString( s('DEFAULT_PROCPATH') );
-		}
-
-		return $proc_path;
+		return $this->getString( $this->_proc_key );
 	}
 
 	/*

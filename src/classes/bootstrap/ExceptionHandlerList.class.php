@@ -48,7 +48,7 @@ class Charcoal_ExceptionHandlerList
 		$exception_handlers = Charcoal_Profile::getArray( s('EXCEPTION_HANDLERS') );
 		if ( $exception_handlers ){
 			foreach( $exception_handlers as $handler_name ) 	{
-				$handler = Charcoal_Factory::createObject( s($handler_name), s('exception_handler'), s('Charcoal_IExceptionHandler') );
+				$handler = Charcoal_Factory::createObject( s($handler_name), s('exception_handler'), v(array()), s('Charcoal_IExceptionHandler') );
 				$ins->_list[] = $handler;
 			}
 		}
@@ -69,10 +69,6 @@ class Charcoal_ExceptionHandlerList
 
 		// インスタンスの取得
 		$ins = self::getInstance();
-
-		$ex_name = get_class($e);
-		$handlers = Charcoal_System::implodeArray(",",$ins->_list);
-		log_info( "system,debug,error", "exception", "Dispatching exception({$ex_name}) to handlers:{$handlers}" );
 
 		// 例外ハンドラを順番に呼び出す
 		$list = $ins->_list;

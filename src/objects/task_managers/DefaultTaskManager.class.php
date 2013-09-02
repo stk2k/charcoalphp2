@@ -50,7 +50,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 		// タスクを保存
 		$this->_tasks[$key] = $task;
 
-//		log_info( "system,event", "task_manager", "タスク[$key]を登録しました。[event_filters]=" . $task->getEventFilters() );
+		log_info( "system,event", "task_manager", "registered task[$task] as [$key]" );
 	}
 
 	/*
@@ -135,7 +135,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 	{
 		// add an event to event queue
 		$this->_queue->enqueue( $event );
-//		log_info( "system,event", "task_manager", "event[" . $event . "] was enqueued." );
+		log_info( "system,event", "task_manager", "event[" . $event . "] was enqueued." );
 	}
 
 	/**

@@ -28,11 +28,8 @@ class Charcoal_HtmlFileOutputExceptionHandler extends Charcoal_CharcoalObject im
 		log_info( "system, debug", "exception_handler",  " handled a framework exception!" );
 
 		// Create Debug Trace Renderer
-		$debugtrace_renderer = Charcoal_Profile::getString( s('DEBUGTRACE_RENDERER'), s("html") );
-		log_info( "system, debug", "exception_handler", "debugtrace_renderer: $debugtrace_renderer" );
-
 		try{
-			$debugtrace_renderer = Charcoal_Factory::createObject( s($debugtrace_renderer), s('debugtrace_renderer'), s('Charcoal_IDebugtraceRenderer') );
+			$debugtrace_renderer = Charcoal_Factory::createObject( s('html'), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
 			log_info( "system, debug", "exception_handler", "debugtrace_renderer[$debugtrace_renderer] created." );
 
 			// Render exception

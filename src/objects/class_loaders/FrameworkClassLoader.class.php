@@ -44,18 +44,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_EnumSQLJoinType'			=> 'constants',
 				'Charcoal_EnumSQLAggregateFunc'		=> 'constants',
 
-		// debug classes
-				'Charcoal_Benchmark'				=> 'classes/debug',
-				'Charcoal_CallHistory'				=> 'classes/debug',
-				'Charcoal_DebugProfiler'			=> 'classes/debug',
-				'Charcoal_MethodSpec'				=> 'classes/debug',
-				'Charcoal_FunctionSpec'				=> 'classes/debug',
-				'Charcoal_PhpSourceElement'			=> 'classes/debug',
-				'Charcoal_PhpSourceInfo'			=> 'classes/debug',
-				'Charcoal_PhpSourceParser'			=> 'classes/debug',
-				'Charcoal_PhpSourceRenderer'		=> 'classes/debug',
-				'Charcoal_PopupDebugWindow'			=> 'classes/debug',
-
 		// core classes
 				'Charcoal_AnnotationValue'			=> 'classes/core',
 				'Charcoal_Cache'					=> 'classes/core',
@@ -93,7 +81,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_IComponent'				=> 'interfaces',
 				'Charcoal_ICoreHook'				=> 'interfaces',
 				'Charcoal_IDataSource'				=> 'interfaces',
-				'Charcoal_IDebugtraceRenderer'		=> 'interfaces',
 				'Charcoal_IEvent'					=> 'interfaces',
 				'Charcoal_IEventContext'			=> 'interfaces',
 				'Charcoal_IExceptionHandler'		=> 'interfaces',
@@ -135,11 +122,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_URLRedirectEvent'						=> 'objects/events',
 				'Charcoal_UserEvent'							=> 'objects/events',
 				'Charcoal_TestEvent'							=> 'objects/events',
-
-		// exception handler classes
-				'Charcoal_HttpErrorDocumentExceptionHandler'	=> 'objects/exception_handlers',
-				'Charcoal_HtmlFileOutputExceptionHandler'		=> 'objects/exception_handlers',
-				'Charcoal_ConsoleOutputExceptionHandler'		=> 'objects/exception_handlers',
+				'Charcoal_RequestEvent'							=> 'objects/events',
 
 		// logger classes
 				'Charcoal_BaseLogger'							=> 'objects/loggers',
@@ -278,11 +261,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// core hook classes
 				'Charcoal_DefaultCoreHook'					=> 'objects/core_hooks',
-
-		// debugtrace renderer classes
-				'Charcoal_HtmlDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
-				'Charcoal_ConsoleDebugtraceRenderer'		=> 'objects/debugtrace_renderers',
-				'Charcoal_LogDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
 
 		// table model classes
 				'Charcoal_AnnotaionTableModel'				=> 'objects/table_models',

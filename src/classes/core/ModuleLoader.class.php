@@ -18,7 +18,7 @@ class Charcoal_ModuleLoader
 	{
 		try{
 			// create module object
-			$module = Charcoal_Factory::createObject( s($module_path->toString()), s('module'), s('Charcoal_IModule'), s('Charcoal_SimpleModule') );
+			$module = Charcoal_Factory::createObject( s($module_path->toString()), s('module'), v(array()), s('Charcoal_IModule'), s('Charcoal_SimpleModule') );
 
 			// load module tasks
 			$module->loadTasks( $task_manager );

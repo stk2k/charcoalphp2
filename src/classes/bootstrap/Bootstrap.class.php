@@ -29,6 +29,8 @@
  */
 class Charcoal_Bootstrap
 {
+	static $debug;
+
 	/**
 	 *	autoload function for bootstrap
 	 *
@@ -52,6 +54,7 @@ class Charcoal_Bootstrap
 					'Charcoal_ICharcoalObject'						=> 'interfaces',
 					'Charcoal_IDebugtraceRenderer'					=> 'interfaces',
 					'Charcoal_IExceptionHandler'					=> 'interfaces',
+					'Charcoal_IDebugtraceRenderer'					=> 'interfaces',
 
 					// Basic object classes	
 					'Charcoal_Object' 								=> 'classes/base',
@@ -63,23 +66,26 @@ class Charcoal_Bootstrap
 
 					// Basic exception classes
 					'Charcoal_CharcoalException' 					=> 'exceptions',
-					'Charcoal_LogicException' 						=> 'exceptions',
-					'Charcoal_RuntimeException' 						=> 'exceptions',
+					'Charcoal_ClassNameEmptyException'				=> 'exceptions',
+					'Charcoal_ConfigSectionNotFoundException'		=> 'exceptions',
 					'Charcoal_ConfigException' 						=> 'exceptions',
 					'Charcoal_ClassLoaderConfigException' 			=> 'exceptions',
-					'Charcoal_ClassNewException'						=> 'exceptions',
+					'Charcoal_ClassNewException'					=> 'exceptions',
 					'Charcoal_ClassNotFoundException' 				=> 'exceptions',
-					'Charcoal_CreateObjectException'					=> 'exceptions',
+					'Charcoal_CreateClassLoaderException'			=> 'exceptions',
+					'Charcoal_CreateObjectException'				=> 'exceptions',
 					'Charcoal_InterfaceImplementException'			=> 'exceptions',
 					'Charcoal_InterfaceNotFoundException'			=> 'exceptions',
 					'Charcoal_FileNotFoundException' 				=> 'exceptions',
+					'Charcoal_FileNotReadableException' 			=> 'exceptions',
+					'Charcoal_FrameworkBootstrapException' 			=> 'exceptions',
+					'Charcoal_LogicException' 						=> 'exceptions',
+					'Charcoal_ModuleLoaderException'				=> 'exceptions',
 					'Charcoal_PHPErrorException' 					=> 'exceptions',
-					'Charcoal_ProfileDirectoryNotFoundException'		=> 'exceptions',
+					'Charcoal_ProfileDirectoryNotFoundException'	=> 'exceptions',
 					'Charcoal_ProfileLoadingException'				=> 'exceptions',
 					'Charcoal_ProfileConfigFileNotFoundException'	=> 'exceptions',
-					'Charcoal_ConfigSectionNotFoundException'		=> 'exceptions',
-					'Charcoal_ClassNameEmptyException'				=> 'exceptions',
-					'Charcoal_ModuleLoaderException'					=> 'exceptions',
+					'Charcoal_RuntimeException' 					=> 'exceptions',
 
 					// Primitive classes
 					'Charcoal_Primitive' 					=> 'classes/base',
@@ -125,12 +131,35 @@ class Charcoal_Bootstrap
 					'Charcoal_FrameworkClassLoader' 			=> 'objects/class_loaders',
 					'Charcoal_UserClassLoader'				=> 'objects/class_loaders',
 
-					// Benchmark
-					'Charcoal_Benchmark'						=> 'classes/debug',
+					// exception handler classes
+					'Charcoal_HttpErrorDocumentExceptionHandler'	=> 'objects/exception_handlers',
+					'Charcoal_HtmlFileOutputExceptionHandler'		=> 'objects/exception_handlers',
+					'Charcoal_ConsoleOutputExceptionHandler'		=> 'objects/exception_handlers',
+
+					// debugtrace renderer classes
+					'Charcoal_HtmlDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
+					'Charcoal_ConsoleDebugtraceRenderer'		=> 'objects/debugtrace_renderers',
+					'Charcoal_LogDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
+
+					// debug classes
+					'Charcoal_Benchmark'				=> 'classes/debug',
+					'Charcoal_CallHistory'				=> 'classes/debug',
+					'Charcoal_DebugProfiler'			=> 'classes/debug',
+					'Charcoal_MethodSpec'				=> 'classes/debug',
+					'Charcoal_FunctionSpec'				=> 'classes/debug',
+					'Charcoal_PhpSourceElement'			=> 'classes/debug',
+					'Charcoal_PhpSourceInfo'			=> 'classes/debug',
+					'Charcoal_PhpSourceParser'			=> 'classes/debug',
+					'Charcoal_PhpSourceRenderer'		=> 'classes/debug',
+					'Charcoal_PopupDebugWindow'			=> 'classes/debug',
+
 				);
 		}
 
-		if ( !isset($bootstrap_classes[$class_name]) )	return FALSE;
+		if ( !isset($bootstrap_classes[$class_name]) ){
+			if ( self::$debug )	echo "Class not found in bootstrap class loader: $class_name" . eol();
+			return FALSE;
+		}
 
 		$file_name = $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
 		$pos = strpos( $file_name, CHARCOAL_CLASS_PREFIX );
@@ -139,6 +168,8 @@ class Charcoal_Bootstrap
 		}
 
 		$class_path = CHARCOAL_HOME . '/src/' . $bootstrap_classes[ $class_name ] . '/' . $file_name;
+
+		if ( self::$debug )	echo "loading file[$class_path] for class: $class_name" . eol();
 
 		require_once( $class_path );
 
@@ -151,7 +182,9 @@ class Charcoal_Bootstrap
 	 */
 	public static function run( $debug = FALSE )
 	{
-		if ( !spl_autoload_register('Charcoal_Bootstrap::loadClass') )
+		self::$debug = $debug;
+
+		if ( !spl_autoload_register('Charcoal_Bootstrap::loadClass',false,true) )
 		{
 			if ( $debug ){
 				echo "registering bootstrap class loader failed." . eol();

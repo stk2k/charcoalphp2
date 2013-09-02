@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class CalkTask extends Charcoal_Task
+class CalcTask extends Charcoal_Task
 {
 	/**
 	 * process event
@@ -26,8 +26,22 @@ class CalkTask extends Charcoal_Task
 		// Get parameter from request
 		$a = $request->getInteger( s('a'), i(0) );
 		$b = $request->getInteger( s('b'), i(0) );
+		$op = $request->getString( s('op'), s('+') );
 
-		$result = ui($a) + ui($b);
+		switch( $op ){
+		case '+':
+			$result = ui($a) + ui($b);
+			break;
+		case '-':
+			$result = ui($a) - ui($b);
+			break;
+		case '*':
+			$result = ui($a) * ui($b);
+			break;
+		case '/':
+			$result = ui($a) / ui($b);
+			break;
+		}
 
 		// show message
 		echo "result:" . $result . eol();

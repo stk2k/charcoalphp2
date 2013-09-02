@@ -19,6 +19,7 @@ class Charcoal_Factory
 	private static function _create( 
 							Charcoal_ObjectPath $obj_path, 
 							Charcoal_String $type_name, 
+							Charcoal_Vector $args = NULL, 
 							Charcoal_Interface $interface = NULL, 
 							Charcoal_Class $default_class = NULL
 						)
@@ -51,7 +52,7 @@ class Charcoal_Factory
 			$obj_name = $obj_path->getObjectName();
 
 			// create instance
-			$object = $klass->newInstance();
+			$object = $klass->newInstance( $args );
 //			log_info( 'system', "factory", "[Factory]created instance of {$type_name}[{$obj_path_string}]." );
 
 			// confirm implementation of the instance
@@ -89,9 +90,14 @@ class Charcoal_Factory
 	 *	@param Charcoal_String $obj_path         object path to create
 	 *
 	 */
-	public static function createEvent( Charcoal_String $obj_path )
+	public static function createEvent( Charcoal_String $obj_path, Charcoal_Vector $args = NULL )
 	{
-		return self::createObject( $obj_path, s('event'), s('Charcoal_IEvent') );
+		if( $args ){
+			return self::createObject( $obj_path, s('event'), $args, s('Charcoal_IEvent') );
+		}
+		else {
+			return self::createObject( $obj_path, s('event'), v(array()), s('Charcoal_IEvent') );
+		}
 	}
 
 	/*
@@ -99,6 +105,7 @@ class Charcoal_Factory
 	 *
 	 *	@param Charcoal_String $obj_path         object path to create
 	 *	@param Charcoal_String $type_name        type name of the object
+	 *	@param Charcoal_Vector $args             constructor arguments
 	 *	@param Charcoal_String $interface_name   interface name which will be checked implements
 	 *	@param Charcoal_String $default_class    default class name which will be used when class_name config property is not specified
 	 *
@@ -106,6 +113,7 @@ class Charcoal_Factory
 	public static function createObject( 
 							Charcoal_String $obj_path, 
 							Charcoal_String $type_name, 
+							Charcoal_Vector $args = NULL, 
 							Charcoal_String $interface_name = NULL, 
 							Charcoal_String $default_class = NULL
 						 )
@@ -113,10 +121,13 @@ class Charcoal_Factory
 		$obj_path = new Charcoal_ObjectPath($obj_path);
 
 		if( $default_class ){
-			$object = self::_create( $obj_path, $type_name, new Charcoal_Interface($interface_name), new Charcoal_Class($default_class) );
+			$object = self::_create( $obj_path, $type_name, $args, new Charcoal_Interface($interface_name), new Charcoal_Class($default_class) );
 		}
 		else if( $interface_name ){
-			$object = self::_create( $obj_path, $type_name, new Charcoal_Interface($interface_name) );
+			$object = self::_create( $obj_path, $type_name, $args, new Charcoal_Interface($interface_name) );
+		}
+		else if( $args ){
+			$object = self::_create( $obj_path, $type_name, $args, new Charcoal_Interface($interface_name) );
 		}
 		else {
 			$object = self::_create( $obj_path, $type_name );
@@ -139,7 +150,7 @@ class Charcoal_Factory
 		// クラス名を取得
 		$class_name = $config->getString( s('class_name') );
 		if ( $class_name === NULL ){
-			_throw( new Charcoal_ClassLoaderConfigException( s("class_name"), s("mandatory") ) );
+			_throw( new Charcoal_ClassLoaderConfigException( $object_path, s("class_name"), s("mandatory") ) );
 		}
 
 		// ソースパスを取得
@@ -180,9 +191,17 @@ class Charcoal_Factory
 	 */
 	public static function createClassLoader( Charcoal_String $path )
 	{
-		$obj_path = new Charcoal_ObjectPath($path);
+		try{
+			$obj_path = new Charcoal_ObjectPath($path);
 
-		return self::_createClassLoader( $obj_path );
+			return self::_createClassLoader( $obj_path );
+		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+
+			_throw( new Charcoal_CreateClassLoaderException( $obj_path, $ex ) );
+		}
 	}
 
 	/*

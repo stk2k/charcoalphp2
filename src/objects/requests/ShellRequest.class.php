@@ -27,21 +27,8 @@ class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_
 
 		log_debug( "debug", "argv:" . print_r($this->_data,true) );
 
-		if ( isset($this->_data['proc']) ){
-			$obj_path = $this->_data['proc'];
-		}
-		else{
-			if ( defined('CHARCOAL_DEFAULT_PROCPATH') ){
-				$obj_path = CHARCOAL_DEFAULT_PROCPATH;
-			}
-			else{
-				$proc_key = Charcoal_Profile::getString( s('PROC_KEY') );
-				$obj_path = $this->get( $proc_key );
-				if ( !$obj_path ){
-					$obj_path = Charcoal_Profile::getString( s('DEFAULT_PROCPATH') );
-				}
-			}
-		}
+		$proc_key = Charcoal_Profile::getString( s('PROC_KEY') );
+		$obj_path = $this->get( $proc_key );
 
 		$this->_obj_path = new Charcoal_ObjectPath( s($obj_path) );
 

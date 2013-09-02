@@ -17,7 +17,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	private $_modules;
 	private $_events;
 	private $_layout_manager;
-	private $_debug_mode;
 	private $_response_filters;
 	private $_log_enabled;
 
@@ -27,14 +26,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	/*
-	 *	デバッグモード
-	 */
-	public function isDebugMode()
-	{
-		return $this->_debug_mode && $this->_debug_mode->isTrue() ? TRUE : FALSE;
 	}
 
 	/**
@@ -50,7 +41,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		$this->_sequence            = $config->getString( s('sequence'), s('') );
 		$this->_modules             = $config->getArray( s('modules'), v(array()) );
 		$this->_events              = $config->getArray( s('events'), v(array()) );
-		$this->_debug_mode          = $config->getBoolean( s('debug_mode'), b(FALSE) );
 		$this->_response_filters    = $config->getArray( s('response_filters'), v(array()) );
 		$this->_log_enabled         = $config->getBoolean( s('log_enabled'), b(TRUE) );
 
@@ -75,7 +65,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 //		log_info( "system,config", "procedure", "modules:" . $this->_modules );
 //		log_info( "system,config", "procedure", "events:" . $this->_events );
 //		log_info( "system,config", "procedure", "layout_manager:" . $this->_layout_manager );
-//		log_info( "system,config", "procedure", "debug_mode:" . $this->_debug_mode );
 //		log_info( "system,config", "procedure", "response_filters:" . print_r($this->_response_filters,true) );
 
 	}
@@ -242,30 +231,25 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		$sequence = new Charcoal_SequenceHolder( $global_sequence, $local_sequence );
 
 		//=======================================
+		// create system event(request event)
+		//
+
+		// create request event
+		$event = Charcoal_Factory::createEvent( s('request'), v(array($request)) );
+		$task_manager->pushEvent( $event );
+
+		//=======================================
 		// ユーザイベントの作成
 		//
 //		log_info( "system", "procedure", 'ユーザイベントの作成処理を開始します。' );
 
-		$event_list = NULL;
+		$event_list = array();
 
-		if ( $this->_events ) {
-			foreach( $this->_events as $event_name ) {
-
-				// ユーザイベントを作成
-				$event = Charcoal_Factory::createObject( s($event_name), s('event') );
-
-				// ユーザイベントの追加
-				$event_list[] = $event;
-
-//				log_info( "system", "procedure",  "ユーザイベント[$event_name]を追加しました。" );
-			}
-		}
-
-//		log_info( "system", "procedure", 'ユーザイベントの作成処理を終了します。' );
-
-		// add events
-		if ( $event_list && is_array($event_list) ){
-			foreach( $event_list as $event ){
+		if ( $this->_events )
+		{
+			foreach( $this->_events as $event_name )
+			{
+				$event = Charcoal_Factory::createEvent( s($event_name) );
 				$task_manager->pushEvent( $event );
 			}
 		}

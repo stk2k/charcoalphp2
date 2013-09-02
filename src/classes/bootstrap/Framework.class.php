@@ -100,7 +100,7 @@ function charcoal_shutdown_handler()
 			if ( $handled->isFalse() )
 			{
 				// Forgot to handle exception?
-				print "Framweork Exception Not Handled:" . eol() . $e . eol();
+				Charcoal_Framework::renderExceptionFinally( $e );
 			}
 		}
 		else if ( $e instanceof Exception ){
@@ -110,7 +110,7 @@ function charcoal_shutdown_handler()
 			if ( $handled->isFalse() )
 			{
 				// Forgot to handle exception?
-				print "Exception Not Handled:" . eol() . $e . eol();
+				Charcoal_Framework::renderExceptionFinally( $e );
 			}
 		}
 	}
@@ -163,7 +163,6 @@ class Charcoal_Framework
 	static $proc_stack;
 	static $request;
 	static $debug_mode;
-	static $print_debugtrace;
 	static $hook_stage;
 	static $echo_flag;
 	static $loaded_files;
@@ -195,7 +194,7 @@ class Charcoal_Framework
 	 */
 	public static function getLoadedSourceFiles()
 	{
-		return self::$loaded_files;
+		return self::$loaded_files ? self::$loaded_files : array();
 	}
 
 	/**
@@ -384,22 +383,6 @@ class Charcoal_Framework
 	}
 
 	/*
-	 *	スタックトレースの出力状態を取得
-	 */
-	public static function isPrintDebugTrace()
-	{
-		return self::$print_debugtrace;
-	}
-
-	/*
-	 *	スタックトレースの出力状態を設定
-	 */
-	public static function setPrintDebugTrace( Charcoal_Boolean $print_debugtrace )
-	{
-		self::$print_debugtrace = ub($print_debugtrace);
-	}
-
-	/*
 	 *	フレームワークのメジャーバージョン番号を取得
 	 */
 	public static function getMajorVersion()
@@ -458,7 +441,7 @@ class Charcoal_Framework
 	/*
 	 *	フレームワークの実行（実体）
 	 */
-	private static function _run()
+	private static function _run( $debug_mode )
 	{
 		//=======================================
 		// シャットダウンハンドラの登録
@@ -471,13 +454,12 @@ class Charcoal_Framework
 		set_error_handler( "charcoal_global_error_handler" );
 		set_exception_handler( "charcoal_global_exception_handler" );
 
-		self::$print_debugtrace = TRUE;
-		self::$debug_mode = TRUE;
+		self::$debug_mode = $debug_mode;
 
 		//==================================================================
 		// プロファイルを読み込む
-		Charcoal_Profile::load( 'default' );
-		Charcoal_Profile::load( CHARCOAL_PROFILE );
+		Charcoal_Profile::load( 'default', $debug_mode );
+		Charcoal_Profile::load( CHARCOAL_PROFILE, $debug_mode );
 
 		//=======================================
 		// ロガー初期化処理
@@ -517,21 +499,29 @@ class Charcoal_Framework
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::BEFORE_REG_CLASS_LOADERS) );
 
 		$framework_class_loader = Charcoal_Factory::createClassLoader( s('framework') );
-			self::setHookStage( i(Charcoal_EnumCoreHookStage::CREATE_FRAMEWORK_CLASS_LOADER), s($loader_name) );
+		self::setHookStage( i(Charcoal_EnumCoreHookStage::CREATE_FRAMEWORK_CLASS_LOADER), s($loader_name) );
 
 		Charcoal_ClassLoader::addClassLoader( $framework_class_loader );
-			self::setHookStage( i(Charcoal_EnumCoreHookStage::REG_FRAMEWORK_CLASS_LOADER), s($loader_name) );
+		self::setHookStage( i(Charcoal_EnumCoreHookStage::REG_FRAMEWORK_CLASS_LOADER), s($loader_name) );
 
-		$class_loaders = Charcoal_Profile::getArray( s('CLASS_LOADERS') );
-		foreach( $class_loaders as $loader_name ) 	{
-			$loader = Charcoal_Factory::createClassLoader( s($loader_name) );
-			self::setHookStage( i(Charcoal_EnumCoreHookStage::CREATE_CLASS_LOADER), s($loader_name) );
-			Charcoal_ClassLoader::addClassLoader( $loader );
-			self::setHookStage( i(Charcoal_EnumCoreHookStage::REG_CLASS_LOADER), s($loader_name) );
+		try{
+			$class_loaders = Charcoal_Profile::getArray( s('CLASS_LOADERS') );
+			foreach( $class_loaders as $loader_name ) 	{
+				$loader = Charcoal_Factory::createClassLoader( s($loader_name) );
+				self::setHookStage( i(Charcoal_EnumCoreHookStage::CREATE_CLASS_LOADER), s($loader_name) );
+				Charcoal_ClassLoader::addClassLoader( $loader );
+				self::setHookStage( i(Charcoal_EnumCoreHookStage::REG_CLASS_LOADER), s($loader_name) );
+			}
+		}
+		catch( Charcoal_CreateClassLoaderException $ex )
+		{
+			_catch( $ex );
+
+			_throw( new Charcoal_FrameworkBootstrapException( s('failed to load class loader:'.$ex->getClassLoaderPath()), $ex ) );
 		}
 
 		// register framework class loader
-		if ( !spl_autoload_register('Charcoal_ClassLoader::loadClass') )
+		if ( !spl_autoload_register('Charcoal_ClassLoader::loadClass',false,false) )
 		{
 			log_fatal( "debug,system,error", 'framework', "registering master class loader failed." );
 			exit;
@@ -544,12 +534,17 @@ class Charcoal_Framework
 		//
 
 		// Requestオブジェクトを作成
-		$request = Charcoal_Factory::createObject( s(CHARCOAL_RUNMODE), s('request'), s('Charcoal_IRequest') );
+		$request = Charcoal_Factory::createObject( s(CHARCOAL_RUNMODE), s('request'), v(array()), s('Charcoal_IRequest') );
 		self::$request = $request;
 //		log_debug( "debug,system", 'framework',"request object created: " . print_r($request,true) );
 
 		$proc_path = self::getRequestPath();
 //		log_debug( "debug,system", 'framework',"proc_path=" . $proc_path );
+
+		// if procedure path is not specified in url, forward the procedure to DEFAULT_PROCPATH in profile.ini
+		if ( strlen($proc_path) === 0 ){
+			$proc_path = Charcoal_Profile::getString( s('DEFAULT_PROCPATH') );
+		}
 
 		//=======================================
 		// Register core hook objects
@@ -557,7 +552,7 @@ class Charcoal_Framework
 		$hooks = Charcoal_Profile::getArray( s('CORE_HOOKS') );
 		if ( $hooks ){
 			foreach( $hooks as $hook_name ){
-				$core_hook = Charcoal_Factory::createObject( s($hook_name), s('core_hook'), s('Charcoal_ICoreHook') );
+				$core_hook = Charcoal_Factory::createObject( s($hook_name), s('core_hook'), v(array()), s('Charcoal_ICoreHook') );
 				Charcoal_CoreHook::register( s($hook_name), $core_hook );
 			}
 		}
@@ -568,7 +563,7 @@ class Charcoal_Framework
 		$cache_drivers = Charcoal_Profile::getArray( s('CACHE_DRIVERS') );
 		if ( $cache_drivers ){
 			foreach( $cache_drivers as $cache_driver_name ){
-				$cache_driver = Charcoal_Factory::createObject( s($cache_driver_name), s('cache_driver'), s('Charcoal_ICacheDriver') );
+				$cache_driver = Charcoal_Factory::createObject( s($cache_driver_name), s('cache_driver'), v(array()), s('Charcoal_ICacheDriver') );
 				Charcoal_Cache::register( s($cache_driver_name), $cache_driver );
 			}
 		}
@@ -587,7 +582,7 @@ class Charcoal_Framework
 			foreach( $logger_names as $logger_name ){
 				$registerd = Charcoal_Logger::isRegistered( s($logger_name) );
 				if ( !$registerd ){
-					$logger = Charcoal_Factory::createObject( s($logger_name), s('logger'), s('Charcoal_ILogger') );
+					$logger = Charcoal_Factory::createObject( s($logger_name), s('logger'), v(array()), s('Charcoal_ILogger') );
 					self::setHookStage( i(Charcoal_EnumCoreHookStage::CREATE_USER_LOGGER), s($logger_name) );
 					Charcoal_Logger::register( s($logger_name), $logger );
 				}
@@ -632,7 +627,7 @@ class Charcoal_Framework
 			if ( $session_handler_name )
 			{
 				// セッションハンドラの作成
-				$session_handler = Charcoal_Factory::createObject( s($session_handler_name), s('session_handler'), s('Charcoal_ISessionHandler') );
+				$session_handler = Charcoal_Factory::createObject( s($session_handler_name), s('session_handler'), v(array()), s('Charcoal_ISessionHandler') );
 
 				// コールバックの登録
 				$class_name = get_class($session_handler);
@@ -684,7 +679,7 @@ class Charcoal_Framework
 		// register routers
 		$routing_rule = NULL;
 		if ( !$routing_rule_name->isEmpty() ){
-			$routing_rule = Charcoal_Factory::createObject( s($routing_rule_name), s('routing_rule'), s('Charcoal_IRoutingRule') );
+			$routing_rule = Charcoal_Factory::createObject( s($routing_rule_name), s('routing_rule'), v(array()), s('Charcoal_IRoutingRule') );
 		}
 
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::AFTER_ROUTING_RULE) );
@@ -703,7 +698,7 @@ class Charcoal_Framework
 			// register routers
 			if ( !$router_names->isEmpty() ){
 				foreach( $router_names as $router_name ){
-					$router = Charcoal_Factory::createObject( s($router_name), s('router'), s('Charcoal_IRouter') );
+					$router = Charcoal_Factory::createObject( s($router_name), s('router'), v(array()), s('Charcoal_IRouter') );
 
 					$res = $router->route( $request, $routing_rule );
 					if ( $res->isTrue() ){
@@ -725,7 +720,7 @@ class Charcoal_Framework
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::BEFORE_CREATE_PROCEDURE), s($proc_path) );
 
 		try{
-			$procedure = Charcoal_Factory::createObject( s($proc_path), s('procedure'), s('Charcoal_IProcedure') );
+			$procedure = Charcoal_Factory::createObject( s($proc_path), s('procedure'), v(array()), s('Charcoal_IProcedure') );
 		}
 		catch( Exception $e )
 		{
@@ -753,11 +748,6 @@ class Charcoal_Framework
 		}
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::AFTER_PROCEDURE_FORWARD) );
 
-		if ( $procedure->isDebugMode() === TRUE && self::$debug_mode === FALSE ) {
-			self::$debug_mode = TRUE;
-//			log_debug( "debug,system", 'framework',"debug_mode=" . self::$debug_mode );
-		}
-
 		//=======================================
 		// コンテナの作成と起動
 		//
@@ -774,7 +764,7 @@ class Charcoal_Framework
 		//
 
 		// Requestオブジェクトを作成
-		$response = Charcoal_Factory::createObject( s(CHARCOAL_RUNMODE), s('response'), s('Charcoal_IResponse') );
+		$response = Charcoal_Factory::createObject( s(CHARCOAL_RUNMODE), s('response'), v(array()), s('Charcoal_IResponse') );
 
 		//=======================================
 		// レスポンスフィルタの作成
@@ -785,7 +775,7 @@ class Charcoal_Framework
 		$response_filters = Charcoal_Profile::getArray( s('RESPONSE_FILTERS'), v(array()) );
 		if ( !$response_filters->isEmpty() ){
 			foreach( $response_filters as $filter_name ){
-				$filter = Charcoal_Factory::createObject( s($filter_name), s('response_filter'), s('Charcoal_IResponseFilter') );
+				$filter = Charcoal_Factory::createObject( s($filter_name), s('response_filter'), v(array()), s('Charcoal_IResponseFilter') );
 				self::setHookStage( i(Charcoal_EnumCoreHookStage::CREATE_RESPONSE_FILTER), s($filter_name) );
 				$response->addResponsefilter( $filter );
 			}
@@ -859,26 +849,28 @@ class Charcoal_Framework
 	/**
 	 *	フレームワークを起動
 	 */
-	public static function run()
+	public static function run( $debug_mode = FALSE )
 	{
 		self::$start_time = Charcoal_Benchmark::nowTime();
 
 		try{
 			try{
-				self::_run();
+				ob_start();
+				self::_run( $debug_mode );
+				ob_end_flush();
 			}
-			catch( Charcoal_ProcedureNotFoundException $e )
+			catch( Charcoal_ProcedureNotFoundException $ex )
 			{
-				_catch( $e );
+				_catch( $ex );
 
 				switch( CHARCOAL_RUNMODE ){
 				// ランモードがhttpの時は404エラー
 				case 'http':
-					_throw( new Charcoal_HttpException(i(404)) );
+					_throw( new Charcoal_HttpException(i(404),$ex) );
 					break;
 				// それ以外の場合はリスロー
 				default:
-					_throw( $e );
+					_throw( $ex );
 					break;
 				}
 			}
@@ -898,14 +890,21 @@ class Charcoal_Framework
 			restore_error_handler();
 			restore_exception_handler();
 
-			$handled = Charcoal_ExceptionHandlerList::handleFrameworkException( $e );
-//			log_debug( "system,debug,error", 'framework',"exception[$e] handled=$handled" );
-
-			// デバッグトレースまたは500.htmlを表示
-			$handled = b($handled);
-			if ( $handled->isFalse() )
-			{
+			if ( self::$debug_mode ){
+				// force to display stack trace in debug mode
 				self::renderExceptionFinally( $e );
+			}
+			else{
+				// call error handlers which are defined in profile.ini
+				$handled = Charcoal_ExceptionHandlerList::handleFrameworkException( $e );
+	//			log_debug( "system,debug,error", 'framework',"exception[$e] handled=$handled" );
+
+				// デバッグトレースまたは500.htmlを表示
+				$handled = b($handled);
+				if ( $handled->isFalse() )
+				{
+					self::renderExceptionFinally( $e );
+				}
 			}
 
 			Charcoal_Logger::flush();
@@ -941,21 +940,22 @@ class Charcoal_Framework
 	{
 		$rendered = FALSE;
 
-		// デバッグトレースがONかつデバッグモードONならデバッグトレースを表示、デバッグモードOFFなら500.htmlを表
-		log_info( 'system, debug', 'framework',"print_debugtrace:" . self::$print_debugtrace );
+		// デバッグモードONならデバッグトレースを表示、デバッグモードOFFなら500.htmlを表
 		log_info( 'system, debug', 'framework',"debug_mode:" . self::$debug_mode );
 
-		if ( self::$print_debugtrace && self::$debug_mode )
+		if ( self::$debug_mode )
 		{
 			try{
 				// Create Debug Trace Renderer
 				$debugtrace_renderers = Charcoal_Profile::getArray( s('DEBUGTRACE_RENDERER') );
 
-				if ( $debugtrace_renderers ){
-					foreach( $debugtrace_renderers as $renderer_name ) 	{
-						$renderer = Charcoal_Factory::createObject( s($renderer_name), s('debugtrace_renderer'), s('Charcoal_IDebugtraceRenderer') );
-						Charcoal_DebugTraceRendererList::addDebugtraceRenderer( $renderer );
-					}
+				if ( !$debugtrace_renderers || count($debugtrace_renderers) === 0 ){
+					$debugtrace_renderers = array( 'html' );
+				}
+
+				foreach( $debugtrace_renderers as $renderer_name ) 	{
+					$renderer = Charcoal_Factory::createObject( s($renderer_name), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
+					Charcoal_DebugTraceRendererList::addDebugtraceRenderer( $renderer );
 				}
 
 				// Render exception
@@ -965,7 +965,7 @@ class Charcoal_Framework
 			{
 				_catch( $e );
 				
-				echo( "debugtrace_renderer[$debugtrace_renderer] rendering failed." );
+				echo( "debugtrace_renderer rendering failed:$e" );
 			}
 		}
 

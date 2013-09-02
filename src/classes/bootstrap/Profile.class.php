@@ -261,34 +261,37 @@ class Charcoal_Profile
 	/*
 	 * グローバルの設定ファイルを読み込む
 	 */
-	public static function load( $profile_name )
+	public static function load( $profile_name, $debug_mode )
 	{
 		try{
 			// get profile directory path
 			$profile_dir = Charcoal_ResourceLocator::getApplicationFile( s('config/profiles') );
-
 
 			// make config file object
 			$config_file = "{$profile_name}.profile.ini";
 			$config_file = new Charcoal_File( s($config_file), $profile_dir );
 			self::$config_file = $config_file;
 
-
 			// check if profile directory exists
 			if ( !$profile_dir->exists() ){
+				if ( $debug_mode )	echo "profile directory not exists: [$profile_dir]" . eol();
 				log_error( "debug,config,profile", "profile", "profile directory not exists: [$profile_dir]", Charcoal_EnumEchoFlag::ECHO_PROFILE );
 				_throw( new Charcoal_ProfileDirectoryNotFoundException( $profile_dir ) );
 			}
 
 			// throw exception when config file is not found
 			if ( !$config_file->exists() || !$config_file->canRead() ){
+				if ( $debug_mode )	echo "profile config file not exists or not readable: [$config_file]" . eol();
 				log_error( "debug,config,profile", "profile", "profile config file not exists or not readable: [$config_file]", Charcoal_EnumEchoFlag::ECHO_PROFILE );
 				_throw( new Charcoal_ProfileConfigFileNotFoundException( $config_file ) );
 			}
 
 			// parse config file
 //			log_debug( "debug,config,profile", "profile", "parsing config file: [$config_file]", Charcoal_EnumEchoFlag::ECHO_PROFILE );
-			$config = parse_ini_file($config_file->getAbsolutePath(),FALSE);
+			$config_file = $config_file->getAbsolutePath();
+			if ( $debug_mode )	echo "executing parse_ini_file: [$config_file]" . eol();
+			$config = parse_ini_file($config_file,FALSE);
+			if ( $debug_mode )	echo "executed parse_ini_file: " . ad($config) . eol();
 //			log_debug( "profile", "profile", "parse_ini_file: " . print_r($config,TRUE), Charcoal_EnumEchoFlag::ECHO_PROFILE );
 
 			// プロファイル名

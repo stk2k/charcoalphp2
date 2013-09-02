@@ -11,9 +11,10 @@
 
 class Charcoal_ClassLoaderConfigException extends Charcoal_ConfigException
 {
-	public function __construct( Charcoal_String $config_entry, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( Charcoal_ObjectPath $object_path, Charcoal_String $config_entry, Charcoal_String $message = NULL, Exception $previous = NULL )
 	{
-		$msg = '[config_entry]' . $config_entry->getValue();
+		$msg  = '[object_path]' . $object_path->toString();
+		$msg .= ' [config_entry]' . $config_entry->getValue();
 		if ( $message ){
 			$msg .= '[message]' . $message->getValue();
 		}
