@@ -10,6 +10,8 @@
 */
 class Charcoal_ArrayRoutingRule extends Charcoal_CharcoalObject implements Charcoal_IRoutingRule
 {
+	const TAG = 'array_routing_rule';
+
 	var $_proc_paths;
 
 	/*
@@ -39,7 +41,7 @@ class Charcoal_ArrayRoutingRule extends Charcoal_CharcoalObject implements Charc
 			$this->_proc_paths[$pattern] = us($proc_path);
 		}
 			
-		log_info( 'system,debug,router', "_proc_paths:" . print_r($this->_proc_paths,true) );
+		log_info( 'system,debug,router', "_proc_paths:" . print_r($this->_proc_paths,true), self::TAG );
 	}
 
 	/*

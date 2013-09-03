@@ -31,6 +31,96 @@ class Charcoal_Bootstrap
 {
 	static $debug;
 
+	/*
+	 *	Framework global error handler
+	 */
+	public static function onUnhandledError( $errno, $errstr, $errfile, $errline )
+	{ 
+		if ( $errno == E_ERROR || $errno == E_PARSE || $errno == E_RECOVERABLE_ERROR || $errno == E_USER_ERROR )
+		{
+			// create fake exception
+			$e = new Charcoal_PHPErrorException($errno, $errstr, $errfile, $errline);
+
+			Charcoal_FrameworkExceptionStack::push( $e );
+
+			exit;	// prevent unnecessary errors to add
+		}
+//		if ( (error_reporting() & $errno) === $errno ){
+			$errno = Charcoal_System::phpErrorString( $errno );
+			echo "[errno]$errno [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
+//		}
+		return TRUE;	// Otherwise, ignore all errors
+	}
+
+	/*
+	 *	Framework global exception handler
+	 */
+	public static function onUnhandledException( $exception )
+	{ 
+		log_fatal( "system,error", "charcoal_global_exception_handler: $exception" );
+
+		// —áŠOƒnƒ“ƒhƒ‰‚Éˆ—‚ðˆÏ÷
+		Charcoal_ExceptionHandlerList::handleFrameworkException( $exception );
+	}
+
+	/*
+	 *	Framework global shutdown handler
+	 */
+	public static function onShutdown()
+	{
+	//	log_info( "system,debug", "shutdown", 'Shutdown handler start' );
+
+		if ( $error = error_get_last() )
+		{
+			switch( $error['type'] )
+			{
+				case E_ERROR:
+				case E_PARSE:
+				case E_CORE_ERROR:
+				case E_CORE_WARNING:
+				case E_COMPILE_ERROR:
+				case E_COMPILE_WARNING:
+				case E_USER_ERROR:
+					$e = new Charcoal_PHPErrorException($error['type'], $error['message'], $error['file'], $error['line']);
+					Charcoal_FrameworkExceptionStack::push( $e );
+					break;
+			}
+		}
+
+		while( $e = Charcoal_FrameworkExceptionStack::pop() )
+		{
+			if ( $e instanceof Charcoal_CharcoalException ){
+				// Delegate framework exception handling to handlers
+				$handled = Charcoal_ExceptionHandlerList::handleFrameworkException( $e );
+				$handled = b($handled);
+				if ( $handled->isFalse() )
+				{
+					// Forgot to handle exception?
+					Charcoal_Framework::renderExceptionFinally( $e );
+				}
+			}
+			else if ( $e instanceof Exception ){
+				// Delegate framework exception handling to handlers
+				$handled = Charcoal_ExceptionHandlerList::handleException( $e );
+				$handled = b($handled);
+				if ( $handled->isFalse() )
+				{
+					// Forgot to handle exception?
+					Charcoal_Framework::renderExceptionFinally( $e );
+				}
+			}
+		}
+
+	//	log_info( "system,debug", "shutdown", 'Shutdown handler end' );
+
+		$end_time = Charcoal_Benchmark::nowTime();
+		$elapse = round( $end_time - Charcoal_Framework::getStartTime(), 4 );
+		log_debug( "system,debug","total framework process time: [$elapse] msec" );
+
+		// Terminate log messages
+		Charcoal_Logger::terminate();
+	}
+
 	/**
 	 *	autoload function for bootstrap
 	 *
@@ -45,7 +135,6 @@ class Charcoal_Bootstrap
 
 					// Basic enum classes	
 					'Charcoal_EnumCoreHookStage' 					=> 'constants',
-					'Charcoal_EnumEchoFlag' 						=> 'constants',
 
 					// Basic interface classes	
 					'Charcoal_IProperties' 							=> 'interfaces',
@@ -55,6 +144,7 @@ class Charcoal_Bootstrap
 					'Charcoal_IDebugtraceRenderer'					=> 'interfaces',
 					'Charcoal_IExceptionHandler'					=> 'interfaces',
 					'Charcoal_IDebugtraceRenderer'					=> 'interfaces',
+					'Charcoal_ILogger'								=> 'interfaces',
 
 					// Basic object classes	
 					'Charcoal_Object' 								=> 'classes/base',
@@ -120,6 +210,7 @@ class Charcoal_Bootstrap
 					'Charcoal_ExceptionHandlerList'			=> 'classes/bootstrap',
 					'Charcoal_Factory' 						=> 'classes/bootstrap',
 					'Charcoal_Framework' 					=> 'classes/bootstrap',
+					'Charcoal_FrameworkVersion' 			=> 'classes/bootstrap',
 					'Charcoal_FrameworkExceptionStack'		=> 'classes/bootstrap',
 					'Charcoal_Logger' 						=> 'classes/bootstrap',
 					'Charcoal_LogMessage' 					=> 'classes/bootstrap',
@@ -153,6 +244,18 @@ class Charcoal_Bootstrap
 					'Charcoal_PhpSourceRenderer'		=> 'classes/debug',
 					'Charcoal_PopupDebugWindow'			=> 'classes/debug',
 
+					// logger classes
+					'Charcoal_BaseLogger'							=> 'objects/loggers',
+					'Charcoal_CsvFileLogger'						=> 'objects/loggers',
+					'Charcoal_FileLogger'							=> 'objects/loggers',
+					'Charcoal_HtmlFileLogger'						=> 'objects/loggers',
+					'Charcoal_ScreenLogger'							=> 'objects/loggers',
+					'Charcoal_PopupScreenLogger'					=> 'objects/loggers',
+					'Charcoal_ConsoleLogger'						=> 'objects/loggers',
+
+					// utility classes
+					'Charcoal_EncodingConverter'		=> 'classes/util',
+
 				);
 		}
 
@@ -180,10 +283,11 @@ class Charcoal_Bootstrap
 	 *	run bootstrap
 	 *
 	 */
-	public static function run( $debug = FALSE )
+	public function run( $debug = FALSE )
 	{
 		self::$debug = $debug;
 
+		// register bootstrap clas loader
 		if ( !spl_autoload_register('Charcoal_Bootstrap::loadClass',false,true) )
 		{
 			if ( $debug ){
@@ -191,6 +295,12 @@ class Charcoal_Bootstrap
 			}
 			exit;
 		}
+
+		// register system handlers
+		register_shutdown_function( 'Charcoal_Bootstrap::onShutdown' );
+		set_error_handler( "Charcoal_Bootstrap::onUnhandledError" );
+		set_exception_handler( "Charcoal_Bootstrap::onUnhandledException" );
+
 	}
 
 }

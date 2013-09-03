@@ -1,6 +1,6 @@
 <?php
 /**
-* 例外ハンドラリスト
+* exception handler list
 *
 * PHP version 5
 *
@@ -11,26 +11,16 @@
 
 class Charcoal_ExceptionHandlerList
 {
-	var $_list;
+	static private $handlers;
 
-	/*
-	 *    コンストラクタ
+	/**
+	 * add exception handler
+	 * 
+	 * @param Charcoal_IExceptionHandler $handler       renderer to add
 	 */
-	private function __construct()
+	public static function add( Charcoal_IExceptionHandler $handler )
 	{
-		$this->_list = array();
-	}
-
-	/*
-	 *    唯一のインスタンス取得
-	 */
-	public static function getInstance()
-	{
-		static $singleton_;
-		if ( $singleton_ == null ){
-			$singleton_ = new Charcoal_ExceptionHandlerList();
-		}
-		return $singleton_;
+		self::$handlers[] = $handler;
 	}
 
 	/**
@@ -38,18 +28,16 @@ class Charcoal_ExceptionHandlerList
 	 */
 	public static function init()
 	{
-		// get singleton instance
-		$ins = self::getInstance();
-
-		if ( $ins->_list ){
-			return;
-		}
-
-		$exception_handlers = Charcoal_Profile::getArray( s('EXCEPTION_HANDLERS') );
-		if ( $exception_handlers ){
-			foreach( $exception_handlers as $handler_name ) 	{
-				$handler = Charcoal_Factory::createObject( s($handler_name), s('exception_handler'), v(array()), s('Charcoal_IExceptionHandler') );
-				$ins->_list[] = $handler;
+		if ( !self::$handlers ){
+			$exception_handlers = Charcoal_Profile::getArray( s('EXCEPTION_HANDLERS') );
+			if ( $exception_handlers ){
+				foreach( $exception_handlers as $handler_name ){
+					$handler = Charcoal_Factory::createObject( s($handler_name), s('exception_handler'), v(array()), s('Charcoal_IExceptionHandler') );
+					self::$handlers[] = $handler;
+				}
+			}
+			else{
+				self::$handlers = array();
 			}
 		}
 	}
@@ -61,34 +49,16 @@ class Charcoal_ExceptionHandlerList
 	{
 		self::init();
 
-		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_EXCEPTION_HANDLER) );
-
-		if ( $echo ){
-			echo "[exception_handler] " . __CLASS__ . "#handleFrameworkException(" . get_class($e) . "): " . eol();
-		}
-
-		// インスタンスの取得
-		$ins = self::getInstance();
-
-		// 例外ハンドラを順番に呼び出す
-		$list = $ins->_list;
-
 		$result = b(FALSE);
-		foreach( $list as $handler ){
+		foreach( self::$handlers as $handler ){
 			log_info( "system,debug,error", "exception", "calling exception handler[$handler]." );
 			$handled = $handler->handleFrameworkException( $e );
-			if ( $echo ){
-				echo "[exception_handler] " . get_class($handler) . "#handleFrameworkException(): " . $handled . eol();
-			}
 			log_info( "system,debug,error", "exception", "handled: $handled" );
 			$handled = b($handled);
 			if ( $handled->isTrue() ){
 				$result = b(TRUE);
 				break;
 			}
-		}
-		if ( $echo ){
-			echo "[exception_handler] result: " . $result . eol();
 		}
 
 		return $result;
@@ -101,38 +71,16 @@ class Charcoal_ExceptionHandlerList
 	{
 		self::init();
 
-		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_EXCEPTION_HANDLER) );
-
-		if ( $echo ){
-			echo "[exception_handler] " . __CLASS__ . "#handleException(" . get_class($e) . "): " . eol();
-		}
-
-		// インスタンスの取得
-		$ins = self::getInstance();
-
-		$ex_name = get_class($e);
-		$handlers = Charcoal_System::implodeArray(",",$ins->_list);
-		log_info( "system,debug,error", "exception", "Dispatching exception({$ex_name}) to handlers:{$handlers}" );
-
-		// 例外ハンドラを順番に呼び出す
-		$list = $ins->_list;
-
 		$result = b(FALSE);
-		foreach( $list as $handler ){
+		foreach( self::$handlers as $handler ){
 			log_info( "system,debug,error", "exception", "calling exception handler[$handler]." );
 			$handled = $handler->handleException( $e );
-			if ( $echo ){
-				echo "[exception_handler] " . get_class($handler) . "#handleException(): " . $handled . eol();
-			}
 			log_info( "system,debug,error", "exception", "handled: $handled" );
 			$handled = b($handled);
 			if ( $handled->isTrue() ){
 				$result = b(TRUE);
 				break;
 			}
-		}
-		if ( $echo ){
-			echo "[exception_handler] result: " . $result . eol();
 		}
 
 		return $result;

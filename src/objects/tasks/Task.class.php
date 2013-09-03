@@ -11,6 +11,8 @@
 
 abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask
 {
+	const TAG = "Task";
+
 	private $_name_space;
 	private $_guard_conditions;
 	private $_event_filters;
@@ -43,10 +45,10 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 		$this->_post_actions       = $config->getArray( s('post_actions'), v(array()) );
 		$this->_priority           = $config->getInteger( s('priority'), i(0) );
 
-		log_debug( "debug", "Task[$this] name space: {$this->_name_space}" );
-		log_debug( "debug", "Task[$this] event filters: {$this->_event_filters}" );
-		log_debug( "debug", "Task[$this] post actions: {$this->_post_actions}" );
-		log_debug( "debug", "Task[$this] priority: {$this->_priority}" );
+		log_debug( "debug", "Task[$this] name space: {$this->_name_space}", self::TAG );
+		log_debug( "debug", "Task[$this] event filters: {$this->_event_filters}", self::TAG );
+		log_debug( "debug", "Task[$this] post actions: {$this->_post_actions}", self::TAG );
+		log_debug( "debug", "Task[$this] priority: {$this->_priority}", self::TAG );
 	}
 
 	/**

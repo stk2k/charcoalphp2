@@ -22,7 +22,7 @@ function qt( $value )
 class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
 	private $_data_source;
-	private $_builder;
+	private $_sql_builder;
 
 	private $_data_source_name;
 
@@ -438,6 +438,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$pk      = $model->getPrimaryKey();
 
 			// SQLを作成
+			$is_new = FALSE;
 			if ( $model->isPrimaryKeyValid($save_data) ){
 				// プライマリキーの値が指定されていればUPDATE
 				$data_id = $dto->$pk;

@@ -333,7 +333,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$sql" );
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [params]$params_disp" );
-
+/*
 		$log_sql = str_replace( '?', '%s', $sql );
 		$log_params = NULL;
 		if ( $params ){
@@ -349,6 +349,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		}
 		$log_sql = $log_params ? vsprintf( $log_sql, uv($log_params) ) : $log_sql;
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$log_sql" );
+*/
 
 		$stmt = $this->_connection->prepare($sql);
 

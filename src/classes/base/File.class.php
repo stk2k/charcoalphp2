@@ -312,6 +312,7 @@ class Charcoal_File extends Charcoal_Object
 
 		if ( is_file($path) )	return NULL;
 
+		$files = array();
 
 		$dh = opendir($path);
 		while( ($file_name = readdir($dh)) !== FALSE ){

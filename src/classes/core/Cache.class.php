@@ -38,7 +38,7 @@ class Charcoal_Cache extends Charcoal_Object
 	 *
 	 * @param Charcoal_String $key         The key of the item to retrieve.
 	 */
-	public function get( Charcoal_String $key )
+	public  static function get( Charcoal_String $key )
 	{
 		$driver_list = self::$drivers;
 
@@ -60,7 +60,7 @@ class Charcoal_Cache extends Charcoal_Object
 	 * @param Charcoal_String $key         The key under which to store the value.
 	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
 	 */
-	public function set( Charcoal_String $key, Charcoal_Object $value, Charcoal_Integer $duration = NULL )
+	public static function set( Charcoal_String $key, Charcoal_Object $value, Charcoal_Integer $duration = NULL )
 	{
 		$driver_list = self::$drivers;
 

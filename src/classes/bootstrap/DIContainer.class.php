@@ -44,30 +44,6 @@ class Charcoal_DIContainer
 	**/
 	public static function createContainer()
 	{
-//		log_info( "system,container", "container", "Starting creating container.");
-
-		// インスタンスの取得
-		$container = self::getInstance();
-
-		// ==================================================
-		// コンポーネント定義ファイルを読み込む
-		// ==================================================
-
-		// システムコンポーネント定義ファイルを読み込む
-		$file = Charcoal_ResourceLocator::getFrameworkPath( s('config'), s('component_defs.ini') );
-		$sys_config = is_file($file) ? parse_ini_file($file,TRUE) : NULL;
-
-		// アプリケーション定義のコンポーネント定義ファイルを読み込む
-		$file = Charcoal_ResourceLocator::getApplicationPath( s('config'), s('component_defs.ini') );
-		$app_config = is_file($file) ? parse_ini_file($file,TRUE) : NULL;
-
-		// 設定をマージする
-		$config = $app_config ? $sys_config + $app_config : $sys_config;
-
-		// 設定を保存
-		$container->component_config_files = $config;
-
-//		log_info( "system,container", "container", "Finished creating container.");
 	}
 
 	/*

@@ -1,6 +1,6 @@
 <?php
 /**
-* 例外ハンドラリスト
+* debugtrace rendrer list
 *
 * PHP version 5
 *
@@ -11,37 +11,16 @@
 
 class Charcoal_DebugTraceRendererList
 {
-	var $_list;
+	static private $renderers;
 
-	/*
-	 *    コンストラクタ
+	/**
+	 * add debugtrace renderer
+	 * 
+	 * @param Charcoal_IDebugtraceRenderer $renderer       renderer to add
 	 */
-	private function __construct()
+	public static function add( Charcoal_IDebugtraceRenderer $renderer )
 	{
-		$this->_list = array();
-	}
-
-	/*
-	 *    唯一のインスタンス取得
-	 */
-	public static function getInstance()
-	{
-		static $singleton_;
-		if ( $singleton_ == null ){
-			$singleton_ = new Charcoal_DebugTraceRendererList();
-		}
-		return $singleton_;
-	}
-
-	/*
-	 * 例外ハンドラを追加
-	 */
-	public static function addDebugtraceRenderer( Charcoal_IDebugtraceRenderer $renderer )
-	{
-		// インスタンスの取得
-		$ins = self::getInstance();
-
-		$ins->_list[] = $renderer;
+		self::$renderers[] = $renderer;
 	}
 
 	/**
@@ -51,14 +30,30 @@ class Charcoal_DebugTraceRendererList
 	 */
 	public static function render( Exception $e )
 	{
-		// インスタンスの取得
-		$ins = self::getInstance();
+		if ( !self::$renderers ){
+			try{
+				// Create Debug Trace Renderer
+				$debugtrace_renderers = Charcoal_Profile::getArray( s('DEBUGTRACE_RENDERER') );
 
-		// デバッグトレースレンダラを順番に呼び出す
-		$list = $ins->_list;
+				if ( !$debugtrace_renderers || count($debugtrace_renderers) === 0 ){
+					$debugtrace_renderers = array( 'html' );
+				}
+
+				foreach( $debugtrace_renderers as $renderer_name ) 	{
+					$renderer = Charcoal_Factory::createObject( s($renderer_name), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
+					self::$renderers[] = $renderer;
+				}
+			}
+			catch ( Exception $e )
+			{
+				_catch( $e );
+				
+				echo( "debugtrace_renderer creation failed:$e" );
+			}
+		}
 
 		$result = b(FALSE);
-		foreach( $list as $renderer ){
+		foreach( self::$renderers as $renderer ){
 			$ret = $renderer->render( $e );
 			if ( $ret && $ret instanceof Charcoal_Boolean && $ret->isTrue() ){
 				$result = b(TRUE);

@@ -53,7 +53,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_HttpHeader'				=> 'classes/core',
 				'Charcoal_Layout'					=> 'classes/core',
 				'Charcoal_ModuleLoader'				=> 'classes/core',
-				'Charcoal_ResponseFilterList'		=> 'classes/core',
 				'Charcoal_Sequence'					=> 'classes/core',
 				'Charcoal_SequenceHolder'			=> 'classes/core',
 				'Charcoal_Session'					=> 'classes/core',
@@ -64,7 +63,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 		// utility classes
 				'Charcoal_CommandLineUtil'			=> 'classes/util',
 				'Charcoal_DBPageInfo'				=> 'classes/util',
-				'Charcoal_EncodingConverter'		=> 'classes/util',
 				'Charcoal_UploadedFile'				=> 'classes/util',
 				'Charcoal_FileSystemUtil'			=> 'classes/util',
 				'Charcoal_GraphicsUtil'				=> 'classes/util',
@@ -123,15 +121,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_UserEvent'							=> 'objects/events',
 				'Charcoal_TestEvent'							=> 'objects/events',
 				'Charcoal_RequestEvent'							=> 'objects/events',
-
-		// logger classes
-				'Charcoal_BaseLogger'							=> 'objects/loggers',
-				'Charcoal_CsvFileLogger'						=> 'objects/loggers',
-				'Charcoal_FileLogger'							=> 'objects/loggers',
-				'Charcoal_HtmlFileLogger'						=> 'objects/loggers',
-				'Charcoal_ScreenLogger'							=> 'objects/loggers',
-				'Charcoal_PopupScreenLogger'					=> 'objects/loggers',
-				'Charcoal_ConsoleLogger'						=> 'objects/loggers',
 
 		// exception classes
 				'Charcoal_AnnotaionException'					=> 'exceptions',
@@ -279,6 +268,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_HttpRequest'						=> 'objects/requests',
 
 		// response classes
+				'Charcoal_BaseResponse'						=> 'objects/responses',
 				'Charcoal_ShellResponse'					=> 'objects/responses',
 				'Charcoal_HttpResponse'						=> 'objects/responses',
 

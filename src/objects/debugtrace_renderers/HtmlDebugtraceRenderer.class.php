@@ -328,22 +328,12 @@ HTML_HEADER;
 	 */
 	private static function _makeHtmlBody( Exception $e, Charcoal_String $title, Charcoal_String $file, Charcoal_Integer $line )
 	{
-		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_DEBUGTRACE_RENDERER) );
-
-		if ( $echo ){
-			echo "[debugtrace_renderer] " . __CLASS__ . "#_makeHtmlBody(" . get_class($e) . ", '$title', $file, $line) start" . eol();
-		}
-
 		$html = '';
 
 		$html .= '<div id="charcoal">' . PHP_EOL;
 		$html .= '<h1><div class="value">' . $title . '</div></h1>' . PHP_EOL;
 
 		// output defined interfaces
-		if ( $echo ){
-			echo "[debugtrace_renderer] output defined interfaces" . eol();
-		}
-
 		$declared_interfaces = get_declared_interfaces();
 		$interfaces = NULL;
 		foreach( $declared_interfaces as $interface )
@@ -371,10 +361,6 @@ HTML_HEADER;
 		$html .= '</table>' . PHP_EOL;
 
 		// output defined classes
-		if ( $echo ){
-			echo "[debugtrace_renderer] output defined classes" . eol();
-		}
-
 		$declared_klasses = get_declared_classes();
 		$klasses = NULL;
 		foreach( $declared_klasses as $klass )
@@ -402,10 +388,6 @@ HTML_HEADER;
 		$html .= '</table>' . PHP_EOL;
 
 		// output loaded files
-		if ( $echo ){
-			echo "[debugtrace_renderer] output loaded files" . eol();
-		}
-
 		$files = Charcoal_Framework::getLoadedSourceFiles();
 		$html .= '<h2><div class="value">Loaded Source Files&nbsp;&nbsp;<a href="#" onclick="expand(\'source_files\');">(' . count($files) . ')</a></div></h2>' . PHP_EOL;
 
@@ -425,10 +407,6 @@ HTML_HEADER;
 		$html .= '</table>' . PHP_EOL;
 
 		// output exception stack
-		if ( $echo ){
-			echo "[debugtrace_renderer] output exception stack" . eol();
-		}
-
 		$html .= '<h2><div class="value">Exception Stack</div></h2>' . PHP_EOL;
 
 		$hash = $file->hash() . $line->hash();
@@ -482,10 +460,6 @@ HTML_HEADER;
 		}
 
 		// output call stack
-		if ( $echo ){
-			echo "[debugtrace_renderer] output call stack" . eol();
-		}
-
 		$html .= '<h2><div class="value">Call Stack</div></h2>' . PHP_EOL;
 
 		$html .= '<table cellspacing="0" cellpadding="0">' . PHP_EOL;
@@ -569,10 +543,6 @@ HTML_HEADER;
 		}
 		$html .= '</table>' . PHP_EOL;
 
-		if ( $echo ){
-			echo "[debugtrace_renderer] " . __CLASS__ . "#_makeHtmlBody(" . get_class($e) . ", '$title', $file, $line) end" . eol();
-		}
-
 		return $html;
 	}
 
@@ -582,11 +552,7 @@ HTML_HEADER;
 	 */
 	public function render( Exception $e )
 	{
-		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_DEBUGTRACE_RENDERER) );
-
-		if ( $echo ){
-			echo "[debugtrace_renderer] " . __CLASS__ . "#output(" . get_class($e) . ", '$title'): " . eol();
-		}
+echo "$e";
 
 		list( $file, $line ) = Charcoal_System::caller(0);
 
@@ -603,12 +569,6 @@ HTML_HEADER;
 	 */
 	public function output( Exception $e )
 	{
-		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_DEBUGTRACE_RENDERER) );
-
-		if ( $echo ){
-			echo "[debugtrace_renderer] " . __CLASS__ . "#output(" . get_class($e) . ", '$title'): " . eol();
-		}
-
 		list( $file, $line ) = Charcoal_System::caller(0);
 
 		$title = 'CharcoalPHP: Exception List';
@@ -623,12 +583,6 @@ HTML_HEADER;
 	 */
 	private function _output( Exception $e, Charcoal_String $title, Charcoal_String $file, Charcoal_Integer $line )
 	{
-		$echo = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_DEBUGTRACE_RENDERER) );
-
-		if ( $echo ){
-			echo "[debugtrace_renderer] " . __CLASS__ . "#_output(" . get_class($e) . ", '$title', $file, $line): " . eol();
-		}
-
 		$html  = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		$html .= '<html lang="ja">';
 		$html .= '<head>';
@@ -638,10 +592,6 @@ HTML_HEADER;
 		$html .= self::_makeHtmlBody( $e, s($title), s($file), i($line) );
 		$html .= '</body>' . PHP_EOL;
 		$html .= '</html>' . PHP_EOL;
-
-		if ( $echo ){
-			echo "[debugtrace_renderer] html: $html" . eol();
-		}
 
 		return $html;
 	}

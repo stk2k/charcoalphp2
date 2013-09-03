@@ -102,20 +102,8 @@ class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogge
 			print "FATAL error occured while output log file:{$this->_file_name} error=$e" . PHP_EOL;
 		}
 
-		
-		if ( Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_LOGGER)) ){
-			echo "opening file: $file_name" . eol();
-		}
-
 		$this->_fp = fopen($file_name, "a");
 		$this->_open = ($this->_fp != FALSE);
-
-		if ( Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_LOGGER) ) ){
-			if ( $this->_open )
-				echo "file opened: $file_name" . eol();
-			else
-				echo "file not opened: $file_name" . eol();
-		}
 
 	}
 

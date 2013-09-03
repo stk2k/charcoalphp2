@@ -24,9 +24,9 @@ class Charcoal_EnumCoreHookStage
 //	const BEFORE_REG_EXCEPTION_HANDLERS   = 10;
 //	const CREATE_EXCEPTION_HANDLER        = 11;
 //	const AFTER_REG_EXCEPTION_HANDLERS    = 12;
-	const BEFORE_REG_USER_LOGGERS         = 13;
-	const CREATE_USER_LOGGER              = 14;
-	const AFTER_REG_USER_LOGGERS          = 15;
+//	const BEFORE_REG_USER_LOGGERS         = 13;
+//	const CREATE_USER_LOGGER              = 14;
+//	const AFTER_REG_USER_LOGGERS          = 15;
 	const BEFORE_REG_EXTLIB_DIR           = 16;
 	const ADD_EXTLIB_DIR                  = 17;
 	const AFTER_REG_EXTLIB_DIR            = 18;
@@ -46,9 +46,9 @@ class Charcoal_EnumCoreHookStage
 	const AFTER_PROCEDURE_FORWARD         = 32;
 	const BEFORE_CREATE_CONTAINER         = 33;
 	const AFTER_CREATE_CONTAINER          = 34;
-	const BEFORE_REG_RESPONSE_FILTERS     = 35;
-	const CREATE_RESPONSE_FILTER          = 36;
-	const AFTER_REG_RESPONSE_FILTERS      = 37;
+//	const BEFORE_REG_RESPONSE_FILTERS     = 35;
+//	const CREATE_RESPONSE_FILTER          = 36;
+//	const AFTER_REG_RESPONSE_FILTERS      = 37;
 	const END_OF_BOOTSTRAP                = 38;
 	const BEFORE_EXECUTE_PROCEDURES       = 39;
 	const PRE_EXECUTE_PROCEDURE           = 40;

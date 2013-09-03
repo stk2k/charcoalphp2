@@ -144,6 +144,14 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	}
 
 	/*
+	 *	array_flip
+	 */
+	public function flip()
+	{
+		return array_flip( $this->_value );
+	}
+
+	/*
 	 *	最後尾に追加
 	 */
 	public function add( $item )

@@ -11,42 +11,61 @@
 
 class Charcoal_CoreHook
 {
-	static private $hook_list;
-	static private $message_queue;
+	static private $hooks;
+	static private $queue;
 
 	/**
 	 * Register hook object
+	 * 
+	 * @param Charcoal_ICoreHook $hook        core hook to add
 	 */
-	public static function register( Charcoal_String $key, Charcoal_ICoreHook $hook )
+	public static function add( Charcoal_ICoreHook $hook )
 	{
-		$key = us($key);
-
-		self::$hook_list[$key] = $hook;
+		self::$hooks[] = $hook;
 	}
 
 	/**
-	 * Call all hook object
+	 * pushes message to internal queue
+	 * 
+	 * @param Charcoal_CoreHookMessage $msg      hook message
+	 * @param Charcoal_Boolean $flush_now        if true, passed message will be flushed to hook immediately.
 	 */
-	public static function processAll()
+	public static function pushMessage( Charcoal_CoreHookMessage $msg, Charcoal_Boolean $flush_now = NULL )
 	{
-		if ( !self::$hook_list || !self::$message_queue ){
-			return;
-		}
-
-		foreach( self::$hook_list as $hook ){
-			foreach( self::$message_queue as $msg ){
-				$hook->process( $msg );
+		if ( $flush_now && $flush_now->isTrue() ){
+			foreach( self::$hooks as $hook ){
+				$hook->processMessage( $msg );
 			}
 		}
+		else{
+			self::$queue[] = $msg;
+		}
 	}
 
-
 	/**
-	 * Add hook message to internal queue
+	 * flush all message to registered core hooks
 	 */
-	public static function pushMessage( Charcoal_CoreHookMessage $msg )
+	public static function flushMessages()
 	{
-		self::$message_queue[] = $msg;
+		if ( !self::$hooks )
+		{
+			$hooks = Charcoal_Profile::getArray( s('CORE_HOOKS') );
+			if ( $hooks ){
+				foreach( $hooks as $hook_name ){
+					$core_hook = Charcoal_Factory::createObject( s($hook_name), s('core_hook'), v(array()), s('Charcoal_ICoreHook') );
+					self::$hooks[] = $hook;
+				}
+			}
+			else{
+				self::$hooks = array();
+			}
+		}
+
+		while( $msg = array_shift(self::$queue) ){
+			foreach( self::$hooks as $hook ){
+				$hook->processMessage( $msg );
+			}
+		}
 	}
 }
 

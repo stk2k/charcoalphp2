@@ -13,6 +13,6 @@ interface Charcoal_ICoreHook extends Charcoal_ICharcoalObject
 	/**
 	 * Process core hook message
 	 */
-	public function process( Charcoal_CoreHookMessage $msg );
+	public function processMessage( Charcoal_CoreHookMessage $msg );
 }
 

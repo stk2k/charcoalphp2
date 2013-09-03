@@ -76,13 +76,13 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$klass = new Charcoal_Class( s($class_name) );
 		$task = $klass->newInstance();
 
-//		log_info( "system,debug,task", "module", "created task[$task] in module[$obj_path]");
+//		log_info( "system,debug,task", "created task[$task] in module[$obj_path]");
 
 		// build object path for the task
 		$obj_name = $task->getObjectName();
 		$task_path = s($obj_name . '@' . $obj_path->getVirtualPath());
 		$task_path = new Charcoal_ObjectPath(s($task_path));
-//		log_info( "system,debug,task", "module", "task[$task] path: [$task_path]");
+//		log_info( "system,debug,task", "task[$task] path: [$task_path]");
 
 		// set task property
 		$task->setObjectPath( $task_path );
@@ -94,11 +94,11 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// configure task
 		$task->configure( $config );
-//		log_info( "system,debug,task", "module", "task[$task] configured.");
+//		log_info( "system,debug,task", "task[$task] configured.");
 
 		// regiser task
 		$task_manager->registerTask( s($task_path->toString()), $task );
-		log_info( "system,debug,task", "module", "task[$class_name] registered as: [$task_path]");
+		log_info( "system,debug,task", "task[$class_name] registered as: [$task_path]");
 
 		return $task;
 	}
@@ -182,7 +182,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$task = NULL;
 
-		if ( $dh = opendir($webapp_path) )
+		if ( is_dir($webapp_path) && $dh = opendir($webapp_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
@@ -194,7 +194,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 			closedir($dh);
 		}
 
-		if ( $dh = opendir($project_path) )
+		if ( is_dir($project_path) && $dh = opendir($project_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
@@ -206,7 +206,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 			closedir($dh);
 		}
 
-		if ( $dh = opendir($framework_path) )
+		if ( is_dir($framework_path) && $dh = opendir($framework_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
@@ -266,9 +266,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$event_class_suffix = 'Event' . CHARCOAL_CLASS_FILE_SUFFIX;
 
-		$event = NULL;
-
-		if ( !$event && $dh = opendir($webapp_path) )
+		if ( is_dir($webapp_path) && $dh = opendir($webapp_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
@@ -280,7 +278,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 			closedir($dh);
 		}
 
-		if ( !$event && $dh = opendir($project_path) )
+		if ( is_dir($project_path) && $dh = opendir($project_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
@@ -292,7 +290,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 			closedir($dh);
 		}
 
-		if ( !$event && $dh = opendir($framework_path) )
+		if ( is_dir($framework_path) && $dh = opendir($framework_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{

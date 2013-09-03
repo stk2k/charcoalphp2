@@ -11,64 +11,15 @@
 
 class Charcoal_Logger extends Charcoal_Object
 {
-	static $loggers = array();
-	static $buffer = array();
-	static $profile_level;
-	static $log_enabled;
-	static $tag_filters;
-	static $output_loggers;
-	static $log_no_buffer;
-
-	static $echo_logger;
-
-	/**
-	 * initialize logger
-	 */
-	public static function init()
-	{
-		self::$profile_level  = Charcoal_Profile::getString( s('LOG_LEVEL') );
-		self::$log_enabled    = Charcoal_Profile::getBoolean( s('LOG_ENABLED'), b(TRUE) )->isTrue();
-		self::$tag_filters    = Charcoal_Profile::getArray( s('LOG_TAG_FILTERS') );
-		self::$output_loggers = Charcoal_Profile::getArray( s('LOG_LOGGERS') );
-		self::$log_no_buffer  = Charcoal_Profile::getBoolean( s('LOG_NO_BUFFER'), b(TRUE) )->isTrue();
-
-		self::$echo_logger = Charcoal_Framework::testEchoFlag( i(Charcoal_EnumEchoFlag::ECHO_LOGGER) );
-
-		if ( self::$echo_logger ){
-			echo "LOG_LEVEL:" . self::$profile_level . eol();
-			echo "LOG_ENABLED:" . self::$log_enabled . eol();
-			echo "LOG_TAG_FILTERS:" . self::$tag_filters . eol();
-			echo "LOG_LOGGERS:" . self::$output_loggers . eol();
-			echo "LOG_NO_BUFFER:" . self::$log_no_buffer . eol();
-		}
-	}
-
-	/**
-	 * clear loggers
-	 */
-	public static function clear()
-	{
-		self::$loggers = NULL;
-	}
+	static private $loggers;
+	static private $buffer;
 
 	/**
 	 * flush write buffer
 	 */
 	public static function flush()
 	{
-		if ( !self::$log_enabled ){
-			if ( self::$echo_logger ){
-				echo "LOG_ENABLED: OFF" . eol();
-			}
-
-			return;
-		}
-
 		if ( self::$buffer === NULL ){
-			if ( self::$echo_logger ){
-				echo "Buffer is empty." . eol();
-			}
-
 			return;
 		}
 
@@ -85,27 +36,55 @@ class Charcoal_Logger extends Charcoal_Object
 	 */
 	public static function flushMessage( Charcoal_LogMessage $msg )
 	{
+		$log_enabled    = Charcoal_Profile::getBoolean( s('LOG_ENABLED') );
+
+		if ( !$log_enabled || $log_enabled->isFalse() ){
+			return;
+		}
+
+		$output_loggers = Charcoal_Profile::getArray( s('LOG_LOGGERS'), v(array()) );
+
+		// プロファイルに設定されているロガーを取得
+		$logger_names = Charcoal_Profile::getArray( s('LOG_LOGGERS') );
+//		log_debug( 'system, debug',"logger_names: $logger_names", 'framework' );
+
+		// ロガーの登録
+		if ( !self::$loggers )
+		{
+			if ( $logger_names ){
+				foreach( $logger_names as $logger_name ){
+					$registerd = self::isRegistered( s($logger_name) );
+					if ( !$registerd ){
+						$logger = Charcoal_Factory::createObject( s($logger_name), s('logger'), v(array()), s('Charcoal_ILogger') );
+						self::register( s($logger_name), $logger );
+					}
+					else{
+						log_warning( "system,debug,error", "Logger[$logger_name] is already registered!" );
+					}
+				}
+			}
+			else{
+				self::$loggers = array();
+			}
+		}
+
 		// 対象ロガーに対してのみ出力
-		$output_loggers = self::$output_loggers ? uv(self::$output_loggers) : array();
-		$output_loggers = array_flip($output_loggers);
+		$output_loggers = $output_loggers->flip();
 
 		$level        = $msg->getLevel();
 		$logger_names = $msg->getLoggerNames();
 
-		if ( !self::$profile_level ){
-			// LOG_LEVELが設定されていない場合は、WARNING以上出力
-			self::$profile_level = s('W');
-		}
-
 		// プロファイルに設定したレベル以下ならば出力しない
-		$cmp = self::_compareLogLevel($level,self::$profile_level);
+		$log_level = Charcoal_Profile::getString( s('LOG_LEVEL'), s('W') );
+		$cmp = self::_compareLogLevel($level,$log_level);
 		if ( $cmp > 0 ){
 			return;
 		}
 
 		// タグフィルタが設定されている場合、マッチしないログは無視
-		if ( self::$tag_filters && count(self::$tag_filters) > 0 ){
-			if ( !self::$tag_filters->contains($msg->getTag()) ){
+		$tag_filters = Charcoal_Profile::getArray( s('LOG_TAG_FILTERS') );
+		if ( $tag_filters && !$tag_filters->isEmpty() ){
+			if ( !$tag_filters->contains($msg->getTag()) ){
 				return;
 			}
 		}
@@ -115,9 +94,6 @@ class Charcoal_Logger extends Charcoal_Object
 			// 登録されていて、かつプロファイルにエントリがあるログだけに出力する
 			if ( isset(self::$loggers[$key]) && isset($output_loggers[$key]) ){
 				$logger = self::$loggers[ $key ];
-				if ( self::$echo_logger ){
-					echo get_class($logger) . "#writeln()" . eol();
-				}
 				$logger->writeln( $msg );
 			}
 		}
@@ -128,21 +104,20 @@ class Charcoal_Logger extends Charcoal_Object
 	 */
 	public static function terminate()
 	{
-		if ( self::$echo_logger ){
-			echo __CLASS__ . "#terminate()" . eol();
-		}
-
 		self::flush();
 
-		$loggers = self::$loggers;
-
-		foreach( $loggers as $logger )
+		if ( self::$loggers )
 		{
-			// output footer
-			$logger->writeFooter();
+			foreach( self::$loggers as $logger )
+			{
+				// output footer
+				$logger->writeFooter();
 
-			// terminate logger
-			$logger->terminate();
+				// terminate logger
+				$logger->terminate();
+			}
+
+			self::$loggers = NULL;
 		}
 	}
 
@@ -172,17 +147,12 @@ class Charcoal_Logger extends Charcoal_Object
 	/*
 	 * write one message
 	 */
-	public static function writeln( Charcoal_String $target, Charcoal_String $tag, Charcoal_String $message, Charcoal_Integer $echo_flag = NULL )
+	public static function writeln( Charcoal_String $target, Charcoal_String $message, Charcoal_String $tag = NULL )
 	{
 		try{
 			// get caller
 			list( $file, $line ) = Charcoal_System::caller(1);
 			
-			// force echo
-			if ( $echo_flag && Charcoal_Framework::testEchoFlag($echo_flag) ){
-				echo "$message    $file($line)" . eol();
-			}
-
 			// get log level and logger names
 			list( $level, $logger_names ) = self::_getLevelAndTargetList( $target );
 
@@ -190,9 +160,9 @@ class Charcoal_Logger extends Charcoal_Object
 			$msg = new Charcoal_LogMessage( s($level), s($tag), s($message), s($file), i($line), v($logger_names) );
 
 			// get LOG_NO_BUFFER flag
-			$log_no_buffer = self::$log_no_buffer;
+			$log_no_buffer  = Charcoal_Profile::getBoolean( s('LOG_NO_BUFFER'), b(FALSE) );
 
-			if ( $log_no_buffer ){
+			if ( $log_no_buffer && $log_no_buffer->isTrue() ){
 				// flush immediately
 				self::flushMessage( $msg );
 			}
