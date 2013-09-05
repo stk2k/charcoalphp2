@@ -140,7 +140,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 		}
 
 		if ( !$encoding_string ){
-			_throw( new Charcoal_InvalidEncodingCodeException( s($encoding) ) );
+			_throw( new Charcoal_InvalidEncodingCodeException( $encoding ) );
 		}
 
 		return $encoding_string;

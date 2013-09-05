@@ -11,11 +11,9 @@
 
 class Charcoal_ProfileConfigFileNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $config_file, Exception $prev = NULL )
+	public function __construct( $config_file, $prev = NULL )
 	{
-		$msg  = "Profile Config File Not Found: [$config_file].";
-
-		if ( $prev ) parent::__construct( s($msg), $prev ); else parent::__construct( s($msg) );
+		parent::__construct( "Profile Config File Not Found: [$config_file].", $prev );
 	}
 }
 

@@ -38,10 +38,10 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 				continue;
 			}
 
-			$value_map = $this->parseAnnotation( $field, $value );
+			$annot_map = $this->parseAnnotation( $field, $value );
 
 			// プライマリキーの確認
-			if ( isset($value_map['pk']) ){
+			if ( isset($annot_map['pk']) ){
 				if ( $this->_primary_key ){
 					// 2回以上指定はできない
 					_throw( new Charcoal_AnnotaionException( $field, "@pk", "@pk annotation must be one per model" ) );
@@ -50,21 +50,21 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 			}
 
 			// 外部キーの確認
-			if ( isset($value_map['fk']) ){
-				$a_value = $value_map['fk'];
+			if ( isset($annot_map['fk']) ){
+				$a_value = $annot_map['fk'];
 				$model_name = $a_value->getValue();
-				if ( !$model_name || strlen($model_name) == 0 ){
+				if ( !$model_name || $model_name->isEmpty() ){
 					_throw( new Charcoal_AnnotaionException( $field, "@fk", "@fk annotation requires model name" ) );
 				}
-				$this->_foreign_keys[$model_name] = $field;
+				$this->_foreign_keys[us($model_name)] = $field;
 			}
 
 			// DBフィールド
-			if ( isset($value_map['field']) ){
+			if ( isset($annot_map['field']) ){
 				$this->_db_fields[] = $field;
 			}
 
-			$annotaions[$field] = $value_map;
+			$annotaions[$field] = $annot_map;
 		}
 
 		$this->_annotaions = $annotaions;
@@ -77,6 +77,22 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	 */
 	public function configure( Charcoal_Config $config )
 	{
+	}
+
+	/*
+	 *   アノテーションを取得
+	 */
+	public function getAnnotations( Charcoal_String $field )
+	{
+		$field = us($field);
+
+		if ( !$this->_annotaions ){
+			return NULL;
+		}
+		if ( !isset($this->_annotaions[$field]) ){
+			return NULL;
+		}
+		return $this->_annotaions[$field];
 	}
 
 	/*
@@ -93,11 +109,11 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 		if ( !isset($this->_annotaions[$field]) ){
 			return NULL;
 		}
-		$value_map = $this->_annotaions[$field];
-		if ( !isset($value_map[$key]) ){
+		$annot_map = $this->_annotaions[$field];
+		if ( !isset($annot_map[$key]) ){
 			return NULL;
 		}
-		return $value_map[$key];
+		return $annot_map[$key];
 	}
 
 	/*
@@ -175,11 +191,11 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	/*
 	 *	アノテーションをパース
 	 */
-	private function parseAnnotation( $field, $value )
+	private function parseAnnotation( $field, $field_value )
 	{
-		$phrase_list = explode( ' ', $value );
+		$phrase_list = explode( ' ', $field_value );
 
-		$value_map = array();
+		$annot_map = array();
 
 		foreach( $phrase_list as $phrase ){
 			if ( strpos($phrase,'@') === 0 ){
@@ -216,23 +232,13 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 					}
 				}
 				// アノテーション追加
-				$new_annot = new Charcoal_AnnotationValue( $this, s($name), s($value), v($params) );
-				if ( !isset($value_map[$name]) ){
-					$value_map[$name] = $new_annot;
-				}
-				else if( $value_map[$name] instanceof Charcoal_AnnotationValue ){
-					$value_map[$name] = array(
-						$value_map[$name],
-						$new_annot
-						);
-				}
-				else if ( is_array($value_map[$name]) ){
-					array_push( $value_map[$name], $new_annot );
-				}
+				$new_annot = new Charcoal_AnnotationValue( s($name), s($value), v($params) );
+
+				$annot_map[$name] = $new_annot;
 			}
 		}
 
-		return $value_map;
+		return $annot_map;
 	}
 
 	/*

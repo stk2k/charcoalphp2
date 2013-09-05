@@ -14,9 +14,9 @@ class Charcoal_Float extends Charcoal_Number
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( $value, $default_value = NULL )
+	public function __construct( $value = 0.0 )
 	{
-		parent::__construct( $value, Charcoal_Number::NUMBER_TYPE_FLOAT, $default_value );
+		parent::__construct( $value, Charcoal_Number::NUMBER_TYPE_FLOAT );
 	}
 
 }

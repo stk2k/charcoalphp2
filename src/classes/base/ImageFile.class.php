@@ -26,7 +26,7 @@ class Charcoal_ImageFile extends Charcoal_File
 
 		$this->_data = getimagesize(parent::getPath());
 		if ( $this->_data === FALSE ){
-			_throw( new Charcoal_ImageGetSizeException($this) );
+			_throw( new Charcoal_ImageGetSizeException( $this ) );
 		}
 	}
 

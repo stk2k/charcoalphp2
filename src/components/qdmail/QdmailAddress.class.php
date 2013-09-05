@@ -24,7 +24,7 @@ class Charcoal_QdmailAddress
 
 		$valid = Charcoal_MailUtil::validateAddress( s($address) );
 		if ( !$valid ){
-			_throw( new Charcoal_InvalidMailAddressException( s($address) ) );
+			_throw( new Charcoal_InvalidMailAddressException( $address ) );
 		}
 	}
 

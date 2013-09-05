@@ -11,11 +11,9 @@
 
 class Charcoal_ConfigSectionNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $section, Exception $prev = NULL )
+	public function __construct( $section, $prev = NULL )
 	{
-		$msg = "[section]$section";
-
-		if ( $prev ) parent::__construct( s($msg), $prev ); else parent::__construct( s($msg) );
+		parent::__construct( "section($section) is not found", $prev );
 	}
 
 }

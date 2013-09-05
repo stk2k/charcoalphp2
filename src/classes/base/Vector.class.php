@@ -21,11 +21,14 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		parent::__construct();
 
 		if ( $value ){
-			if ( is_array($value) ){
+			if ( $value instanceof Charcoal_Vector ){
+				$this->_value = $value->toArray();
+			}
+			else if ( is_array($value) ){
 				$this->_value = $value;
 			}
 			else{
-				_throw( new Charcoal_NonArrayException($value) );
+				_throw( new Charcoal_NonArrayException( $value ) );
 			}
 		}
 		else{
@@ -348,7 +351,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function toArray()
 	{
-		return array_diff( $this->_value, array() );
+		return $this->_value;
 	}
 
 	/*

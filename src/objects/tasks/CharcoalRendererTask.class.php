@@ -126,7 +126,7 @@ class Charcoal_CharcoalRendererTask extends Charcoal_Task implements Charcoal_IT
 		{
 			_catch( $ex );
 
-			_throw( new Charcoal_SmartyRendererTaskException( s("rendering failed"), $ex ) );
+			_throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
 		}
 
 		return b(TRUE);

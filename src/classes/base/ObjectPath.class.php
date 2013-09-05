@@ -55,7 +55,7 @@ class Charcoal_ObjectPath extends Charcoal_Object
 /*
 		// オブジェクト名のテスト
 		if ( !preg_match("/^[\w\d_]+$/",$object_name) ){
-			_throw( new Charcoal_ObjectPathFormatException( s($object_name), s("should be consist of alphabet + number") ) );
+			_throw( new Charcoal_ObjectPathFormatException( $object_name, "should be consist of alphabet + number" ) );
 		}
 */
 
@@ -66,14 +66,14 @@ class Charcoal_ObjectPath extends Charcoal_Object
 
 			// 最初は:でなければならない
 			if ( strlen($dir_list[0]) > 0 ){
-				_throw( new Charcoal_ObjectPathFormatException( s($object_path_string), s("must start with character ':'") ) );
+				_throw( new Charcoal_ObjectPathFormatException( $object_path_string, "must start with character ':'" ) );
 			}
 
 			// ディレクトリ名は1文字以上の英数字またはアンダースコアでなければならない
 			for($i=1;$i<count($dir_list);$i++){
 				$dir = $dir_list[$i];
 				if ( !preg_match("/^[\w\d_]+$/",$dir) ){
-					_throw( new Charcoal_ObjectPathFormatException( s($object_path_string), s("should be consist of alphabet + number") ) );
+					_throw( new Charcoal_ObjectPathFormatException( $object_path_string, "should be consist of alphabet + number" ) );
 				}
 			}
 		}

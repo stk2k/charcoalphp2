@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_IEventContext
+class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventContext
 {
 	private $procedure;
 	private $request;
@@ -22,6 +22,7 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	public function __construct()
 	{
+		parent::__construct();
 	}
 
 	/**
@@ -146,7 +147,7 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 		catch( Exception $ex )
 		{
 			_catch( $ex );
-			_throw( new Charcoal_EventContextException( s('getObject'), $ex ) );
+			_throw( new Charcoal_EventContextException( 'getObject', $ex ) );
 		}
 	}
 
@@ -169,7 +170,7 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 		catch( Exception $ex )
 		{
 			_catch( $ex );
-			_throw( new Charcoal_EventContextException( s('getComponent'), $ex ) );
+			_throw( new Charcoal_EventContextException( 'getComponent', $ex ) );
 		}
 	}
 
@@ -208,7 +209,7 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 		catch( Exception $ex )
 		{
 			_catch( $ex );
-			_throw( new Charcoal_EventContextException( s('getCache'), $ex ) );
+			_throw( new Charcoal_EventContextException( 'getCache', $ex ) );
 		}
 	}
 
@@ -226,7 +227,7 @@ class Charcoal_EventContext extends Charcoal_CharcoalObject implements Charcoal_
 		catch( Exception $ex )
 		{
 			_catch( $ex );
-			_throw( new Charcoal_EventContextException( s('setCache'), $ex ) );
+			_throw( new Charcoal_EventContextException( 'setCache', $ex ) );
 		}
 	}
 

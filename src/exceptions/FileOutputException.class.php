@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイル出力例外
+* Exception caused by failure in writing file
 *
 * PHP version 5
 *
@@ -11,11 +11,11 @@
 
 class Charcoal_FileOutputException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $file, Exception $previous = NULL )
+	public function __construct( $path, Exception $prev = NULL )
 	{
-		$msg = 'Output to file[' . $file->getPath() . "] failed.";
+		Charcoal_ParamTrait::checkString( 1, $path );
 
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "Output to file[$path] failed.", $prev );
 	}
 }
 

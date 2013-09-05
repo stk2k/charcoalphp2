@@ -409,7 +409,7 @@ HTML_HEADER;
 		// output exception stack
 		$html .= '<h2><div class="value">Exception Stack</div></h2>' . PHP_EOL;
 
-		$hash = $file->hash() . $line->hash();
+		$hash = sha1($file . $line);
 
 		$src = new Charcoal_PhpSourceInfo( s($file), i($line), i(10) );
 		$html .= '<div style="text-align: left;">' . PHP_EOL;
@@ -477,7 +477,7 @@ HTML_HEADER;
 				$modifiers = Reflection::getModifierNames( $ref_method->getModifiers() );
 				$modifiers = implode(" ",$modifiers);
 				$params = $ref_method->getParameters();
-/*
+
 				$args_disp = '';
 				foreach( $params as $p ){
 					if ( strlen($args_disp) > 0 ){
@@ -494,13 +494,25 @@ HTML_HEADER;
 						$args_disp .= '&amp;';
 					}
 					$args_disp .= $p->getName();
-					if ( $p->isDefaultValueAvailable()||$p->isDefaultValueConstant() ){
-						$args_disp .= '=' . $p->getDefaultValue();
+
+					if ( $p->isDefaultValueAvailable() ){
+						$default_value = $p->getDefaultValue() ? $p->getDefaultValue() : 'NULL';
+						$args_disp .= '=' . $default_value;
 					}
+					else if ( version_compare(PHP_VERSION, '5.4.6') >= 0 && $p->isDefaultValueConstant() ){
+						$default_value = $p->getDefaultValue() ? $p->getDefaultValue() : 'NULL';
+						$args_disp .= '=' . $default_value;
+					}
+
 					if ( $p->isOptional() ){
 						$args_disp .= ']';
 					}
-				}*/
+				}/*
+echo "func:$func" . eol();
+ad($args);
+ad($args_disp);
+
+*/
 
 				$message = "$modifiers {$klass}{$type}{$func}($args_disp)";
 			}
@@ -512,7 +524,6 @@ HTML_HEADER;
 					}
 					$args_disp .= '"' . Charcoal_System::toString($arg) . '"';
 				}
-
 				$message = "{$klass}{$type}{$func}($args_disp)";
 			}
 
@@ -552,8 +563,6 @@ HTML_HEADER;
 	 */
 	public function render( Exception $e )
 	{
-echo "$e";
-
 		list( $file, $line ) = Charcoal_System::caller(0);
 
 		$title = 'CharcoalPHP: Exception List';

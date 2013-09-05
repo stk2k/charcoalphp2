@@ -1,6 +1,6 @@
 <?php
 /**
-* 画像ファイル読み込み例外
+* Exception caused by failure in manipulating image file
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ImageGetSizeException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $file, Exception $previous = NULL )
+	public function __construct( Charcoal_File $file, $prev = NULL )
 	{
-		$msg = "getimagesize() failed. path=[$file]";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "getimagesize() failed. path=[$file]", $prev );
 	}
 
 }

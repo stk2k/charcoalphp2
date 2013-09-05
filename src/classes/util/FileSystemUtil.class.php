@@ -18,16 +18,16 @@ class Charcoal_FileSystemUtil
 	{
 		// コピー元ファイルの確認
 		if ( !$src->isFile() ){
-			_throw( new Charcoal_FileSystemException( s('copy'), s( $src->getAbsolutePath() . ' is not file') ) );
+			_throw( new Charcoal_FileSystemException( 'copy', $src->getAbsolutePath() . ' is not file' ) );
 		}
 		if ( !$src->isReadable() ){
-			_throw( new Charcoal_FileSystemException( s('copy'), s( $src->getAbsolutePath() . ' is not readable') ) );
+			_throw( new Charcoal_FileSystemException( 'copy', $src->getAbsolutePath() . ' is not readable' ) );
 		}
 
 		// コピー先の確認
 		$dir = $dest->getDir();
 		if ( !$dir->isDir() ){
-			_throw( new Charcoal_FileSystemException( s('copy'), s( $dir->getAbsolutePath() . ' is not directory') ) );
+			_throw( new Charcoal_FileSystemException( 'copy', $dir->getAbsolutePath() . ' is not directory' ) );
 		}
 
 		$src = us( $src->getPath() );
@@ -36,7 +36,7 @@ class Charcoal_FileSystemUtil
 		$result = copy( $src, $dest );
 
 		if ( false === $result ){
-			_throw( new Charcoal_FileSystemException( s('copy'), s("[src]$src [dest]$dest") ) );
+			_throw( new Charcoal_FileSystemException( 'copy', "[src]$src [dest]$dest" ) );
 		}
 	}
 

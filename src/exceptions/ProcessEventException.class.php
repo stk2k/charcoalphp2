@@ -1,6 +1,6 @@
 <?php
 /**
-* イベント処理例外
+* exception caused by failure in processing event
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ProcessEventException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_IEvent $event, Charcoal_ITask $task, $result, Charcoal_String $message, Exception $previous = NULL )
+	public function __construct( Charcoal_IEvent $event, Charcoal_ITask $task, $result, Charcoal_String $message, $prev = NULL )
 	{
-		$msg = " [event]$event [task]$task [result]$result [message]$message";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "Event processing failed. [event]$event [task]$task [result]$result [message]$message", $prev );
 	}
 
 }

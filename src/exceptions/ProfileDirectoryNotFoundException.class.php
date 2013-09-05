@@ -1,6 +1,6 @@
 <?php
 /**
-* バリデータ設定例外
+* exception caused by failure in finding profile directory
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ProfileDirectoryNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $profile_dir )
+	public function __construct( $profile_dir, $prev = NULL )
 	{
-		$msg = "Profile directory not found: [$profile_dir]";
-
-		parent::__construct( s($msg) );
+		parent::__construct( "Profile directory not found: [$profile_dir]", $prev );
 	}
 }
 

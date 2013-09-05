@@ -1,6 +1,6 @@
 <?php
 /**
-* フレームワークオブジェクトの基底クラス
+* framework basic object class
 *
 * PHP version 5
 *
@@ -8,23 +8,20 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-
-
 class Charcoal_CharcoalObject extends Charcoal_Object
 {
 	public $obj_name;
 	public $obj_path;
 	public $type_name;
 
-	/*
-	 *	コンストラクタ
+	/**
+	 *	constructor
 	 */
 	public function __construct()
 	{
 		parent::__construct();
 
-		$class_name = get_class($this);
-		$this->obj_name = strtolower(preg_replace('/([a-z0-9])([A-Z])/', "$1_$2", $class_name));
+		$this->obj_name = Charcoal_System::snakeCase( get_class($this) );
 	}
 
 	/**
@@ -37,49 +34,68 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	}
 
 	/**
-	 *  get object name
+	 * destruct instance
 	 */
-	public final function getObjectName()
+	public function terminate()
+	{
+	}
+
+	/**
+	 *  get object name
+	 *
+	 * @return string           object name
+	 */
+	public function getObjectName()
 	{
 		return $this->obj_name;
 	}
 
 	/**
 	 *  set object name
+	 *
+	 * @param Charcoal_String $obj_name          object name
 	 */
-	public final function setObjectName( Charcoal_String $obj_name )
+	public function setObjectName( Charcoal_String $obj_name )
 	{
 		$this->obj_name = $obj_name;
 	}
 
 	/**
-	 *   オブジェクトパスを取得
+	 *   returns object path
+	 *
+	 * @return string           object path
 	 */
-	public final function getObjectPath()
+	public function getObjectPath()
 	{
 		return $this->obj_path;
 	}
 
 	/**
-	 *   オブジェクトパスを設定
+	 *   set object path
+	 *
+	 * @param Charcoal_String $obj_path          object path
 	 */
-	public final function setObjectPath( Charcoal_ObjectPath $obj_path )
+	public function setObjectPath( Charcoal_ObjectPath $obj_path )
 	{
 		$this->obj_path = $obj_path;
 	}
 
 	/**
-	 *   タイプ名を取得
+	 *   returns type name
+	 *
+	 * @return string           type name
 	 */
-	public final function getTypeName()
+	public function getTypeName()
 	{
 		return $this->type_name;
 	}
 
 	/**
-	 *   タイプ名を設定
+	 *   set type name
+	 *
+	 * @param Charcoal_String $type_name          type name
 	 */
-	public final function setTypeName( Charcoal_String $type_name )
+	public function setTypeName( Charcoal_String $type_name )
 	{
 		$this->type_name = $type_name;
 	}
@@ -91,10 +107,11 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		$path = $this->obj_path ? $this->obj_path->getObjectPathString() : $this->hash();
+		$clazz = get_class($this);
+		$hash = $this->hash();
+		$path = $this->obj_path ? $this->obj_path->getObjectPathString() : '(new)';
 		$type = $this->type_name ? $this->type_name : '';
-		return get_class($this) . '(' . $this->obj_name . '[' . $path . '/' . $type . '])';
+
+		return "[class=$clazz hash=$hash path=$path type=$type]";
 	}
-
 }
-

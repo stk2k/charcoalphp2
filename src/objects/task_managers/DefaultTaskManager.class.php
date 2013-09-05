@@ -85,7 +85,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 			return $this->_tasks[$task_name];
 		}
 
-		throw new Charcoal_TaskNotRegisteredException( $task_name );
+		throw new Charcoal_TaskNotFoundException( $task_name );
 	}
 
 	/**
@@ -173,7 +173,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 			// 最大イベント処理回数
 			$max_event_loop = Charcoal_Profile::getInteger( s("TM_MAX_EVENT_LOOP"), i(1000) )->getValue();
 
-			$start_total = Charcoal_Benchmark::nowTime();
+			Charcoal_Benchmark::start( 'total' );
 
 			$loop_id = 0;
 			while( !$queue->isEmpty() ){
@@ -219,7 +219,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 					// イベントフィルタ
 					$process = FALSE;
 					$event_filters = $task->getEventFilters();
-					log_info( "event", "task_manager", "[loop:$loop_id/$event_name/$task_name] task event filter: " . $event_filters );
+					log_info( "event", "[loop:$loop_id/$event_name/$task_name] task event filter: " . $event_filters );
 					foreach( $event_filters as $filter ){
 						if ( $event_id == us($filter) ){
 							$process = TRUE;
@@ -276,14 +276,13 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 						continue;
 					}
 
-					// イベント処理
-					$start_task = Charcoal_Benchmark::nowTime();
+					// task timer start
+					Charcoal_Benchmark::start( 'task' );
 
 					$result = $this->processTaskEvent( $task, $context );
 
-					// 処理時間
-					$now_task = Charcoal_Benchmark::nowTime();
-					$elapse = round( $now_task - $start_task, 4 );
+					// task timer stop
+					$elapse = Charcoal_Benchmark::stop( 'task' );
 
 					// ログ
 					log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result] time=[$elapse]sec." );
@@ -296,7 +295,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 							log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$result] was enqueued[$queue].");	
 						}
 						else if ( !($result instanceof Charcoal_Boolean) ){
-							_throw( new Charcoal_ProcessEventException( $event, $task, $result, s("ITask::processEvent() must return a [Boolean] or [IEvent] value.") ) );
+							_throw( new Charcoal_ProcessEventException( $event, $task, $result, "ITask::processEvent() must return a [Boolean] or [IEvent] value." ) );
 						}
 					}
 
@@ -334,7 +333,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 									$target = $event_id;
 								}
 								if ( $target == $event_id ){
-									log_info( "event", "task_manager", "[loop:$loop_id/$event_name/$task_name] event[$target] was removed.");		
+									log_info( "event", "[loop:$loop_id/$event_name/$task_name] event[$target] was removed.");		
 									$event = NULL;
 								}
 								break;
@@ -395,8 +394,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 			}
 
 			// ログ
-			$now_total = Charcoal_Benchmark::nowTime();
-			$elapse = round( $now_total - $start_total, 4 );
+			$elapse = Charcoal_Benchmark::stop( 'total' );
 			log_info( "system,event", "event loop end. time=[$elapse]msec.");
 //		}
 //		catch( Exception $ex ){

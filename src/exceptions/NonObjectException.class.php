@@ -1,6 +1,6 @@
 <?php
 /**
-* 非オブジェクト例外
+* exception caused by not suitable for object
 *
 * PHP version 5
 *
@@ -11,19 +11,10 @@
 
 class Charcoal_NonObjectException extends Charcoal_RuntimeException
 {
-	public function __construct( $object = NULL, $expected = NULL, Exception $previous = NULL )
+	public function __construct( $value, $prev = NULL )
 	{
-		$msg = "";
-		if ( $object != NULL ){
-			$msg .= " [object type]" . gettype($object);
-		}
-		if ( $expected != NULL ){
-			$msg .= " [expected]$expected";
-		}
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "can't convert to object: $value", $prev );
 	}
-
 }
 
 

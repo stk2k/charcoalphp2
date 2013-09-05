@@ -5,9 +5,9 @@
 
 define( 'PROC_KEYWORD', 'proc' );
 define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
-define( 'CHARCOAPHP_VERSION_MINOR', 18 );
-define( 'CHARCOAPHP_VERSION_REVISION', 3 );
-define( 'CHARCOAPHP_VERSION_BUILD', 145 );
+define( 'CHARCOAPHP_VERSION_MINOR', 19 );
+define( 'CHARCOAPHP_VERSION_REVISION', 0 );
+define( 'CHARCOAPHP_VERSION_BUILD', 147 );
 define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
 define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
  
@@ -17,14 +17,6 @@ define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
 // タイムゾーン
 date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );
 
-// PHPバージョン
-$php_ver = explode('.',PHP_VERSION);
-define( 'PHP_VERSION_5_X', ($php_ver[0] == 5) );
-define( 'PHP_VERSION_5_2', ($php_ver[1] == 2) );
-define( 'PHP_VERSION_5_2_UP', ($php_ver[1] >= 2) );
-define( 'PHP_VERSION_5_3', ($php_ver[1] == 3) );
-define( 'PHP_VERSION_5_3_UP', ($php_ver[1] >= 3) );
-
 // ユーザによる中断を無視する
 //ignore_user_abort( TRUE );
 
@@ -32,7 +24,7 @@ define( 'PHP_VERSION_5_3_UP', ($php_ver[1] >= 3) );
 define( 'ENABLE_INTERNAL_EXCEPTION_TRACE', true );
 
 // magic_quotes_runtimeをOFFにする
-if ( !PHP_VERSION_5_3_UP ){
+if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
 	set_magic_quotes_runtime( false );
 }
 

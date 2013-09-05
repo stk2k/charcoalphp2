@@ -92,7 +92,7 @@ class Charcoal_CharcoalUnitTest extends Charcoal_CharcoalObject implements Charc
 		}
 //print "path: $path<br>";
 
-		_throw( new Charcoal_FileNotFoundException( new Charcoal_File($test_class_file) ) );
+		_throw( new Charcoal_FileNotFoundException( $test_class_file ) );
 	}
 }
 

@@ -153,6 +153,18 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 */
 
 		//=======================================
+		// create system event(request event)
+		//
+
+//		log_info( "system,debug,event", 'creating reqyest event.', 'event' );
+
+		// create request event
+		$event = Charcoal_Factory::createEvent( s('request'), v(array($request)) );
+		$task_manager->pushEvent( $event );
+
+//		log_info( "system,debug,event", 'pushed reqyest event to the event queue.', 'event' );
+
+		//=======================================
 		// ユーザイベントの作成
 		//
 		log_info( "system,event", 'ユーザイベントの作成処理を開始します。' );
@@ -196,7 +208,7 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 		$exit_code = $task_manager->processEvents( $context );
 		if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){
 			log_info( "system",  "異常な終了コードを検知しました。(" . gettype($exit_code) . ")。タスクマネージャは終了コードとして整数値のみ返却することができます。" );
-			_throw( new Charcoal_BadReturnValueTypeException( $exit_code, s('Integer') ) );
+			_throw( new Charcoal_BadExitCodeException( $exit_code ) );
 		}
 
 		log_info( "system", "タスクマネージャによるイベント処理が完了しました。終了コード($exit_code)" );

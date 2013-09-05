@@ -21,7 +21,7 @@ class Charcoal_GraphicsUtil
 		}
 		$data = getimagesize( $image_file->getPath() );
 		if ( $data === FALSE ){
-			_throw( new Charcoal_ImageGetSizeException($image_file) );
+			_throw( new Charcoal_ImageGetSizeException( $image_file ) );
 		}
 		return array( $data[0], $data[1] );
 	}
@@ -36,7 +36,7 @@ class Charcoal_GraphicsUtil
 		}
 		$data = getimagesize( us($image_file->getPath()) );
 		if ( $data === FALSE ){
-			_throw( new Charcoal_ImageGetSizeException($image_file) );
+			_throw( new Charcoal_ImageGetSizeException( $image_file ) );
 		}
 		return $data[2];
 	}
@@ -51,7 +51,7 @@ class Charcoal_GraphicsUtil
 		}
 		$data = getimagesize( us($image_file->getPath()) );
 		if ( $data === FALSE ){
-			_throw( new Charcoal_ImageGetSizeException($image_file) );
+			_throw( new Charcoal_ImageGetSizeException( $image_file ) );
 		}
 		return $data['mime'];
 	}

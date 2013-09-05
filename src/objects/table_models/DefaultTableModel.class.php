@@ -42,12 +42,9 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
 	public function getTableName()
 	{
 		if ( property_exists($this,'___table_name') ){
-			$table_name = $this->___table_name;
+			return $this->___table_name;
 		}
-		else{
-			$table_name = get_class($this);
-		}
-		return $table_name;
+		_throw( new Charcoal_TableModelException( $this, s('___table_name property is not set') ) );
 	}
 
 	/*

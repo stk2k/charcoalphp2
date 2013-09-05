@@ -31,5 +31,11 @@ interface Charcoal_ICharcoalObject
 	 * @param Charcoal_Config $config   configuration data
 	 */
 	public function configure( Charcoal_Config $config );
+
+	/**
+	 * destruct instance
+	 */
+	public function terminate();
+
 }
 

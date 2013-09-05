@@ -51,15 +51,28 @@ class Charcoal_System
 		return $a;
 	}
 
-	/*
-	 *	２変数の値を交換
+	/**
+	 *	swap two values
 	 */
 	public static function swap( $a, $b )
 	{
-		$tmp = $a;
-		$a = $b;
-		$b = $tmp;
-		return array( $a, $b );
+		return array( $b, $a );
+	}
+
+	/**
+	 *	make a string to snake case
+	 */
+	public static function snakeCase( $str )
+	{
+		return strtolower(preg_replace('/([a-z0-9])([A-Z])/', "$1_$2", $str));
+	}
+
+	/**
+	 *	make a string to pascal case
+	 */
+	public static function pascalCase( $str )
+	{
+		return implode(array_map('ucfirst',array_map('strtolower',explode( '_', $str ))));
 	}
 
 	/**
@@ -648,6 +661,18 @@ class Charcoal_System
 	}
 
 	/** 
+	 *	get object's property using reflection
+	 */
+	public static function getObjectVar( $obj, $field )
+	{
+		$ref = new ReflectionObject( $obj );
+		$p = $ref->getProperty( $field );
+		$p->setAccessible( true );
+		$value = $p->getValue( $obj );
+		return $value;
+	}
+
+	/** 
 	 *	improved version of get_object_vars 
 	 */
 	public static function getObjectVars( $obj )
@@ -799,6 +824,18 @@ class Charcoal_System
 
 		return $var;
 	}
+
+	/*
+	 *  difference of two values which is retrieved by microtime(FALSE)
+	 */
+	public static function diffMicrotime( $a, $b )
+	{
+		list( $ma, $sa ) = explode( ' ', $a );
+		list( $mb, $sb ) = explode( ' ', $b );
+
+		return ((float)$ma - (float)$mb) + ((float)$sa - (float)$sb);
+	}
+
 }
 
 

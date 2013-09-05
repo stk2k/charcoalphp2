@@ -16,26 +16,28 @@ class Charcoal_String extends Charcoal_Primitive
 	/**
 	 *	Constructor
 	 */
-	public function __construct( $value )
+	public function __construct( $value = '' )
 	{
 		parent::__construct();
 
-		if ( !is_string($value) ){
-			if ( $value instanceof Charcoal_Object ){
-				$value = $value->toString();
-			}
-			else if ( is_scalar($value) ){
-				$value = strval($value);
-			}
-			else if ( $value === NULL ){
-				$value = '';
-			}
-			else{
-				_throw( new Charcoal_NonStringException( $value ) );
-			}
+		if ( is_string($value) ){
+			$this->_value = $value;
 		}
-
-		$this->_value = $value;
+		else if ( $value instanceof Charcoal_String ){
+			$this->_value = $value->unbox();
+		}
+		else if ( $value instanceof Charcoal_Object ){
+			$this->_value = $value->toString();
+		}
+		else if ( is_scalar($value) ){
+			$this->_value = strval($value);
+		}
+		else if ( $value === NULL ){
+			$this->_value = '';
+		}
+		else{
+			_throw( new Charcoal_NonStringException( $value ) );
+		}
 	}
 
 	/**
@@ -64,6 +66,18 @@ class Charcoal_String extends Charcoal_Primitive
 	public function length()
 	{
 		return $this->_value && is_string($this->_value) ? strlen($this->_value) : -1;
+	}
+
+	/**
+	 *	append another string
+	 *
+	 * @param Charcoal_String $add     string to add
+	 *
+	 * @return Charcoal_String         combined string
+	 */
+	public function append( Charcoal_String $add )
+	{
+		return new Charcoal_String( $this->_value . $add->_value );
 	}
 
 	/**

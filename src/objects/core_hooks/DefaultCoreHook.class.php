@@ -11,6 +11,8 @@
 
 class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charcoal_ICoreHook
 {
+	const TIMER_ID = 'core_hook';
+
 	/**
 	 * Initialize instance
 	 *
@@ -32,7 +34,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 
 		switch( ui($stage) ){
 		case Charcoal_EnumCoreHookStage::START_OF_BOOTSTRAP:
-			$bench = new Charcoal_Benchmark();
+			Charcoal_Benchmark::start( self::TIMER_ID );
 			// starting message
 			log_info( "system,debug", "[$stage] Starting framework bootstrap process." );
 			log_info( "system,debug", "[$stage] ===============================================" );
@@ -80,7 +82,6 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 		case Charcoal_EnumCoreHookStage::AFTER_REG_EXCEPTION_HANDLERS:
 			log_info( "system,debug", "[$stage] Finished registering exception handlers." );
 			break;
-*/
 		case Charcoal_EnumCoreHookStage::BEFORE_REG_USER_LOGGERS:
 			log_info( "system,debug", "[$stage] Starting registering loggers." );
 			break;
@@ -90,6 +91,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 		case Charcoal_EnumCoreHookStage::AFTER_REG_USER_LOGGERS:
 			log_info( "system,debug", "[$stage] Finished registering loggers." );
 			break;
+*/
 		case Charcoal_EnumCoreHookStage::BEFORE_REG_EXTLIB_DIR:
 			log_info( "system,debug", "[$stage] Starting registering external library paths." );
 			break;
@@ -159,7 +161,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 			break;
 */
 		case Charcoal_EnumCoreHookStage::END_OF_BOOTSTRAP:
-			$elapse = $bench->nowScore();
+			$elapse = Charcoal_Benchmark::score( self::TIMER_ID );
 			log_info( "system,debug", "[$stage] Finished framework bootstrap process.");
 			log_info( "system,debug", "[$stage] bootstrap processing time: [$elapse] msec");
 			break;
@@ -200,7 +202,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 
 			if ( Charcoal_Framework::isDebugMode() ){
 				// whole ellapse time
-				$elapse = $bench->stop();
+				$elapse = Charcoal_Benchmark::stop( self::TIMER_ID );
 				log_info( "system,debug", "[$stage] total processing time: [$elapse] msec");
 
 				$peak_usage = memory_get_peak_usage(FALSE);

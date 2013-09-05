@@ -1,6 +1,6 @@
 <?php
 /**
-* 非配列例外
+* exception caused by not suitable for array object
 *
 * PHP version 5
 *
@@ -11,16 +11,10 @@
 
 class Charcoal_NonArrayException extends Charcoal_RuntimeException
 {
-	public function __construct( $object = NULL, Exception $previous = NULL )
+	public function __construct( $value, $prev = NULL )
 	{
-		$msg = "";
-		if ( $object != NULL ){
-			$msg .= " [object type]" . gettype($object);
-		}
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "can't convert to array object: $value", $prev );
 	}
-
 }
 
 

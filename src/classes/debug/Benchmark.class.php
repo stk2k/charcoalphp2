@@ -11,64 +11,54 @@
 
 class Charcoal_Benchmark
 {
-	private $_precision;
-	private $_start;
-	private $_stop;
-	private $_score;
+	static private $start;
+	static private $stop;
 
-
-	/*
-	 *    コンストラクタ
+	/**
+	 *  start timer
+	 *  
+	 *  @param string $timer_id    key of timer to start
+	 *  
+	 *  @return string      now time
 	 */
-	public function __construct( $precision = 2, $auto_start = TRUE )
+	public static function start( $timer_id = '' )
 	{
-		$this->_precision = $precision;
+		return self::$start[$timer_id] = microtime();
+	}
 
-		if ( $auto_start ){
-			$this->start();
+	/**
+	 *    stop timer
+	 *  
+	 *  @param string $timer_id    key of timer to stop
+	 *  
+	 *  @return string      now score
+	 */
+	public static function stop( $timer_id = '', $precision = 2 )
+	{
+		self::$stop[$timer_id] = microtime();
+		return self::score( $timer_id, $precision );
+	}
+
+	/**
+	 *  get score in msec
+	 *  
+	 *  @param string $timer_id      key of timer to stop
+	 *  @param integer $precision    precision of score
+	 *  
+	 *  @return string      msec time elapsed
+	 */
+	public function score( $timer_id = '', $precision = 2 )
+	{
+		if ( !isset(self::$start[$timer_id]) ){
+			_throw( new Charcoal_BenchmarkException( "timer[$timer_id] is not started yet" ) );
 		}
-	}
+		$start = self::$start[$timer_id];
 
-	/*
-	 *    スコア
-	 */
-	public function getScore()
-	{
-		return $this->_score;
-	}
+		$stop = isset(self::$stop[$timer_id]) ? self::$stop[$timer_id] : microtime();
 
-	/*
-	 *    経過時間
-	 */
-	public function nowScore()
-	{
-  		return round( self::nowTime() - $this->_start, $this->_precision );
-	}
+		$diff = Charcoal_System::diffMicrotime( $stop, $start );
 
-	/*
-	 *    開始
-	 */
-	public function start()
-	{
-		$this->_start = self::nowTime();
-	}
-
-	/*
-	 *    終了
-	 */
-	public function stop()
-	{
-		$this->_stop = self::nowTime();
-  		$this->_score = round( $this->_stop - $this->_start, $this->_precision );
-		return $this->_score;
-	}
-
-	/*
-	 *    現在時間を取得
-	 */
-	public static function nowTime()
-	{ 
-		return microtime(true) * 1000;
+		return round( $diff, $precision );
 	}
 
 }

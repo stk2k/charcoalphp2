@@ -1,6 +1,6 @@
 <?php
 /**
-* クラス名未定義例外
+* exception caused by empty class name for object
 *
 * PHP version 5
 *
@@ -10,11 +10,9 @@
 */
 class Charcoal_ClassNameEmptyException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $object_name = NULL, Exception $prev = NULL )
+	public function __construct( $object_name, $prev = NULL )
 	{
-		$msg = "Class name is empty. [object_name]$object_name";
-
-		if ( $prev ) parent::__construct( s($msg), $prev ); else parent::__construct( s($msg) );
+		parent::__construct( "Class name is empty. [object_name]$object_name", $prev );
 	}
 
 

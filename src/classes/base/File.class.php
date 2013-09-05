@@ -151,6 +151,16 @@ class Charcoal_File extends Charcoal_Object
 	}
 
 	/**
+	 *  returns last modified time(UNIX time)
+	 *
+	 * @return int    UNIX time
+	 */
+	public function getLastModified()
+	{
+		return getlastmod( $this->_path );
+	}
+
+	/**
 	 *  Return if the file or directory exists.
 	 *
 	 * @return bool TRUE if the file or directory exists, otherwise FALSE. 
@@ -241,7 +251,7 @@ class Charcoal_File extends Charcoal_Object
 	{
 		$res = rename( $this->_path, $new_file->getPath() );
 		if ( $res === FALSE ){
-			_throw( new Charcoal_FileRenameException($this,$new_file) );
+			_throw( new Charcoal_FileRenameException( $this->getPath() ,$new_file->getPath() ) );
 		}
 	}
 
@@ -268,7 +278,7 @@ class Charcoal_File extends Charcoal_Object
 
 		$ret = file_put_contents( $path, $contents );
 		if ( $ret === FALSE ){
-			_throw( new Charcoal_MakeFileException(s($path)) );
+			_throw( new Charcoal_MakeFileException( $path ) );
 		}
 	}
 
@@ -290,8 +300,7 @@ class Charcoal_File extends Charcoal_Object
 
 		$res = mkdir( us($path), us($mode), $drilldown );
 		if ( $res === FALSE ){
-			$msg = "mkdir failed: $path";
-			_throw( new Charcoal_MakeDirectoryException(s($msg)) );
+			_throw( new Charcoal_MakeDirectoryException( $path ) );
 		}
 	}
 

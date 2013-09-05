@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイルが存在しない例外
+* Exception caused by failure in finding file
 *
 * PHP version 5
 *
@@ -11,11 +11,11 @@
 
 class Charcoal_FileNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $file, Exception $previous = NULL )
+	public function __construct( $path, $prev = NULL )
 	{
-		$msg = 'File[' . $file->getPath() . "] does not exists.";
+		Charcoal_ParamTrait::checkString( 1, $path );
 
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "File[$path] does not exists.", $prev );
 	}
 }
 

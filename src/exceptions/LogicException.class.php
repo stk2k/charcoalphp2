@@ -1,6 +1,6 @@
 <?php
 /**
-* DB例外
+* exception caused by program logic
 *
 * PHP version 5
 *
@@ -11,9 +11,9 @@
 
 class Charcoal_LogicException extends Charcoal_CharcoalException
 {
-	public function __construct( Charcoal_String $message, Exception $previous = NULL )
+	public function __construct( $msg, $prev = NULL )
 	{
-		if ( $previous === NULL ) parent::__construct( $message ); else parent::__construct( $message, $previous );
+		parent::__construct( $msg, $prev );
 	}
 
 }

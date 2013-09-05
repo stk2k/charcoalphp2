@@ -18,7 +18,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	private $_events;
 	private $_layout_manager;
 	private $_response_filters;
-	private $_log_enabled;
 
 	/*
 	 *	コンストラクタ
@@ -42,7 +41,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		$this->_modules             = $config->getArray( s('modules'), v(array()) );
 		$this->_events              = $config->getArray( s('events'), v(array()) );
 		$this->_response_filters    = $config->getArray( s('response_filters'), v(array()) );
-		$this->_log_enabled         = $config->getBoolean( s('log_enabled'), b(TRUE) );
 
 		$layout_manager      = $config->getString( s('layout_manager') );
 		$this->setLayoutManager( s($layout_manager) );
@@ -114,14 +112,6 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 //		log_info( "system", "procedure",  "プロシージャ[$proc_name]を実行します。" );
 
 		//=======================================
-		// ログの無効化
-		//
-
-		if ( $this->_log_enabled->isFalse() ){
-			Charcoal_Logger::clear();
-		}
-
-		//=======================================
 		// タスクマネージャの作成
 		//
 
@@ -147,8 +137,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 //			log_info( "system", "procedure", 'loading additional modules: ' . $this->_modules . " of procedure: " . $proc_path );
 
 			foreach( $this->_modules as $module_name ) {
-//				log_info( "system", "procedure", 'loading module: ' . $module_name );
-				// モジュールのロード
+				// load module
 				$obj_path = new Charcoal_ObjectPath( s($module_name) );
 				Charcoal_ModuleLoader::loadModule( $obj_path, $task_manager );
 			}
@@ -234,9 +223,13 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		// create system event(request event)
 		//
 
+//		log_info( "system,debug,event", 'creating reqyest event.', 'event' );
+
 		// create request event
 		$event = Charcoal_Factory::createEvent( s('request'), v(array($request)) );
 		$task_manager->pushEvent( $event );
+
+//		log_info( "system,debug,event", 'pushed reqyest event to the event queue.', 'event' );
 
 		//=======================================
 		// ユーザイベントの作成
@@ -270,7 +263,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		$exit_code = $task_manager->processEvents( $context );
 		if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){
 //			log_info( "system", "procedure", "異常な終了コードを検知しました。(" . gettype($exit_code) . ")。タスクマネージャは終了コードとして整数値のみ返却することができます。" );
-			_throw( new Charcoal_BadReturnValueTypeException( $exit_code, s('Integer') ) );
+			_throw( new Charcoal_BadExitCodeException( $exit_code ) );
 		}
 
 //		log_info( "system", "procedure", "タスクマネージャによるイベント処理が完了しました。終了コード($exit_code)" );

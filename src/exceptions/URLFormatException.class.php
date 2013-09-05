@@ -1,0 +1,19 @@
+<?php
+/**
+* Exception when string format is not match for URI
+*
+* PHP version 5
+*
+* @package    exceptions
+* @author     CharcoalPHP Development Team
+* @copyright  2008 - 2013 CharcoalPHP Development Team
+*/
+
+class Charcoal_URLFormatException extends Charcoal_RuntimeException
+{
+	public function __construct( Charcoal_String $url, $prev = NULL )
+	{
+		parent::__construct( "[$url] is not suitable for URI", $prev );
+	}
+}
+

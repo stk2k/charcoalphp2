@@ -1,9 +1,6 @@
 <?php
 /**
-* 配列書式例外
-*
-* [詳細]
-* ・配列でなければならない箇所で配列以外の書式の値が渡された
+* exception caused by not suitable for array value
 *
 * PHP version 5
 *
@@ -14,13 +11,8 @@
 
 class Charcoal_ArrayFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $var_value, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $key, $prev = NULL )
 	{
-		$msg  = "[var value]$var_value";
-		$msg .= "[message] must be an ARRAY value. $message";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "must be an ARRAY value for key[$key]", $prev );
 	}
-
 }
-

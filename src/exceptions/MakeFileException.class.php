@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイル作成例外
+* Exception caused by failure in making file 
 *
 * PHP version 5
 *
@@ -11,11 +11,11 @@
 
 class Charcoal_MakeFileException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $path, Exception $previous = NULL )
+	public function __construct( $path, $prev = NULL )
 	{
-		$msg = "making file failed: path=[$path]";
+		Charcoal_ParamTrait::checkString( 1, $path );
 
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "make file failed: $path", $prev );
 	}
 }
 

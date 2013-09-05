@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-interface Charcoal_IStateful extends Charcoal_ICharcoalObject
+interface Charcoal_IStateful
 {
 	/**
 	 * オブジェクトの内容を初期化する

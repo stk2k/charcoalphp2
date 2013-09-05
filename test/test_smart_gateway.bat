@@ -8,8 +8,6 @@ REM Query Test
 SET ACTIONS="fluent_api"
 php shell.php -proc %PROC_PATH% -actions %ACTIONS%
 
-exit /b;
-
 REM Query Test
 SET ACTIONS="select_cascade"
 php shell.php -proc %PROC_PATH% -actions %ACTIONS%

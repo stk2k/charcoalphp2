@@ -19,6 +19,8 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 	public function __construct( $values = array() )
 	{
 		parent::__construct();
+
+		$this->_values = array();
 	}
 
 	/*

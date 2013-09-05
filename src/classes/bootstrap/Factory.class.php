@@ -28,8 +28,8 @@ class Charcoal_Factory
 			$obj_path_string = $obj_path->getObjectPathString();
 
 			// load configure file
-			$config = new Charcoal_Config();
-			Charcoal_ConfigLoader::loadConfig( $obj_path, $type_name, $config );
+			$config = Charcoal_ConfigLoader::loadConfig( $obj_path, $type_name );
+			$config = new Charcoal_Config( $config );
 
 //			log_info( 'system', "factory", "[Factory]loaded config of {$type_name}[{$obj_path_string}]:" . print_r($config,true) );
 
@@ -43,7 +43,7 @@ class Charcoal_Factory
 					$klass = $default_class;
 				}
 				else{
-					_throw( new Charcoal_ClassNameEmptyException( s("$obj_path/$type_name") ) );
+					_throw( new Charcoal_ClassNameEmptyException( "$obj_path/$type_name" ) );
 				}
 			}
 //			log_info( 'system', "factory", "[Factory]class name of {$type_name}[{$obj_path_string}] is:{$klass}" );
@@ -127,7 +127,7 @@ class Charcoal_Factory
 			$object = self::_create( $obj_path, $type_name, $args, new Charcoal_Interface($interface_name) );
 		}
 		else if( $args ){
-			$object = self::_create( $obj_path, $type_name, $args, new Charcoal_Interface($interface_name) );
+			$object = self::_create( $obj_path, $type_name, $args );
 		}
 		else {
 			$object = self::_create( $obj_path, $type_name );
@@ -144,19 +144,19 @@ class Charcoal_Factory
 //		log_info( 'system', "factory","[Factory] creating class loader: [$object_path]" );
 
 		// Configをロード
-		$config = new Charcoal_Config();
-		Charcoal_ConfigLoader::loadConfig( $object_path, s('class_loader'), $config );
+		$config = Charcoal_ConfigLoader::loadConfig( $object_path, s('class_loader') );
+		$config = new Charcoal_Config( $config );
 
 		// クラス名を取得
 		$class_name = $config->getString( s('class_name') );
 		if ( $class_name === NULL ){
-			_throw( new Charcoal_ClassLoaderConfigException( $object_path, s("class_name"), s("mandatory") ) );
+			_throw( new Charcoal_ClassLoaderConfigException( $object_path, "class_name", "mandatory" ) );
 		}
 
 		// ソースパスを取得
 		$source_file = $config->getString( s('source_file') );
 		if ( $source_file === NULL ){
-			_throw( new Charcoal_ClassLoaderConfigException( s("source_file"), s("mandatory") ) );
+			_throw( new Charcoal_ClassLoaderConfigException( "source_file", "mandatory" ) );
 		}
 		$source_file = us($source_file);
 
@@ -235,7 +235,7 @@ class Charcoal_Factory
 		// 生成したインスタンスがIConfigProviderインタフェースを実装しているか確認
 		if ( !($provider instanceof Charcoal_IConfigProvider) ){
 			// Invoke Exception
-			_throw( new Charcoal_InterfaceImplementException( s($class_name), s(CHARCOAL_CLASS_PREFIX . "IConfigProvider") ) );
+			_throw( new Charcoal_InterfaceImplementException( $class_name, CHARCOAL_CLASS_PREFIX . "IConfigProvider" ) );
 		}
 
 		self::$config_provider = $provider;

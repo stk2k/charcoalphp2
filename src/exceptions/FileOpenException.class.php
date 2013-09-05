@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイルオープン例外
+* Exception caused by failure in opening file
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_FileOpenException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $file, Exception $previous = NULL )
+	public function __construct( $path, $prev = NULL )
 	{
-		$msg = 'file[' . $file->getPath() . "] could not be opened.";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "File[$path] could not be opened.", $prev );
 	}
 }
 

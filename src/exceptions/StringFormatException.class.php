@@ -1,9 +1,6 @@
 <?php
 /**
-* 文字列書式例外
-*
-* [詳細]
-* ・文字列でなければならない箇所で文字列以外の書式の値が渡された
+* exception caused by not suitable for string value
 *
 * PHP version 5
 *
@@ -14,12 +11,9 @@
 
 class Charcoal_StringFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $var_value, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $key, $prev = NULL )
 	{
-		$msg  = "[var value]$var_value";
-		$msg .= "[message] must be a STRING value. $message";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "must be an STRING value for key[$key]", $prev );
 	}
 
 }

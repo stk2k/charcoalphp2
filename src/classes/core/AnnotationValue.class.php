@@ -11,20 +11,18 @@
 
 class Charcoal_AnnotationValue extends Charcoal_Object
 {
-	private $_tbl_model;
-	private $_name;
-	private $_value;
-	private $_params;
+	private $name;
+	private $value;
+	private $params;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_ITableModel $tbl_model, Charcoal_String $name, Charcoal_String $value, Charcoal_Vector $params )
+	public function __construct( Charcoal_String $name, Charcoal_String $value, Charcoal_Vector $params )
 	{
-		$this->_tbl_model = $tbl_model;
-		$this->_name      = us($name);
-		$this->_value     = us($value);
-		$this->_params    = uv($params);
+		$this->name    = $name;
+		$this->value   = $value;
+		$this->params  = $params;
 	}
 
 	/*
@@ -32,7 +30,7 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function getName()
 	{
-		return $this->_name;
+		return $this->name;
 	}
 
 	/*
@@ -40,7 +38,7 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function getValue()
 	{
-		return $this->_value;
+		return $this->value;
 	}
 
 	/*
@@ -48,7 +46,7 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function setValue( Charcoal_String $value )
 	{
-		$this->_value = us($value);
+		$this->value = $value;
 	}
 
 	/*
@@ -56,7 +54,7 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function getParameters()
 	{
-		return $this->_params;
+		return $this->params;
 	}
 
 	/*
@@ -65,7 +63,7 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	public function getParameter( Charcoal_Integer $index, Charcoal_String $defaultValue = NULL )
 	{
 		$idx = ui( $index );
-		return isset($this->_params[ $idx ]) ? $this->_params[ $idx ] : us($defaultValue);
+		return isset($this->_params[ $idx ]) ? $this->_params[ $idx ] : $defaultValue;
 	}
 
 	/*
@@ -75,9 +73,8 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		$str  = "[table]" . $this->_tbl_model->getTableName();
-		$str .= " [name]" . $this->_name . " [value]" . $this->_value;
-		$str .= " [params]" . explode(",",$this->_params);
+		$str .= " [name]" . $this->name . " [value]" . $this->value;
+		$str .= " [params]" . explode(",",$this->params);
 		return $str;
 	}
 }

@@ -74,7 +74,7 @@ class Charcoal_MemcachedCacheDriver extends Charcoal_CharcoalObject implements C
 		$res = $this->_memcached->set( us($key), $value, $duration );
 		if ( !$res ){
 			$result_code = $this->_memcached->getResultCode();
-			_throw( new Charcoal_CacheDriverException( s('memcached'), s("set failed. result code=[$result_code]") ) );
+			_throw( new Charcoal_CacheDriverException( 'memcached', "set failed. result code=[$result_code]" ) );
 		}
 	}
 

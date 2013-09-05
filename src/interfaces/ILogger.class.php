@@ -12,11 +12,6 @@
 interface Charcoal_ILogger extends Charcoal_ICharcoalObject
 {
 	/*
-	 * teminate logger
-	 */
-	public function terminate();
-
-	/*
 	 * write header message
 	 */
 	public function writeHeader();

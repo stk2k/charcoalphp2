@@ -20,7 +20,7 @@ class Charcoal_Number extends Charcoal_Primitive
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( $value, $type, $default_value = NULL )
+	public function __construct( $value, $type )
 	{
 		parent::__construct();
 
@@ -30,13 +30,13 @@ class Charcoal_Number extends Charcoal_Primitive
 		else if ( $value instanceof Charcoal_Number ){
 			$value = $value->getValue();
 		}
+		else if ( $value === NULL ){
+			$value = 0;
+		}
 		
 		// check if value is numeric
 		if ( !is_numeric($value) ){
-			if ( $default_value === NULL ){
-				_throw( new NonNumberException( $value ) );
-			}
-			$value = $default_value;
+			_throw( new Charcoal_NonNumberException( $value ) );
 		}
 
 		switch( $type ){

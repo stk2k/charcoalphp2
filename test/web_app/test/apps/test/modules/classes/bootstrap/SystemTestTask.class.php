@@ -69,7 +69,10 @@ class SystemTestTask extends Charcoal_TestTask
 	public function isValidAction( Charcoal_String $action )
 	{
 		switch( $action ){
+		case "get_object_var":
 		case "get_object_vars":
+		case "snake_case":
+		case "pascal_case":
 			return TRUE;
 		}
 		return FALSE;
@@ -97,6 +100,29 @@ class SystemTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		switch( $action ){
+		case "get_object_var":
+			$child = new ChildClass();
+
+			$actual = Charcoal_System::getObjectVar( $child, 'child_public_var' );
+			$this->assertEquals( 4, $actual );
+			
+			$actual = Charcoal_System::getObjectVar( $child, 'child_protected_var' );
+			$this->assertEquals( 5, $actual );
+			
+			$actual = Charcoal_System::getObjectVar( $child, 'child_private_var' );
+			$this->assertEquals( 6, $actual );
+			
+			$actual = Charcoal_System::getObjectVar( $child, 'public_var' );
+			$this->assertEquals( 4, $actual );
+			
+			$actual = Charcoal_System::getObjectVar( $child, 'protected_var' );
+			$this->assertEquals( 5, $actual );
+			
+			$actual = Charcoal_System::getObjectVar( $child, 'private_var' );
+			$this->assertEquals( 6, $actual );
+			
+			return TRUE;
+
 		case "get_object_vars":
 			$grandchild = new GrandChildClass();
 
@@ -171,6 +197,83 @@ class SystemTestTask extends Charcoal_TestTask
 			$this->assertEquals( 3, $parent_vars_actual['private_var'] );
 
 			return TRUE;
+
+		case "snake_case":
+
+			$data = array(
+
+					'CharcoalPhp' => 'charcoal_php',
+					'CharcoalPHP' => 'charcoal_php',
+					'charcoalPhp' => 'charcoal_php',
+					'charcoalPHP' => 'charcoal_php',
+					'charcoalphp' => 'charcoalphp',
+					'Charcoalphp' => 'charcoalphp',
+					'charcoalpHp' => 'charcoalp_hp',
+					'charcoalphP' => 'charcoalph_p',
+					'charCoalphp' => 'char_coalphp',
+					'charcoal_php' => 'charcoal_php',
+					'charcoal_PHP' => 'charcoal_php',
+					'Charcoal_PHP' => 'charcoal_php',
+					'Charcoal_Php' => 'charcoal_php',
+					'Charcoal_pHp' => 'charcoal_p_hp',
+					'Charcoal_phP' => 'charcoal_ph_p',
+					'CharCoal_php' => 'char_coal_php',
+					'charcoal_php_5.3' => 'charcoal_php_5.3',
+					'charcoal_php_ver5.3' => 'charcoal_php_ver5.3',
+					'charcoal_php_Ver5.3' => 'charcoal_php_ver5.3',
+					'charcoal_php_vEr5.3' => 'charcoal_php_v_er5.3',
+					'charcoal_php_5.3-dev' => 'charcoal_php_5.3-dev',
+					'charcoal_php_5.3-Dev' => 'charcoal_php_5.3-dev',
+					'charcoal_php_5.3-dEv' => 'charcoal_php_5.3-d_ev',
+					'charcoal_php0a2c' => 'charcoal_php0a2c',
+				);
+
+			foreach( $data as $key => $expected ){
+				$actual = Charcoal_System::snakeCase( $key );
+//				echo "[original]$key [expected]$expected [actual]$actual" . eol();
+				$this->assertEquals( $expected, $actual );
+			}
+
+			return TRUE;
+
+		case "pascal_case":
+
+			$data = array(
+
+					'CharcoalPhp' => 'Charcoalphp',
+					'CharcoalPHP' => 'Charcoalphp',
+					'charcoalPhp' => 'Charcoalphp',
+					'charcoalPHP' => 'Charcoalphp',
+					'charcoalphp' => 'Charcoalphp',
+					'Charcoalphp' => 'Charcoalphp',
+					'charcoalpHp' => 'Charcoalphp',
+					'charcoalphP' => 'Charcoalphp',
+					'charCoalphp' => 'Charcoalphp',
+					'charcoal_php' => 'CharcoalPhp',
+					'charcoal_PHP' => 'CharcoalPhp',
+					'Charcoal_PHP' => 'CharcoalPhp',
+					'Charcoal_Php' => 'CharcoalPhp',
+					'Charcoal_pHp' => 'CharcoalPhp',
+					'Charcoal_phP' => 'CharcoalPhp',
+					'CharCoal_php' => 'CharcoalPhp',
+					'charcoal_php_5.3' => 'CharcoalPhp5.3',
+					'charcoal_php_ver5.3' => 'CharcoalPhpVer5.3',
+					'charcoal_php_Ver5.3' => 'CharcoalPhpVer5.3',
+					'charcoal_php_vEr5.3' => 'CharcoalPhpVer5.3',
+					'charcoal_php_5.3-dev' => 'CharcoalPhp5.3-dev',
+					'charcoal_php_5.3-Dev' => 'CharcoalPhp5.3-dev',
+					'charcoal_php_5.3-dEv' => 'CharcoalPhp5.3-dev',
+					'charcoal_php0a2c' => 'CharcoalPhp0a2c',
+				);
+
+			foreach( $data as $key => $expected ){
+				$actual = Charcoal_System::pascalCase( $key );
+				echo "[original]$key [expected]$expected [actual]$actual" . eol();
+				$this->assertEquals( $expected, $actual );
+			}
+
+			return TRUE;
+
 		}
 
 		return FALSE;

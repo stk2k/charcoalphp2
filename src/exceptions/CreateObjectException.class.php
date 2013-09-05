@@ -1,6 +1,6 @@
 <?php
 /**
-* 想定外のランモード例外
+* exception caused by failure in creating object
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_CreateObjectException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_ObjectPath $obj_path, Charcoal_String $type_name, Exception $previous = NULL )
+	public function __construct( $obj_path, $type_name, $prev = NULL )
 	{
-		$msg = "Creating Charcoal Object Failed. [obj_path]$obj_path [type_name]$type_name";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "Creating Charcoal Object Failed. [obj_path]$obj_path [type_name]$type_name", $prev );
 	}
 
 }

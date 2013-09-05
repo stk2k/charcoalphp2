@@ -51,7 +51,7 @@ class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogge
 		$logs_dir    = $config->getString( s('logs_dir') );
 
 		if ( $file_name === NULL ){
-			_throw( new Charcoal_ComponentConfigException( s('file_name'), s('mandatory') ) );
+			_throw( new Charcoal_ComponentConfigException( 'file_name', 'mandatory' ) );
 		}
 
 		$file_name = parent::formatFileName( $file_name );

@@ -47,7 +47,7 @@ class Charcoal_Interface extends Charcoal_Object
 
 		if ( $interface_name && !($object instanceof $interface_name) ){
 			// Invoke Exception
-			_throw( new Charcoal_InterfaceImplementException( $object, s($interface_name) ) );
+			_throw( new Charcoal_InterfaceImplementException( $object, $interface_name ) );
 		}
 	}
 

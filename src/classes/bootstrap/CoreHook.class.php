@@ -52,7 +52,7 @@ class Charcoal_CoreHook
 			$hooks = Charcoal_Profile::getArray( s('CORE_HOOKS') );
 			if ( $hooks ){
 				foreach( $hooks as $hook_name ){
-					$core_hook = Charcoal_Factory::createObject( s($hook_name), s('core_hook'), v(array()), s('Charcoal_ICoreHook') );
+					$hook = Charcoal_Factory::createObject( s($hook_name), s('core_hook'), v(array()), s('Charcoal_ICoreHook') );
 					self::$hooks[] = $hook;
 				}
 			}

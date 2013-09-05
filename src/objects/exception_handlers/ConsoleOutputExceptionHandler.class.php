@@ -32,7 +32,7 @@ class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_CharcoalObject imp
 		log_info( "system, debug", "exception", "renderer: $renderer" );
 
 		try{
-			$renderer = Charcoal_Factory::createObject( s($renderer), s('debugtrace_renderer'), s('Charcoal_IDebugtraceRenderer') );
+			$renderer = Charcoal_Factory::createObject( s($renderer), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
 
 			// Render exception
 			$renderer->render( $e );

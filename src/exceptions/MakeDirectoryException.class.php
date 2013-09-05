@@ -1,6 +1,6 @@
 <?php
 /**
-* ディレクトリ作成例外
+* Exception caused by failure in making directory 
 *
 * PHP version 5
 *
@@ -11,9 +11,11 @@
 
 class Charcoal_MakeDirectoryException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $message, Exception $previous = NULL )
+	public function __construct( $path, Exception $prev = NULL )
 	{
-		if ( $previous === NULL ) parent::__construct( $message ); else parent::__construct( $message, $previous );
+		Charcoal_ParamTrait::checkString( 1, $path );
+
+		parent::__construct( "mkdir failed: $path", $prev );
 	}
 }
 

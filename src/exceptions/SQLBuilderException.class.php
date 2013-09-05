@@ -1,6 +1,6 @@
 <?php
 /**
-* SQLビルダ例外
+* exception caused by failure in SQL builder
 *
 * PHP version 5
 *
@@ -11,9 +11,9 @@
 
 class Charcoal_SQLBuilderException extends Charcoal_DBException
 {
-	public function __construct( Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $message, $prev = NULL )
 	{
-		if ( $previous ) parent::__construct( s($message), $previous ); else parent::__construct( s($message) );
+		parent::__construct( "SQL builder failed: $message", $prev );
 	}
 }
 

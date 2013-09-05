@@ -8,11 +8,8 @@ REM ConfigPropertySet class test
 SET ACTIONS="get_section"
 php shell.php -proc %PROC_PATH% -actions %ACTIONS%
 
-exit /b;
-
-
 REM System class test
-SET ACTIONS="get_object_vars"
+SET ACTIONS="get_object_var,get_object_vars,snake_case,pascal_case"
 php shell.php -proc %PROC_PATH% -actions %ACTIONS%
 
 exit /b;

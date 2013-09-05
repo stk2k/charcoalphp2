@@ -18,7 +18,8 @@ class Charcoal_Object
 	 */
 	public function __construct()
 	{
-		$this->_object_hash = spl_object_hash($this);
+		static $id_master = 0;
+		$this->_object_hash = ++$id_master;
 	}
 
 	/**
@@ -75,7 +76,7 @@ class Charcoal_Object
 	 *
 	 * @return string
 	 */
-	public final function __toString()
+	public function __toString()
 	{
 		return us($this->toString());	// __toString() must return string type only!
 	}
@@ -87,7 +88,7 @@ class Charcoal_Object
 	 */
 	public function toString()
 	{
-		return '[class=' . get_class($this) . ' hash=' . $this->hash() . ']';
+		return '[class=' . get_class($this) . ' hash=' . $this->_object_hash . ']';
 	}
 }
 

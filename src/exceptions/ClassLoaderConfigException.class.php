@@ -1,6 +1,6 @@
 <?php
 /**
-* クラスローダ設定例外
+* exception caused by configuration of class loader
 *
 * PHP version 5
 *
@@ -11,15 +11,9 @@
 
 class Charcoal_ClassLoaderConfigException extends Charcoal_ConfigException
 {
-	public function __construct( Charcoal_ObjectPath $object_path, Charcoal_String $config_entry, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $object_path, $entry, $message = NULL, $prev = NULL )
 	{
-		$msg  = '[object_path]' . $object_path->toString();
-		$msg .= ' [config_entry]' . $config_entry->getValue();
-		if ( $message ){
-			$msg .= '[message]' . $message->getValue();
-		}
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "[object_path]$object_path [entry]$entry [message]$message", $prev );
 	}
 }
 

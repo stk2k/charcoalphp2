@@ -1,9 +1,6 @@
 <?php
 /**
-* ブール値整数書式例外
-*
-* [詳細]
-* ・ブール値でなければならない箇所でブール値以外の書式の値が渡された
+* exception caused by not suitable for boolean value
 *
 * PHP version 5
 *
@@ -14,12 +11,9 @@
 
 class Charcoal_BooleanFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $var_value, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $key, $prev = NULL )
 	{
-		$msg  = "[var value]$var_value";
-		$msg .= "[message] must be a BOOLEAN value. $message";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "must be an BOOLEAN value for key[$key]", $prev );
 	}
 
 }

@@ -50,7 +50,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 		// throws exception if the element's type is not match for required type
 		if ( !is_string($value) && !($value instanceof Charcoal_String) ){
-			_throw( new Charcoal_StringFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_StringFormatException( $key ) );
 		}
 
 		// processes macro
@@ -95,7 +95,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 		// throws exception if the element's type is not match for required type
 		if ( !is_array($array) ){
-			_throw( new Charcoal_ArrayFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_ArrayFormatException( $key ) );
 		}
 
 		// processes macro
@@ -155,7 +155,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 		// throws exception if the element's type is not match for required type
 		if ( !is_numeric($value) ){
-			_throw( new Charcoal_IntegerFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_IntegerFormatException( $key ) );
 		}
 
 		return i($value);

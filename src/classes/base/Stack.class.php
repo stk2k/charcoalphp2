@@ -78,9 +78,8 @@ class Charcoal_Stack extends Charcoal_Object
 	 */
 	public function push( $item )
 	{
-		if ( is_null($item) ){
-			_throw( new Charcoal_NullPointerException() );
-		}
+		Charcoal_ParamTrait::checkObject( 1, $item );
+
 		return $this->_data->add( $item );
 	}
 

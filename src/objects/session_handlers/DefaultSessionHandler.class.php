@@ -11,10 +11,10 @@
 
 class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements Charcoal_ISessionHandler
 {
-	static $save_path;
+	private $save_path;
 
-	/*
-	 *	コンストラクタ
+	/**
+	 *	constructor 
 	 */
 	public function __construct()
 	{
@@ -60,42 +60,43 @@ class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements 
 //		log_info( "session", __CLASS__, "ssl_only:$ssl_only" );
 
 		// メンバーに保存
-		self::$save_path = $save_path;
+		$this->save_path = $save_path;
 	}
 
 	/**
 	 * セッションファイルパスを取得
 	 */
-	public static function getSessionFile( $id )
+	public function getSessionFile( $id )
 	{
-		return self::$save_path . "/sess_$id";
+		return $this->save_path . "/sess_$id";
 	}
 
 	/**
-	 * コールバック関数：オープン
+	 * open session
 	 */
-	public static function open( $save_path, $session_name )
+	public function open( $save_path, $session_name )
 	{
 		return true;
 	}
 
 	/**
-	 * コールバック関数：クローズ
+	 * close session
 	 */
-	public static function close()
+	public function close()
 	{
 		return true;
 	}
 
 	/**
-	 * コールバック関数：読み取り
+	 * read session data
 	 */
-	public static function read( $id )
+	public function read( $id )
 	{
-		$file = self::getSessionFile( $id );
+		$file = $this->getSessionFile( $id );
 
 		if ( !is_readable($file) ){
 			log_warning( "system,session", __CLASS__, "can't read session file[$file]" );
+			return NULL;
 		}
 
 		$session_date = (string)@file_get_contents( $file );
@@ -106,11 +107,11 @@ class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements 
 	}
 
 	/**
-	 * コールバック関数：書き込み
+	 * write session data
 	 */
-	public static function write( $id, $sess_data )
+	public function write( $id, $sess_data )
 	{
-		$file = self::getSessionFile( $id );
+		$file = $this->getSessionFile( $id );
 
 //		log_info( "session", __CLASS__, __CLASS__.'#write: file=' . $file . ' id=' . $id . ' data=' . print_r($sess_data,true) );
 		$fp = @fopen($file,'w');
@@ -124,25 +125,25 @@ class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements 
 	}
 
 	/**
-	 * コールバック関数：破棄
+	 * destroy session
 	 */
-	public static function destroy( $id )
+	public function destroy( $id )
 	{
-		$file = self::getSessionFile( $id );
+		$file = $this->getSessionFile( $id );
 
 		return @unlink($file);
 	}
 
 	/**
-	 * コールバック関数：ガベージコレクション
+	 * garbage collection
 	 */
-	public static function gc( $max_lifetime )
+	public function gc( $max_lifetime )
 	{
-		if ( $dh = opendir(self::$save_path) )
+		if ( $dh = opendir($this->save_path) )
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
-				$file = self::$save_path . DIRECTORY_SEPARATOR . $file;
+				$file = $$this->save_path . DIRECTORY_SEPARATOR . $file;
 				if ( filemtime($file) + $max_lifetime < time() ){
 					@unlink( $file );
 				}

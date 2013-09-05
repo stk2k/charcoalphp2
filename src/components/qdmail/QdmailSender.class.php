@@ -137,7 +137,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 				$address = $match['address'];
 				$valid = Charcoal_MailUtil::validateAddress( s($address) );
 				if ( !$valid ){
-					_throw( new Charcoal_InvalidMailAddressException( s($address) ) );
+					_throw( new Charcoal_InvalidMailAddressException( $address ) );
 				}
 				$out[] = array( $address, $label );
 			}
@@ -145,7 +145,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 				// アドレスは１つのみ、表示名なし
 				$valid = Charcoal_MailUtil::validateAddress( s($data) );
 				if ( !$valid ){
-					_throw( new Charcoal_InvalidMailAddressException( s($data) ) );
+					_throw( new Charcoal_InvalidMailAddressException( $data ) );
 				}
 				$out[] = us($data);
 			}
@@ -178,7 +178,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 						$address = $match['address'];
 						$valid = Charcoal_MailUtil::validateAddress( s($address) );
 						if ( !$valid ){
-							_throw( new Charcoal_InvalidMailAddressException( s($address) ) );
+							_throw( new Charcoal_InvalidMailAddressException( $address ) );
 						}
 						$out[] = array( $address, $label );
 					}
@@ -186,7 +186,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 						// 表示名なし
 						$valid = Charcoal_MailUtil::validateAddress( s($item) );
 						if ( !$valid ){
-							_throw( new Charcoal_InvalidMailAddressException( s($item) ) );
+							_throw( new Charcoal_InvalidMailAddressException( $item ) );
 						}
 						$out[] = us($item);
 					}

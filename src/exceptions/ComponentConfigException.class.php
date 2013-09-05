@@ -1,6 +1,6 @@
 <?php
 /**
-* コンポーネントの設定に関する例外クラス
+* exception caused by configuration of component
 *
 * PHP version 5
 *
@@ -11,14 +11,9 @@
 
 class Charcoal_ComponentConfigException extends Charcoal_ConfigException
 {
-	public function __construct( Charcoal_String $config_entry, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $entry, $message = NULL, Exception $previous = NULL )
 	{
-		$msg = '[config_entry]' . $config_entry->getValue();
-		if ( $message ){
-			$msg .= '[message]' . $message->getValue();
-		}
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "[entry]$entry [message]$message", $prev );
 	}
 }
 

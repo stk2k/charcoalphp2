@@ -20,13 +20,5 @@ class Charcoal_TableModelException extends Charcoal_RuntimeException
 
 		if ( $previous ) parent::__construct( s($msg), $previous ); else parent::__construct( s($msg) );
 	}
-
-	/**
-	 *   クラス名
-	 */
-	static function getClassName()
-	{
-		return __CLASS__;
-	}
 }
 

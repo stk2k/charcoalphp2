@@ -1,6 +1,6 @@
 <?php
 /**
-* Smartyレンダラタスク例外
+* exception caused by failure in rendering by smarty
 *
 * PHP version 5
 *
@@ -11,9 +11,9 @@
 
 class Charcoal_SmartyRendererTaskException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $message, Exception $previous = NULL )
+	public function __construct( Charcoal_String $message, $prev = NULL )
 	{
-		if ( $previous === NULL ) parent::__construct( $message ); else parent::__construct( $message, $previous );
+		parent::__construct( $message, $prev );
 	}
 }
 

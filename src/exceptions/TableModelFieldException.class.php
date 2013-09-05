@@ -1,6 +1,6 @@
 <?php
 /**
-* テーブルモデル項目例外
+* exception caused by parsing annotation of table model
 *
 * PHP version 5
 *
@@ -11,25 +11,9 @@
 
 class Charcoal_TableModelFieldException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_ITableModel $model, Charcoal_String $field, Charcoal_String $message, Exception $previous = NULL )
+	public function __construct( $model, $field, $message, $prev = NULL )
 	{
-		$msg  = " [table model]" . get_class($model);
-		if ( $field ){
-			$msg .= " [field]$field";
-		}
-		if ( $message ){
-			$msg .= " [message]$message";
-		}
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
-	}
-
-	/**
-	 *   クラス名
-	 */
-	static function getClassName()
-	{
-		return __CLASS__;
+		parent::__construct( "a field of table model seems to be wrong: [model]$model [field]$field [message]$message", $prev );
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* DB例外
+* exception caused by failure in changing transcation status
 *
 * PHP version 5
 *
@@ -11,10 +11,5 @@
 
 class Charcoal_DBBeginTransactionException extends Charcoal_DBException
 {
-	public function __construct( Charcoal_String $message, Exception $previous = NULL )
-	{
-		if ( $previous === NULL ) parent::__construct( $message ); else parent::__construct( $message, $previous );
-	}
-
 }
 

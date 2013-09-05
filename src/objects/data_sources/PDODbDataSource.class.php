@@ -137,7 +137,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -158,7 +158,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -182,7 +182,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -206,7 +206,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -295,9 +295,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		{
 			_catch( $e );
 
-			$msg  = __METHOD__ . " failed: [db_string]$db_string";
-
-			_throw( new Charcoal_DBDataSourceException( s($msg), $e ) );
+			_throw( new Charcoal_DBConnectException( __METHOD__ . " failed: [db_string]$db_string", $e ) );
 		}
 
 	}
@@ -324,7 +322,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	private function _prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
 	{
-		$start = Charcoal_Benchmark::nowTime();
+		Charcoal_Benchmark::start();
 
 		$command_id = $this->_command_id++;
 
@@ -361,15 +359,14 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			list( $sqlstate, $err_code, $err_msg ) = $stmt->errorInfo();
 			$msg = "PDO#execute failed. [ID]$command_id [SQL]$sql [params]$params_disp [SQLSTATE]$sqlstate [ERR_CODE]$err_code [ERR_MSG]$err_msg";
 			log_error( "data_source,sql,debug", "data_source", "...FAILED: $msg" );
-			_throw( new Charcoal_DBDataSourceException( s($msg) ) );
+			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 		
 		$numRows = $stmt->rowCount();
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id ...success(numRows=$numRows)" );
 
 		// ログ
-		$now = Charcoal_Benchmark::nowTime();
-		$elapse = round( $now - $start, 4 );
+		$elapse = Charcoal_Benchmark::stop();
 		log_debug( 'data_source,sql,debug', "data_source", "[ID]$command_id prepareExecute() end. time=[$elapse]msec.");
 
 		return $stmt;
@@ -438,7 +435,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			$msg .= ' [SQL]' . $sql->getValue();
 			$msg .= ' [params]' . ($params ? $params->join(s(','),b(TRUE)) : '');
 
-			_throw( new Charcoal_DBDataSourceException( s($msg), $e ) );
+			_throw( new Charcoal_DBDataSourceException( $msg, $e ) );
 		}
 
 		return $result;

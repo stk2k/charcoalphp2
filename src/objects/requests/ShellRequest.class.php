@@ -126,7 +126,7 @@ class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_
 
 		// フォーマット確認
 		if ( !is_string($value) ){
-			_throw( new Charcoal_StringFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_StringFormatException( $key ) );
 		}
 
 		return s($value);
@@ -161,7 +161,7 @@ class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_
 
 		// フォーマット確認
 		if ( !is_array($array) ){
-			_throw( new Charcoal_ArrayFormatException( $array, s("key=[$key]") ) );
+			_throw( new Charcoal_ArrayFormatException( $key ) );
 		}
 
 		// 配列を返却

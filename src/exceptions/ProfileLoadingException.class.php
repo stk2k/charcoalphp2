@@ -1,6 +1,6 @@
 <?php
 /**
-* プロファイルロード例外
+* exception caused by failure in loading profile
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ProfileLoadingException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $config_file, Charcoal_String $profile_name, Exception $previous = NULL )
+	public function __construct( Charcoal_File $config_file, Charcoal_String $profile_name, $prev = NULL )
 	{
-		$msg = "Profile loading failed. config_file=[$config_file] profile_name=[$profile_name]";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "Profile loading failed. [config_file]$config_file [profile_name]$profile_name", $prev );
 	}
 
 }

@@ -106,7 +106,7 @@ class Charcoal_Profile
 
 		// フォーマット確認
 		if ( !is_string($value) ){
-			_throw( new Charcoal_StringFormatException($value,"key=" . $key));
+			_throw( new Charcoal_StringFormatException( $key ) );
 		}
 
 		$value = s($value);
@@ -135,7 +135,7 @@ class Charcoal_Profile
 
 		// フォーマット確認
 		if ( !is_bool($value) ){
-			_throw( new Charcoal_BooleanFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_BooleanFormatException( $key ) );
 		}
 
 		// ブール型にして返却
@@ -158,7 +158,7 @@ class Charcoal_Profile
 
 		// フォーマット確認
 		if ( !is_numeric($value) ){
-			_throw( new Charcoal_FloatFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_FloatFormatException( $key ) );
 		}
 
 		// ブール型にして返却
@@ -196,7 +196,7 @@ class Charcoal_Profile
 
 		// フォーマット確認
 		if ( !is_array($array) ){
-			_throw( new Charcoal_ArrayFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_ArrayFormatException( $key ) );
 		}
 
 		// 配列を返却
@@ -233,7 +233,7 @@ class Charcoal_Profile
 
 		// フォーマット確認
 		if ( !is_array($array) ){
-			_throw( new Charcoal_ArrayFormatException( $value, "key=[$key]" ) );
+			_throw( new Charcoal_ArrayFormatException( $key ) );
 		}
 
 		$ret = NULL;
@@ -312,7 +312,7 @@ class Charcoal_Profile
 			_catch( $ex );
 
 			$config_file  = new Charcoal_File( s(self::$config_file) );
-			_throw( new Charcoal_ProfileLoadingException( $config_file, s(self::$profile_name), $ex ) );
+			_throw( new Charcoal_ProfileLoadingException( $config_file, self::$profile_name, $ex ) );
 		}
 	}
 

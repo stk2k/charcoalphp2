@@ -1,6 +1,6 @@
 <?php
 /**
-* インタフェース実装例外
+* Exception caused by no implementation is found about specified interface
 *
 * PHP version 5
 *
@@ -11,13 +11,11 @@
 
 class Charcoal_InterfaceImplementException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_Object $object, Charcoal_String $interface_name, Exception $previous = NULL )
+	public function __construct( $object, $interface_name, $prev = NULL )
 	{
 		$object_name = '[' . $object->getClassName() . '] id=' . $object->hash();
 
-		$msg = "Object[$object_name] must implement interface[$interface_name]";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "Object[$object_name] must implement interface[$interface_name]", $prev );
 	}
 
 }

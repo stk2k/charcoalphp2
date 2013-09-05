@@ -11,11 +11,9 @@
 
 class Charcoal_QueryTargetException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $expression, Exception $prev = NULL )
+	public function __construct( Charcoal_String $expression, $prev = NULL )
 	{
-		$msg = "Illegal query target format: {$expression}";
-
-		if ( $prev ) parent::__construct( s($msg), $prev ); else parent::__construct( s($msg) );
+		parent::__construct( "Illegal query target format: {$expression}", $prev );
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
-* クラス作成例外
+* exception caused by creating new instance
 *
 * PHP version 5
 *
@@ -10,13 +10,11 @@
 */
 class Charcoal_ClassNewException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_Class $klass, Charcoal_Vector $args, Exception $previous = NULL )
+	public function __construct( Charcoal_Class $klass, Charcoal_Vector $args, $prev = NULL )
 	{
 		$class_name = $klass->getClassName();
 
-		$msg = "[class_name]$class_name [args]$args";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "[class_name]$class_name [args]$args", $prev );
 	}
 
 

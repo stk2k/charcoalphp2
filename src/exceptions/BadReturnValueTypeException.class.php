@@ -1,6 +1,6 @@
 <?php
 /**
-* 戻り値タイプ異常例外
+* exception caused by not suitable for exit code
 *
 * PHP version 5
 *
@@ -9,13 +9,14 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_BadReturnValueTypeException extends Charcoal_RuntimeException
+class Charcoal_BadExitCodeException extends Charcoal_RuntimeException
 {
-	public function __construct( $return_value, Charcoal_String $expected_type, Exception $previous = NULL )
+	public function __construct( $exit_code, $prev = NULL )
 	{
-		$msg = "Bad return value type[" . gettype($return_value) . "]. [$expected_type] is expected.";
+		$exit_code = Charcoal_System::toString( $exit_code );
+		$type = gettype($exit_code);
 
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "Bad exit code: [$exit_code]($type)", $prev );
 	}
 }
 

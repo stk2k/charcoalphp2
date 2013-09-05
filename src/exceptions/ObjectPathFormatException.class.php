@@ -1,6 +1,6 @@
 <?php
 /**
-* オブジェクトパス書式例外
+* exception caused by not suitable for object path
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ObjectPathFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $object_path, Charcoal_String $message = NULL, Exception $prev = NULL )
+	public function __construct( $object_path, $message = NULL, $prev = NULL )
 	{
-		$msg  = " [object_path]" . $object_path . " [message]$message";
-
-		if ( $prev ) parent::__construct( s($msg), $prev ); else parent::__construct( s($msg) );
+		parent::__construct( "Bad object pathformat($message): $object_path", $prev );
 	}
 }
 

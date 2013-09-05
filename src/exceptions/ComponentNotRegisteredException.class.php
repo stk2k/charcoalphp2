@@ -1,6 +1,6 @@
 <?php
 /**
-* コンポーネントが未登録例外
+* exception caused by failure in finding registered component
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ComponentNotRegisteredException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $component_name, Exception $previous = NULL )
+	public function __construct( Charcoal_String $component_name, $prev = NULL )
 	{
-		$msg = "[component name]" . $component_name;
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "[component name]$component_name", $prev );
 	}
 
 }

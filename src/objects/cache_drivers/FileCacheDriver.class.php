@@ -42,8 +42,8 @@ class Charcoal_FileCacheDriver extends Charcoal_CharcoalObject implements Charco
 
 		$this->_cache_root_dir = new Charcoal_File( $this->_cache_root );
 
-		log_debug( "system, debug, cache", "cache", "cache_root=[{$this->_cache_root}]" );
-		log_debug( "system, debug, cache", "cache", "default_duration=[{$this->_default_duration}]" );
+		log_debug( "system, debug, cache", "cache_root=[{$this->_cache_root}]" );
+		log_debug( "system, debug, cache", "default_duration=[{$this->_default_duration}]" );
 	}
 
 	/**
@@ -152,7 +152,7 @@ class Charcoal_FileCacheDriver extends Charcoal_CharcoalObject implements Charco
 		// save data file
 		$res = $data_file->putContents( s($serialized_data) );
 		if ( $res === FALSE ){
-			_throw( new Charcoal_CacheDriverException( s('file'), s("cache set failed. Saving data file failed: [$data_file]") ) );
+			_throw( new Charcoal_CacheDriverException( 'file', "cache set failed. Saving data file failed: [$data_file]" ) );
 		}
 	}
 
@@ -223,7 +223,7 @@ class Charcoal_FileCacheDriver extends Charcoal_CharcoalObject implements Charco
 
 		$fp = @fopen( $meta_file->getPath(), 'w' );
 		if ( $fp === FALSE ){
-			_throw( new Charcoal_CacheDriverException( s('file'), s("cache set failed. Saving meta file failed: [$meta_file]") ) );
+			_throw( new Charcoal_CacheDriverException( 'file', "cache set failed. Saving meta file failed: [$meta_file]" ) );
 		}
 
 		foreach( $meta_data as $meta_key => $meta_value ){

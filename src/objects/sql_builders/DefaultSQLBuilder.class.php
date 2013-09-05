@@ -154,25 +154,25 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 			$field_list = $model->getFieldList();
 //			log_debug( "debug, smart_gateway", 'sql_builder', "field_list:" . print_r($field_list,true) );
 
-			foreach( $field_list as $name ) 
+			foreach( $field_list as $field ) 
 			{
-				$update = $model->getAnnotationValue( s($name), s('update') );
+				$update = $model->getAnnotationValue( s($field), s('update') );
 
-				if ( $override && isset($override[$name]) ){
-					$update = isset($override[$name]['update']) ? $override[$name]['update'] : $update;
+				if ( $override && isset($override[$field]) ){
+					$update = isset($override[$field]['update']) ? $override[$field]['update'] : $update;
 				}
 //				log_debug( "debug, smart_gateway", 'sql_builder', "override:" . print_r($override,true) );
 
 				if ( !$update ){
 					// 無指定の場合エラー
-					_throw( new Charcoal_TableModelFieldException( $model, s($name), s('[@update] annotation is required') ) );
+					_throw( new Charcoal_TableModelFieldException( $model, $field, '[@update] annotation is required' ) );
 				}
 
 				// キーフィールドのチェック
-				$pk = $model->getAnnotationValue( s($name), s('pk') );
+				$pk = $model->getAnnotationValue( s($field), s('pk') );
 				if ( $pk ){
 					// キーフィールドに追加
-					$SQL_key_fields[$name] = $dto->$name;
+					$SQL_key_fields[$field] = $dto->$field;
 					// キーフィールドなので更新しない
 					continue;
 				}
@@ -183,9 +183,9 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 				switch ( $update_anno ){
 				case 'value':
 					// 値で更新
-					$value = $dto->$name;
+					$value = $dto->$field;
 					if ( $value !== NULL ){
-						$SQL_set[] = $name . ' = ?';
+						$SQL_set[] = $field . ' = ?';
 						// パラメータを追加
 						$SQL_params[] = $value;
 					}
@@ -200,13 +200,13 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 						}
 					}
 					// 関数で更新
-					$SQL_set[] = $name . ' = ' . $function;
+					$SQL_set[] = $field . ' = ' . $function;
 					break;
 				case 'no':
 					// 更新しない
 					break;
 				default:
-					_throw( new Charcoal_TableModelFieldException( $model, s($name), s('[@update] value is invalid') ) );
+					_throw( new Charcoal_TableModelFieldException( $model, $field, '[@update] value is invalid' ) );
 				}
 			}
 
@@ -217,10 +217,10 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 			}
 			else{
 				$SQL_WHERE = array();
-				foreach( $SQL_key_fields as $name => $value )
+				foreach( $SQL_key_fields as $field => $value )
 				{
 					// ステートメントを追加
-					$SQL_WHERE[] = $name . ' = ?';
+					$SQL_WHERE[] = $field . ' = ?';
 					// パラメータを追加
 					$SQL_params[] = $value;
 				}
@@ -255,17 +255,17 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 
 			$field_list = $model->getFieldList();
 
-			foreach( $field_list as $name ) 
+			foreach( $field_list as $field ) 
 			{
-				$insert = $model->getAnnotationValue( s($name), s('insert') );
+				$insert = $model->getAnnotationValue( s($field), s('insert') );
 
-				if ( $override && isset($override[$name]) ){
-					$insert = isset($override[$name]['insert']) ? $override[$name]['insert'] : $update;
+				if ( $override && isset($override[$field]) ){
+					$insert = isset($override[$name]['insert']) ? $override[$field]['insert'] : $insert;
 				}
 
 				if ( !$insert ){
 					// 無指定の場合エラー
-					_throw( new Charcoal_TableModelFieldException( $model, s($name), s('[@insert] annotation is required') ) );
+					_throw( new Charcoal_TableModelFieldException( $model, $field, '[@insert] annotation is required' ) );
 				}
 
 				// @insertアノテーションの値によって分岐
@@ -273,9 +273,9 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 				switch ( $insert_anno ){
 				case 'value':
 					// 値で更新
-					$value = $dto->$name;
+					$value = $dto->$field;
 					if ( $value !== NULL ){
-						$SQL_field_list[] = $name;
+						$SQL_field_list[] = $field;
 						$SQL_value_list[] = '?';
 						// パラメータを追加
 						$SQL_params[] = $value;
@@ -291,14 +291,14 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 						}
 					}
 					// 関数で更新
-					$SQL_field_list[] = $name;
+					$SQL_field_list[] = $field;
 					$SQL_value_list[] = $function;
 					break;
 				case 'no':
 					// 更新しない
 					break;
 				default:
-					_throw( new Charcoal_TableModelFieldException( $model, s($name), s('[@insert] value is invalid') ) );
+					_throw( new Charcoal_TableModelFieldException( $model, $field, '[@insert] value is invalid' ) );
 				}
 			}
 

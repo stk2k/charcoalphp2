@@ -14,9 +14,9 @@ class Charcoal_Integer extends Charcoal_Number
 	/*
 	 *	constructor
 	 */
-	public function __construct( $value, $default_value = NULL )
+	public function __construct( $value = 0 )
 	{
-		parent::__construct( $value, Charcoal_Number::NUMBER_TYPE_INTEGER, $default_value );
+		parent::__construct( $value, Charcoal_Number::NUMBER_TYPE_INTEGER );
 	}
 
 	/*

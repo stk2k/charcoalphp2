@@ -31,24 +31,26 @@ class Charcoal_DebugTraceRendererList
 	public static function render( Exception $e )
 	{
 		if ( !self::$renderers ){
-			try{
-				// Create Debug Trace Renderer
-				$debugtrace_renderers = Charcoal_Profile::getArray( s('DEBUGTRACE_RENDERER') );
+			// Create Debug Trace Renderer
+			$debugtrace_renderers = Charcoal_Profile::getArray( s('DEBUGTRACE_RENDERER') );
 
-				if ( !$debugtrace_renderers || count($debugtrace_renderers) === 0 ){
-					$debugtrace_renderers = array( 'html' );
-				}
-
-				foreach( $debugtrace_renderers as $renderer_name ) 	{
-					$renderer = Charcoal_Factory::createObject( s($renderer_name), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
-					self::$renderers[] = $renderer;
+			if ( $debugtrace_renderers )
+			{
+				foreach( $debugtrace_renderers as $renderer_name )
+				{
+					try{
+						$renderer = Charcoal_Factory::createObject( s($renderer_name), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
+						self::$renderers[] = $renderer;
+					}
+					catch ( Exception $e )
+					{
+						_catch( $e );
+						echo( "debugtrace_renderer creation failed:$e" );
+					}
 				}
 			}
-			catch ( Exception $e )
-			{
-				_catch( $e );
-				
-				echo( "debugtrace_renderer creation failed:$e" );
+			else{
+				self::$renderers = array();
 			}
 		}
 

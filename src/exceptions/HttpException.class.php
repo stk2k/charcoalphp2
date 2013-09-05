@@ -1,6 +1,6 @@
 <?php
 /**
-* HTTPの例外
+* exception caused by HTTP status error 
 *
 * PHP version 5
 *
@@ -11,23 +11,21 @@
 
 class Charcoal_HttpException extends Charcoal_RuntimeException
 {
-	private $_status;
+	private $status_code;
 
-	public function __construct( Charcoal_Integer $status_code, Exception $previous = NULL )
+	public function __construct( $status_code, $prev = NULL )
 	{
-		$this->_status = $status_code;
+		$this->status_code = $status_code;
 
-		$msg = "[status_code]$status_code";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "[status_code]$status_code", $prev );
 	}
 
 	/**
-	 *   ステータスコード
+	 *  HTTP status code
 	 */
 	function getStatusCode()
 	{
-		return $this->_status;
+		return $this->status_code;
 	}
 }
 

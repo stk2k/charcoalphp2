@@ -49,18 +49,14 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	/*
 	 * load a rask
 	 */
-	private function loadTask( Charcoal_ObjectPath $obj_path, $file, Charcoal_ITaskManager $task_manager )
+	private function loadTask( $obj_path, $path, $task_manager )
 	{
-		$file = new Charcoal_File( s($file) );
-
-		// ソースを取り込む
-		if ( !$file->canRead() ){
-//			log_warning( "system,debug,include,task", "module", "task class file not readable:" . $file );
-			_throw( new Charcoal_FileNotReadableException($file) );
-		}
+		Charcoal_ParamTrait::check( 1, 'Charcoal_ObjectPath', $obj_path );
+		Charcoal_ParamTrait::checkString( 2, $path );
+		Charcoal_ParamTrait::check( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
-		$base_name = $file->getName();
+		$base_name = basename($path);
 
 		// retrieve class name from file name
 		$pos = strpos($base_name,CHARCOAL_CLASS_FILE_SUFFIX);
@@ -68,9 +64,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$class_name = substr($base_name,0,$pos);
 
 		// include source file
-		Charcoal_Framework::loadSourceFile( $file );
-
-//		log_debug( "system,debug,include,task", "module", "require_once:" . $file );
+		Charcoal_Framework::loadSourceFile( $path );
 
 		// create new instance
 		$klass = new Charcoal_Class( s($class_name) );
@@ -89,8 +83,8 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$task->setTypeName( s('task') );
 
 		// load object config
-		$config = new Charcoal_Config();
-		Charcoal_ConfigLoader::loadConfig( $task_path, s('task'), $config );
+		$config = Charcoal_ConfigLoader::loadConfig( $task_path, s('task') );
+		$config = new Charcoal_Config( $config );
 
 		// configure task
 		$task->configure( $config );
@@ -106,18 +100,14 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	/*
 	 * load a rask
 	 */
-	private function loadEvent( Charcoal_ObjectPath $obj_path, $file, Charcoal_ITaskManager $task_manager )
+	private function loadEvent( $obj_path, $path, $task_manager )
 	{
-		$file = new Charcoal_File( s($file) );
-
-		// ソースを取り込む
-		if ( !$file->canRead() ){
-//			log_warning( "system,debug,include,event", "module", "event class file not readable:" . $file );
-			_throw( new Charcoal_FileNotReadableException($file) );
-		}
+		Charcoal_ParamTrait::check( 1, 'Charcoal_ObjectPath', $obj_path );
+		Charcoal_ParamTrait::checkString( 2, $path );
+		Charcoal_ParamTrait::check( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
-		$base_name = $file->getName();
+		$base_name = basename($path);
 
 		// retrieve class name from file name
 		$pos = strpos($base_name,CHARCOAL_CLASS_FILE_SUFFIX);
@@ -125,8 +115,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$class_name = substr($base_name,0,$pos);
 
 		// include source file
-		Charcoal_Framework::loadSourceFile( $file );
-//		log_debug( "system,debug,include,event", "module", "require_once:" . $file );
+		Charcoal_Framework::loadSourceFile( $path );
 
 		// create new instance
 		$klass = new Charcoal_Class( s($class_name) );
@@ -145,8 +134,8 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$event->setTypeName( s('event') );
 
 		// load object config
-		$config = new Charcoal_Config();
-		Charcoal_ConfigLoader::loadConfig( $event_path, s('event'), $config );
+		$config = Charcoal_ConfigLoader::loadConfig( $event_path, s('event') );
+		$config = new Charcoal_Config( $config );
 
 		// configure event
 		$event->configure( $config );

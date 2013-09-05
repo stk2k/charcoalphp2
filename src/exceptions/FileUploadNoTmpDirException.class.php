@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイルアップロード例外：　一時ディレクトリがない
+* Exception caused by failure in manipulating uploaded file
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_FileUploadNoTmpDirException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_UploadedFile $file, Exception $previous = NULL )
+	public function __construct( $path, $prev = NULL )
 	{
-		$msg = "File upload failed(UPLOAD_ERR_NO_TMP_DIR). file=" . print_r($file,true);
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "File upload failed(UPLOAD_ERR_NO_TMP_DIR): $path", $prev );
 	}
 
 }

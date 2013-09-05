@@ -1,6 +1,6 @@
 <?php
 /**
-* パラメータ例外
+* exception when a parameter is wrong
 *
 * PHP version 5
 *
@@ -9,22 +9,14 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ParameterException extends Charcoal_RuntimeException
+class Charcoal_ParameterException extends Charcoal_LogicException
 {
-	public function __construct( Charcoal_String $parameter_name = NULL, Charcoal_String $value = NULL, Charcoal_String $message = NULL, Exception $previous = NULL )
+	public function __construct( $parameter_id, $parameter_type, $actual )
 	{
-		$msg = "";
-		if ( $parameter_name && is_string($parameter_name) ){
-			$msg .= "[parameter name]$parameter_name";
-		}
-		if ( $value && is_string($value) ){
-			$msg .= " [value]$value";
-		}
-		if ( $message && is_string($message) ){
-			$msg .= " [message]$message";
-		}
+		$actual_type = is_object($actual) ? get_class($actual) : gettype($actual);
+		$message = "parameter[$parameter_id] must be instanceof [$parameter_type],[$actual_type] is passed.";
 
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( $message );
 	}
 
 }

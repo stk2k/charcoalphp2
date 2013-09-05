@@ -29,8 +29,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 		self::$class_paths = array(
 
 		// base classes
-				'Charcoal_CharcoalComponent'		=> 'classes/base',
 				'Charcoal_DTO'						=> 'classes/base',
+				'Charcoal_CharcoalComponent'		=> 'classes/base',
 				'Charcoal_ImageFile'				=> 'classes/base',
 				'Charcoal_Position'					=> 'classes/base',
 				'Charcoal_PositionFloat'			=> 'classes/base',
@@ -124,20 +124,16 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// exception classes
 				'Charcoal_AnnotaionException'					=> 'exceptions',
-				'Charcoal_AnnotaionMandatoryException'			=> 'exceptions',
 				'Charcoal_ArrayFormatException'					=> 'exceptions',
-				'Charcoal_BadReturnValueTypeException'			=> 'exceptions',
+				'Charcoal_BadExitCodeException'					=> 'exceptions',
+				'Charcoal_BenchmarkException'					=> 'exceptions',
 				'Charcoal_BooleanFormatException'				=> 'exceptions',
 				'Charcoal_CacheDriverException'					=> 'exceptions',
-				'Charcoal_ClassLoaderConfigException'			=> 'exceptions',
-				'Charcoal_ClassNameEmptyException'				=> 'exceptions',
 				'Charcoal_ComponentConfigException'				=> 'exceptions',
 				'Charcoal_ComponentNotRegisteredException'		=> 'exceptions',
 				'Charcoal_ConfigException'						=> 'exceptions',
 				'Charcoal_ConfigFileNotFoundException'			=> 'exceptions',
 				'Charcoal_DateFormatException'					=> 'exceptions',
-				'Charcoal_DateWithTimeFormatException'			=> 'exceptions',
-				'Charcoal_DataSourceConfigException'			=> 'exceptions',
 				'Charcoal_DBAutoCommitException'				=> 'exceptions',
 				'Charcoal_DBBeginTransactionException'			=> 'exceptions',
 				'Charcoal_DBCommitTransactionException'			=> 'exceptions',
@@ -145,13 +141,9 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_DBException'							=> 'exceptions',
 				'Charcoal_DBConnectException'					=> 'exceptions',
 				'Charcoal_DBRollbackTransactionException'		=> 'exceptions',
-				'Charcoal_DirectoryPermissionException'			=> 'exceptions',
 				'Charcoal_EmptyStackException'					=> 'exceptions',
-				'Charcoal_EncodingConverterException'			=> 'exceptions',
-				'Charcoal_EventConfigException'					=> 'exceptions',
 				'Charcoal_EventContextException'				=> 'exceptions',
 				'Charcoal_FileOpenException'					=> 'exceptions',
-				'Charcoal_FilterConfigException'				=> 'exceptions',
 				'Charcoal_FileOutputException'					=> 'exceptions',
 				'Charcoal_FileRenameException'					=> 'exceptions',
 				'Charcoal_FileUploadCantWriteException'			=> 'exceptions',
@@ -164,73 +156,40 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_FileSystemException'					=> 'exceptions',
 				'Charcoal_FloatFormatException'					=> 'exceptions',
 				'Charcoal_HttpException'						=> 'exceptions',
-				'Charcoal_IllegalOffsetTypeException'			=> 'exceptions',
 				'Charcoal_ImageGetSizeException'				=> 'exceptions',
 				'Charcoal_InterfaceNotFoundException'			=> 'exceptions',
 				'Charcoal_IntegerFormatException'				=> 'exceptions',
-				'Charcoal_InvalidClassNameException'			=> 'exceptions',
-				'Charcoal_InvalidDBRelationException'			=> 'exceptions',
 				'Charcoal_InvalidEncodingCodeException'			=> 'exceptions',
-				'Charcoal_InvalidHashMapKeyException'			=> 'exceptions',
 				'Charcoal_InvalidMailAddressException'			=> 'exceptions',
-				'Charcoal_InvalidPostParameterException'		=> 'exceptions',
-				'Charcoal_LayoutNotFoundException'				=> 'exceptions',
 				'Charcoal_LoggerConfigException'				=> 'exceptions',
 				'Charcoal_MakeDirectoryException'				=> 'exceptions',
 				'Charcoal_MakeFileException'					=> 'exceptions',
-				'Charcoal_ModuleConfigException'				=> 'exceptions',
 				'Charcoal_NonArrayException'					=> 'exceptions',
 				'Charcoal_NonBooleanException'					=> 'exceptions',
 				'Charcoal_NonIntegerException'					=> 'exceptions',
 				'Charcoal_NonNumberException'					=> 'exceptions',
 				'Charcoal_NonObjectException'					=> 'exceptions',
 				'Charcoal_NonStringException'					=> 'exceptions',
-				'Charcoal_NotImplementedException'				=> 'exceptions',
-				'Charcoal_NullPointerException'					=> 'exceptions',
-				'Charcoal_NumberOfArgsException'				=> 'exceptions',
 				'Charcoal_ObjectPathFormatException'			=> 'exceptions',
-				'Charcoal_ObjectConfigException'				=> 'exceptions',
-				'Charcoal_PagerComponentException'				=> 'exceptions',
-				'Charcoal_ParameterException'					=> 'exceptions',
+				'Charcoal_RoutingRuletConfigException'			=> 'exceptions',
 				'Charcoal_PhpSourceParserException'				=> 'exceptions',
-				'Charcoal_ProcedureConfigException'				=> 'exceptions',
 				'Charcoal_ProcedureNotFoundException'			=> 'exceptions',
 				'Charcoal_ProcessEventException'				=> 'exceptions',
 				'Charcoal_QueryTargetException'					=> 'exceptions',
-				'Charcoal_RequestConfigException'				=> 'exceptions',
-				'Charcoal_SessionFileUnreadableException'		=> 'exceptions',
-				'Charcoal_SessionHandlerConfigException'		=> 'exceptions',
-				'Charcoal_ShellException'						=> 'exceptions',
-				'Charcoal_SmartyCompileException'				=> 'exceptions',
+				'Charcoal_SessionHandlerException'				=> 'exceptions',
 				'Charcoal_SmartyRendererTaskException'			=> 'exceptions',
-				'Charcoal_SQLBuilderConfigException'			=> 'exceptions',
 				'Charcoal_SQLBuilderException'					=> 'exceptions',
 				'Charcoal_StringFormatException'				=> 'exceptions',
 				'Charcoal_TableModelException'					=> 'exceptions',
 				'Charcoal_TableModelFieldException'				=> 'exceptions',
-				'Charcoal_TableModelConfigException'			=> 'exceptions',
-				'Charcoal_TaskConfigException'					=> 'exceptions',
-				'Charcoal_TaskGuardConditionException'			=> 'exceptions',
-				'Charcoal_TaskNotRegisteredException'			=> 'exceptions',
-				'Charcoal_TemplateFileNotFoundException'		=> 'exceptions',
-				'Charcoal_TransformerException'					=> 'exceptions',
-				'Charcoal_TransformerConfigException'			=> 'exceptions',
-				'Charcoal_UnsupportedImageFormatException'		=> 'exceptions',
-				'Charcoal_RouterConfigException'				=> 'exceptions',
-				'Charcoal_ValidatorConfigException'				=> 'exceptions',
-				'Charcoal_XmlRenderingException'				=> 'exceptions',
-				'Charcoal_PHPConfigException'					=> 'exceptions',
+				'Charcoal_TaskNotFoundException'				=> 'exceptions',
+				'Charcoal_URLFormatException'					=> 'exceptions',
 
 		// I/O classes
 				'Charcoal_FileWriter'						=> 'classes/io',
 				'Charcoal_RegExFileFilter'					=> 'classes/io',
 				'Charcoal_WildcardFileFilter'				=> 'classes/io',
 				'Charcoal_CombinedFileFilter'				=> 'classes/io',
-
-		// config provider classes
-				'Charcoal_PhpConfigProvider'				=> 'classes/config_providers',
-				'Charcoal_SpycConfigProvider'				=> 'classes/config_providers',
-				'Charcoal_CachedSpycConfigProvider'			=> 'classes/config_providers',
 
 		// task manager classes
 				'Charcoal_DefaultTaskManager'				=> 'objects/task_managers',
@@ -258,6 +217,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// DTO classes
 				'Charcoal_TableDTO'							=> 'objects/DTOs',
+				'Charcoal_SessionTableDTO'					=> 'objects/DTOs',
 
 		// data source classes
 				'Charcoal_PearDbDataSource'					=> 'objects/data_sources',
@@ -386,7 +346,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 //		log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] class_path=[$class_path] class_name=[$class_name]" );
 
 		// ソース読み込み
-		Charcoal_Framework::loadSourceFile( new Charcoal_File(s($class_path)) );
+		Charcoal_Framework::loadSourceFile( $class_path );
 
 //		log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] Class file loaded: class=[$class_name] file=[$class_path]" );
 

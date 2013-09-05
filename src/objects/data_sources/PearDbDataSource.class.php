@@ -225,7 +225,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -245,7 +245,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -264,7 +264,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -283,7 +283,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -308,7 +308,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 			return;
 		}
 
-		$start = Charcoal_Benchmark::nowTime();
+		Charcoal_Benchmark::start();
 
 		$backend   = $this->_backend;
 		$user      = $this->_user;
@@ -375,8 +375,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		}
 
 		// ログ
-		$now = Charcoal_Benchmark::nowTime();
-		$elapse = round( $now - $start, 4 );
+		$elapse = Charcoal_Benchmark::stop();
 		log_debug( "debug,sql,data_source", "data_source", "connect() end. time=[$elapse]sec.");
 	}
 
@@ -414,7 +413,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 	 */
 	private function _prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
 	{
-		$start = Charcoal_Benchmark::nowTime();
+		Charcoal_Benchmark::start();
 
 		$flag = new Charcoal_DeprecateFlaggOff();
 
@@ -442,7 +441,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 			$msg = $stmt->getMessage() . "(" . $stmt->getCode() . ")";
 			log_error( "system", $msg );
 			log_error( "sql,debug", "...FAILED: $msg" );
-			_throw( new Charcoal_DBDataSourceException( s($msg) ) );
+			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
 		$params = $params ? $params->toArray() : array();
@@ -453,7 +452,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 			$msg = $result->getMessage();
 			log_error( "system", $msg );
 			log_error( "sql,debug", "...FAILED: $msg" );
-			_throw( new Charcoal_DBDataSourceException( s($msg) ) );
+			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
 		if ( is_object($result) ){
@@ -466,8 +465,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		}
 
 		// ログ
-		$now = Charcoal_Benchmark::nowTime();
-		$elapse = round( $now - $start, 4 );
+		$elapse = Charcoal_Benchmark::stop();
 		log_debug( 'sql,debug', "prepareExecute() end. time=[$elapse]sec.");
 
 		return $result;
@@ -488,7 +486,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 			
 		if ( DB::isError($result) ){
 			$msg = $result->getMessage() . " [SQL]" . $sql;
-			_throw( new Charcoal_DBDataSourceException( ($msg) ) );
+			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
 		return $result;
@@ -504,14 +502,13 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		// 接続処理
 		$this->connect();
 
-		$start = Charcoal_Benchmark::nowTime();
+		Charcoal_Benchmark::start();
 
 		// SQLを実行して結果セットを得る
 		$resultset = $this->_query( $sql );
 
 		// ログ
-		$now = Charcoal_Benchmark::nowTime();
-		$elapse = round( $now - $start, 4 );
+		$elapse = Charcoal_Benchmark::stop();
 		log_debug( 'sql', "query() end. time=[$elapse]sec.");
 
 		// 結果セットを返却
@@ -559,12 +556,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		{
 			_catch( $e );
 
-			$msg  = __METHOD__ . " failed: [SQL]$sql";
-			if ( $params ){
-				$msg .= ' [params]' . $params->join();
-			}
-
-			_throw( new Charcoal_DBDataSourceException( s($msg), $e ) );
+			_throw( new Charcoal_DBDataSourceException( __METHOD__ . " failed: [SQL]$sql [params]$params", $e ) );
 		}
 
 		return $result;
@@ -583,11 +575,10 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function fetchAssoc( $result )
 	{
+		Charcoal_ParamTrait::checkResource( 1, $result );
+
 		$flag = new Charcoal_DeprecateFlaggOff();
 
-		if ( $result === NULL ){
-			_throw( new Charcoal_NullPointerException() );
-		}
 		if ( !is_object($result) ){
 			_throw( new Charcoal_NonObjectException( $result ) );
 		}

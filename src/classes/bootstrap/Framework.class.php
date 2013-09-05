@@ -36,26 +36,24 @@ class Charcoal_Framework
 	static $debug_mode;
 	static $hook_stage;
 	static $loaded_files;
-	static $start_time;
-
-	/**
-	 *	get start time
-	 */
-	public static function getStartTime()
-	{
-		return self::$start_time;
-	}
 
 	/**
 	 *	load source file
 	 */
-	public static function loadSourceFile( Charcoal_File $file )
+	public static function loadSourceFile( $path )
 	{
-		if ( !$file->exists() ){
-			_throw( new Charcoal_FileNotFoundException($file) );
+		Charcoal_ParamTrait::checkString( 1, $path );
+
+		if ( !is_file($path) ){
+			_throw( new Charcoal_FileNotFoundException( $path ) );
 		}
-		require_once( $file->getAbsolutePath() );
-		self::$loaded_files[] = $file;
+
+		if ( !is_readable($path) ){
+			_throw( new Charcoal_FileNotReadableException( $path ) );
+		}
+
+		require( $path );
+		self::$loaded_files[] = $path;
 //		log_info( "system,debug,loaded_files","loaded source file: [$file]", 'framework' );
 	}
 
@@ -279,7 +277,7 @@ class Charcoal_Framework
 		{
 			_catch( $ex );
 
-			_throw( new Charcoal_FrameworkBootstrapException( s('failed to load class loader:'.$ex->getClassLoaderPath()), $ex ) );
+			_throw( new Charcoal_FrameworkBootstrapException( 'failed to load class loader:'.$ex->getClassLoaderPath(), $ex ) );
 		}
 
 		// register framework class loader
@@ -308,17 +306,6 @@ class Charcoal_Framework
 			$proc_path = Charcoal_Profile::getString( s('DEFAULT_PROCPATH') );
 		}
 
-		//=======================================
-		// Register cache driver objects
-
-		$cache_drivers = Charcoal_Profile::getArray( s('CACHE_DRIVERS') );
-		if ( $cache_drivers ){
-			foreach( $cache_drivers as $cache_driver_name ){
-				$cache_driver = Charcoal_Factory::createObject( s($cache_driver_name), s('cache_driver'), v(array()), s('Charcoal_ICacheDriver') );
-				Charcoal_Cache::register( s($cache_driver_name), $cache_driver );
-			}
-		}
-
 		// flush core hook messages
 		Charcoal_CoreHook::flushMessages();
 
@@ -333,7 +320,7 @@ class Charcoal_Framework
 			foreach( $lib_dirs as $dir ){
 				$path = Charcoal_ResourceLocator::processMacro( s($dir) );
 				add_include_path( $path->getValue() );
-				self::setHookStage( i(Charcoal_EnumCoreHookStage::ADD_EXTLIB_DIR), s($path) );
+				self::setHookStage( i(Charcoal_EnumCoreHookStage::ADD_EXTLIB_DIR), b(TRUE), s($path) );
 			}
 		}
 
@@ -357,16 +344,13 @@ class Charcoal_Framework
 				// セッションハンドラの作成
 				$session_handler = Charcoal_Factory::createObject( s($session_handler_name), s('session_handler'), v(array()), s('Charcoal_ISessionHandler') );
 
-				// コールバックの登録
-				$class_name = get_class($session_handler);
-
 				session_set_save_handler(
-							array( $class_name, 'open' ), 
-							array( $class_name, 'close' ), 
-							array( $class_name, 'read' ), 
-							array( $class_name, 'write' ), 
-							array( $class_name, 'destroy' ), 
-							array( $class_name, 'gc' )
+							array( $session_handler, 'open' ), 
+							array( $session_handler, 'close' ), 
+							array( $session_handler, 'read' ), 
+							array( $session_handler, 'write' ), 
+							array( $session_handler, 'destroy' ), 
+							array( $session_handler, 'gc' )
 					);
 			}
 
@@ -454,7 +438,7 @@ class Charcoal_Framework
 		{
 			_catch( $e );
 
-			_throw( new Charcoal_ProcedureNotFoundException( s($proc_path), $e ) );
+			_throw( new Charcoal_ProcedureNotFoundException( $proc_path, $e ) );
 		}
 
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::AFTER_CREATE_PROCEDURE), b(TRUE), s($proc_path) );
@@ -527,6 +511,8 @@ class Charcoal_Framework
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::START_OF_SHUTDOWN), b(TRUE) );
 		self::setHookStage( i(Charcoal_EnumCoreHookStage::BEFORE_SAVE_SESSION), b(TRUE) );
 
+		$response->terminate();
+
 		// セッション情報の保存
 		if ( $use_session )
 		{
@@ -561,7 +547,7 @@ class Charcoal_Framework
 	 */
 	public static function run( $debug_mode = FALSE )
 	{
-		self::$start_time = Charcoal_Benchmark::nowTime();
+		Charcoal_Benchmark::start( 'framework::run()' );
 
 		try{
 			try{
@@ -576,7 +562,7 @@ class Charcoal_Framework
 				switch( CHARCOAL_RUNMODE ){
 				// ランモードがhttpの時は404エラー
 				case 'http':
-					_throw( new Charcoal_HttpException(i(404),$ex) );
+					_throw( new Charcoal_HttpException( 404, $ex ) );
 					break;
 				// それ以外の場合はリスロー
 				default:
@@ -587,34 +573,20 @@ class Charcoal_Framework
 		}
 		catch ( Charcoal_CharcoalException $e )
 		{
-			log_debug( "system,error,debug", "catch $e", "exception" );
 			_catch( $e );
 
-			// 既に出力された内容をクリア
-			$clear_buffer = ub( Charcoal_Profile::getBoolean( s('DEBUG_CLEAR_BUFFER'), b(FALSE) ) );
-			if ( $clear_buffer ){
-				ob_clean();
-			}
-
-			// ループを防止するため、これ以降のエラーは以前のエラーハンドラで処理する
+			// restore error handlers for avoiding infinite loop
 			restore_error_handler();
 			restore_exception_handler();
 
-			if ( self::$debug_mode->isTrue() ){
-				// force to display stack trace in debug mode
-				self::renderExceptionFinally( $e );
-			}
-			else{
-				// call error handlers which are defined in profile.ini
-				$handled = Charcoal_ExceptionHandlerList::handleFrameworkException( $e );
-	//			log_debug( "system,debug,error","exception[$e] handled=$handled", 'framework' );
+			// call error handlers which are defined in profile.ini
+			$handled = Charcoal_ExceptionHandlerList::handleFrameworkException( $e );
 
-				// デバッグトレースまたは500.htmlを表示
-				$handled = b($handled);
-				if ( $handled->isFalse() )
-				{
-					self::renderExceptionFinally( $e );
-				}
+			// display debugtrace
+			$handled = b($handled);
+			if ( $handled->isFalse() || self::$debug_mode->isTrue() )
+			{
+				self::renderExceptionFinally( $e );
 			}
 
 			Charcoal_Logger::flush();
@@ -623,22 +595,27 @@ class Charcoal_Framework
 		{
 			_catch( $e );
 
-			// ループを防止するため、これ以降のエラーは以前のエラーハンドラで処理する
-//			restore_error_handler();
-//			restore_exception_handler();
+			// restore error handlers for avoiding infinite loop
+			restore_error_handler();
+			restore_exception_handler();
 
 			$handled = Charcoal_ExceptionHandlerList::handleException( $e );
-//			log_debug( "system,debug,error","exception[$e] handled=$handled", 'framework' );
 
-			// デバッグトレースまたは500.htmlを表示
+			// display debugtrace
 			$handled = b($handled);
-			if ( $handled->isFalse() )
+			if ( $handled->isFalse() || self::$debug_mode->isTrue() )
 			{
 				self::renderExceptionFinally( $e );
 			}
 
 			Charcoal_Logger::flush();
 		}
+
+		// finally process
+		$score = Charcoal_Benchmark::stop( 'framework::run()' );
+		log_debug( 'system, debug', "total framework process time: [$score] msec" );
+
+		Charcoal_Logger::terminate();
 	}
 
 
@@ -650,25 +627,25 @@ class Charcoal_Framework
 		$rendered = FALSE;
 
 		// デバッグモードONならデバッグトレースを表示、デバッグモードOFFなら500.htmlを表
-		log_info( 'system, debug',"debug_mode:" . self::$debug_mode, 'framework' );
+		log_info( 'system, debug', 'debug_mode:' . self::$debug_mode, 'framework' );
 
 		// Render exception
-		if ( self::$debug_mode ) {
+		if ( self::$debug_mode->isTrue() ) {
 			$rendered = Charcoal_DebugTraceRendererList::render( $e );
 		}
 
 		// Show something if debugtrace rendering failed
 		if ( !$rendered || $rendered->isFalse() ){
-			log_debug( 'system, debug',"debugtrace was not rendered.", 'framework' );
+			log_debug( 'system, debug','debugtrace was not rendered.', 'framework' );
 			switch( CHARCOAL_RUNMODE ){
 			case 'http':
-				log_debug( 'system, debug',"showing 500 html(internal server error).", 'framework' );
+				log_debug( 'system, debug', 'showing 500 html(internal server error).', 'framework' );
 
 				self::showHttpErrorDocument( i(500) );
 				break;
 			case 'shell':
 			default:
-				echo "Exception was not handled: $e";
+				echo 'Exception was not handled: ' . $e;
 				break;
 			}
 		}

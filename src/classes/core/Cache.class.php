@@ -13,41 +13,49 @@ class Charcoal_Cache extends Charcoal_Object
 {
 	private static $drivers;
 
-	/*
-	 *	check if a logger is registered
+	private static $init;
+
+	/**
+	 *  initialize instance
 	 */
-	public static function isRegistered( Charcoal_String $key )
+	public static function init()
 	{
-		$key = $key->getValue();
-		return isset(self::$drivers[$key]);
+		if ( !self::$init ){
+
+			$cache_drivers = Charcoal_Profile::getArray( s('CACHE_DRIVERS'), v(array('file')) );
+
+			foreach( $cache_drivers as $driver_name ){
+				$driver = Charcoal_Factory::createObject( s($driver_name), s('cache_driver'), v(array()), s('Charcoal_ICacheDriver') );
+				self::$drivers[] = $driver;
+			}
+			self::$init = TRUE;
+		}
 	}
 
 	/*
-	 *	register a logger
+	 *	add a logger
 	 */
-	public static function register( Charcoal_String $key, Charcoal_ICacheDriver $cache_driver )
+	public static function add( Charcoal_ICacheDriver $cache_driver )
 	{
-		$key = $key->getValue();
-
-		// set a logger to array
-		self::$drivers[$key] = $cache_driver;
+		self::$drivers[] = $cache_driver;
 	}
 
 	/**
 	 * Get non-typed data which is associated with a string key
 	 *
 	 * @param Charcoal_String $key         The key of the item to retrieve.
+	 *
+	 * @return mixed                       cache data
 	 */
 	public  static function get( Charcoal_String $key )
 	{
-		$driver_list = self::$drivers;
+		self::init();
 
-		if ( $driver_list && is_array($driver_list) ){
-			foreach( $driver_list as $driver ){
-				$ret = $driver->get( $key );
-				if ( FALSE !== $ret ){
-					return $ret;
-				}
+		foreach( self::$drivers as $driver )
+		{
+			$ret = $driver->get( $key );
+			if ( FALSE !== $ret ){
+				return $ret;
 			}
 		}
 
@@ -62,15 +70,13 @@ class Charcoal_Cache extends Charcoal_Object
 	 */
 	public static function set( Charcoal_String $key, Charcoal_Object $value, Charcoal_Integer $duration = NULL )
 	{
-		$driver_list = self::$drivers;
+		self::init();
 
-		if ( $driver_list && is_array($driver_list) ){
-			foreach( $driver_list as $driver ){
-				if ( $duration )
-					$driver->set( $key, $value, $duration );
-				else
-					$driver->set( $key, $value );
-			}
+		foreach( self::$drivers as $driver ){
+			if ( $duration )
+				$driver->set( $key, $value, $duration );
+			else
+				$driver->set( $key, $value );
 		}
 
 		return $value;
@@ -82,14 +88,12 @@ class Charcoal_Cache extends Charcoal_Object
 	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
 	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
 	 */
-	public function delete( Charcoal_String $key )
+	public static function delete( Charcoal_String $key )
 	{
-		$driver_list = self::$drivers;
+		self::init();
 
-		if ( $driver_list && is_array($driver_list) ){
-			foreach( $driver_list as $driver ){
-				$driver->delete( $key );
-			}
+		foreach( self::$drivers as $driver ){
+			$driver->delete( $key );
 		}
 	}
 
@@ -102,12 +106,10 @@ class Charcoal_Cache extends Charcoal_Object
 	 */
 	public function deleteRegEx( Charcoal_String $key )
 	{
-		$driver_list = self::$drivers;
+		self::init();
 
-		if ( $driver_list && is_array($driver_list) ){
-			foreach( $driver_list as $driver ){
-				$driver->deleteRegEx( $key );
-			}
+		foreach( self::$drivers as $driver ){
+			$driver->deleteRegEx( $key );
 		}
 	}
 
@@ -119,15 +121,13 @@ class Charcoal_Cache extends Charcoal_Object
 	 */
 	public function touch( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
-		$driver_list = self::$drivers;
+		self::init();
 
-		if ( $driver_list && is_array($driver_list) ){
-			foreach( $driver_list as $driver ){
-				if ( $duration )
-					$driver->touch( $key, $duration );
-				else
-					$driver->touch( $key );
-			}
+		foreach( self::$drivers as $driver ){
+			if ( $duration )
+				$driver->touch( $key, $duration );
+			else
+				$driver->touch( $key );
 		}
 	}
 
@@ -139,15 +139,13 @@ class Charcoal_Cache extends Charcoal_Object
 	 */
 	public function touchRegEx( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
-		$driver_list = self::$drivers;
+		self::init();
 
-		if ( $driver_list && is_array($driver_list) ){
-			foreach( $driver_list as $driver ){
-				if ( $duration )
-					$driver->touchRegEx( $key, $duration );
-				else
-					$driver->touchRegEx( $key );
-			}
+		foreach( self::$drivers as $driver ){
+			if ( $duration )
+				$driver->touchRegEx( $key, $duration );
+			else
+				$driver->touchRegEx( $key );
 		}
 	}
 

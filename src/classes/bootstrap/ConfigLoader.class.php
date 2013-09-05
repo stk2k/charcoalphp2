@@ -14,11 +14,7 @@ class Charcoal_ConfigLoader
 	/*
 	 * load configure file
 	 */
-	public static function loadConfig( 
-							Charcoal_ObjectPath $object_path, 
-							Charcoal_String $type_name, 
-							Charcoal_Config $config
-						)
+	public static function loadConfig( Charcoal_ObjectPath $object_path, Charcoal_String $type_name )
 	{
 		$object_name = $object_path->getObjectName();
 
@@ -104,34 +100,42 @@ class Charcoal_ConfigLoader
 
 			$pos = strpos( $request_path, '@' );
 			if ( $pos !== FALSE ){
-				$proc_dir = str_replace( ':', '/', substr( $request_path, $pos+1 ) );
-				if ( $object_name ){
-					$config_name = '/' . $object_name . '.' . $type_name;
+				$virt_dir = substr( $request_path, $pos+1 );
+				if ( strlen($virt_dir) > 0 )
+				{
+					$proc_dir = str_replace( ':', '/', $virt_dir );
+					if ( $object_name ){
+						$config_name = '/' . $object_name . '.' . $type_name;
+					}
+					else{
+						$config_name = '/' . $type_name;
+					}
+					$config_target_list[] = array( $root_webapp_modules . $proc_dir, $config_name );
 				}
-				else{
-					$config_name = '/' . $type_name;
-				}
-				$config_target_list[] = array( $root_webapp_modules . $proc_dir, $config_name );
 			}
 		}
 
 		// load all config files
+		$config = array();
 		foreach( $config_target_list as $target ){
 			list($root, $name) = $target;
-			$provider->loadConfigByName( s($root), s($name), $config );
+			$data = $provider->loadConfig( s($root), s($name), $config );
+			if ( $data ){
+				$config = array_merge( $config, $data );
+			}
 		}
 
 		// import
-		$import = $config->getString( s("import") );
+		$import = isset($config['import']) ? $config['import'] : NULL;
 		if ( $import ){
-			$import_path = new Charcoal_ObjectPath(s($import));
-
-			$config_to_import = new Charcoal_Config();
-
-			self::loadConfig( $import_path, $type_name, $config_to_import );
-
-			$config->mergeHashMap( $config_to_import );
+			$import_path = new Charcoal_ObjectPath( s($import) );
+			$data = self::loadConfig( $import_path, $type_name );
+			if ( $data ){
+				$config = array_merge( $config, $data );
+			}
 		}
+
+		return $config;
 	}
 
 }

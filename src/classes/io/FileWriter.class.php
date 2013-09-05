@@ -40,7 +40,7 @@ class Charcoal_FileWriter
 
 		$this->fp = @fopen($path,$this->mode);
 		if ( !$this->fp ){
-			_throw( new Charcoal_FileOpenException( $this->file ) );
+			_throw( new Charcoal_FileOpenException( $path ) );
 		}
 	}
 
@@ -67,11 +67,11 @@ class Charcoal_FileWriter
 	public function write( $data )
 	{
 		if ( !$this->fp ){
-			_throw( new Charcoal_FileOutputException($this->file) );
+			_throw( new Charcoal_FileOutputException( $this->file->getPath() ) );
 		}
 		$ret = fwrite($this->fp, $data);
 		if ( $ret === FALSE ){
-			_throw( new Charcoal_FileOutputException($this->file) );
+			_throw( new Charcoal_FileOutputException( $this->file->getPath() ) );
 		}
 		return i($ret);
 	}

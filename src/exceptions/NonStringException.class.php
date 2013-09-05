@@ -1,6 +1,6 @@
 <?php
 /**
-* 非文字列例外
+* exception caused by not suitable for string object
 *
 * PHP version 5
 *
@@ -11,17 +11,9 @@
 
 class Charcoal_NonStringException extends Charcoal_RuntimeException
 {
-	public function __construct( $value = NULL, Exception $previous = NULL  )
+	public function __construct( $value, $prev = NULL )
 	{
-		$msg = "";
-		if ( $value != NULL ){
-			$msg .= " [value]" . strval($value);
-			$msg .= " [object type]" . gettype($value);
-			if ( is_object($value) ){
-				$msg .= " [class type]" . get_class($value);
-			}
-		}
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "can't convert to string object: $value", $prev );
 	}
 
 }

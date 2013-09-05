@@ -16,23 +16,22 @@ class Charcoal_Boolean extends Charcoal_Primitive
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( $value, $default_value = NULL )
+	public function __construct( $value = FALSE )
 	{
 		parent::__construct();
 
-		if ( is_null($value) ){
-			if ( $default_value === NULL ){
-				_throw( new NullPointerException() );
-			}
-			$value = $default_value;
+		if ( $value === TRUE || $value === FALSE ){
+			$this->_value = $value;
 		}
-		else if ( gettype($value) !== 'boolean' ){
-			if ( $default_value === NULL ){
-				_throw( new BooleanFormatException( System::toString($value) ) );
-			}
-			$value = $default_value;
+		else if ( $value instanceof Charcoal_Boolean ){
+			$this->_value = $value->unbox();
 		}
-		$this->_value      = $value;
+		else if ( $value === NULL ){
+			$value = FALSE;
+		}
+		else{
+			_throw( new Charcoal_NonBooleanException( $value ) );
+		}
 	}
 
     /**

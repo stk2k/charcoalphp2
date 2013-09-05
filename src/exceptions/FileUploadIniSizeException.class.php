@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイルアップロード例外：　アップロードサイズ超過
+* Exception caused by failure in manipulating uploaded file
 *
 * PHP version 5
 *
@@ -11,12 +11,9 @@
 
 class Charcoal_FileUploadIniSizeException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_UploadedFile $file, Exception $previous = NULL )
+	public function __construct( $path, $prev = NULL )
 	{
-		$msg = "File upload failed(UPLOAD_ERR_INI_SIZE). file=" . print_r($file,true);
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "File upload failed(UPLOAD_ERR_INI_SIZE): $path", $prev );
 	}
-
 }
 

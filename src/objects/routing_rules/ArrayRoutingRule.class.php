@@ -36,7 +36,7 @@ class Charcoal_ArrayRoutingRule extends Charcoal_CharcoalObject implements Charc
 		foreach( $patterns as $pattern ){
 			$proc_path = $rules_section->getString( s($pattern) );
 			if ( $proc_path === NULL ){
-				_throw( new Charcoal_ObjectConfigException( $this, s($pattern), ('can not be NULL') ) );
+				_throw( new Charcoal_RoutingRuleConfigException( $this, s($pattern), ('can not be NULL') ) );
 			}
 			$this->_proc_paths[$pattern] = us($proc_path);
 		}

@@ -1,9 +1,6 @@
 <?php
 /**
-* PHP実行時例外
-*
-* [詳細]
-* ・文法例外など、error_handlerで補足された場合の例外
+* exception in PHP runtime
 *
 * PHP version 5
 *
@@ -19,11 +16,9 @@ class Charcoal_PHPErrorException extends Charcoal_RuntimeException
 	public $errfile;
 	public $errline;
 
-	public function __construct( $errno, $errstr, $errfile, $errline, Exception $previous = NULL )
+	public function __construct( $errno, $errstr, $errfile, $errline, $prev = NULL )
 	{
-		$msg  = "PHP Runtime Error([$errno]$errstr   @$errfile($errline)";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "PHP Runtime Error([$errno]$errstr   @$errfile($errline)", $prev );
 
 		$this->errno = $errno;
 		$this->errstr = $errstr;

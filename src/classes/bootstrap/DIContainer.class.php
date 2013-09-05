@@ -73,8 +73,9 @@ class Charcoal_DIContainer
 
 		// コンポーネント設定ファイルの読み込み
 		$obj_path = new Charcoal_ObjectPath( s($component_name) );
-		$config = new Charcoal_Config();
-		Charcoal_ConfigLoader::loadConfig( $obj_path, s('component'),  $config );
+
+		$config = Charcoal_ConfigLoader::loadConfig( $obj_path, s('component') );
+		$config = new Charcoal_Config( $config );
 
 		// キャッシュに保存
 		$this->_component_configs[ $component_name ] = $config;
@@ -82,7 +83,7 @@ class Charcoal_DIContainer
 		// クラス名を取得
 		$class_name = $config->getString( s('class_name') );
 		if ( $class_name === NULL ){
-			_throw( new Charcoal_ComponentConfigException( s("class_name"), s("mandatory") ) );
+			_throw( new Charcoal_ComponentConfigException( "class_name", "mandatory" ) );
 		}
 
 		// create class object
@@ -116,7 +117,7 @@ class Charcoal_DIContainer
 		default:
 			{
 				// scopeに指定されたワードが不正
-				_throw( new Charcoal_ComponentConfigException( s($component_name), s('scope'), s('invalid scope value:$scope') ) );
+				_throw( new Charcoal_ComponentConfigException( $component_name, 'scope', "invalid scope value:$scope" ) );
 			}
 			break;
 		}
@@ -126,7 +127,7 @@ class Charcoal_DIContainer
 		// 生成したインスタンスがIComponentインタフェースを実装しているか確認
 		if ( !($component instanceof Charcoal_IComponent) ){
 			// 実装例外
-			_throw( new Charcoal_InterfaceImplementException( s($class_name), s("Charcoal_IComponent") ) );
+			_throw( new Charcoal_InterfaceImplementException( $class_name, "Charcoal_IComponent" ) );
 		}
 
 		// コンポーネントを初期化

@@ -28,6 +28,16 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 		$this->_headers  = array();
 	}
 
+	/**
+	 * destruct instance
+	 */
+	public function terminate()
+	{
+		parent::terminate();
+
+		$this->flushHeaders();
+	}
+
 	/*
 	 *  add response header
 	 *
@@ -63,21 +73,27 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	}
 
 	/*
+	 *  clear response header
+	 */
+	public function clearHeaders()
+	{
+		header_remove();
+
+		// erase all headers
+		$this->_headers = array();
+	}
+
+	/*
 	 *  output HTTP header
 	 *
-	 * @param Charcoal_String $header   Header to output
-	 * @param Charcoal_Boolean $flush_now   Flushes header immediately
+	 * @param Charcoal_String $header            header to output
+	 * @param Charcoal_Boolean $flush_now        flushes header immediately
 	 */
 	public function header( Charcoal_String $header, Charcoal_Boolean $flush_now = NULL )
 	{
-
-		if ( $flush_now == NULL ){
-			$flush_now = b(TRUE);
-		}
-
 		$this->addHeader( s($header) );
 
-		if ( $flush_now->isTrue() ){
+		if ( !$flush_now || $flush_now->isTrue() ){
 			$this->flushHeaders();
 		}
 	}
@@ -85,17 +101,30 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	/*
 	 *  HTTP redirect
 	 *
-	 * @param Charcoal_String $url   Redirect URL
+	 * @param Charcoal_URL $url   Redirect URL
 	 * @param Charcoal_Boolean $flush_now   Flushes header immediately
 	 */
-	public function redirect( Charcoal_String $url, Charcoal_Boolean $flush_now = NULL )
+	public function redirect_( Charcoal_URL $url, Charcoal_Boolean $flush_now = NULL )
 	{
 		if ( $flush_now == NULL ){
 			$flush_now = b(TRUE);
 		}
 
 //		$this->header( s("HTTP/1.0 302 Found"), $flush_now );
+		$this->clearHeaders();
 		$this->header( s("Location: $url"), $flush_now );
+	}
+
+	/*
+	 *  HTTP redirect(weak API)
+	 *
+	 * @param Charcoal_URL $url   Redirect URL
+	 * @param Charcoal_Boolean $flush_now   Flushes header immediately
+	 */
+	public function redirect( $url, $flush_now = FALSE )
+	{
+		$url = new Charcoal_URL( s($url) );
+		$this->redirect_( $url, b($flush_now) );
 	}
 
 	/*

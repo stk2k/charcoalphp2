@@ -13,8 +13,10 @@ class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Char
 {
 	private $_debug;
 
-	/*
-	 *	set object options
+	/**
+	 * set options
+	 *
+	 * @param Charcoal_Properties $options   option set to apply
 	 */
 	public function setOptions( Charcoal_Properties $options )
 	{
@@ -22,17 +24,14 @@ class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Char
 	}
 
 	/**
-	 *  load config by name
+	 *  load config
 	 *
-	 * @access    public
-	 * @param     config_root   root name
-	 * @param     config_name   config name
+	 * @param  Charcoal_String $config_root   root name
+	 * @param  Charcoal_String $config_name   config name
+	 *
+	 * @return mixed   configure data
 	 */
-	public function loadConfigByName( 
-							Charcoal_String $config_root, 
-							Charcoal_String $config_name, 
-							Charcoal_Config& $config
-							)
+	public function loadConfig( Charcoal_String $config_root, Charcoal_String $config_name )
 	{
 		$config_root = us($config_root);
 		$config_name = us($config_name);
@@ -43,7 +42,7 @@ class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Char
 		if ( !is_file($source) ){	
 			if ( $this->_debug->isTrue() )	print "[$source]is not exists!" . eol();	
 //			log_info( "system, debug, config", "config", "ini file[$source] does not exist." );
-			return FALSE;
+			return NULL;
 		}
 
 		// read ini file
@@ -54,16 +53,11 @@ class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Char
 		}
 		if ( $ini_config === FALSE ){	
 //			log_warning( "system, debug, config", "config", "failed to read ini file[$source]" );
-			return FALSE;
+			return NULL;
 		}
 //		log_info( "system, debug, config", "config", "read ini file[$source]:" . print_r($ini_config,true) );
 
-		// load ini file
-		foreach( $ini_config as $key => $value ){
-			$config->set( s($key), $value );
-		}
-
-		return TRUE;
+		return $ini_config;
 	}
 
 }

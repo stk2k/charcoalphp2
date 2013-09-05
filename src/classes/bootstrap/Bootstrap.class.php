@@ -45,10 +45,10 @@ class Charcoal_Bootstrap
 
 			exit;	// prevent unnecessary errors to add
 		}
-//		if ( (error_reporting() & $errno) === $errno ){
+		if ( (error_reporting() & $errno) === $errno ){
 			$errno = Charcoal_System::phpErrorString( $errno );
 			echo "[errno]$errno [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
-//		}
+		}
 		return TRUE;	// Otherwise, ignore all errors
 	}
 
@@ -111,14 +111,6 @@ class Charcoal_Bootstrap
 			}
 		}
 
-	//	log_info( "system,debug", "shutdown", 'Shutdown handler end' );
-
-		$end_time = Charcoal_Benchmark::nowTime();
-		$elapse = round( $end_time - Charcoal_Framework::getStartTime(), 4 );
-		log_debug( "system,debug","total framework process time: [$elapse] msec" );
-
-		// Terminate log messages
-		Charcoal_Logger::terminate();
 	}
 
 	/**
@@ -146,6 +138,9 @@ class Charcoal_Bootstrap
 					'Charcoal_IDebugtraceRenderer'					=> 'interfaces',
 					'Charcoal_ILogger'								=> 'interfaces',
 
+					// traits
+					'Charcoal_ParamTrait' 							=> 'traits',
+
 					// Basic object classes	
 					'Charcoal_Object' 								=> 'classes/base',
 					'Charcoal_Class' 								=> 'classes/base',
@@ -171,6 +166,7 @@ class Charcoal_Bootstrap
 					'Charcoal_FrameworkBootstrapException' 			=> 'exceptions',
 					'Charcoal_LogicException' 						=> 'exceptions',
 					'Charcoal_ModuleLoaderException'				=> 'exceptions',
+					'Charcoal_ParameterException'					=> 'exceptions',
 					'Charcoal_PHPErrorException' 					=> 'exceptions',
 					'Charcoal_ProfileDirectoryNotFoundException'	=> 'exceptions',
 					'Charcoal_ProfileLoadingException'				=> 'exceptions',
@@ -196,13 +192,15 @@ class Charcoal_Bootstrap
 					'Charcoal_Stack' 						=> 'classes/base',
 
 					// Basic config provider classes
-					'Charcoal_IniConfigProvider'				=> 'objects/config_providers',
+					'Charcoal_IniConfigProvider'			=> 'objects/config_providers',
+					'Charcoal_CachedIniConfigProvider'		=> 'objects/config_providers',
+					'Charcoal_PhpConfigProvider'			=> 'classes/config_providers',
 
 					// Bootstrap classes
 					'Charcoal_ClassLoader'					=> 'classes/bootstrap',
-					'Charcoal_ConfigPropertySet'				=> 'classes/bootstrap',
+					'Charcoal_ConfigPropertySet'			=> 'classes/bootstrap',
 					'Charcoal_Config' 						=> 'classes/bootstrap',
-					'Charcoal_ConfigLoader' 					=> 'classes/bootstrap',
+					'Charcoal_ConfigLoader' 				=> 'classes/bootstrap',
 					'Charcoal_CoreHook'						=> 'classes/bootstrap',
 					'Charcoal_CoreHookMessage'				=> 'classes/bootstrap',
 					'Charcoal_DebugTraceRendererList'		=> 'classes/bootstrap',
@@ -274,7 +272,7 @@ class Charcoal_Bootstrap
 
 		if ( self::$debug )	echo "loading file[$class_path] for class: $class_name" . eol();
 
-		require_once( $class_path );
+		require( $class_path );
 
 		return TRUE;
 	}
@@ -288,18 +286,16 @@ class Charcoal_Bootstrap
 		self::$debug = $debug;
 
 		// register bootstrap clas loader
-		if ( !spl_autoload_register('Charcoal_Bootstrap::loadClass',false,true) )
+		if ( FALSE === spl_autoload_register('Charcoal_Bootstrap::loadClass',false) )
 		{
-			if ( $debug ){
-				echo "registering bootstrap class loader failed." . eol();
-			}
+			echo "registering bootstrap class loader failed." . eol();
 			exit;
 		}
 
 		// register system handlers
-		register_shutdown_function( 'Charcoal_Bootstrap::onShutdown' );
-		set_error_handler( "Charcoal_Bootstrap::onUnhandledError" );
-		set_exception_handler( "Charcoal_Bootstrap::onUnhandledException" );
+//		register_shutdown_function( 'Charcoal_Bootstrap::onShutdown' );
+//		set_error_handler( "Charcoal_Bootstrap::onUnhandledError" );
+//		set_exception_handler( "Charcoal_Bootstrap::onUnhandledException" );
 
 	}
 

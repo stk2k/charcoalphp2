@@ -1,6 +1,6 @@
 <?php
 /**
-* バリデータ設定例外
+* exception caused by invalid encoding type
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_InvalidEncodingCodeException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $code, Exception $previous = NULL )
+	public function __construct( $encoding, $prev = NULL )
 	{
-		$msg = "Invalid encoding code[" . us($code) . "]";
-
-		if ( $previous ) parent::__construct( s($msg), $previous ); else parent::__construct( s($msg) );
+		 parent::__construct( "Invalid encoding type: $encoding", $prev );
 	}
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* PHPソースパーサ例外
+* exception caused by PHP source parser
 *
 * PHP version 5
 *
@@ -12,11 +12,9 @@
 
 class Charcoal_PhpSourceParserException extends Charcoal_RuntimeException 
 {
-	public function __construct( Charcoal_Integer $err_code, Charcoal_String $message, Exception $previous = NULL )
+	public function __construct( $err_code, $message, Exception $prev = NULL )
 	{
-		$msg = "[code]$err_code [message]$message";
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "[code]$err_code [message]$message", $prev );
 	}
 
 }

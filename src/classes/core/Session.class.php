@@ -18,10 +18,12 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function __construct()
 	{
+		parent::__construct();
+
 		$this->_data = array();
 
 //		$req_path = Charcoal_Framework::getRequestPath();
-//		log_info( "debug, session", "session", "request_path=" . $req_path );
+//		log_info( "debug, session", "request_path=" . $req_path );
 	}
 
 	/*
@@ -65,7 +67,7 @@ class Charcoal_Session extends Charcoal_Object
 	{
 		$this->_data = array();
 
-//		log_info( "debug, session", "session", "clear()" );
+//		log_info( "debug, session", "clear()" );
 	}
 
 	/*
@@ -79,7 +81,7 @@ class Charcoal_Session extends Charcoal_Object
 
 //		$new_id = session_id();
 
-//		log_info( "debug, session", "session", "regenerateID() old=$old_id new=$new_id result=" . ($result ? "TRUE" : "FALSE") );
+//		log_info( "debug, session", "regenerateID() old=$old_id new=$new_id result=" . ($result ? "TRUE" : "FALSE") );
 	}
 
 	/*
@@ -142,7 +144,7 @@ class Charcoal_Session extends Charcoal_Object
 //		session_cache_limiter('nocache');
 		session_start();
 
-//		log_info( "debug, session", "session", "start() session_id=" . session_id() . " IP=" . $_SERVER["REMOTE_ADDR"] );
+//		log_info( "debug, session", "start() session_id=" . session_id() . " IP=" . $_SERVER["REMOTE_ADDR"] );
 	}
 
 	/**
@@ -152,7 +154,7 @@ class Charcoal_Session extends Charcoal_Object
 	{
 		session_write_close();
 
-//		log_info( "debug, session", "session", "close()" );
+//		log_info( "debug, session", "close()" );
 	}
 
 	/*
@@ -164,7 +166,7 @@ class Charcoal_Session extends Charcoal_Object
 		session_unset();
 		session_destroy();
 
-//		log_info( "debug, session", "session", "destroy()" );
+//		log_info( "debug, session", "destroy()" );
 	}
 
 	/**
@@ -172,14 +174,14 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function restore()
 	{
-//		log_info( "debug, session", "session", "restore() start" );
-//		log_info( "debug, session", "session", "_SESSION:" . print_r($_SESSION,true) );
-//		log_info( "debug, session", "session", "this->_data:" . print_r($this->_data,true) );
+//		log_info( "debug, session", "restore() start" );
+//		log_info( "debug, session", "_SESSION:" . print_r($_SESSION,true) );
+//		log_info( "debug, session", "this->_data:" . print_r($this->_data,true) );
 
 		// 配列の初期化
 		$this->clear();
 
-		log_info( "debug, session", "session", "_SESSION:" . print_r($_SESSION,true) );
+		log_info( "debug, session", "_SESSION:" . print_r($_SESSION,true) );
 
 		// 各配列の値をデシリアライズ
 		$keys = array_keys( $_SESSION );
@@ -187,13 +189,13 @@ class Charcoal_Session extends Charcoal_Object
 			foreach( $keys as $key ){
 				$value = unserialize( $_SESSION[$key] );
 				$this->set( s($key), $value );
-				log_info( "debug, session", "session", "[$key]=" . print_r($value,true) );
+				log_info( "debug, session", "[$key]=" . print_r($value,true) );
 			}
 		}
 
 
-		log_info( "debug, session", "session", "restored :" . print_r($this->_data,true) );
-//		log_info( "debug, session", "session", "restore() end" );
+		log_info( "debug, session", "restored :" . print_r($this->_data,true) );
+//		log_info( "debug, session", "restore() end" );
 	}
 
 	/**
@@ -201,31 +203,22 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function save()
 	{
-//		log_info( "debug, session", "session", 'save() start' );
+//		log_info( "debug, session", 'save() start' );
 
 		// 初期化しておく
 		$_SESSION = array();
 
 		$keys = $this->getKeys();
-//		log_info( "debug, session", "session", "keys:" . print_r($keys,true) );
+//		log_info( "debug, session", "keys:" . print_r($keys,true) );
 
 		// メモリ上に設定されたキーの値をシリアライズ
 		foreach( $keys as $key ){
 			$value = $this->get( s($key) );
 			$_SESSION[ $key ] = serialize($value);
-//			log_info( "debug, session", "session", "[$key]=" . print_r($value,true) );
+//			log_info( "debug, session", "[$key]=" . print_r($value,true) );
 		}
 
-//		log_info( "debug, session", "session", 'save() end' );
+//		log_info( "debug, session", 'save() end' );
 	}
 
-	/*
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return Charcoal_System::arrayToString( $this->_data );
-	}
 }

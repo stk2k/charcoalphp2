@@ -11,10 +11,13 @@
 
 class Charcoal_SmartGatewaySessionHandler extends Charcoal_CharcoalObject implements Charcoal_ISessionHandler
 {
-	static $gw;
+	private $gw;
+	private $target;
+	private $save_path;
+	private $session_name;
 
-	/*
-	 *	コンストラクタ
+	/**
+	 *	constructor 
 	 */
 	public function __construct()
 	{
@@ -28,74 +31,100 @@ class Charcoal_SmartGatewaySessionHandler extends Charcoal_CharcoalObject implem
 	 */
 	public function configure( Charcoal_Config $config )
 	{
-		self::$gw = new Charcoal_SmartGateway();
+		parent::configure( $config );
+
+		$this->target = $config->getString( s('target'), s('session') );
+
+		$this->gw = Charcoal_DIContainer::getComponent( s('smart_gateway@:charcoal:db') );
 	}
 
 	/**
-	 * コールバック関数：オープン
+	 * open session
 	 */
-	public static function open( $save_path, $session_name )
+	public function open( $save_path, $session_name )
+	{
+		$this->save_path = $save_path;
+		$this->session_name = $session_name;
+		return true;
+	}
+
+	/**
+	 * close session
+	 */
+	public function close()
 	{
 		return true;
 	}
 
 	/**
-	 * コールバック関数：クローズ
+	 * read session data
 	 */
-	public static function close()
-	{
-		return true;
-	}
-
-	/**
-	 * コールバック関数：読み取り
-	 */
-	public static function read( $id )
+	public function read( $id )
 	{
 		$criteria = new Charcoal_SQLCriteria( s('session_id = ?'), v(array($id)) );
 
-		$session_dto = self::$gw->findFirst( s('session'), $criteria );
+		$dto = $this->gw->findFirst( qt($this->target), $criteria );
 
-		$contents = $session_dto['session_data'];
-
-		return $contents;
+		return $dto ? $dto->session_data : NULL;
 	}
 
 	/**
-	 * コールバック関数：書き込み
+	 * write session data
 	 */
-	public static function write( $id, $sess_data )
+	public function write( $id, $sess_data )
 	{
 		$criteria = new Charcoal_SQLCriteria( s('session_id = ?'), v(array($id)) );
 
-		$dto = self::$gw->findFirst( s('session'), $criteria );
+		$dto = $this->gw->findFirst( qt($this->target), $criteria );
 
 		if ( !$dto ){
-			$dto = new SessionDTO();
+			$dto = new Charcoal_SessionTableDTO();
 			$dto->session_id = $id;
+			$dto->save_path = $this->save_path;
+			$dto->session_name = $this->session_name;
 		}
 		$dto->session_data = $sess_data;
 
-		self::$gw->save( s('session'), $dto );
+		try{
+			$this->gw->beginTrans();
+
+			$this->gw->save( s($this->target), $dto );
+
+			$this->gw->commitTrans();
+		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+
+			$this->gw->rollbackTrans();
+
+			_throw( new Charcoal_SessionHandlerException( 'write failed', $ex ) );
+		}
 
 		return true;
 	}
 
 	/**
-	 * コールバック関数：破棄
+	 * destroy session
 	 */
-	public static function destroy( $id )
+	public function destroy( $id )
 	{
-		self::$gw->destroyById( s('session'), s($id) );
+		$this->gw->destroyById( s($this->target), i($id) );
 
 		return true;
 	}
 
 	/**
-	 * コールバック関数：ガベージコレクション
+	 * garbage collection
 	 */
-	public static function gc( $max_lifetime )
+	public function gc( $max_lifetime )
 	{
+		$time_diff = date('h:i:s',strtotime($max_lifetime.'seconds'));
+
+		$criteria = new Charcoal_SQLCriteria( s('modified < ADDTIME(NOW(),?)'), v(array($time_diff)) );
+
+		$this->gw->destroyAll( s($this->target), $criteria );
+
 		return true;
 	}
 

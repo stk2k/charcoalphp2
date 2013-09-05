@@ -1,6 +1,6 @@
 <?php
 /**
-* プロシージャ例外
+* exception caused by failure in finding procudure
 *
 * PHP version 5
 *
@@ -11,11 +11,9 @@
 
 class Charcoal_ProcedureNotFoundException extends Charcoal_ConfigException
 {
-	public function __construct( Charcoal_String $proc_path, Exception $prev = NULL )
+	public function __construct( Charcoal_String $proc_path, $prev = NULL )
 	{
-		$msg  = "Procedure Not Found: [$proc_path].";
-
-		if ( $prev ) parent::__construct( s($msg), $prev ); else parent::__construct( s($msg) );
+		parent::__construct( "Procedure Not Found: [$proc_path].", $prev );
 	}
 }
 

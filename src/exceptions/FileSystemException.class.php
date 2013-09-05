@@ -1,6 +1,6 @@
 <?php
 /**
-* ファイルシステム例外
+* Exception caused by failure in manipulating file
 *
 * PHP version 5
 *
@@ -11,14 +11,9 @@
 
 class Charcoal_FileSystemException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $operation, Charcoal_String $reason = NULL, Exception $previous = NULL )
+	public function __construct( $operation, $reason = NULL, $prev = NULL )
 	{
-		$msg = " [operation]$operation";
-		if ( $reason ){
-			$msg .= "  [reason]$reason";
-		}
-
-		if ( $previous === NULL ) parent::__construct( s($msg) ); else parent::__construct( s($msg), $previous );
+		parent::__construct( "file system operation failed: [operation]$operation [reason]$reason", $prev );
 	}
 }
 

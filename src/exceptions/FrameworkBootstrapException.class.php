@@ -1,6 +1,6 @@
 <?php
 /**
-* XML描画例外
+* exception caused by failure in bootstrap of framework
 *
 * PHP version 5
 *
@@ -11,9 +11,5 @@
 
 class Charcoal_FrameworkBootstrapException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $msg, Exception $prev = NULL )
-	{
-		if ( $prev ) parent::__construct( $msg, $prev ); else parent::__construct( $msg );
-	}
 }
 

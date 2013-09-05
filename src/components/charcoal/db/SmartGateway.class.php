@@ -144,7 +144,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBAutoCommitException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBAutoCommitException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -162,7 +162,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBBeginTransactionException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBBeginTransactionException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -180,7 +180,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBCommitTransactionException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBCommitTransactionException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -198,7 +198,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBRollbackTransactionException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBRollbackTransactionException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -228,7 +228,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -276,7 +276,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -297,7 +297,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$field = us($field);
 
 			// アノテーションオーバーライド
-			$override[$field]['update'] = new Charcoal_AnnotationValue( $model, s('update'), s('function'), v(array('now')) );
+			$override[$field]['update'] = new Charcoal_AnnotationValue( s('update'), s('function'), v(array('now')) );
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "override:" . print_r($override,true) );
 
@@ -320,7 +320,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -368,7 +368,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -414,7 +414,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -486,7 +486,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -507,7 +507,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e ) 
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -541,7 +541,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e ) 
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -573,7 +573,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e ) 
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -686,7 +686,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e ) 
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 
 		return $ret_val;
@@ -716,7 +716,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -745,7 +745,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -775,7 +775,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -806,7 +806,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -838,7 +838,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -876,7 +876,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -910,7 +910,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -952,7 +952,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -992,7 +992,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1017,7 +1017,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1054,7 +1054,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1109,7 +1109,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1135,7 +1135,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1157,7 +1157,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1179,7 +1179,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1201,7 +1201,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1223,7 +1223,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1246,7 +1246,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1269,7 +1269,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1297,7 +1297,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 
@@ -1325,7 +1325,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		catch ( Exception $e )
 		{
 			_catch( $e );
-			_throw( new Charcoal_DBException( s(__METHOD__." Failed."), $e ) );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
 	}
 

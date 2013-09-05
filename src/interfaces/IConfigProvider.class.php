@@ -1,6 +1,6 @@
 <?php
 /**
-* 設定を定義するインターフェース
+* interface of config provider
 *
 * PHP version 5
 *
@@ -11,19 +11,22 @@
 
 interface Charcoal_IConfigProvider
 {
-	/*
-	 *　設定プロバイダにオプションをセット
+	/**
+	 * set options
+	 *
+	 * @param Charcoal_Properties $options   option set to apply
 	 */
 	public function setOptions( Charcoal_Properties $options );
 
-	/*
-	 *　設定を名前でロード
+	/**
+	 *  load config
+	 *
+	 * @param  Charcoal_String $config_root   root name
+	 * @param  Charcoal_String $config_name   config name
+	 *
+	 * @return mixed   configure data
 	 */
-	public function loadConfigByName( 
-						Charcoal_String $config_root, 
-						Charcoal_String $config_name, 
-						Charcoal_Config& $config
-					);
+	public function loadConfig( Charcoal_String $config_root, Charcoal_String $config_name );
 
 }
 
