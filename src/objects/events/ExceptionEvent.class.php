@@ -11,5 +11,22 @@
 
 class Charcoal_ExceptionEvent extends Charcoal_SystemEvent 
 {
+	private $exception;
+
+	public function __construct( $exception )
+	{
+		$this->exception = $exception;
+
+		parent::__construct();
+	}
+
+	/**
+	 *  get exception
+	 */
+	public function getException()
+	{
+		return $this->exception;
+	}
+
 }
 

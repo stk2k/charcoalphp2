@@ -11,7 +11,7 @@
 
 class Charcoal_ComponentConfigException extends Charcoal_ConfigException
 {
-	public function __construct( $entry, $message = NULL, Exception $previous = NULL )
+	public function __construct( $entry, $message = NULL, $prev = NULL )
 	{
 		parent::__construct( "[entry]$entry [message]$message", $prev );
 	}

@@ -26,7 +26,7 @@ class Charcoal_File extends Charcoal_Object
 
 		parent::__construct();
 
-		$path = $parent ? $parent->getPath() . DIRECTORY_SEPARATOR . $file_name : $file_name;
+		$path = $parent ? $parent->getPath() . '/' . $file_name : $file_name;
 
 		while( stripos($path,'//') !== FALSE ){
 			$path = str_replace('//','/',$path);
@@ -265,14 +265,18 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Create file
 	 *
-	 * @param Charcoal_String $mode File mode
-	 * @param Charcoal_String $contents File contents
-	 * @param Charcoal_Boolean $drilldown If TRUE, all of parent directory may be created automatically.
+	 * @param string $mode File mode
+	 * @param string $contents File contents
+	 * @param bool $drilldown If TRUE, all of parent directory may be created automatically.
 	 *
 	 * @return void
 	 */
 	public function makeFile( $mode, $contents, $drilldown = TRUE )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $mode );
+//		Charcoal_ParamTrait::checkString( 2, $contents );
+//		Charcoal_ParamTrait::checkBool( 3, $drilldown );
+
 		$parent_dir = $this->getDir();
 
 		$parent_dir->makeDirectory( $mode, $drilldown );
@@ -288,13 +292,16 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Create empty directory
 	 *
-	 * @param Charcoal_String $mode File mode
-	 * @param Charcoal_Boolean $drilldown If TRUE, all of parent directory may be created automatically.
+	 * @param string $mode File mode
+	 * @param bool $drilldown If TRUE, all of parent directory may be created automatically.
 	 *
 	 * @return void
 	 */
-	public function makeDirectory( Charcoal_String $mode, $drilldown = TRUE )
+	public function makeDirectory( $mode, $drilldown = TRUE )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $mode );
+//		Charcoal_ParamTrait::checkBool( 2, $drilldown );
+
 		$path = $this->_path;
 
 		if ( file_exists($path) )	return;

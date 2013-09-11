@@ -37,7 +37,7 @@ abstract class CommandTaskBase extends Charcoal_Task
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$request   = $context->getRequest();
 //		$response  = $context->getResponse();

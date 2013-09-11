@@ -49,7 +49,7 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	/*
 	 *    自動コミット機能をON/OFF
 	 */
-	public function autoCommit( Charcoal_Boolean $onoff = NULL );
+	public function autoCommit( $on );
 
 	/*
 	 *    トランザクションを開始
@@ -84,17 +84,17 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	/*
 	 *    SQLをそのまま発行（結果セットあり）
 	 */
-	public function query( Charcoal_String $sql );
+	public function query( $sql );
 
 	/*
 	 *    SQLをそのまま発行（結果セットなし）
 	 */
-	public function execute( Charcoal_String $sql );
+	public function execute( $sql );
 
 	/*
 	 *    プリペアドステートメントの発行
 	 */
-	public function prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL );
+	public function prepareExecute( $sql, $params = NULL );
 
 	/*
 	 *    実行結果件数取得

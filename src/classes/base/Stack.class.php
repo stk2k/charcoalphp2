@@ -25,6 +25,16 @@ class Charcoal_Stack extends Charcoal_Object
 		$this->_data = $data->reverse();
 	}
 
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
+	 */
+	public function getAll()
+	{
+		return $this->_data->getAll();
+	}
+
 	/*
 	 *	先頭の要素を取得
 	 */
@@ -82,7 +92,9 @@ class Charcoal_Stack extends Charcoal_Object
 	{
 		Charcoal_ParamTrait::checkObject( 1, $item );
 
-		return $this->_data->add( $item );
+		$ret = $this->_data->add( $item );
+
+		return $ret;
 	}
 
 	/*
@@ -94,6 +106,7 @@ class Charcoal_Stack extends Charcoal_Object
 		if ( !$tail ){
 			_throw( new Charcoal_EmptyStackException( $this ) );
 		}
+
 		return $tail;
 	}
 

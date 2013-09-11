@@ -46,13 +46,26 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	{
 		parent::configure( $config );
 
-		$this->backend   = $config->getString( s('backend'), s('') );
-		$this->user      = $config->getString( s('user'), s('') );
-		$this->password  = $config->getString( s('password'), s('') );
-		$this->db_name   = $config->getString( s('db_name'), s('') );
-		$this->server    = $config->getString( s('server'), s('') );
-		$this->charset   = $config->getString( s('charset'), s('') );
-		$this->autocommit = $config->getBoolean( s('autocommit'), b(FALSE) );
+		$this->backend   = $config->getString( 'backend' );
+		$this->user      = $config->getString( 'user' );
+		$this->password  = $config->getString( 'password' );
+		$this->db_name   = $config->getString( 'db_name' );
+		$this->server    = $config->getString( 'server' );
+		$this->charset   = $config->getString( 'charset' );
+		$this->autocommit = $config->getBoolean( 'autocommit', FALSE );
+
+		if ( strlen($this->backend) === 0 ){
+			_throw( new Charcoal_ComponentConfigException( 'backend', 'mandatory' ) );
+		}
+		if ( strlen($this->user) === 0 ){
+			_throw( new Charcoal_ComponentConfigException( 'user', 'mandatory' ) );
+		}
+		if ( strlen($this->db_name) === 0 ){
+			_throw( new Charcoal_ComponentConfigException( 'db_name', 'mandatory' ) );
+		}
+		if ( strlen($this->server) === 0 ){
+			_throw( new Charcoal_ComponentConfigException( 'server', 'mandatory' ) );
+		}
 /*
 		log_debug( "data_source", "data_source", "[PearDbDataSource]backend=" . $this->backend );
 		log_debug( "data_source", "data_source", "[PearDbDataSource]user=" . $this->user );
@@ -123,17 +136,15 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	/*
 	 *    自動コミット機能をON/OFF
 	 */
-	public function autoCommit( Charcoal_Boolean $onoff = NULL )
+	public function autoCommit( $on )
 	{
-		if ( $onoff === NULL ){
-			$onoff = b(TRUE);
-		}
-
 		try {
+			Charcoal_ParamTrait::checkBoolean( 1, $on );
+
 			// 接続処理
 			$this->connect();
 
-			$this->connection->setAttribute( PDO::ATTRautocommit, $onoff->isTrue() );
+			$this->connection->setAttribute( PDO::ATTRautocommit, $on );
 			
 		}
 		catch ( Exception $e )
@@ -321,14 +332,16 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	/*
 	 *    プリペアドステートメントの発行
 	 */
-	private function _prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
+	private function _prepareExecute( $sql, $params = NULL )
 	{
-		Charcoal_Benchmark::start();
+		Charcoal_ParamTrait::checkString( 1, $sql );
+		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
+
+		Charcoal_Benchmark::start( 'charcoal.data_sources.pdo' );
 
 		$command_id = $this->command_id++;
 
-		$sql = $sql->getValue();
-		$params_disp = $params ? $params->join(s(','),b(TRUE)) :'';
+		$params_disp = $params ? $params->join( ',' , TRUE ) :'';
 
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$sql" );
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [params]$params_disp" );
@@ -367,7 +380,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id ...success(numRows=$numRows)" );
 
 		// ログ
-		$elapse = Charcoal_Benchmark::stop();
+		$elapse = Charcoal_Benchmark::stop( 'charcoal.data_sources.pdo' );
 		log_debug( 'data_source,sql,debug', "data_source", "[ID]$command_id prepareExecute() end. time=[$elapse]msec.");
 
 		return $stmt;
@@ -376,8 +389,10 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	/*
 	 *    SQLをそのまま発行
 	 */
-	private function _query( Charcoal_String $sql )
+	private function _query( $sql )
 	{
+		Charcoal_ParamTrait::checkString( 1, $sql );
+
 		$sql = $sql->getValue();
 
 //		log_info( "sql", "data_source", $sql );
@@ -390,8 +405,10 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	/*
 	 *    SQLをそのまま発行（結果セットあり）
 	 */
-	public function query( Charcoal_String $sql )
+	public function query( $sql )
 	{
+		Charcoal_ParamTrait::checkString( 1, $sql );
+
 		// 接続処理
 		$this->connect();
 
@@ -405,8 +422,10 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	/*
 	 *    SQLをそのまま発行（結果セットなし）
 	 */
-	public function execute( Charcoal_String $sql )
+	public function execute( $sql )
 	{
+		Charcoal_ParamTrait::checkString( 1, $sql );
+
 		// 接続処理
 		$this->connect();
 
@@ -417,14 +436,17 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	/*
 	 *    プリペアドステートメントの発行
 	 */
-	public function prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
+	public function prepareExecute( $sql, $params = NULL )
 	{
-		$result = null;
-
-		// 接続処理
-		$this->connect();
-		
 		try {
+			Charcoal_ParamTrait::checkString( 1, $sql );
+			Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
+
+			$result = null;
+
+			// 接続処理
+			$this->connect();
+			
 			// statementの実行
 			$result = $this->_prepareExecute( $sql, $params );
 		}
@@ -433,7 +455,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			_catch( $e );
 
 			$msg  = 'PearDbDataSource#prepareExecute() failed:';
-			$msg .= ' [SQL]' . $sql->getValue();
+			$msg .= ' [SQL]' . $sql;
 			$msg .= ' [params]' . ($params ? $params->join(s(','),b(TRUE)) : '');
 
 			_throw( new Charcoal_DBDataSourceException( $msg, $e ) );

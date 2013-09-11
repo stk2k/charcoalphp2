@@ -41,14 +41,11 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 	{
 		parent::configure( $config );
 
-		$this->_task_manager        = $config->getString( s('task_manager'), s('') );
-		$this->_forward_target      = $config->getString( s('forward_target'), s('') );
-		$this->_modules             = $config->getArray( s('modules'), v(array()) );
-		$this->_events              = $config->getArray( s('events'), v(array()) );
-		$this->_debug_mode          = $config->getBoolean( s('debug_mode'), b(FALSE) );
-
-		$layout_manager      = $config->getString( s('layout_manager'), s('') );
-		$this->setLayoutManager( s($layout_manager) );
+		$this->_task_manager        = $config->getString( 'task_manager', '' );
+		$this->_forward_target      = $config->getString( 'forward_target', '' );
+		$this->_modules             = $config->getArray( 'modules', array() );
+		$this->_events              = $config->getArray( 'events', array() );
+		$this->_debug_mode          = $config->getBoolean( 'debug_mode', FALSE );
 
 		// eventsに記載しているイベントのモジュールも読み込む
 		if ( $this->_events ){
@@ -61,11 +58,14 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 			}
 		}
 
-		log_info( "system,config",  "task_manager：" . $this->_task_manager );
-		log_info( "system,config",  "forward_target：" . $this->_forward_target );
-		log_info( "system,config",  "modules：" . $this->_modules );
-		log_info( "system,config",  "events：" . $this->_events );
-		log_info( "system,config",  "_debug_mod：" . $this->_debug_mode );
+		if ( $this->getSandbox()->isDebug() )
+		{
+			log_info( "system,config",  "task_manager：" . $this->_task_manager );
+			log_info( "system,config",  "forward_target：" . $this->_forward_target );
+			log_info( "system,config",  "modules：" . $this->_modules );
+			log_info( "system,config",  "events：" . $this->_events );
+			log_info( "system,config",  "_debug_mod：" . $this->_debug_mode );
+		}
 	}
 
 	/*
@@ -79,11 +79,9 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 	/*
 	 * レイアウトマネージャを設定
 	 */
-	public function setLayoutManager( Charcoal_String $layout_manager )
+	public function setLayoutManager( $layout_manager )
 	{
-		if ( !$layout_manager->isEmpty() ){
-			$this->_layout_manager = $this->getSandbox()->CreateObject( $layout_manager, 'layout_manager' );
-		}
+		$this->_layout_manager = $this->getSandbox()->CreateObject( $layout_manager, 'layout_manager' );
 	}
 
 	/*
@@ -91,7 +89,7 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function hasForwardTarget()
 	{
-		return !$this->_forward_target->isEmpty();
+		return strlen($this->_forward_target) > 0;
 	}
 
 	/*
@@ -133,10 +131,10 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 		if ( $this->_modules ) {
 			log_info( "system",  '追加モジュールを読み込みます。' );
 
-			foreach( $this->_modules as $module ) {
+			foreach( $this->_modules as $module_name ) {
 				if ( strlen($module_name) === 0 )    continue;
 				// モジュールのロード
-				Charcoal_ModuleLoader::loadModule( $module, $task_manager );
+				Charcoal_ModuleLoader::loadModule( $module_name, $task_manager );
 			}
 	
 			log_info( "system",  '追加モジュールを読み込みました。' );
@@ -146,11 +144,7 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 		// modules以下にクラスファイルがあればロードする
 		//
 
-		$module_path = $proc_path->getVirtualPath();
-		$module_path = new Charcoal_ObjectPath( s("@{$module_path}") );
-		log_info( "system",  'modules以下のモジュールを読み込みます。モジュールパス:' . $module_path );
-		Charcoal_ModuleLoader::loadModule( $module_path, $task_manager );
-		log_info( "system",  'modules以下のモジュールを読み込みました。' );
+		Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $proc_path, $task_manager );
 
 /*
 		log_info( "system",  'modules以下のモジュールを読み込みます。モジュールパス:' . $proc_path );
@@ -165,7 +159,7 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 //		log_info( "system,debug,event", 'creating reqyest event.', 'event' );
 
 		// create request event
-		$event = Charcoal_Factory::createEvent( 'request', array($request) );
+		$event = $this->getSandbox()->createEvent( 'request', array($request) );
 		$task_manager->pushEvent( $event );
 
 //		log_info( "system,debug,event", 'pushed reqyest event to the event queue.', 'event' );
@@ -180,13 +174,11 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 		if ( $this->_events ) {
 			foreach( $this->_events as $event_name ) {
 
-				// ユーザイベントを作成
+				if ( strlen($event_name) === 0 )    continue;
+
 				$event = $this->getSandbox()->createEvent( $event_name );
 
-				// ユーザイベントの追加
 				$event_list[] = $event;
-
-				log_info( "system,event",  "ユーザイベント[$event_name]を追加しました。" );
 			}
 		}
 
@@ -205,7 +197,7 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 
 		log_info( "system", "タスクマネージャによるイベント処理を開始します。" );
 
-		$context = new Charcoal_EventContext();
+		$context = new Charcoal_EventContext( $this->getSandbox() );
 
 		$context->setProcedure( $this );
 		$context->setRequest( $request );
@@ -225,5 +217,6 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 
 		log_info( "system", "プロシージャ[$proc_name]を実行しました。" );
 	}
+
 }
 

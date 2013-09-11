@@ -2,6 +2,4 @@
 
 PROC_PATH="@:shell"
 
-echo $ACTIONS
-
-php index.php -proc $PROC_PATH -actions $1
+php shell.php -proc $PROC_PATH -action "$1"

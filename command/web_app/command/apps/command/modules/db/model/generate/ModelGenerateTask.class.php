@@ -33,40 +33,44 @@ class ModelGenerateTask extends Charcoal_Task
 	/**
 	 * イベントを処理する
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$request   = $context->getRequest();
 		$response  = $context->getResponse();
 		$sequence  = $context->getSequence();
 		$procedure = $context->getProcedure();
 
+		$space_count = 30;
+
 		// パラメータを取得
-		$table       = $request->get( s("table") );
-		$entity      = $request->get( s("entity") );
-		$space_count = $request->getInteger( s("space_count"), i(30) );
+		$table         = $request->getString( 'p2' );
+		$out_dir       = $request->getString( 'p3' );
 
-		if ( strlen($entity) === 0 ){
-			$entity  = $table;
-		}
+		$entity = $table;
 
-		$config_key = strtolower($entity);
-
-		$entity = str_replace('_',' ',$config_key);
-		$entity = ucwords($entity);
-		$entity = str_replace(' ','',$entity);
+		$entity = Charcoal_System::pascalCase( $table );
+		$config_key = Charcoal_System::snakeCase( $table );
 
 		$table_model_class_name = "{$entity}TableModel";
 		$table_dto_class_name = "{$entity}TableDTO";
 		$date_now_y = date("Y");
 
 		// SmartGateway
-		$gw = $context->getComponent( s('smart_gateway@:charcoal:db') );
+		$gw = $context->getComponent( 'smart_gateway@:charcoal:db' );
+
+		// output directory
+		if ( !$out_dir ){
+			$out_dir = Charcoal_ResourceLocator::getFrameworkPath( 'tmp' );
+		}
+		$out_dir = new Charcoal_File( $out_dir );
+
+		$out_dir->makeDirectory( '666', TRUE );
 
 		//=======================================
 		// Genarate  table model file
 		//=======================================
 
-		$colmn_attr_list = $gw->query( s("SHOW COLUMNS FROM " . $table) );
+		$colmn_attr_list = $gw->query( 'SHOW COLUMNS FROM ' . $table );
 
 		$lines = NULL;
 
@@ -95,7 +99,7 @@ class ModelGenerateTask extends Charcoal_Task
 			$default   = $colmn_attr['Default'];
 			$extra     = $colmn_attr['Extra'];
 
-			$spaces = str_repeat( " ", intval(ui($space_count)) - strlen($field) );
+			$spaces = str_repeat( " ", $space_count - strlen($field) );
 
 			if ( $key == "PRI" ){
 				$lines[] = "    public \${$field}{$spaces}= '@field @type:$type @pk @insert:no @update:no @serial';";
@@ -117,9 +121,10 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = "return __FILE__;	// end of file";
 
 		$file_name = $table_model_class_name . ".class.php";
-		$this->outputFile( new Charcoal_File(s($file_name)), $lines );
+		$outfile = new Charcoal_File( $file_name, $out_dir );
+		$this->outputFile( $outfile, $lines );
 
-		print "{$file_name} was successfully generated." . PHP_EOL;
+		print "{$outfile} was successfully generated." . PHP_EOL;
 
 		//=======================================
 		// Genarate table DTO file
@@ -158,9 +163,10 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = "return __FILE__;	// end of file";
 
 		$file_name = $table_dto_class_name . ".class.php";
-		$this->outputFile( new Charcoal_File(s($file_name)), $lines );
+		$outfile = new Charcoal_File( $file_name, $out_dir );
+		$this->outputFile( $outfile, $lines );
 
-		print "{$file_name} was successfully generated." . PHP_EOL;
+		print "{$outfile} was successfully generated." . PHP_EOL;
 
 		//=======================================
 		// Genarate  config file
@@ -171,9 +177,10 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = "class_name	= {$table_model_class_name}";
 
 		$file_name = $config_key . ".table_model.ini";
-		$this->outputFile( new Charcoal_File(s($file_name)), $lines );
+		$outfile = new Charcoal_File( $file_name, $out_dir );
+		$this->outputFile( $outfile, $lines );
 
-		print "{$file_name} was successfully generated." . PHP_EOL;
+		print "{$outfile} was successfully generated." . PHP_EOL;
 
 		return b(true);
 	}

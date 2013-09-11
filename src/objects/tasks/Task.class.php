@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask, Charcoal_IExceptionHandler
+abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask
 {
 	const TAG = "Task";
 
@@ -44,7 +44,7 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 
 		$this->_name_space         = $config->getString( 'name_space', '' );
 		$this->_event_filters      = $config->getArray( 'event_filters', array() );
-		$this->_post_actions       = $config->getArray( 'post_actions', array() );
+		$this->_post_actions       = $config->getArray( 'post_actions', array('remove_task', 'remove_event') );
 		$this->_priority           = $config->getInteger( 'priority', 0 );
 
 		if ( $this->getSandbox()->isDebug() )

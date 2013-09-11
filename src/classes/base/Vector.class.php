@@ -11,7 +11,7 @@
 
 class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAccess, Countable
 {
-	private $_value;
+	private $_values;
 
 	/*
 	 *	コンストラクタ
@@ -22,18 +22,28 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 
 		if ( $value ){
 			if ( $value instanceof Charcoal_Vector ){
-				$this->_value = $value->unbox();
+				$this->_values = $value->unbox();
 			}
 			else if ( is_array($value) ){
-				$this->_value = $value;
+				$this->_values = $value;
 			}
 			else{
 				_throw( new Charcoal_NonArrayException( $value ) );
 			}
 		}
 		else{
-			$this->_value = array();
+			$this->_values = array();
 		}
+	}
+
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
+	 */
+	public function getAll()
+	{
+		return $this->_values;
 	}
 
     /**
@@ -41,21 +51,21 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
      */
     public function unbox()
     {
-        return $this->_value;
+        return $this->_values;
     }
 
 	/*
 	 *	Iteratorインタフェース:rewidの実装
 	 */
 	public function rewind() {
-		reset($this->_value);
+		reset($this->_values);
 	}
 
 	/*
 	 *	Iteratorインタフェース:currentの実装
 	 */
 	public function current() {
-		$var = current($this->_value);
+		$var = current($this->_values);
 		return $var;
 	}
 
@@ -63,7 +73,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 *	Iteratorインタフェース:keyの実装
 	 */
 	public function key() {
-		$var = key($this->_value);
+		$var = key($this->_values);
 		return $var;
 	}
 
@@ -71,7 +81,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 *	Iteratorインタフェース:nextの実装
 	 */
 	public function next() {
-		$var = next($this->_value);
+		$var = next($this->_values);
 		return $var;
 	}
 
@@ -88,9 +98,9 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function getHead()
 	{
-		$cnt = count( $this->_value );
+		$cnt = count( $this->_values );
 		if ( $cnt > 0 ){
-			return $this->_value[ 0 ];
+			return $this->_values[ 0 ];
 		}
 		return NULL;
 	}
@@ -100,9 +110,9 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function getTail()
 	{
-		$cnt = count( $this->_value );
+		$cnt = count( $this->_values );
 		if ( $cnt > 0 ){
-			return $this->_value[ $cnt - 1 ];
+			return $this->_values[ $cnt - 1 ];
 		}
 		return NULL;
 	}
@@ -113,7 +123,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function removeTail()
 	{
-		return array_pop( $this->_value );
+		return array_pop( $this->_values );
 	}
 
 	/*
@@ -121,7 +131,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function removeHead()
 	{
-		return array_shift( $this->_value );
+		return array_shift( $this->_values );
 	}
 
 	/*
@@ -135,7 +145,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		$index  = $index->getValue();
 		$length = $length->getValue();
 
-		return array_splice ( $this->_value, $index, $length );
+		return array_splice ( $this->_values, $index, $length );
 	}
 
 	/**
@@ -145,7 +155,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function isEmpty()
 	{
-		return count( $this->_value ) === 0;
+		return count( $this->_values ) === 0;
 	}
 
 	/*
@@ -153,7 +163,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function flip()
 	{
-		return array_flip( $this->_value );
+		return array_flip( $this->_values );
 	}
 
 	/*
@@ -161,7 +171,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function add( $item )
 	{
-		$new_array_cnt = array_push( $this->_value, $item );
+		$new_array_cnt = array_push( $this->_values, $item );
 
 		return $new_array_cnt;
 	}
@@ -172,10 +182,10 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	public function addAll( Charcoal_Vector $items )
 	{
 		foreach( $items as $item ){
-			array_push( $this->_value, $item );
+			array_push( $this->_values, $item );
 		}
 
-		return count($this->_value);
+		return count($this->_values);
 	}
 
 	/*
@@ -183,7 +193,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function getValue()
 	{
-		return $this->_value;
+		return $this->_values;
 	}
 
 	/*
@@ -191,7 +201,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	protected function setValue( array $value )
 	{
-		$this->_value = $value;
+		$this->_values = $value;
 	}
 
 	/*
@@ -200,7 +210,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	public function get( Charcoal_Integer $index )
 	{
 		$index = $index->getValue();
-		return isset($this->_value[$index]) ? $this->_value[$index] : NULL;
+		return isset($this->_values[$index]) ? $this->_values[$index] : NULL;
 	}
 
 	/*
@@ -209,7 +219,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	public function set( Charcoal_Integer $index, $value )
 	{
 		$index = $index->getValue();
-		$this->_value[$index] = $value;
+		$this->_values[$index] = $value;
 	}
 
 	/*
@@ -217,7 +227,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function __get( $name )
 	{
-		$data =  isset($this->_value[ $name ]) ? $this->_value[ $name ] : NULL;
+		$data =  isset($this->_values[ $name ]) ? $this->_values[ $name ] : NULL;
 		return $data;
 	}
 
@@ -226,7 +236,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function __set( $name, $value )
 	{
-		$this->_value[ $name ] = $value;
+		$this->_values[ $name ] = $value;
 	}
 
 	/*
@@ -237,7 +247,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		if ( $offset instanceof Charcoal_Object ){
 			$offset = us( $offset );
 		}
-		return isset($this->_value[ $offset ]) ? $this->_value[ $offset ] : NULL;
+		return isset($this->_values[ $offset ]) ? $this->_values[ $offset ] : NULL;
 	}
 
 	/*
@@ -248,7 +258,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		if ( $offset instanceof Charcoal_Object ){
 			$offset = us( $offset );
 		}
-		$this->_value[ $offset ] = $value;
+		$this->_values[ $offset ] = $value;
 	}
 
 	/*
@@ -259,7 +269,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		if ( $offset instanceof Charcoal_Object ){
 			$offset = $offset->s();
 		}
-		return isset($this->_value[$offset]);
+		return isset($this->_values[$offset]);
 	}
 
 	/*
@@ -267,7 +277,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function offsetUnset($offset)
 	{
-		unset($this->_value[$offset]);
+		unset($this->_values[$offset]);
 	}
 
 	/*
@@ -275,7 +285,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function count()
 	{
-		return count( $this->_value );
+		return count( $this->_values );
 	}
 
 	/*
@@ -283,7 +293,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function size()
 	{
-		return count( $this->_value );
+		return count( $this->_values );
 	}
 
 	/*
@@ -291,7 +301,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function keys()
 	{
-		return new Vector( array_keys( $this->_value ) );
+		return new Vector( array_keys( $this->_values ) );
 	}
 
 	/*
@@ -299,7 +309,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function shift()
 	{
-		return array_shift( $this->_value );
+		return array_shift( $this->_values );
 	}
 
 	/*
@@ -307,7 +317,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function push()
 	{
-		return array_shift( $this->_value );
+		return array_shift( $this->_values );
 	}
 
 	/*
@@ -320,7 +330,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		}
 		$size = $this->size();
 		for( $i=$index; $i < $size; $i++ ){
-			$item = $this->_value[$i];
+			$item = $this->_values[$i];
 			if ( $item instanceof Charcoal_Object ){
 				if ( $item->equals($object) ){
 					return $i;
@@ -336,7 +346,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function contains( $value )
 	{
-		return in_array( $value, $this->_value );
+		return in_array( $value, $this->_values );
 	}
 
 	/*
@@ -344,7 +354,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function map( $callback )
 	{
-		$new_array = array_map( $callback, $this->_value );
+		$new_array = array_map( $callback, $this->_values );
 		return new Vector( $new_array );
 	}
 
@@ -353,7 +363,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function toArray()
 	{
-		return $this->_value;
+		return $this->_values;
 	}
 
 	/*
@@ -361,7 +371,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function reverse()
 	{
-		return new Charcoal_Vector( array_reverse( $this->_value ) );
+		return new Charcoal_Vector( array_reverse( $this->_values ) );
 	}
 
 	/*
@@ -372,7 +382,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		$with_type = $with_type ? ub($with_type) : FALSE;
 		$max_size  = $max_size ? ui($max_size) : 0;
 
-		$array      = $this->_value;
+		$array      = $this->_values;
 		$delimiter  = $delimiter ? us($delimiter) : ',';
 
 		$implode    = Charcoal_System::implodeArray( $delimiter, $array, $with_type, $max_size );

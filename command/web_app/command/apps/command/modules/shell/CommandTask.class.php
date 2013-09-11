@@ -12,11 +12,32 @@
 class CommandTask extends Charcoal_Task
 {
 	/**
+	 * execute exception handlers
+	 * 
+	 * @param Exception $e     exception to handle
+	 * 
+	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
+	 */
+	public function handleException( $e )
+	{
+		if ( $e instanceof Charcoal_CreateObjectException ){
+			$path = $e->getObjectPath();
+			echo 'illegal object path: ' . $path . PHP_EOL;
+		}
+		else if ( $e instanceof Charcoal_ObjectPathFormatException ){
+			$path = $e->getObjectPath();
+			echo 'bad object path: ' . $path . PHP_EOL;
+		}
+
+		return TRUE;
+	}
+
+	/**
 	 * process event
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$request   = $context->getRequest();
 //		$response  = $context->getResponse();
@@ -24,36 +45,17 @@ class CommandTask extends Charcoal_Task
 //		$procedure = $context->getProcedure();
 
 		// get paramter from command line
-		$actions       = $request->getString( s("actions") );
+		$action       = $request->getString( 'p1' );
 
-		// convert comma separated action list to PHP array
-		$action_list = $actions->split( s(',') );
-
-		// initialize
-		try{
-			$this->setUp();
-		}
-		catch( Exception $e ){
-			print "Command execution failed while setup:" . $e . PHP_EOL;
-			return b(true);
+		if ( strlen($action) === 0 ){
+			echo 'action is needed.' . PHP_EOL;
+			return TRUE;
 		}
 
-		foreach( $action_list as $action ){
-			$this->action = $action = trim( $action );
-			$tests ++;
+		$proc = $this->getSandbox()->createObject( $action, 'procedure' );
+		Charcoal_Framework::pushProcedure( $proc );
 
-			$this->execute( s($action) );
-		}
-
-		try{
-			$this->cleanUp();
-		}
-		catch( Exception $e ){
-			print "Command execution failed while clean up:" . $e . PHP_EOL;
-			return b(true);
-		}
-
-		return b(TRUE);
+		return TRUE;
 	}
 }
 

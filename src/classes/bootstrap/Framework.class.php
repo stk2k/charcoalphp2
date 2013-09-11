@@ -652,9 +652,9 @@ class Charcoal_Framework
 
 		try{
 			try{
-				ob_start();
+//				ob_start();
 				self::_run( $sandbox );
-				ob_end_flush();
+//				ob_end_flush();
 			}
 			catch( Charcoal_ProcedureNotFoundException $ex )
 			{

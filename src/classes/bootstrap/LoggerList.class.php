@@ -203,7 +203,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 
 		try{
 			// get caller
-			list( $file, $line ) = Charcoal_System::caller(1);
+			list( $file, $line ) = Charcoal_System::caller(2);
 			
 			// get log level and logger names
 			list( $level, $logger_names ) = self::_getLevelAndTargetList( $target );

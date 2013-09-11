@@ -11,9 +11,22 @@
 
 class Charcoal_ObjectPathFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $object_path, $message = NULL, $prev = NULL )
+	private $obj_path;
+
+	public function __construct( $obj_path, $message = NULL, $prev = NULL )
 	{
-		parent::__construct( "Bad object pathformat($message): $object_path", $prev );
+		$this->obj_path = $obj_path;
+
+		parent::__construct( "Bad object pathformat($message): $obj_path", $prev );
 	}
+
+	/**
+	 *  get object path
+	 */
+	public function getObjectPath()
+	{
+		return $this->obj_path;
+	}
+
 }
 
