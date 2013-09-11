@@ -49,8 +49,10 @@ class Charcoal_Stack extends Charcoal_Object
 		_throw( new EmptyStackException( $this ) );
 	}
 
-	/*
-	 *	空か
+	/**
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
 	public function isEmpty()
 	{

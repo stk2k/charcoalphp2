@@ -10,9 +10,10 @@
 */
 class Charcoal_CharcoalObject extends Charcoal_Object
 {
-	public $obj_name;
-	public $obj_path;
-	public $type_name;
+	private $obj_name;
+	private $obj_path;
+	private $type_name;
+	private $sandbox;
 
 	/**
 	 *	constructor
@@ -29,8 +30,10 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+//		Charcoal_ParamTrait::checkConfig( 1, $config );
+
 	}
 
 	/**
@@ -55,8 +58,10 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 *
 	 * @param Charcoal_String $obj_name          object name
 	 */
-	public function setObjectName( Charcoal_String $obj_name )
+	public function setObjectName( $obj_name )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $obj_name );
+
 		$this->obj_name = $obj_name;
 	}
 
@@ -75,8 +80,10 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 *
 	 * @param Charcoal_String $obj_path          object path
 	 */
-	public function setObjectPath( Charcoal_ObjectPath $obj_path )
+	public function setObjectPath( $obj_path )
 	{
+//		Charcoal_ParamTrait::checkObjectPath( 1, $obj_path );
+
 		$this->obj_path = $obj_path;
 	}
 
@@ -93,11 +100,35 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	/**
 	 *   set type name
 	 *
-	 * @param Charcoal_String $type_name          type name
+	 * @param string $type_name          type name
 	 */
-	public function setTypeName( Charcoal_String $type_name )
+	public function setTypeName( $type_name )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $type_name );
+
 		$this->type_name = $type_name;
+	}
+
+	/**
+	 *   returns sandbox
+	 *
+	 * @return string           sandbox object
+	 */
+	public function getSandbox()
+	{
+		return $this->sandbox;
+	}
+
+	/**
+	 *   set sandbox
+	 *
+	 * @param Charcoal_Sandbox $sandbox          sandbox object
+	 */
+	public function setSandbox( $sandbox )
+	{
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+
+		$this->sandbox = $sandbox;
 	}
 
 	/*
@@ -109,7 +140,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	{
 		$clazz = get_class($this);
 		$hash = $this->hash();
-		$path = $this->obj_path ? $this->obj_path->getObjectPathString() : '(new)';
+		$path = $this->obj_path ? $this->obj_path : '(new)';
 		$type = $this->type_name ? $this->type_name : '';
 
 		return "[class=$clazz hash=$hash path=$path type=$type]";

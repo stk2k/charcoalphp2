@@ -32,7 +32,7 @@ class Charcoal_HtmlFileLogger extends Charcoal_FileLogger implements Charcoal_IL
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 	}

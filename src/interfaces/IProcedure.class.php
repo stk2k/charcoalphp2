@@ -25,6 +25,6 @@ interface Charcoal_IProcedure extends Charcoal_ICharcoalObject
 	/*
 	 * プロシージャを実行する
 	 */
-	public function execute( Charcoal_IRequest $request, Charcoal_IResponse $response, Charcoal_Session $session );
+	public function execute( $request, $response, $session = NULL );
 }
 

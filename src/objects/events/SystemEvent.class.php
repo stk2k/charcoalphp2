@@ -24,11 +24,11 @@ abstract class Charcoal_SystemEvent extends Charcoal_Event implements Charcoal_I
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$config->set( s('priority'), Charcoal_EnumEventPriority::SYSTEM );
-
 		parent::configure( $config );
+
+		$config->set( s('priority'), Charcoal_EnumEventPriority::SYSTEM );
 	}
 
 	/**

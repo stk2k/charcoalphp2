@@ -14,40 +14,28 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_CharcoalObject implements 
 	const LOG_EOL		= "\n";
 
 	/**
-	 *	constructor
-	 */
-	public function __construct()
-	{
-	}
-
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-	}
-
-	/**
 	 * Render debug trace
 	 *
 	 */
-	public function render( Exception $e )
+	public function render( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		$message = $this->output( $e );
 
 		log_error( "debug,error,debugtrace", "debugtrace", $message );
 
-		return b(TRUE);
+		return TRUE;
 	}
 
 	/**
 	 * Output HTML
 	 *
 	 */
-	public function output( Exception $e )
+	public function output( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		$out = '';
 		$version = Charcoal_Framework::getVersion();
 

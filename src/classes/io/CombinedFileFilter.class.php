@@ -18,8 +18,10 @@ class Charcoal_CombinedFileFilter implements Charcoal_IFileFilter
 	 *
 	 * Charcoal_Vector $filters      Array of file filters. All of the elements must implement Charcoal_IFileFilter interface.
 	 */
-	public function __construct( Charcoal_Vector $filters )
+	public function __construct( $filters )
 	{
+		Charcoal_ParamTrait::checkVector( 1, $filters );
+
 		$this->filters = $filters;
 	}
 

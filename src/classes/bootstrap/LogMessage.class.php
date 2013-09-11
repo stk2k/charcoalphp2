@@ -18,18 +18,30 @@ class Charcoal_LogMessage extends Charcoal_Object
 	private $line;
 	private $logger_names;
 
-	public function __construct( 
-						Charcoal_String $level, 
-						Charcoal_String $tag, 
-						Charcoal_String $message, 
-						Charcoal_String $file, 
-						Charcoal_Integer $line, 
-						Charcoal_Vector $logger_names
-					)
+	/**
+	 *  Constructor
+	 * 
+	 * @param Charcoal_String $level           log level
+	 * @param Charcoal_String $message         log message
+	 * @param Charcoal_String $tag             log tag
+	 * @param Charcoal_String $file            file path
+	 * @param Charcoal_Integer $line           line of file
+	 * @param Charcoal_Vector $logger_names    target loggers
+	 */
+	public function __construct( $level, $message, $tag, $file, $line, $logger_names )
 	{
+/*
+//		Charcoal_ParamTrait::checkString( 1, $level );
+//		Charcoal_ParamTrait::checkString( 2, $message );
+//		Charcoal_ParamTrait::checkString( 3, $tag );
+//		Charcoal_ParamTrait::checkString( 4, $file );
+//		Charcoal_ParamTrait::checkInteger( 5, $line );
+//		Charcoal_ParamTrait::checkVector( 6, $logger_names );
+*/
+
 		$this->level         = $level;
-		$this->tag           = $tag;
 		$this->message       = $message;
+		$this->tag           = $tag;
 		$this->file          = $file;
 		$this->line          = $line;
 		$this->logger_names  = $logger_names;

@@ -12,7 +12,7 @@
 
 class Charcoal_CharcoalComponent extends Charcoal_CharcoalObject
 {
-	private $_component_name;
+	private $component_name;
 
 	/*
 	 *	コンストラクタ
@@ -24,18 +24,24 @@ class Charcoal_CharcoalComponent extends Charcoal_CharcoalObject
 
 	/**
 	 *   get component name
+	 *
+	 * @return string          component name
 	 */
 	public function getComponentName()
 	{
-		return $this->_component_name;
+		return $this->component_name;
 	}
 
 	/**
 	 *   set component name
+	 *
+	 * @param Charcoal_String $component_name          component name
 	 */
-	public function setComponentName( Charcoal_String $component_name )
+	public function setComponentName( $component_name )
 	{
-		$this->_component_name = us($component_name);
+//		Charcoal_ParamTrait::checkString( 1, $component_name );
+
+		$this->component_name = $component_name;
 	}
 }
 

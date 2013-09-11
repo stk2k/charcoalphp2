@@ -14,8 +14,8 @@ interface Charcoal_IDebugtraceRenderer extends Charcoal_ICharcoalObject
 	/**
 	 * Render debug trace
 	 *
-	 * @param Charcoal_String $title  title
+	 * @param Exception $e  exception to render
 	 */
-	public function render( Exception $e );
+	public function render( $e );
 }
 

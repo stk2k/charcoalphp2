@@ -10,8 +10,8 @@
 */
 interface Charcoal_IProperties
 {
-	/*
-	 *  Get all element values
+	/**
+	 *	Get all values with keys
 	 *
 	 * @return array
 	 */
@@ -20,11 +20,11 @@ interface Charcoal_IProperties
 	/*
 	 *  Return if property has specified key
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key   Key string to get
 	 *
 	 * @return bool   TRUE if the key exists, otherwise FALSE
 	 */
-	public function keyExists( Charcoal_String $key );
+	public function keyExists( $key );
 
 	/*
 	 *  Return list of all property keys
@@ -36,55 +36,60 @@ interface Charcoal_IProperties
 	/*
 	 *  Get element value
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key   Key string to get
 	 *
 	 * @return mixed   Returns NULL if key does not exist
 	 */
-	public function get( Charcoal_String $key );
+	public function get( $key );
 
 	/**
 	 *  Get element value as string
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key             Key string to get
+	 * @param string $default_value   default value
 	 *
 	 * @return Charcoal_String
 	 */
-	public function getString( Charcoal_String $key, Charcoal_String $default_value = NULL );
+	public function getString( $key, $default_value = NULL );
 
 	/**
 	 *  Get element value as array
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key   Key string to get
+	 * @param array $default_value   default value
 	 *
 	 * @return Charcoal_Vector
 	 */
-	public function getArray( Charcoal_String $key, Charcoal_Vector $default_value = NULL );
+	public function getArray( $key, $default_value = NULL );
 
 	/**
 	 *  Get element value as boolean
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key           Key string to get
+	 * @param bool $default_value   default value
 	 *
 	 * @return Charcoal_Boolean
 	 */
-	public function getBoolean( Charcoal_String $key, Charcoal_Boolean $default_value = NULL );
+	public function getBoolean( $key, $default_value = NULL );
 
 	/**
 	 *  Get element value as integer
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key          Key string to get
+	 * @param int $default_value   default value
 	 *
 	 * @return Charcoal_Integer
 	 */
-	public function getInteger( Charcoal_String $key, Charcoal_Integer $default_value = NULL );
+	public function getInteger( $key, $default_value = NULL );
 
 	/**
 	 *  Get element value as float
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key          Key string to get
+	 * @param int $default_value   default value
 	 *
 	 * @return Charcoal_Float
 	 */
-	public function getFloat( Charcoal_String $key, Charcoal_Float $default_value = NULL );
+	public function getFloat( $key, $default_value = NULL );
 }
 

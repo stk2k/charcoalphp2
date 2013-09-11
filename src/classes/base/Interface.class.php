@@ -16,15 +16,13 @@ class Charcoal_Interface extends Charcoal_Object
 	/*
 	 *	Constructor
 	 */
-	public function __construct( Charcoal_String $interface_name )
+	public function __construct( $interface_name )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $interface_name );
+
 		parent::__construct();
 
-		if ( !interface_exists($interface_name) ){
-			_throw( new Charcoal_InterfaceNotFoundException( $interface_name ) );
-		}
-
-		$this->interface_name = $interface_name;
+		$this->interface_name = us($interface_name);
 	}
 
 	/*
@@ -43,9 +41,13 @@ class Charcoal_Interface extends Charcoal_Object
 	 */
 	public function checkImplements( Charcoal_Object $object )
 	{
-		$interface_name = us($this->interface_name);
+		$interface_name = $this->interface_name;
 
-		if ( $interface_name && !($object instanceof $interface_name) ){
+		if ( !interface_exists($interface_name) ){
+			_throw( new Charcoal_InterfaceNotFoundException( $interface_name ) );
+		}
+
+		if ( !($object instanceof $interface_name) ){
 			// Invoke Exception
 			_throw( new Charcoal_InterfaceImplementException( $object, $interface_name ) );
 		}

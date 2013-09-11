@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-interface Charcoal_IComponent
+interface Charcoal_IComponent extends Charcoal_ICharcoalObject
 {
 	/**
 	 *   get component name
@@ -19,23 +19,23 @@ interface Charcoal_IComponent
 	/**
 	 *   set component name
 	 */
-	public function setComponentName( Charcoal_String $component_name );
+	public function setComponentName( $component_name );
 
 	/**
 	 *   オブジェクトパスを取得
 	 */
-	public function getObjectPath();
+//	public function getObjectPath();
 
 	/**
 	 *   オブジェクトパスを設定
 	 */
-	public function setObjectPath( Charcoal_ObjectPath $obj_path );
+//	public function setObjectPath( Charcoal_ObjectPath $obj_path );
 
 	/**
 	 * Initialize instance
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config );
+//	public function configure( $config );
 }
 

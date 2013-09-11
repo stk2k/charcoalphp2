@@ -35,9 +35,9 @@ class Charcoal_FrameworkExceptionStack extends Charcoal_Object
 	}
 
 	/**
-	 *  Return if stack is empty
-	 *
-	 * @return Charcoal_Boolean TRUE if stack is empty, otherwise FALSE.
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
 	public function isEmpty()
 	{

@@ -27,8 +27,10 @@ class Charcoal_CookieComponent extends Charcoal_CharcoalComponent implements Cha
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_path      = $config->getString( s('path'), s('/') )->getValue();
 		$this->_domain    = $config->getString( s('domain'), s('') )->getValue();
 		$this->_secure    = $config->getBoolean( s('secure'), b(FALSE) )->getValue();

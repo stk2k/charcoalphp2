@@ -172,8 +172,10 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 		return array_splice ( $this->_value, $index, $length );
 	}
 
-	/*
-	 *	空か
+	/**
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
 	public function isEmpty()
 	{

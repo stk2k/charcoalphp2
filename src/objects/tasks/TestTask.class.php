@@ -17,16 +17,6 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	private $expected_exception;
 
 	/**
-	 * Configure component
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-		parent::configure( $config );
-	}
-
-	/**
 	 * check if action will be processed
 	 */
 	public abstract function isValidAction( Charcoal_String $action );
@@ -167,7 +157,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$request   = $context->getRequest();
 		$response  = $context->getResponse();

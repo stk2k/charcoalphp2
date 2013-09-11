@@ -42,8 +42,10 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		// =========================================
 		// QdMail設定
 		// =========================================

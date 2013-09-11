@@ -11,7 +11,7 @@
 
 class Charcoal_ProcedureNotFoundException extends Charcoal_ConfigException
 {
-	public function __construct( Charcoal_String $proc_path, $prev = NULL )
+	public function __construct( $proc_path, $prev = NULL )
 	{
 		parent::__construct( "Procedure Not Found: [$proc_path].", $prev );
 	}

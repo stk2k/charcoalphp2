@@ -11,22 +11,6 @@
 
 class Charcoal_HtmlDebugtraceRenderer extends Charcoal_CharcoalObject implements Charcoal_IDebugtraceRenderer
 {
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-	}
-
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-	}
-
 	/**
 	 * Print HTML Header
 	 */
@@ -478,43 +462,46 @@ HTML_HEADER;
 				$modifiers = implode(" ",$modifiers);
 				$params = $ref_method->getParameters();
 
-				$args_disp = '';
+				$args_defs = '';
 				foreach( $params as $p ){
-					if ( strlen($args_disp) > 0 ){
-						$args_disp .= ',';
+					if ( strlen($args_defs) > 0 ){
+						$args_defs .= ',';
 					}
 					if ( $p->isOptional() ){
-						$args_disp .= '[';
+						$args_defs .= '[';
 					}
 					if ( $p->isArray() ){
-						$args_disp .= 'array ';
+						$args_defs .= 'array ';
 					}
-					$args_disp .= $p->getClass();
+					$args_defs .= $p->getClass();
 					if ( $p->isPassedByReference() ){
-						$args_disp .= '&amp;';
+						$args_defs .= '&amp;';
 					}
-					$args_disp .= $p->getName();
+					$args_defs .= $p->getName();
 
 					if ( $p->isDefaultValueAvailable() ){
-						$default_value = $p->getDefaultValue() ? $p->getDefaultValue() : 'NULL';
-						$args_disp .= '=' . $default_value;
-					}
-					else if ( version_compare(PHP_VERSION, '5.4.6') >= 0 && $p->isDefaultValueConstant() ){
-						$default_value = $p->getDefaultValue() ? $p->getDefaultValue() : 'NULL';
-						$args_disp .= '=' . $default_value;
+						$args_defs .= '=' . $p->getDefaultValue();
 					}
 
 					if ( $p->isOptional() ){
-						$args_disp .= ']';
+						$args_defs .= ']';
 					}
-				}/*
-echo "func:$func" . eol();
-ad($args);
-ad($args_disp);
+				}
 
-*/
+				$args_disp  = '<table>';
+				$args_disp .= '<tr>';
+				$args_disp .= '  <th>No</th>';
+				$args_disp .= '  <th>value</th>';
+				$args_disp .= '</tr>';
+				foreach( $args as $key => $arg ){
+					$args_disp .= '<tr>';
+					$args_disp .= '  <td>' . $key . '</td>';
+					$args_disp .= '  <td>' . Charcoal_System::toString($arg) . '</td>';
+					$args_disp .= '</tr>';
+				}
+				$args_disp .= '</table>';
 
-				$message = "$modifiers {$klass}{$type}{$func}($args_disp)";
+				$message = "$modifiers {$klass}{$type}{$func}($args_defs)<br>$args_disp";
 			}
 			else{
 				$args_disp = '';
@@ -561,23 +548,27 @@ ad($args_disp);
 	 * Render debug trace
 	 *
 	 */
-	public function render( Exception $e )
+	public function render( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		list( $file, $line ) = Charcoal_System::caller(0);
 
 		$title = 'CharcoalPHP: Exception List';
 
 		echo $this->_output( $e, s($title), s($file), i($line) );
 
-		return b(TRUE);
+		return TRUE;
 	}
 
 	/**
 	 * Output HTML
 	 *
 	 */
-	public function output( Exception $e )
+	public function output( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		list( $file, $line ) = Charcoal_System::caller(0);
 
 		$title = 'CharcoalPHP: Exception List';

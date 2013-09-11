@@ -51,7 +51,7 @@ class Charcoal_PhpSourceInfo extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		$keyword_file = Charcoal_ResourceLocator::getFrameworkPath( s('data'), s('php.kwd') );
+		$keyword_file = Charcoal_ResourceLocator::getFrameworkPath( 'data', 'php.kwd' );
 
 		$file = $this->_file;
 		$line = $this->_line;

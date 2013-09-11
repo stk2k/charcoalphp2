@@ -70,24 +70,32 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 		return $var;
 	}
 
-	/*
-	 *	全要素値を取得
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
 	 */
 	public function getAll()
 	{
 		return $this->_values;
 	}
 
-	/*
-	 *	配列の全要素を追加
+	/**
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
-	public function setArray( array $array )
+	public function setArray( $array )
 	{
+		Charcoal_ParamTrait::checkArray( 1, $array );
+
 		$this->_values = array_merge( $this->_values, $array );
 	}
 
-	/*
-	 *	空か
+	/**
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
 	public function isEmpty()
 	{
@@ -121,44 +129,62 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 	/*
 	 *	要素値を更新
 	 */
-	public function set( Charcoal_String $key, $value )
+	public function set( $key, $value )
 	{
 		$this->offsetSet( $key, $value );
 	}
 
-	/*
-	 *	キー一覧を取得
+	/**
+	 *  get list of key
+	 *
+	 * @param string $key            Key string to get
+	 *
+	 * @return array      
 	 */
 	public function getKeys() {
 		return v(array_keys($this->_values));
 	}
 
-	/*
-	 *  キーがあるか
+	/**
+	 *  check if this object has specified key
+	 *
+	 * @param string $key            Key string to get
+	 *
+	 * @return bool      TRUE if this object has specified key, otherwise FALSE
 	 */
-	public function keyExists( Charcoal_String $key )
+	public function keyExists( $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 		$key = us($key);
 		return array_key_exists($key,$this->_values);
 	}
 
-	/*
-	 *	要素値を取得
+	/**
+	 *  Get element value
+	 *
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
+	 *
+	 * @return mixed
 	 */
-	public function get( Charcoal_String $key, $defaultValue =NULL )
+	public function get( $key, $defaultValue =NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 		return $this->offsetGet( $key );
 	}
 
 	/*
 	 *	ArrayAccessインタフェース:offsetGetの実装
 	 */
-	public function offsetGet($offset)
+	public function offsetGet( $offset )
 	{
-		if ( is_object($offset) ){
-			$offset = $offset->__toString();
-		}
-		$value = isset($this->_values[ $offset ]) ? $this->_values[ $offset ] : NULL;
+//		Charcoal_ParamTrait::checkString( 1, $offset );
+
+		$key = us( $key );
+
+		$value = isset($this->_values[ $key ]) ? $this->_values[ $key ] : NULL;
 
 		return $value;
 	}
@@ -166,20 +192,25 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 	/*
 	 *	ArrayAccessインタフェース:offsetSetの実装
 	 */
-	public function offsetSet($offset, $value)
+	public function offsetSet( $key, $value )
 	{
-		if ( is_object($offset) ){
-			$offset = $offset->__toString();
-		}
-		$this->_values[ $offset ] = $value;
+//		Charcoal_ParamTrait::checkString( 1, $offset );
+
+		$key = us( $key );
+
+		$this->_values[ $key ] = $value;
 	}
 
 	/*
 	 *	ArrayAccessインタフェース:offsetExistsの実装
 	 */
-	public function offsetExists($offset)
+	public function offsetExists( $key )
 	{
-		return isset($this->_values[$offset]);
+//		Charcoal_ParamTrait::checkString( 1, $offset );
+
+		$key = us( $key );
+
+		return isset($this->_values[$key]);
 	}
 
 	/*
@@ -187,57 +218,72 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 	 */
 	public function offsetUnset($offset)
 	{
-		unset($this->_values[$offset]);
+//		Charcoal_ParamTrait::checkString( 1, $offset );
+
+		$key = us( $key );
+
+		unset($this->_values[$key]);
 	}
 
 	/*
 	 *  Get element value as string
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key   Key string to get
+	 * @param string $default_value   default value
 	 *
-	 * @return Charcoal_String
+	 * @return string
 	 */
-	public function getString( Charcoal_String $key, Charcoal_String $default_value = NULL )
+	public function getString( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
 		$value = $this->offsetGet( $key );
 
-		// 文字列として不正ならデフォルト値を返す
+		// return default value if the value is not string type
 		if ( NULL === $value || !is_string($value) ){
-			return $default_value;
+			return us( $default_value );
 		}
 
-		return s($value);
+		return $value;
 	}
 
 	/*
 	 *  Get element value as array
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
 	 *
-	 * @return Charcoal_Vector
+	 * @return array
 	 */
-	public function getArray( Charcoal_String $key, Charcoal_Vector $default_value = NULL )
+	public function getArray( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
 		$value = $this->offsetGet( $key );
 
-		// 配列値として不正ならデフォルト値を返す
+		// return default value if the value is not array type
 		if ( NULL === $value || !is_array($value) ){
-			return $default_value;
+			return uv( $default_value );
 		}
 
-		// 配列を返却
-		return  v($value);
+		return $value;
 	}
 
 	/*
 	 *  Get element value as boolean
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key           Key string to get
+	 * @param bool $default_value   default value
 	 *
-	 * @return Charcoal_Boolean
+	 * @return bool
 	 */
-	public function getBoolean( Charcoal_String $key, Charcoal_Boolean $default_value = NULL )
+	public function getBoolean( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+
 		$value = $this->offsetGet( $key );
 
 		if ( is_string($value) ){
@@ -254,53 +300,58 @@ class Charcoal_Sequence extends Charcoal_Object implements Charcoal_IProperties,
 			}
 		}
 
-		// ブール値として不正ならデフォルト値を返す
+		// return default value if the value is not boolean type
 		if ( NULL === $value || !is_bool($value) ){
-			return $default_value;
+			return ub( $default_value );
 		}
 
-		// ブール型にして返却
-		return b($value);
+		return $value;
 	}
 
 	/*
 	 *  Get element value as integer
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key          Key string to get
+	 * @param int $default_value   default value
 	 *
-	 * @return Charcoal_Integer
+	 * @return int
 	 */
-	public function getInteger( Charcoal_String $key, Charcoal_Integer $default_value = NULL )
+	public function getInteger( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+
 		$value = $this->offsetGet( $key );
 
-		// 整数値として不正ならデフォルト値を返す
+		// return default value if the value is not int type
 		if ( NULL === $value || !is_numeric($value) ){
 			return $default_value;
 		}
 
-		// 整数型にして返却
-		return i($value);
+		return $value;
 	}
 
 	/*
 	 *  Get element value as float
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
 	 *
-	 * @return Charcoal_Float
+	 * @return float
 	 */
-	public function getFloat( Charcoal_String $key, Charcoal_Float $default_value = NULL )
+	public function getFloat( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+
 		$value = $this->offsetGet( $key );
 
-		// 浮動小数点数として不正ならデフォルト値を返す
+		// return default value if the value is not int type
 		if ( NULL === $value || !is_numeric($value) ){
-			return $default_value;
+			return uf( $default_value );
 		}
 
-		// 浮動小数点数型にして返却
-		return f($value);
+		return $value;
 	}
 
 	/*

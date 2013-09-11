@@ -11,19 +11,19 @@
 
 class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charcoal_IDataSource
 {
-	private $_connected = false;
-	private $_connection;
+	private $connected = false;
+	private $connection;
 
-	private $_backend;
-	private $_user;
-	private $_password;
-	private $_db_name;
-	private $_server;
-	private $_charset;
-	private $_autocommit;
-	private $_command_id;
+	private $backend;
+	private $user;
+	private $password;
+	private $db_name;
+	private $server;
+	private $charset;
+	private $autocommit;
+	private $command_id;
 
-	private $_trans_cnt;
+	private $trans_cnt;
 
 	/*
 	 *	コンストラクタ
@@ -32,9 +32,9 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	{
 		parent::__construct();
 
-		$this->_connected 	= false;
-		$this->_connection 	= null;
-		$this->_command_id 	= 0;
+		$this->connected 	= false;
+		$this->connection 	= null;
+		$this->command_id 	= 0;
 	}
 
 	/**
@@ -42,23 +42,25 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$this->_backend   = $config->getString( s('backend'), s('') );
-		$this->_user      = $config->getString( s('user'), s('') );
-		$this->_password  = $config->getString( s('password'), s('') );
-		$this->_db_name   = $config->getString( s('db_name'), s('') );
-		$this->_server    = $config->getString( s('server'), s('') );
-		$this->_charset   = $config->getString( s('charset'), s('') );
-		$this->_autocommit = $config->getBoolean( s('autocommit'), b(FALSE) );
+		parent::configure( $config );
+
+		$this->backend   = $config->getString( s('backend'), s('') );
+		$this->user      = $config->getString( s('user'), s('') );
+		$this->password  = $config->getString( s('password'), s('') );
+		$this->db_name   = $config->getString( s('db_name'), s('') );
+		$this->server    = $config->getString( s('server'), s('') );
+		$this->charset   = $config->getString( s('charset'), s('') );
+		$this->autocommit = $config->getBoolean( s('autocommit'), b(FALSE) );
 /*
-		log_debug( "data_source", "data_source", "[PearDbDataSource]backend=" . $this->_backend );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]user=" . $this->_user );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]password=" . $this->_password );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]db_name=" . $this->_db_name );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]server=" . $this->_server );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]charset=" . $this->_charset );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]autocommit=" . $this->_autocommit );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]backend=" . $this->backend );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]user=" . $this->user );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]password=" . $this->password );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]db_name=" . $this->db_name );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]server=" . $this->server );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]charset=" . $this->charset );
+		log_debug( "data_source", "data_source", "[PearDbDataSource]autocommit=" . $this->autocommit );
 */
 	}
 
@@ -67,7 +69,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function isConnected()
 	{
-		return $this->_connected;
+		return $this->connected;
 	}
 
 	/*
@@ -75,7 +77,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function getBackend()
 	{
-		return $this->_backend;
+		return $this->backend;
 	}
 
 	/*
@@ -83,7 +85,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function getServer()
 	{
-		return $this->_server;
+		return $this->server;
 	}
 
 	/*
@@ -91,7 +93,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function getUser()
 	{
-		return $this->_user;
+		return $this->user;
 	}
 
 	/*
@@ -99,7 +101,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function getPassword()
 	{
-		return $this->_password;
+		return $this->password;
 	}
 
 	/*
@@ -107,7 +109,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function getDatabaseName()
 	{
-		return $this->_db_name;
+		return $this->db_name;
 	}
 
 	/*
@@ -115,7 +117,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function getCharacterSet()
 	{
-		return $this->_charset;
+		return $this->charset;
 	}
 
 	/*
@@ -131,7 +133,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			// 接続処理
 			$this->connect();
 
-			$this->_connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $onoff->isTrue() );
+			$this->connection->setAttribute( PDO::ATTRautocommit, $onoff->isTrue() );
 			
 		}
 		catch ( Exception $e )
@@ -151,9 +153,9 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			// 接続処理
 			$this->connect();
 
-			$this->_connection->beginTransaction();
+			$this->connection->beginTransaction();
 
-			$this->_trans_cnt ++;
+			$this->trans_cnt ++;
 		}
 		catch ( Exception $e )
 		{
@@ -172,11 +174,11 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			// 接続処理
 			$this->connect();
 
-			if ( $this->_trans_cnt > 0 )
+			if ( $this->trans_cnt > 0 )
 			{
-				$this->_connection->commit();
+				$this->connection->commit();
 
-				$this->_trans_cnt --;
+				$this->trans_cnt --;
 			}
 		}
 		catch ( Exception $e )
@@ -196,11 +198,11 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 			// 接続処理
 			$this->connect();
 
-			if ( $this->_trans_cnt > 0 )
+			if ( $this->trans_cnt > 0 )
 			{
-				$this->_connection->rollback();
+				$this->connection->rollback();
 
-				$this->_trans_cnt --;
+				$this->trans_cnt --;
 			}
 		}
 		catch ( Exception $e )
@@ -215,8 +217,8 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	 */
 	public function connectDefault( $db_name_enabled = TRUE, $force = FALSE )
 	{
-		$db_name = $db_name_enabled ? $this->_db_name : NULL;
-		$this->connect( $this->_backend, $this->_user, $this->_password, $this->_server, s($db_name), $force );
+		$db_name = $db_name_enabled ? $this->db_name : NULL;
+		$this->connect( $this->backend, $this->user, $this->password, $this->server, s($db_name), $force );
 	}
 
 	/*
@@ -225,16 +227,16 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	public function connect( $force = FALSE )
 	{
 		// 接続済みなら何もしない
-		if ( $this->_connected && !$force ){
+		if ( $this->connected && !$force ){
 			return;
 		}
 
-		$backend   = $this->_backend;
-		$user      = $this->_user;
-		$password  = $this->_password;
-		$db_name   = $this->_db_name;
-		$server    = $this->_server;
-		$charset   = $this->_charset;
+		$backend   = $this->backend;
+		$user      = $this->user;
+		$password  = $this->password;
+		$db_name   = $this->db_name;
+		$server    = $this->server;
+		$charset   = $this->charset;
 
 		try{
 			$DSN = "$backend:host=$server; dbname=$db_name";
@@ -245,7 +247,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 
 			// 文字化け対策
 /*
-			$charset = $this->_charset;
+			$charset = $this->charset;
 
 			if ( !$charset->isEmpty() ){
 				$charset = $charset->getValue();
@@ -254,7 +256,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 				case 'ujis':	$driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET CHARACTER SET `ujis`";		break;
 				case 'sjis':	$driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET CHARACTER SET `sjis`";		break;
 				default:
-					_throw( new DataSourceConfigException( s('charset'), s('INVALID_CHARSET_VALUE: ' . $charset) ) );
+					_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
 				}
 			}
 */
@@ -267,29 +269,28 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 
 //			log_info( "debug,sql,data_source", "data_source", "connected database: DSN=[$DSN]" );
 
-			$this->_connection = $pdo;
-			$this->_connected = true;
+			$this->connection = $pdo;
+			$this->connected = true;
 
 			// 文字化け対策
-			$charset = $this->_charset;
-			if ( !$charset->isEmpty() ){
-				$charset = $charset->getValue();
+			$charset = $this->charset;
+			if ( strlen($charset) > 0 ){
 				switch( strtolower($charset) ){
 				case 'utf8':	$this->_query( s('SET NAMES `utf8`') );		break;
 				case 'ujis':	$this->_query( s('SET NAMES `ujis`') );		break;
 				case 'sjis':	$this->_query( s('SET NAMES `sjis`') );		break;
 				default:
-					_throw( new DataSourceConfigException( s('charset'), s('INVALID_CHARSET_VALUE: ' . $charset) ) );
+					_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
 				}
 		//		$this->_query( "set character set $charset" );
 			}
 
 			// 自動コミット
-			$autocommit = $this->_autocommit;
-			$this->_connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $autocommit->isTrue() );
+			$autocommit = $this->autocommit;
+			$this->connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $autocommit );
 //			log_info( "debug,sql,data_source", "data_source", "autocommit: [$autocommit]" );
 
-			$this->_trans_cnt = 0;
+			$this->trans_cnt = 0;
 		}
 		catch ( Exception $e )
 		{
@@ -307,14 +308,14 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	{
 
 		// 接続していないなら何もしない
-		if ( !$this->_connected ){
+		if ( !$this->connected ){
 			return;
 		}
 
 		// 切断
-		$this->_connection = NULL;
+		$this->connection = NULL;
 
-		$this->_connected = FALSE;
+		$this->connected = FALSE;
 	}
 
 	/*
@@ -324,7 +325,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 	{
 		Charcoal_Benchmark::start();
 
-		$command_id = $this->_command_id++;
+		$command_id = $this->command_id++;
 
 		$sql = $sql->getValue();
 		$params_disp = $params ? $params->join(s(','),b(TRUE)) :'';
@@ -337,7 +338,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		if ( $params ){
 			foreach( $params as $value ){
 				if ( is_string($value) || $value instanceof Charcoal_String || $value instanceof Charcoal_Date || $value instanceof Charcoal_DateWithTime ){
-//					$value = $this->_connection->quote($value);
+//					$value = $this->connection->quote($value);
 					$log_params[] = "'{$value}'";
 				}
 				else{
@@ -349,7 +350,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$log_sql" );
 */
 
-		$stmt = $this->_connection->prepare($sql);
+		$stmt = $this->connection->prepare($sql);
 
 		$params = $params ? $params->toArray() : array();
 
@@ -381,7 +382,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 
 //		log_info( "sql", "data_source", $sql );
 
-		$stmt = $this->_connection->query( $sql );
+		$stmt = $this->connection->query( $sql );
 
 		return $stmt;
 	}

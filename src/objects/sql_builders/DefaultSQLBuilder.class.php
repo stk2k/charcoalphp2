@@ -26,8 +26,10 @@ abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implem
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_type_mapping = $config->getArray( s('type_mappings') );
 	}
 

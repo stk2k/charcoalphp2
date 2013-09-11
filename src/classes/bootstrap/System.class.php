@@ -356,6 +356,36 @@ class Charcoal_System
 	}
 
 	/**
+	 *	get type of primitive, resource, array, or object
+	 *
+	 */
+	public static function getType( $value )
+	{
+		$type = gettype($value);
+		switch( $type ){
+		case 'string':
+			return $type . '(' . strlen($value) . ')';
+			break;
+		case 'integer':
+		case 'float':
+		case 'boolean':
+		case 'NULL':
+		case 'unknown type':
+			return $type;
+			break;
+		case 'array':
+			return $type . '(' . count($value) . ')';
+			break;
+		case 'object':
+			if ( $value instanceof Charcoal_Object ){
+				return get_class( $value ) . '(' . $value->hash() . ')';
+			}
+			return get_class( $value );
+			break;
+		}
+	}
+
+	/**
 	 *	toStringのラッパー
 	 *
 	 */
@@ -381,9 +411,13 @@ class Charcoal_System
 				}
 				break;
 			case 'array':
-				$ret = implode(',',$value);
-				if ( $with_type ){
-					$ret .= '(' . $type . ')';
+				$ret = '';
+				foreach( $value as $k => $v ){
+					if ( strlen($ret) > 0 )		$ret .= '/';
+					$ret .= "$k=$v";
+					if ( $with_type ){
+						$ret .= '(' . gettype($v) . ')';
+					}
 				}
 				break;
 			case 'object':
@@ -485,7 +519,8 @@ class Charcoal_System
 		$type              = $options['type'];
 
 		$lines = array();
-		self::_dump( '-', $var, 0, $max_string_length, $lines, $max_depth );
+		$recursion = array();
+		self::_dump( '-', $var, 0, $max_string_length, $lines, $max_depth, $recursion );
 
 		switch( CHARCOAL_RUNMODE )
 		{
@@ -505,6 +540,7 @@ class Charcoal_System
 			}
 		}
 
+
 		if ( $return ){
 			return $output;
 		}
@@ -513,10 +549,10 @@ class Charcoal_System
 		}
 	}
 
-	private static function _dump( $key, $value, $depth, $max_string_length, &$lines, $max_depth )
+	private static function _dump( $key, $value, $depth, $max_string_length, &$lines, $max_depth, &$recursion )
 	{
 		if ( $depth > $max_depth ){
-			$lines[] = str_repeat( '.', $depth * 4 ) . "......(max depth over:$max_depth)";
+			$lines[] = str_repeat( '.', $depth * 4 ) . "----(max depth over:$max_depth)";
 			return;
 		}
 
@@ -524,6 +560,15 @@ class Charcoal_System
 
 		switch( $type ){
 		case 'string':
+			{
+				$str = $value;
+				if ( strlen($str) > $max_string_length ){
+					$str = substr( $str, 0, $max_string_length ) . '...(total:' . strlen($str) . 'bytes)';
+				}
+				$str = htmlspecialchars( $str, ENT_QUOTES );
+				$lines[] = str_repeat( '.', $depth * 4 ) . "[$key:$type]$str";
+			}
+			break;
 		case 'integer':
 		case 'double':
 		case 'boolean':
@@ -542,7 +587,7 @@ class Charcoal_System
 			{
 				$lines[] = str_repeat( '.', $depth * 4 ) . "[$key:array(" . count($value) . ')]';
 				foreach( $value as $_key => $_value ){
-					self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth );
+					self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth, $recursion );
 				}
 			}
 			break;
@@ -550,10 +595,20 @@ class Charcoal_System
 			{
 				$clazz = get_class( $value );
 				$id = function_exists('spl_object_hash') ? spl_object_hash($value) : 'unknown';
-				$lines[] = str_repeat( '.', $depth * 4 ) . "[$key:object($clazz)@$id]";
+				$line = str_repeat( '.', $depth * 4 ) . "[$key:object($clazz)@$id]";
+
+				$hash = spl_object_hash( $value );
+				if ( isset($recursion[$hash]) ){
+					$lines[] = $line . "----[RECURSION]";
+					return;
+				}
+				$recursion[$hash] = 1;
+
+				$lines[] = $line;
+
 				$vars = self::getObjectVars( $value );
 				foreach( $vars as $_key => $_value ){
-					self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth );
+					self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth, $recursion );
 				}
 			}
 			break;
@@ -695,7 +750,9 @@ class Charcoal_System
 			$key = $p->getName();
 			$value = $p->getValue($obj);
 
-			$vars[$key] = $value;
+			if ( !$p->isStatic() ){
+				$vars[$key] = $value;
+			}
 		}
 
 		$parent = $class_obj->getParentClass();

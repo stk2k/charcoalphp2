@@ -20,8 +20,10 @@ class Charcoal_ObjectPath extends Charcoal_Object
 	/*
 	 *    コンストラクタ
 	 */
-	public function __construct( Charcoal_String $object_path_string )
+	public function __construct( $object_path_string )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $object_path_string );
+
 		parent::__construct();
 
 		list($object_name,$virtual_path,$real_path,$dir_list) = self::_parsePath( $object_path_string );
@@ -36,10 +38,8 @@ class Charcoal_ObjectPath extends Charcoal_Object
 	/*
 	 * パスをパース
 	 */
-	private static function _parsePath( Charcoal_String $object_path_string )
+	private static function _parsePath( $object_path_string )
 	{
-		$object_path_string = us($object_path_string);
-
 		// @あり
 		$pos_at = strpos( $object_path_string, '@' );
 		if ( FALSE === $pos_at ){
@@ -95,7 +95,7 @@ class Charcoal_ObjectPath extends Charcoal_Object
 			if ( strlen($this->_virtual_path) === 0 ){
 				return NULL;
 			}
-			return new Charcoal_ObjectPath( s('') );
+			return new Charcoal_ObjectPath( '' );
 		}
 
 		$parent_path = substr($this->_virtual_path,0,$pos);

@@ -31,33 +31,56 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 
-		$this->_smarty->caching 			= 0;	//$config->getBoolean( s('caching') )->getValue();
-		$this->_smarty->compile_check 		= $config->getBoolean( s('compile_check'), b(FALSE) )->getValue();
-		$this->_smarty->template_dir 		= $config->getString( s('template_dir'), s('') )->getValue();
-		$this->_smarty->compile_dir 		= $config->getString( s('compile_dir'), s('') )->getValue();
-		$this->_smarty->config_dir 			= $config->getString( s('config_dir'), s('') )->getValue();
-		$this->_smarty->cache_dir 			= $config->getString( s('cache_dir'), s('') )->getValue();
-		$this->_smarty->_default_modifiers 	= $config->getArray( s('default_modifiers'), v(array()) )->getValue();
+		$this->_smarty->caching 			= 0;	//$config->getBoolean( 'caching' );
+		$this->_smarty->compile_check 		= $config->getBoolean( 'compile_check', FALSE );
+		$this->_smarty->template_dir 		= $config->getString( 'template_dir', '', TRUE );
+		$this->_smarty->compile_dir 		= $config->getString( 'compile_dir', '', TRUE );
+		$this->_smarty->config_dir 			= $config->getString( 'config_dir', '', TRUE );
+		$this->_smarty->cache_dir 			= $config->getString( 'cache_dir', '', TRUE );
+//		$this->_smarty->default_modifiers 	= $config->getArray( s('default_modifiers'), v(array()) )->unbox();
 
-		$plugins_dir = $config->getArray( s('plugins_dir'), v(array()) );
-		if ( $plugins_dir->isEmpty() ){
+		$plugins_dir = $config->getArray( 'plugins_dir', array(), TRUE );
+		if ( $plugins_dir === NULL || count($plugins_dir) === 0 ){
 			$this->_smarty->plugins_dir	= 'plugins';
 		}
 		else{
-			$this->_smarty->plugins_dir	= $plugins_dir->getValue();
+			
+			$this->_smarty->plugins_dir	= $plugins_dir;
 		}
 
-		$left_delimiter = $config->getString( s('left_delimiter'), s('{') );
-		if ( !$left_delimiter->isEmpty() ){
-			$this->_smarty->left_delimiter 	= $left_delimiter->getValue();
+		$left_delimiter = $config->getString( 'left_delimiter', '{' );
+		if ( $left_delimiter ){
+			$this->_smarty->left_delimiter 	= $left_delimiter;
 		}
-		$right_delimiter = $config->getString( s('right_delimiter'), s('}') );
-		if ( !$right_delimiter->isEmpty() ){
-			$this->_smarty->right_delimiter = $right_delimiter->getValue();
+		$right_delimiter = $config->getString( 'right_delimiter', '}' );
+		if ( !$right_delimiter ){
+			$this->_smarty->right_delimiter = $right_delimiter;
+		}
+
+		if ( $this->getSandbox()->isDebug() )
+		{
+			$smarty_options = array(
+					'caching' => $this->_smarty->caching,
+					'compile_check' => $this->_smarty->compile_check,
+					'template_dir' => $this->_smarty->template_dir,
+					'compile_dir' => $this->_smarty->compile_dir,
+					'config_dir' => $this->_smarty->config_dir,
+					'cache_dir' => $this->_smarty->cache_dir,
+					'default_modifiers' => $this->_smarty->default_modifiers,
+					'plugins_dir' => $this->_smarty->plugins_dir,
+					'left_delimiter' => $this->_smarty->left_delimiter,
+					'right_delimiter' => $this->_smarty->right_delimiter,
+				);
+
+			ad( $smarty_options );
+
+			foreach( $smarty_options as $key => $value ){
+				log_debug( 'system, debug, smarty', "smarty option: [$key]=" . Charcoal_System::toString($value) );
+			}
 		}
 	}
 
@@ -66,7 +89,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$event    = $context->getEvent();
 		$response = $context->getResponse();
@@ -85,6 +108,12 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 //		log_info( "smarty", "compile_dir=" . $this->_smarty->compile_dir );
 //		log_info( "smarty", "config_dir=" . $this->_smarty->config_dir );
 //		log_info( "smarty", "cache_dir=" . $this->_smarty->cache_dir );
+
+		$flags = E_ALL & ~E_STRICT;
+		if ( defined('E_DEPRECATED') ){
+			$flags = $flags & ~E_DEPRECATED;
+		}
+		$error_flags = error_reporting($flags);
 
 		try{
 			$charcoal = array();
@@ -110,10 +139,10 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 				// Page information
 				$page_info = $layout->getAttribute( s('page_info') );
-				log_info( "smarty", "template", "page_info=" . print_r($page_info,true) );
+				log_info( "smarty","page_info=" . print_r($page_info,true) );
 
 				// Profile information
-				$profile_config = Charcoal_Profile::getConfig();
+				$profile_config = $this->getSandbox()->getProfile()->getAll();
 				if ( $profile_config && is_array($profile_config) ){
 					foreach( $profile_config as $key => $value ){
 						$charcoal['profile'][$key] = $value;
@@ -157,9 +186,9 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				// render template
 				$template = $layout->getAttribute( s('layout') );
 
-				log_info( "smarty", "template", "template=$template" );
+				log_info( "smarty","template=$template" );
 				$html = $smarty->fetch( $template );
-				log_info( "smarty", "template", "html=$html" );
+				log_info( "smarty","html=$html" );
 
 				echo $html;
 			}
@@ -170,6 +199,8 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 			_throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
 		}
+
+		error_reporting( $error_flags );
 
 		return b(TRUE);
 	}

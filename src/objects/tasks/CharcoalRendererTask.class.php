@@ -11,29 +11,11 @@
 class Charcoal_CharcoalRendererTask extends Charcoal_Task implements Charcoal_ITask
 {
 	/**
-	 *	Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/*
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration of component
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-		parent::configure( $config );
-	}
-
-	/**
 	 * Process events
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$event    = $context->getEvent();
 		$response = $context->getResponse();

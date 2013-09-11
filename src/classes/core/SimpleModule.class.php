@@ -27,11 +27,13 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$this->_tasks              = $config->getArray( s('tasks'), v(array()) );
-		$this->_events             = $config->getArray( s('events'), v(array()) );
-		$this->_required_modules   = $config->getArray( s('required_modules'), v(array()) );
+		parent::configure( $config );
+
+		$this->_tasks              = $config->getArray( 'tasks', array() );
+		$this->_events             = $config->getArray( 'events', array() );
+		$this->_required_modules   = $config->getArray( 'required_modules', array() );
 
 //		log_info( "system, debug", "module", "tasks:" . print_r($this->_tasks,true) );
 //		log_info( "system, debug", "module", "events:" . print_r($this->_events,true) );
@@ -51,9 +53,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	private function loadTask( $obj_path, $path, $task_manager )
 	{
-		Charcoal_ParamTrait::check( 1, 'Charcoal_ObjectPath', $obj_path );
-		Charcoal_ParamTrait::checkString( 2, $path );
-		Charcoal_ParamTrait::check( 3, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::checkObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::checkString( 2, $path );
+//		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
 		$base_name = basename($path);
@@ -75,15 +77,14 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		// build object path for the task
 		$obj_name = $task->getObjectName();
 		$task_path = s($obj_name . '@' . $obj_path->getVirtualPath());
-		$task_path = new Charcoal_ObjectPath(s($task_path));
-//		log_info( "system,debug,task", "task[$task] path: [$task_path]");
 
 		// set task property
 		$task->setObjectPath( $task_path );
-		$task->setTypeName( s('task') );
+		$task->setTypeName( 'task' );
+		$task->setSandbox( $this->getSandbox() );
 
 		// load object config
-		$config = Charcoal_ConfigLoader::loadConfig( $task_path, s('task') );
+		$config = Charcoal_ConfigLoader::loadConfig( $this->getSandbox(), $task_path, 'task' );
 		$config = new Charcoal_Config( $config );
 
 		// configure task
@@ -91,7 +92,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 //		log_info( "system,debug,task", "task[$task] configured.");
 
 		// regiser task
-		$task_manager->registerTask( s($task_path->toString()), $task );
+		$task_manager->registerTask( $task_path, $task );
 		log_info( "system,debug,task", "task[$class_name] registered as: [$task_path]");
 
 		return $task;
@@ -102,9 +103,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	private function loadEvent( $obj_path, $path, $task_manager )
 	{
-		Charcoal_ParamTrait::check( 1, 'Charcoal_ObjectPath', $obj_path );
-		Charcoal_ParamTrait::checkString( 2, $path );
-		Charcoal_ParamTrait::check( 3, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::checkObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::checkString( 2, $path );
+//		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
 		$base_name = basename($path);
@@ -131,10 +132,10 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// set task property
 		$event->setObjectPath( $event_path );
-		$event->setTypeName( s('event') );
+		$event->setTypeName( 'event' );
 
 		// load object config
-		$config = Charcoal_ConfigLoader::loadConfig( $event_path, s('event') );
+		$config = Charcoal_ConfigLoader::loadConfig( $this->getSandbox(), $event_path, 'event' );
 		$config = new Charcoal_Config( $config );
 
 		// configure event
@@ -163,9 +164,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$real_path = $root_path->getRealPath();
 
-		$webapp_path    = Charcoal_ResourceLocator::getApplicationPath( s('modules' . $real_path) );
-		$project_path   = Charcoal_ResourceLocator::getProjectPath( s('modules' . $real_path) );
-		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( s('modules' . $real_path) );
+		$webapp_path    = Charcoal_ResourceLocator::getApplicationPath( 'modules' . $real_path );
+		$project_path   = Charcoal_ResourceLocator::getProjectPath( 'modules' . $real_path );
+		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( 'modules' . $real_path );
 
 		$task_class_suffix = 'Task' . CHARCOAL_CLASS_FILE_SUFFIX;
 
@@ -219,7 +220,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 				$task_path = $task . '@' . $root_path->getVirtualPath();
 //				log_info( "system,debug", "module", "creating task[$task_path] in module[$root_path]");
 
-				$task = Charcoal_Factory::createObject( s($task_path), s('task') );
+				$task = $this->getSandbox()->createObject( $task_path, 'task' );
 
 //				log_info( "system,debug", "module", "created task[" . get_class($task) . "/$task_path] in module[$root_path]");
 
@@ -249,9 +250,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		$real_path = $root_path->getRealPath();
 
-		$webapp_path    = Charcoal_ResourceLocator::getApplicationPath( s('modules' . $real_path) );
-		$project_path   = Charcoal_ResourceLocator::getProjectPath( s('modules' . $real_path) );
-		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( s('modules' . $real_path) );
+		$webapp_path    = Charcoal_ResourceLocator::getApplicationPath( 'modules' . $real_path );
+		$project_path   = Charcoal_ResourceLocator::getProjectPath( 'modules' . $real_path );
+		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( 'modules' . $real_path );
 
 		$event_class_suffix = 'Event' . CHARCOAL_CLASS_FILE_SUFFIX;
 
@@ -302,7 +303,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 			foreach( $this->_events as $event ){
 				$event_path = $event . '@' . $root_path->getVirtualPath();
 
-				$event = Charcoal_Factory::createObject( s($event_path), s('event') );
+				$event = $this->getSandbox()->createEvent( $event_path );
 
 //				log_info( "system,debug", "module", "created event[" . get_class($event) . "/$event_path] in module[$root_path]");
 

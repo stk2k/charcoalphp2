@@ -9,80 +9,70 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ExceptionHandlerList
+class Charcoal_ExceptionHandlerList extends Charcoal_Object
 {
-	static private $handlers;
+	private $handlers;
+	private $sandbox;
+
+	/**
+	 *  Constructor
+	 */
+	public function __construct( $sandbox )
+	{
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+
+		$this->sandbox = $sandbox;
+
+		parent::__construct();
+	}
 
 	/**
 	 * add exception handler
 	 * 
 	 * @param Charcoal_IExceptionHandler $handler       renderer to add
 	 */
-	public static function add( Charcoal_IExceptionHandler $handler )
+	public function add( $handler )
 	{
-		self::$handlers[] = $handler;
+		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IExceptionHandler', $handler );
+
+		$this->handlers[] = $handler;
 	}
 
 	/**
 	 * initialize exception handler list
 	 */
-	public static function init()
+	private function init()
 	{
-		if ( !self::$handlers ){
-			$exception_handlers = Charcoal_Profile::getArray( s('EXCEPTION_HANDLERS') );
+		if ( !$this->handlers ){
+			$this->handlers = array();
+
+			$exception_handlers = $this->sandbox->getProfile()->getArray( 'EXCEPTION_HANDLERS' );
 			if ( $exception_handlers ){
 				foreach( $exception_handlers as $handler_name ){
-					$handler = Charcoal_Factory::createObject( s($handler_name), s('exception_handler'), v(array()), s('Charcoal_IExceptionHandler') );
-					self::$handlers[] = $handler;
+					if ( strlen($handler_name) === 0 )    continue;
+					$handler = $this->sandbox->createObject( $handler_name, 'exception_handler', array(), 'Charcoal_IExceptionHandler' );
+					$this->handlers[] = $handler;
 				}
 			}
-			else{
-				self::$handlers = array();
-			}
 		}
 	}
 
-	/*
-	 * フレームワーク例外ハンドラを実行
+	/**
+	 * execute exception handlers
+	 * 
+	 * @param Exception $e     exception to handle
+	 * 
+	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
 	 */
-	public static function handleFrameworkException( Charcoal_CharcoalException $e )
+	public function handleException( Exception $e )
 	{
-		self::init();
+		Charcoal_ParamTrait::checkException( 1, $e );
 
-		$result = b(FALSE);
-		foreach( self::$handlers as $handler ){
+		$this->init();
+
+		foreach( $this->handlers as $handler ){
 			log_info( "system,debug,error", "exception", "calling exception handler[$handler]." );
-			$handled = $handler->handleFrameworkException( $e );
-			log_info( "system,debug,error", "exception", "handled: $handled" );
-			$handled = b($handled);
-			if ( $handled->isTrue() ){
-				$result = b(TRUE);
-				break;
-			}
+			$handler->handleException( $e );
 		}
-
-		return $result;
-	}
-
-	/*
-	 * 例外ハンドラを実行
-	 */
-	public static function handleException( Exception $e )
-	{
-		self::init();
-
-		$result = b(FALSE);
-		foreach( self::$handlers as $handler ){
-			log_info( "system,debug,error", "exception", "calling exception handler[$handler]." );
-			$handled = $handler->handleException( $e );
-			log_info( "system,debug,error", "exception", "handled: $handled" );
-			$handled = b($handled);
-			if ( $handled->isTrue() ){
-				$result = b(TRUE);
-				break;
-			}
-		}
-
-		return $result;
 	}
 }

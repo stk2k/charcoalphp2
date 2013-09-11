@@ -25,8 +25,10 @@ class Charcoal_SimpleTokenGenerator extends Charcoal_CharcoalObject implements C
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_algorithm  = $config->getString( s('algorithm'), s('sha1') )->getValue();
 
 		log_debug( "debug", "token algorithm: {$this->_algorithm}" );

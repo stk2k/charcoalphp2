@@ -13,7 +13,7 @@ class Charcoal_FileNotFoundException extends Charcoal_RuntimeException
 {
 	public function __construct( $path, $prev = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $path );
+//		Charcoal_ParamTrait::checkString( 1, $path );
 
 		parent::__construct( "File[$path] does not exists.", $prev );
 	}

@@ -29,10 +29,22 @@ class Charcoal_ModuleLoader
 
 	/*
 	 * load module files
+	 * 
+	 * @param Charcoal_Sandbox $sandbox                  sandbox object
+	 * @param CharcCharcoal_ObjectPath $module_path      module path to create
+	 * @param Charcoal_ITaskManager $task_manager        task manager
 	 */
-	public static function loadModule( Charcoal_ObjectPath $module_path, Charcoal_ITaskManager $task_manager )
+	public static function loadModule( $sandbox, $module_path, $task_manager )
 	{
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::checkStringOrObjectPath( 2, $module_path );
+		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
+
 		try{
+			if ( is_string($module_path) ){
+				$module_path = new Charcoal_ObjectPath( $module_path );
+			}
+
 			$path_string = $module_path->toString();
 
 			// check if module is already loaded
@@ -42,7 +54,7 @@ class Charcoal_ModuleLoader
 			}
 
 			// create module object
-			$module = Charcoal_Factory::createObject( s($path_string), s('module'), v(array()), s('Charcoal_IModule'), s('Charcoal_SimpleModule') );
+			$module = $sandbox->createObject( $path_string, 'module', array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
 
 			// load module tasks
 			$module->loadTasks( $task_manager );
@@ -55,8 +67,9 @@ class Charcoal_ModuleLoader
 			if ( $required_modules ){
 				$loaded_modules = NULL;
 				foreach( $required_modules as $module_name ){
-					$obj_path = new Charcoal_ObjectPath( s($module_name) );
-					self::loadModule( $obj_path, $task_manager );
+					if ( strlen($module_name) === 0 )    continue;
+
+					self::loadModule( $module_name, $task_manager );
 				}
 			}
 

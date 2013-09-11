@@ -11,7 +11,7 @@
 
 class Charcoal_URLFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $url, $prev = NULL )
+	public function __construct( $url, $prev = NULL )
 	{
 		parent::__construct( "[$url] is not suitable for URI", $prev );
 	}

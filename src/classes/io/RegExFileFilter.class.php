@@ -17,11 +17,14 @@ class Charcoal_RegExFileFilter implements Charcoal_IFileFilter
 	/**
 	 * Construct object
 	 *
-	 * Charcoal_String $pattern        regular expression pattern
-	 * Charcoal_String $extension      file extension which is ignored in pattern matching.
+	 * string $pattern        regular expression pattern
+	 * string $extension      file extension which is ignored in pattern matching.
 	 */
-	public function __construct( Charcoal_String $pattern, Charcoal_String $extension = NULL )
+	public function __construct($pattern, $extension = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $pattern );
+//		Charcoal_ParamTrait::checkString( 2, $extension, TRUE );
+
 		$this->pattern        = $pattern;
 		$this->extension      = $extension;
 	}

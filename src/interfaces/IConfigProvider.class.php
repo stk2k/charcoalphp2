@@ -16,17 +16,16 @@ interface Charcoal_IConfigProvider
 	 *
 	 * @param Charcoal_Properties $options   option set to apply
 	 */
-	public function setOptions( Charcoal_Properties $options );
+	public function setOptions( $options );
 
 	/**
 	 *  load config
 	 *
-	 * @param  Charcoal_String $config_root   root name
-	 * @param  Charcoal_String $config_name   config name
+	 * @param  string $key       config key
 	 *
-	 * @return mixed   configure data
+	 * @return array   configure data
 	 */
-	public function loadConfig( Charcoal_String $config_root, Charcoal_String $config_name );
+	public function loadConfig( $key );
 
 }
 

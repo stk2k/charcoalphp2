@@ -27,8 +27,10 @@ class Charcoal_ArrayRoutingRule extends Charcoal_CharcoalObject implements Charc
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$rules_section = $config->getSection( s('routing rules') );
 
 		$patterns = $rules_section->getKeys();

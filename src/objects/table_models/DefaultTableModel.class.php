@@ -23,8 +23,10 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
 	/**
 	 * モデルIDを設定
 	 */
-	public function setModelID( Charcoal_String $model_id )
+	public function setModelID( $model_id )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $model_id );
+
 		$this->_model_id = $model_id;
 	}
 

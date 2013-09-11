@@ -12,24 +12,6 @@
 class Charcoal_ScreenLogger extends Charcoal_BaseLogger implements Charcoal_ILogger
 {
 	/*
-	 * コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-		parent::configure( $config );
-	}
-
-	/*
 	 * write header message
 	 */
 	public function writeHeader()

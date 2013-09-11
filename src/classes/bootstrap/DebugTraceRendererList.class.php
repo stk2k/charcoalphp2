@@ -9,18 +9,33 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_DebugTraceRendererList
+class Charcoal_DebugTraceRendererList extends Charcoal_Object
 {
-	static private $renderers;
+	private $renderers;
+	private $sandbox;
+
+	/**
+	 *  Constructor
+	 */
+	public function __construct( $sandbox )
+	{
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+
+		$this->sandbox = $sandbox;
+
+		parent::__construct();
+	}
 
 	/**
 	 * add debugtrace renderer
 	 * 
 	 * @param Charcoal_IDebugtraceRenderer $renderer       renderer to add
 	 */
-	public static function add( Charcoal_IDebugtraceRenderer $renderer )
+	public function add( $renderer )
 	{
-		self::$renderers[] = $renderer;
+		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IDebugtraceRenderer', $renderer );
+
+		$this->renderers[] = $renderer;
 	}
 
 	/**
@@ -28,19 +43,24 @@ class Charcoal_DebugTraceRendererList
 	 *
 	 * @param Charcoal_String $title  title
 	 */
-	public static function render( Exception $e )
+	public function render( Exception $e )
 	{
-		if ( !self::$renderers ){
+		Charcoal_ParamTrait::checkException( 1, $e );
+
+		if ( !$this->renderers ){
+			$this->renderers = array();
+
 			// Create Debug Trace Renderer
-			$debugtrace_renderers = Charcoal_Profile::getArray( s('DEBUGTRACE_RENDERER') );
+			$debugtrace_renderers = $this->sandbox->getProfile()->getArray( 'DEBUGTRACE_RENDERER' );
 
 			if ( $debugtrace_renderers )
 			{
 				foreach( $debugtrace_renderers as $renderer_name )
 				{
+					if ( strlen($renderer_name) === 0 )    continue;
 					try{
-						$renderer = Charcoal_Factory::createObject( s($renderer_name), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
-						self::$renderers[] = $renderer;
+						$renderer = $this->sandbox->createObject( $renderer_name, 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
+						$this->renderers[] = $renderer;
 					}
 					catch ( Exception $e )
 					{
@@ -49,13 +69,10 @@ class Charcoal_DebugTraceRendererList
 					}
 				}
 			}
-			else{
-				self::$renderers = array();
-			}
 		}
 
 		$result = b(FALSE);
-		foreach( self::$renderers as $renderer ){
+		foreach( $this->renderers as $renderer ){
 			$ret = $renderer->render( $e );
 			if ( $ret && $ret instanceof Charcoal_Boolean && $ret->isTrue() ){
 				$result = b(TRUE);

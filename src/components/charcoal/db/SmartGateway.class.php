@@ -21,13 +21,15 @@ function qt( $value )
 
 class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
-	private $_data_source;
-	private $_sql_builder;
+	private $data_source;
+	private $sql_builder;
 
-	private $_data_source_name;
+	private $data_source_name;
 
-	private $_last_sql;
-	private $_last_params;
+	private $last_sql;
+	private $last_params;
+
+	private $model_cache;
 
 	/*
 	 *	コンストラクタ
@@ -42,12 +44,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		// create data source
-		$this->_data_source_name = Charcoal_Profile::getString( s('DB_DATA_SOURCE') );
+		parent::configure( $config );
 
-		log_debug( "data_source", "smart_gateway", "data_source_name=" . $this->_data_source_name );
+		// create data source
+		$this->data_source_name = $this->getSandbox()->getProfile()->getString( 'DB_DATA_SOURCE' );
+
+		log_debug( "data_source", "smart_gateway", "data_source_name=" . $this->data_source_name );
 	}
 
 	/*
@@ -55,8 +59,8 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function terminate()
 	{
-		if ( $this->_data_source ){
-			$this->_data_source->disconnect();
+		if ( $this->data_source ){
+			$this->data_source->disconnect();
 		}
 	}
 
@@ -65,9 +69,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function initDataSource()
 	{
-		if ( !$this->_data_source ){
-			$this->_data_source = Charcoal_Factory::createObject( s($this->_data_source_name), s('data_source') );
-			log_info( "data_source", "smart_gateway", "data source created: " . $this->_data_source_name );
+		if ( !$this->data_source ){
+			$this->data_source = $this->getSandbox()->createObject( $this->data_source_name, 'data_source' );
+			log_info( "data_source", "smart_gateway", "data source created: " . $this->data_source_name );
 		}
 	}
 
@@ -76,11 +80,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function initSQLBuilder()
 	{
-		if ( !$this->_sql_builder ){
+		if ( !$this->sql_builder ){
 			// create SQL builder
-			$sql_builder_name = $this->_data_source->getBackend();
+			$sql_builder_name = $this->data_source->getBackend();
 
-			$this->_sql_builder = Charcoal_Factory::createObject( s($sql_builder_name), s('sql_builder') );
+			$this->sql_builder = $this->getSandbox()->createObject( $sql_builder_name, 'sql_builder' );
 			log_info( "data_source", "smart_gateway", "SQL builder created: " . $sql_builder_name );
 		}
 	}
@@ -90,7 +94,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function getDataSource()
 	{
-		return $this->_data_source;
+		return $this->data_source;
 	}
 
 	/*
@@ -98,7 +102,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function setDataSource( Charcoal_IDataSource $source )
 	{
-		$this->_data_source = $source;
+		$this->data_source = $source;
 	}
 
 	/*
@@ -106,7 +110,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function getSQLBuilder()
 	{
-		return $this->_sql_builder;
+		return $this->sql_builder;
 	}
 
 	/*
@@ -114,7 +118,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function getLastSQL()
 	{
-		return $this->_last_sql;
+		return $this->last_sql;
 	}
 
 	/*
@@ -122,7 +126,33 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function getLastParams()
 	{
-		return $this->_last_params;
+		return $this->last_params;
+	}
+
+	/**
+	 *	get table model
+	 *	
+	 *	@param string $model_name       table model name
+	 */
+	public function getModel( $model_name )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $model_name );
+
+		$model_name = us($model_name);
+
+		if ( isset($this->model_cache[$model_name]) ){
+			return $this->model_cache[$model_name];
+		}
+
+		// create new instance
+		$model = $this->getSandbox()->createObject( $model_name, 'table_model' );
+
+		$model->setModelID( $model_name );
+
+		// set in cache
+		$this->model_cache[$model_name] = $model;
+
+		return $model;
 	}
 
 	/*
@@ -134,10 +164,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$this->initDataSource();
 
 			if ( $onoff ){
-				$this->_data_source->autoCommit($onoff);
+				$this->data_source->autoCommit($onoff);
 			}
 			else{
-				$this->_data_source->autoCommit();
+				$this->data_source->autoCommit();
 			}
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "done: autoCommit" );
 		}
@@ -156,7 +186,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		try{
 			$this->initDataSource();
 
-			$this->_data_source->beginTrans();
+			$this->data_source->beginTrans();
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "done: beginTrans" );
 		}
 		catch ( Exception $e )
@@ -174,7 +204,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		try{
 			$this->initDataSource();
 
-			$this->_data_source->commitTrans();
+			$this->data_source->commitTrans();
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "done: commitTrans" );
 		}
 		catch ( Exception $e )
@@ -192,7 +222,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		try{
 			$this->initDataSource();
 
-			$this->_data_source->rollbackTrans();
+			$this->data_source->rollbackTrans();
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "done: rollbackTrans" );
 		}
 		catch ( Exception $e )
@@ -213,16 +243,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// テーブルモデル取得
-		$model = Charcoal_TableModelCache::get( $model_name );
+		$model = $this->getModel( $model_name );
 
 		try{
-			list( $sql, $params ) = $this->_sql_builder->buildUpdateSQL( $model, $data, $criteria );
+			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $data, $criteria );
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$this->_data_source->prepareExecute( s($sql), v($params) );
+			$this->data_source->prepareExecute( s($sql), v($params) );
 
 		}
 		catch ( Exception $e )
@@ -243,7 +273,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// テーブルモデル取得
-		$model = Charcoal_TableModelCache::get( $model_name );
+		$model = $this->getModel( $model_name );
 
 		try{
 
@@ -264,13 +294,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
 
 			// SQLとパラメータ作成
-			list( $sql, $params ) = $this->_sql_builder->buildUpdateSQL( $model, $dto, $criteria );
+			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$this->_data_source->prepareExecute( s($sql), v($params) );
+			$this->data_source->prepareExecute( s($sql), v($params) );
 
 		}
 		catch ( Exception $e )
@@ -291,7 +321,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// テーブルモデル取得
-		$model = Charcoal_TableModelCache::get( $model_name );
+		$model = $this->getModel( $model_name );
 
 		try{
 			$field = us($field);
@@ -308,13 +338,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
 
 			// SQLとパラメータ作成
-			list( $sql, $params ) = $this->_sql_builder->buildUpdateSQL( $model, $model->createDTO(), $criteria, p($override) );
+			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $model->createDTO(), $criteria, p($override) );
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$this->_data_source->prepareExecute( s($sql), v($params) );
+			$this->data_source->prepareExecute( s($sql), v($params) );
 
 		}
 		catch ( Exception $e )
@@ -336,7 +366,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// テーブルモデル取得
-		$model = Charcoal_TableModelCache::get( $model_name );
+		$model = $this->getModel( $model_name );
 
 		try{
 			// DTO
@@ -356,13 +386,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
 
 			// SQLとパラメータ作成
-			list( $sql, $params ) = $this->_sql_builder->buildUpdateSQL( $model, $dto, $criteria );
+			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$this->_data_source->prepareExecute( s($sql), v($params) );
+			$this->data_source->prepareExecute( s($sql), v($params) );
 
 		}
 		catch ( Exception $e )
@@ -385,26 +415,26 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// テーブルモデル取得
-		$model = Charcoal_TableModelCache::get( $model_name );
+		$model = $this->getModel( $model_name );
 
 		try{
 			// SQLを作成
-			list( $sql, $params ) = $this->_sql_builder->buildInsertSQL( $model, $dto );
+			list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $dto );
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$this->_data_source->prepareExecute( s($sql), v($params) );
+			$this->data_source->prepareExecute( s($sql), v($params) );
 
 			// IDを返す
-			$sql = $this->_sql_builder->buildLastIdSQL();
+			$sql = $this->sql_builder->buildLastIdSQL();
 			
 			// 実行
-			$result = $this->_data_source->prepareExecute( s($sql) );
+			$result = $this->data_source->prepareExecute( s($sql) );
 
 			// フェッチ
-			$row = $this->_data_source->fetchArray( $result );
+			$row = $this->data_source->fetchArray( $result );
 
 			$new_id = $row[0];
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "new_id:$new_id" );
@@ -431,7 +461,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// テーブルモデル取得
-		$model = Charcoal_TableModelCache::get( $model_name );
+		$model = $this->getModel( $model_name );
 
 		try{
 			// プライマリキー
@@ -446,11 +476,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 				$where = "$pk = ?";
 				$params = array( ui($data_id) );
 				$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-				list( $sql, $params ) = $this->_sql_builder->buildUpdateSQL( $model, $dto, $criteria );
+				list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
 			}
 			else{
 				// プライマリキーの値が指定されていなければINSERT
-				list( $sql, $params ) = $this->_sql_builder->buildInsertSQL( $model, $dto );
+				list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $dto );
 
 				$is_new = TRUE;
 			}
@@ -459,19 +489,19 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$this->_data_source->prepareExecute( s($sql), v($params) );
+			$this->data_source->prepareExecute( s($sql), v($params) );
 
 			// IDを返す
 			if ( $is_new ){
-				$sql = $this->_sql_builder->buildLastIdSQL();
+				$sql = $this->sql_builder->buildLastIdSQL();
 
 //				log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 					
 				// 実行
-				$result = $this->_data_source->prepareExecute( s($sql) );
+				$result = $this->data_source->prepareExecute( s($sql) );
 
 				// フェッチ
-				$row = $this->_data_source->fetchArray( $result );
+				$row = $this->data_source->fetchArray( $result );
 
 				$new_id = $row[0];
 			}
@@ -502,7 +532,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// 実行
-			$this->_data_source->prepareExecute( $sql, $params );
+			$this->data_source->prepareExecute( $sql, $params );
 		}
 		catch ( Exception $e ) 
 		{
@@ -523,7 +553,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// DataSourceコンポーネントを取得
-			$ds = $this->_data_source;
+			$ds = $this->data_source;
 
 			// 実行
 			$result = $ds->prepareExecute( $sql, $params );
@@ -557,7 +587,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// DataSourceコンポーネントを取得
-			$ds = $this->_data_source;
+			$ds = $this->data_source;
 
 			// 実行
 			$result = $ds->prepareExecute( $sql, $params );
@@ -595,7 +625,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		// DataSourceを取得
-		$ds = $this->_data_source;
+		$ds = $this->data_source;
 
 		try{
 
@@ -604,7 +634,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$current_model_joins = $query_target->getJoins();
 		
 			// get current model
-			$current_model = Charcoal_TableModelCache::get( s($current_model_name) );
+			$current_model = $this->getModel( s($current_model_name) );
 
 			$current_table_name  = $current_model->getTableName();
 
@@ -632,7 +662,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 						$join_model_name = $join->getModelName();
 						$join_alias = $join->getAlias();
 
-						$join_model = Charcoal_TableModelCache::get( s($join_model_name) );
+						$join_model = $this->getModel( s($join_model_name) );
 						$join_fields = $join_model->getFieldList();
 						foreach( $join_fields as $field ){
 							$out_field = $field;
@@ -652,7 +682,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			}
 
 			// SQLの作成
-			$sql = $this->_sql_builder->buildSelectSQL( $current_model, $options, $criteria, s($current_model_alias), v($current_model_joins), $fields );
+			$sql = $this->sql_builder->buildSelectSQL( $current_model, $options, $criteria, s($current_model_alias), v($current_model_joins), $fields );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "SQL: $sql" );
 
 			// パラメータ
@@ -662,8 +692,8 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			// 実行
 			$result = $ds->prepareExecute( s($sql), v($params) );
 
-			$this->_last_sql = $sql;
-			$this->_last_params = $params;
+			$this->last_sql = $sql;
+			$this->last_params = $params;
 
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "executed SQL: $sql" );
 
@@ -891,7 +921,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		$this->initSQLBuilder();
 
 		try{
-			$model = Charcoal_TableModelCache::get( s($model_name) );
+			$model = $this->getModel( s($model_name) );
 
 			// プライマリキーフィールド名を取得
 			$pk = $model->getPrimaryKey();
@@ -928,7 +958,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$id = us( $id );
 
 			// テーブルモデル取得
-			$model = Charcoal_TableModelCache::get( $model_name );
+			$model = $this->getModel( $model_name );
 
 			// キーフィールド名
 			$pk = us($model->getPrimaryKey());
@@ -942,7 +972,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$criteria->setParams( v($params) );
 
 			// SQLビルダを使いSQLを生成
-			$sql = $this->_sql_builder->buildDeleteSQL( $model, $criteria );
+			$sql = $this->sql_builder->buildDeleteSQL( $model, $criteria );
 
 ///			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
@@ -968,7 +998,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// テーブルモデル取得
-			$model = Charcoal_TableModelCache::get( $model_name );
+			$model = $this->getModel( $model_name );
 
 			// テーブル名
 			$table = $model->getTableName();
@@ -1034,13 +1064,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// テーブルモデル取得
-			$model = Charcoal_TableModelCache::get(  $model_name );
+			$model = $this->getModel(  $model_name );
 
 			// キーフィールド名
 //			$pk = $model->getPrimaryKey();
 
 			// SQLビルダを使いSQLを生成
-			$sql = $this->_sql_builder->buildDeleteSQL( $model, $criteria );
+			$sql = $this->sql_builder->buildDeleteSQL( $model, $criteria );
 
 			// パラメータ
 			$params = $criteria ? $criteria->getParams() : NULL;
@@ -1084,10 +1114,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			$current_model_joins = $query_target->getJoins();
 
 			// get current model
-			$model = Charcoal_TableModelCache::get( s($current_model_name) );
+			$model = $this->getModel( s($current_model_name) );
 
 			// SQL
-			$sql = $this->_sql_builder->buildAggregateSQL( $aggregate_func, $model, $criteria, s($current_model_alias), v($current_model_joins), $fields );
+			$sql = $this->sql_builder->buildAggregateSQL( $aggregate_func, $model, $criteria, s($current_model_alias), v($current_model_joins), $fields );
 
 			// パラメータ
 			$params = $criteria->getParams();
@@ -1096,10 +1126,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 //			log_debug( "debug,smart_gateway,sql", "smart_gateway", "params:" . print_r($params,true) );
 
 			// SQL実行
-			$result = $this->_data_source->prepareExecute( s($sql), v($params) );
+			$result = $this->data_source->prepareExecute( s($sql), v($params) );
 
 			// フェッチ
-			$rows = $this->_data_source->fetchArray( $result );
+			$rows = $this->data_source->fetchArray( $result );
 
 			// result
 			$result = $rows[0] ? intval($rows[0]) : 0;
@@ -1237,7 +1267,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// SQL
-			$limit = $this->_sql_builder->getLimit( $page_info );
+			$limit = $this->sql_builder->getLimit( $page_info );
 
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "limit:$limit" );
 
@@ -1260,7 +1290,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// SQL
-			$offset = $this->_sql_builder->getOffset( $page_info );
+			$offset = $this->sql_builder->getOffset( $page_info );
 
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "offset:$offset" );
 
@@ -1286,12 +1316,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// SQLビルダを使いSQLを生成
-			$sql = $this->_sql_builder->buildCreateDatabaseSQL( $db_name, $charset );
+			$sql = $this->sql_builder->buildCreateDatabaseSQL( $db_name, $charset );
 
 			log_debug( "debug,smart_gateway,sql", "smart_gateway", "sql:$sql" );
 
 			// SQL実行
-			$this->_data_source->execute( s($sql) );
+			$this->data_source->execute( s($sql) );
 
 		}
 		catch ( Exception $e )
@@ -1313,13 +1343,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		try{
 			// テーブルモデル取得
-			$model = Charcoal_TableModelCache::get( $model_name );
+			$model = $this->getModel( $model_name );
 
 			// SQLビルダを使いSQLを生成
-			$sql = $this->_sql_builder->buildCreateTableSQL( $model );
+			$sql = $this->sql_builder->buildCreateTableSQL( $model );
 
 			// SQL実行
-			$this->_data_source->execute( s($sql) );
+			$this->data_source->execute( s($sql) );
 
 		}
 		catch ( Exception $e )

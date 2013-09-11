@@ -10,24 +10,6 @@
 */
 class Charcoal_SimpleRouter extends Charcoal_CharcoalObject implements Charcoal_IRouter
 {
-	/*
-	 * Construct object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-		parent::configure( $config );
-	}
-
 	/**
 	 * Lookup routing rules
 	 *

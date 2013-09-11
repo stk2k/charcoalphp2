@@ -26,11 +26,11 @@ class Charcoal_RenderLayoutEvent extends Charcoal_UserEvent implements Charcoal_
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$config->set( s('priority'), Charcoal_EnumEventPriority::VIEW_RENDERING );
-
 		parent::configure( $config );
+
+		$config->set( s('priority'), Charcoal_EnumEventPriority::VIEW_RENDERING );
 	}
 
 	/**

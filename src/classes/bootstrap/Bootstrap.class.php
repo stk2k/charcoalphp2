@@ -55,12 +55,12 @@ class Charcoal_Bootstrap
 	/*
 	 *	Framework global exception handler
 	 */
-	public static function onUnhandledException( $exception )
+	public static function onUnhandledException( $e )
 	{ 
 		log_fatal( "system,error", "charcoal_global_exception_handler: $exception" );
 
 		// —áŠOƒnƒ“ƒhƒ‰‚Éˆ—‚ðˆÏ÷
-		Charcoal_ExceptionHandlerList::handleFrameworkException( $exception );
+		Charcoal_Framework::handleException( $e );
 	}
 
 	/*
@@ -89,28 +89,17 @@ class Charcoal_Bootstrap
 
 		while( $e = Charcoal_FrameworkExceptionStack::pop() )
 		{
-			if ( $e instanceof Charcoal_CharcoalException ){
-				// Delegate framework exception handling to handlers
-				$handled = Charcoal_ExceptionHandlerList::handleFrameworkException( $e );
-				$handled = b($handled);
-				if ( $handled->isFalse() )
-				{
-					// Forgot to handle exception?
-					Charcoal_Framework::renderExceptionFinally( $e );
-				}
-			}
-			else if ( $e instanceof Exception ){
-				// Delegate framework exception handling to handlers
-				$handled = Charcoal_ExceptionHandlerList::handleException( $e );
-				$handled = b($handled);
-				if ( $handled->isFalse() )
-				{
-					// Forgot to handle exception?
-					Charcoal_Framework::renderExceptionFinally( $e );
-				}
+			// Delegate framework exception handling to handlers
+			$handled = Charcoal_Framework::handleException( $e );
+			$handled = b($handled);
+			if ( $handled->isFalse() )
+			{
+				// Forgot to handle exception?
+				Charcoal_Framework::renderExceptionFinally( $e );
 			}
 		}
 
+		self::$loggers->terminate();
 	}
 
 	/**
@@ -137,9 +126,15 @@ class Charcoal_Bootstrap
 					'Charcoal_IExceptionHandler'					=> 'interfaces',
 					'Charcoal_IDebugtraceRenderer'					=> 'interfaces',
 					'Charcoal_ILogger'								=> 'interfaces',
+					'Charcoal_IRegistry'							=> 'interfaces',
+					'Charcoal_ICodebase'							=> 'interfaces',
+					'Charcoal_IContainer'							=> 'interfaces',
+					'Charcoal_ICoreHook'							=> 'interfaces',
 
 					// traits
 					'Charcoal_ParamTrait' 							=> 'traits',
+					'Charcoal_PrimitiveTrait' 						=> 'traits',
+					'Charcoal_ArrayTrait' 							=> 'traits',
 
 					// Basic object classes	
 					'Charcoal_Object' 								=> 'classes/base',
@@ -150,6 +145,8 @@ class Charcoal_Bootstrap
 					'Charcoal_Interface' 							=> 'classes/base',
 
 					// Basic exception classes
+					'Charcoal_ArrayFormatException'					=> 'exceptions',
+					'Charcoal_BooleanFormatException'				=> 'exceptions',
 					'Charcoal_CharcoalException' 					=> 'exceptions',
 					'Charcoal_ClassNameEmptyException'				=> 'exceptions',
 					'Charcoal_ConfigSectionNotFoundException'		=> 'exceptions',
@@ -159,11 +156,14 @@ class Charcoal_Bootstrap
 					'Charcoal_ClassNotFoundException' 				=> 'exceptions',
 					'Charcoal_CreateClassLoaderException'			=> 'exceptions',
 					'Charcoal_CreateObjectException'				=> 'exceptions',
+					'Charcoal_HashMapFormatException'				=> 'exceptions',
 					'Charcoal_InterfaceImplementException'			=> 'exceptions',
 					'Charcoal_InterfaceNotFoundException'			=> 'exceptions',
 					'Charcoal_FileNotFoundException' 				=> 'exceptions',
 					'Charcoal_FileNotReadableException' 			=> 'exceptions',
+					'Charcoal_FloatFormatException'					=> 'exceptions',
 					'Charcoal_FrameworkBootstrapException' 			=> 'exceptions',
+					'Charcoal_IntegerFormatException'				=> 'exceptions',
 					'Charcoal_LogicException' 						=> 'exceptions',
 					'Charcoal_ModuleLoaderException'				=> 'exceptions',
 					'Charcoal_ParameterException'					=> 'exceptions',
@@ -172,6 +172,8 @@ class Charcoal_Bootstrap
 					'Charcoal_ProfileLoadingException'				=> 'exceptions',
 					'Charcoal_ProfileConfigFileNotFoundException'	=> 'exceptions',
 					'Charcoal_RuntimeException' 					=> 'exceptions',
+					'Charcoal_SanboxNotLoadedException'				=> 'exceptions',
+					'Charcoal_StringFormatException'				=> 'exceptions',
 
 					// Primitive classes
 					'Charcoal_Primitive' 					=> 'classes/base',
@@ -197,24 +199,23 @@ class Charcoal_Bootstrap
 					'Charcoal_PhpConfigProvider'			=> 'classes/config_providers',
 
 					// Bootstrap classes
+					'Charcoal_CacheDriverList'				=> 'classes/bootstrap',
 					'Charcoal_ClassLoader'					=> 'classes/bootstrap',
 					'Charcoal_ConfigPropertySet'			=> 'classes/bootstrap',
 					'Charcoal_Config' 						=> 'classes/bootstrap',
 					'Charcoal_ConfigLoader' 				=> 'classes/bootstrap',
-					'Charcoal_CoreHook'						=> 'classes/bootstrap',
-					'Charcoal_CoreHookMessage'				=> 'classes/bootstrap',
+					'Charcoal_CoreHookList'					=> 'classes/bootstrap',
 					'Charcoal_DebugTraceRendererList'		=> 'classes/bootstrap',
-					'Charcoal_DIContainer' 					=> 'classes/bootstrap',
 					'Charcoal_ExceptionHandlerList'			=> 'classes/bootstrap',
-					'Charcoal_Factory' 						=> 'classes/bootstrap',
 					'Charcoal_Framework' 					=> 'classes/bootstrap',
 					'Charcoal_FrameworkVersion' 			=> 'classes/bootstrap',
 					'Charcoal_FrameworkExceptionStack'		=> 'classes/bootstrap',
-					'Charcoal_Logger' 						=> 'classes/bootstrap',
+					'Charcoal_LoggerList'					=> 'classes/bootstrap',
 					'Charcoal_LogMessage' 					=> 'classes/bootstrap',
-					'Charcoal_Profile' 						=> 'classes/bootstrap',
+					'Charcoal_SandboxProfile' 				=> 'classes/bootstrap',
 					'Charcoal_ResourceLocator' 				=> 'classes/bootstrap',
 					'Charcoal_System' 						=> 'classes/bootstrap',
+					'Charcoal_Sandbox' 						=> 'classes/bootstrap',
 
 					// Class loaders
 					'Charcoal_FrameworkClassLoader' 			=> 'objects/class_loaders',
@@ -251,8 +252,22 @@ class Charcoal_Bootstrap
 					'Charcoal_PopupScreenLogger'					=> 'objects/loggers',
 					'Charcoal_ConsoleLogger'						=> 'objects/loggers',
 
+					// registry classes
+					'Charcoal_FileSystemRegistry'					=> 'classes/bootstrap/registry',
+					'Charcoal_MemoryRegistry'						=> 'classes/bootstrap/registry',
+
+					// codebase classes
+					'Charcoal_PlainCodebase'						=> 'classes/bootstrap/codebase',
+
+					// container classes
+					'Charcoal_DIContainer' 							=> 'classes/bootstrap/container',
+					'Charcoal_AopContainer'							=> 'classes/bootstrap/container',
+
 					// utility classes
-					'Charcoal_EncodingConverter'		=> 'classes/util',
+					'Charcoal_EncodingConverter'					=> 'classes/util',
+
+					// core hook classes
+					'Charcoal_DefaultCoreHook'						=> 'objects/core_hooks',
 
 				);
 		}

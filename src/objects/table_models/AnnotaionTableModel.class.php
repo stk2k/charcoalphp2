@@ -70,15 +70,6 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 		$this->_annotaions = $annotaions;
 	}
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-	}
-
 	/*
 	 *   アノテーションを取得
 	 */

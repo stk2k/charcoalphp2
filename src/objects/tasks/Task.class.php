@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask
+abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask, Charcoal_IExceptionHandler
 {
 	const TAG = "Task";
 
@@ -38,17 +38,33 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$this->_name_space         = $config->getString( s('name_space'), s('') );
-		$this->_event_filters      = $config->getArray( s('event_filters'), v(array()) );
-		$this->_post_actions       = $config->getArray( s('post_actions'), v(array()) );
-		$this->_priority           = $config->getInteger( s('priority'), i(0) );
+		parent::configure( $config );
 
-		log_debug( "debug", "Task[$this] name space: {$this->_name_space}", self::TAG );
-		log_debug( "debug", "Task[$this] event filters: {$this->_event_filters}", self::TAG );
-		log_debug( "debug", "Task[$this] post actions: {$this->_post_actions}", self::TAG );
-		log_debug( "debug", "Task[$this] priority: {$this->_priority}", self::TAG );
+		$this->_name_space         = $config->getString( 'name_space', '' );
+		$this->_event_filters      = $config->getArray( 'event_filters', array() );
+		$this->_post_actions       = $config->getArray( 'post_actions', array() );
+		$this->_priority           = $config->getInteger( 'priority', 0 );
+
+		if ( $this->getSandbox()->isDebug() )
+		{
+			log_debug( "debug", "Task[$this] name space: {$this->_name_space}", self::TAG );
+			log_debug( "debug", "Task[$this] event filters: " . implode( ',', $this->_event_filters ), self::TAG );
+			log_debug( "debug", "Task[$this] post actions: " . implode( ',', $this->_post_actions ), self::TAG );
+			log_debug( "debug", "Task[$this] priority: {$this->_priority}", self::TAG );
+		}
+	}
+
+	/**
+	 * execute exception handlers
+	 * 
+	 * @param Exception $e     exception to handle
+	 * 
+	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
+	 */
+	public function handleException( $e )
+	{
 	}
 
 	/**
@@ -57,14 +73,6 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	public function getNameSpace()
 	{
 		return $this->_name_space;
-	}
-
-	/**
-	 * ユーザイベントを作成する
-	 */
-	public function createUserEvent( Charcoal_String $event_name )
-	{
-		return Charcoal_Factory::createObject( s($event_name), s('event') );
 	}
 
 	/**

@@ -9,52 +9,52 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class CommandTask extends CommandTaskBase
+class CommandTask extends Charcoal_Task
 {
 	/**
-	 * setup
+	 * process event
 	 *
-	 * @return void
+	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function setUp()
+	public function processEvent( Charcoal_IEventContext $context )
 	{
-	}
+		$request   = $context->getRequest();
+//		$response  = $context->getResponse();
+//		$sequence  = $context->getSequence();
+//		$procedure = $context->getProcedure();
 
-	/**
-	 * clean up
-	 *
-	 * @return void
-	 */
-	public function cleanUp()
-	{
-	}
+		// get paramter from command line
+		$actions       = $request->getString( s("actions") );
 
-	/**
-	 * execute command
-	 *
-	 * @param Charcoal_String $action   action name to execute
-	 */
-	public function execute( Charcoal_String $action )
-	{
-		$action = us($action);
+		// convert comma separated action list to PHP array
+		$action_list = $actions->split( s(',') );
 
-		switch( $action ){
-		case 'version':
-			$version = Charcoal_Framework::getVersion();
-			echo "CharcoalPHP {$version}." . PHP_EOL;
-			echo "Copyright (c)2008-2013 CharcoalPHP team." . PHP_EOL;
-
-			return TRUE;
-
-		case 'hello':
-			echo "Hello, world!" . PHP_EOL;
-
-			return TRUE;
+		// initialize
+		try{
+			$this->setUp();
+		}
+		catch( Exception $e ){
+			print "Command execution failed while setup:" . $e . PHP_EOL;
+			return b(true);
 		}
 
-		return FALSE;
-	}
+		foreach( $action_list as $action ){
+			$this->action = $action = trim( $action );
+			$tests ++;
 
+			$this->execute( s($action) );
+		}
+
+		try{
+			$this->cleanUp();
+		}
+		catch( Exception $e ){
+			print "Command execution failed while clean up:" . $e . PHP_EOL;
+			return b(true);
+		}
+
+		return b(TRUE);
+	}
 }
 
 return __FILE__;

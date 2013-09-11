@@ -39,10 +39,6 @@ include( CHARCOAL_HOME . '/charcoal.inc.php');
 // run framework
 //
 
-//ob_start();
-
 Charcoal_Bootstrap::run();
 Charcoal_Framework::run();
-
-//ob_end_flush();
 

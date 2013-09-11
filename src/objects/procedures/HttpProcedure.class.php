@@ -10,60 +10,57 @@
 */
 class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal_IProcedure
 {
-	private $_task_manager;
-	private $_use_session;
-	private $_forward_target;
-	private $_sequence;
-	private $_modules;
-	private $_events;
-	private $_layout_manager;
-	private $_response_filters;
-
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+	private $task_manager;
+	private $use_session;
+	private $forward_target;
+	private $sequence;
+	private $modules;
+	private $events;
+	private $layout_manager;
+	private $response_filters;
 
 	/**
 	 * Initialize instance
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$this->_task_manager        = $config->getString( s('task_manager'), s('') );
-		$this->_use_session         = $config->getBoolean( s('use_session'), b(TRUE) );
-		$this->_forward_target      = $config->getString( s('forward_target'), s('') );
-		$this->_sequence            = $config->getString( s('sequence'), s('') );
-		$this->_modules             = $config->getArray( s('modules'), v(array()) );
-		$this->_events              = $config->getArray( s('events'), v(array()) );
-		$this->_response_filters    = $config->getArray( s('response_filters'), v(array()) );
+		parent::configure( $config );
 
-		$layout_manager      = $config->getString( s('layout_manager') );
-		$this->setLayoutManager( s($layout_manager) );
+		$this->task_manager        = $config->getString( 'task_manager', '' );
+		$this->use_session         = $config->getBoolean( 'use_session', TRUE );
+		$this->forward_target      = $config->getString( 'forward_target', '' );
+		$this->sequence            = $config->getString( 'sequence', '' );
+		$this->modules             = $config->getArray( 'modules', array() );
+		$this->events              = $config->getArray( 'events', array() );
+		$this->response_filters    = $config->getArray( 'response_filters', array() );
+
+		$layout_manager      = $config->getString( 'layout_manager' );
+
+		if ( $layout_manager ){
+			$this->setLayoutManager( $layout_manager );
+		}
 
 		// eventsに記載しているイベントのモジュールも読み込む
-		if ( $this->_events ){
-			foreach( $this->_events as $event ){
+		if ( $this->events ){
+			foreach( $this->events as $event ){
 				$pos = strpos( $event, "@" );
 				if ( $pos !== FALSE ){
 					$module_name = substr( $event, $pos );
-					$this->_modules[] = $module_name;
+					$this->modules[] = $module_name;
 				}
 			}
 		}
 
-//		log_info( "system,config", "procedure", "task_manager:" . $this->_task_manager );
-//		log_info( "system,config", "procedure", "use_session:" . $this->_use_session );
-//		log_info( "system,config", "procedure", "forward_target:" . $this->_forward_target );
-//		log_info( "system,config", "procedure", "sequence:" . $this->_sequence );
-//		log_info( "system,config", "procedure", "modules:" . $this->_modules );
-//		log_info( "system,config", "procedure", "events:" . $this->_events );
-//		log_info( "system,config", "procedure", "layout_manager:" . $this->_layout_manager );
-//		log_info( "system,config", "procedure", "response_filters:" . print_r($this->_response_filters,true) );
+//		log_info( "system,config", "procedure", "task_manager:" . $this->task_manager );
+//		log_info( "system,config", "procedure", "use_session:" . $this->use_session );
+//		log_info( "system,config", "procedure", "forward_target:" . $this->forward_target );
+//		log_info( "system,config", "procedure", "sequence:" . $this->sequence );
+//		log_info( "system,config", "procedure", "modules:" . $this->modules );
+//		log_info( "system,config", "procedure", "events:" . $this->events );
+//		log_info( "system,config", "procedure", "layout_manager:" . $this->layout_manager );
+//		log_info( "system,config", "procedure", "response_filters:" . print_r($this->response_filters,true) );
 
 	}
 
@@ -72,16 +69,16 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function getLayoutManager()
 	{
-		return $this->_layout_manager;
+		return $this->layout_manager;
 	}
 
 	/*
 	 * レイアウトマネージャを設定
 	 */
-	public function setLayoutManager( Charcoal_String $layout_manager )
+	public function setLayoutManager( $layout_manager )
 	{
-		if ( !$layout_manager->isEmpty() ){
-			$this->_layout_manager = Charcoal_Factory::CreateObject( s($layout_manager), s('layout_manager') );
+		if ( $layout_manager && strlen($layout_manager) > 0 ){
+			$this->layout_manager = $this->getSandbox()->createObject( $layout_manager, 'layout_manager' );
 		}
 	}
 
@@ -90,7 +87,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function hasForwardTarget()
 	{
-		return !$this->_forward_target->isEmpty();
+		return strlen($this->forward_target) > 0;
 	}
 
 	/*
@@ -98,14 +95,18 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function getForwardTarget()
 	{
-		return new Charcoal_ObjectPath( $this->_forward_target );
+		return new Charcoal_ObjectPath( $this->forward_target );
 	}
 
 	/*
 	 * プロシージャを実行する
 	 */
-	public function execute( Charcoal_IRequest $request, Charcoal_IResponse $response, Charcoal_Session $session )
+	public function execute( $request, $response, $session = NULL )
 	{
+		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IRequest', $request );
+		Charcoal_ParamTrait::checkImplements( 2, 'Charcoal_IResponse', $response );
+		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_Session', $session, TRUE );
+
 		$proc_path = $this->getObjectPath();
 		$proc_name = $proc_path->toString();
 
@@ -116,8 +117,8 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		//
 
 		// タスクマネージャを作成
-		$task_manager_name = $this->_task_manager;
-		$task_manager = Charcoal_Factory::createObject( s($task_manager_name), s('task_manager') );
+		$task_manager_name = $this->task_manager;
+		$task_manager = $this->getSandbox()->createObject( $task_manager_name, 'task_manager' );
 
 //		log_info( "system", "procedure", "タスクマネージャ[$task_manager_name]を作成しました。" );
 
@@ -126,20 +127,20 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		//
 
 //		log_info( "system", "procedure", 'loading module at procedure path:' . $proc_path );
-		Charcoal_ModuleLoader::loadModule( $proc_path, $task_manager );
+		Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $proc_path, $task_manager );
 //		log_info( "system", "procedure", 'loaded module at procedure path:' . $proc_path );
 
 		//=======================================
 		// 追加モジュールのロード
 		//
 
-		if ( $this->_modules ) {
-//			log_info( "system", "procedure", 'loading additional modules: ' . $this->_modules . " of procedure: " . $proc_path );
+		if ( $this->modules ) {
+//			log_info( "system", "procedure", 'loading additional modules: ' . $this->modules . " of procedure: " . $proc_path );
 
-			foreach( $this->_modules as $module_name ) {
+			foreach( $this->modules as $module_name ) {
+				if ( strlen($module_name) === 0 )    continue;
 				// load module
-				$obj_path = new Charcoal_ObjectPath( s($module_name) );
-				Charcoal_ModuleLoader::loadModule( $obj_path, $task_manager );
+				Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $module_name, $task_manager );
 			}
 	
 //			log_info( "system", "procedure", 'loaded additional modules.' );
@@ -149,12 +150,12 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		// レスポンスフィルタのロード
 		//
 
-		if ( $this->_response_filters ) {
+		if ( $this->response_filters ) {
 //			log_info( "system", "procedure", 'プロシージャの追加レスポンスフィルタを読み込みます。' );
 
-			foreach( $this->_response_filters as $filter_name ) {
+			foreach( $this->response_filters as $filter_name ) {
 				// モジュールのロード
-				$filter = Charcoal_Factory::createObject( s($filter_name), s('response_filter') );
+				$filter = $this->getSandbox()->createObject( $filter_name, 'response_filter' );
 				// リストに追加
 				$response->addResponseFilter( $filter );
 			}
@@ -165,9 +166,9 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		//=======================================
 		// ステートフルタスクの復帰
 		//
-		$use_session = Charcoal_Profile::getBoolean(s('USE_SESSION'))->isTrue();
+		$use_session = $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' );
 
-		if ( $use_session && $this->_use_session->getValue() ){
+		if ( $use_session ){
 //			log_info( "system", "procedure", 'ステートフルタスクの復元を開始します。' );
 
 			$task_manager->restoreStatefulTasks( $session );
@@ -179,24 +180,26 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		// シーケンスの復帰
 		//
 
-		$global_sequence = new Charcoal_Sequence();
-		$local_sequence = new Charcoal_Sequence();
-
-		$seq_name = us($this->_sequence);
-		$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
+		$sequence = NULL;
+		$globalsequence = NULL;
+		$localsequence = NULL;
 
 		if ( $use_session ){
+
+			$seq_name = us($this->sequence);
+			$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
 
 			// restore global sequence
 //			log_info( "system,sequence", "sequence", "starting restoring global sequence." );
 
 			$data_id = 'sequence://global';
+			$global_seq = NULL;
 			if ( isset($_SESSION[ $data_id ]) ){
 				$data = $_SESSION[ $data_id ];
 				$data = unserialize( $data );
 				if ( $data instanceof Charcoal_Sequence ){
-					$global_sequence = $data;
-//					log_info( "debug,sequence", "sequence", "restored global sequence:" . print_r($global_sequence,true) );
+					$global_seq = $data;
+//					log_info( "debug,sequence", "sequence", "restored global sequence:" . print_r($globalsequence,true) );
 				}
 			}
 
@@ -205,19 +208,23 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 
 			// 復元
 			$data_id = 'sequence://' . $seq_name;
+			$local_seq = NULL;
 			if ( isset($_SESSION[ $data_id ]) ){
 				$data = $_SESSION[ $data_id ];
 
 				$data = unserialize( $data );
 				if ( $data instanceof Charcoal_Sequence ){
-					$local_sequence = $data;
-//					log_info( "debug,sequence",  "restored local sequence:" . print_r($local_sequence,true) );
+					$local_seq = $data;
+//					log_info( "debug,sequence",  "restored local sequence:" . print_r($localsequence,true) );
 				}
 			}
-		}
 
-		// merge global and local sequence
-		$sequence = new Charcoal_SequenceHolder( $global_sequence, $local_sequence );
+			// merge global and local sequence
+			$global_seq = $global_seq ? $global_seq : new Charcoal_Sequence();
+			$local_seq  = $local_seq ? $local_seq : new Charcoal_Sequence();
+
+			$sequence = new Charcoal_SequenceHolder( $global_seq, $local_seq );
+		}
 
 		//=======================================
 		// create system event(request event)
@@ -226,7 +233,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 //		log_info( "system,debug,event", 'creating reqyest event.', 'event' );
 
 		// create request event
-		$event = Charcoal_Factory::createEvent( s('request'), v(array($request)) );
+		$event = $this->getSandbox()->createEvent( 'request', array($request) );
 		$task_manager->pushEvent( $event );
 
 //		log_info( "system,debug,event", 'pushed reqyest event to the event queue.', 'event' );
@@ -238,11 +245,13 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 
 		$event_list = array();
 
-		if ( $this->_events )
+		if ( $this->events )
 		{
-			foreach( $this->_events as $event_name )
+			foreach( $this->events as $event_name )
 			{
-				$event = Charcoal_Factory::createEvent( s($event_name) );
+				if ( strlen($event_name) === 0 )    continue;
+
+				$event = $this->getSandbox()->createEvent( $event_name );
 				$task_manager->pushEvent( $event );
 			}
 		}
@@ -253,7 +262,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 
 //		log_info( "system", "procedure", "タスクマネージャによるイベント処理を開始します。" );
 
-		$context = new Charcoal_EventContext();
+		$context = new Charcoal_EventContext( $this->getSandbox() );
 
 		$context->setProcedure( $this );
 		$context->setRequest( $request );
@@ -274,18 +283,21 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 
 		if ( $use_session ){
 
+			$seq_name = us($this->sequence);
+			$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
+
 			// globalシーケンスの保存
 			$data_id = 'sequence://global';
-			$session->set( s($data_id), $global_sequence );
+			$session->set( s($data_id), $global_seq );
 
-//			log_info( "debug,sequence",  "global_sequence:" . print_r($global_sequence,true) );
+//			log_info( "debug,sequence",  "globalsequence:" . print_r($globalsequence,true) );
 //			log_info( "system,sequence", "globalシーケンスを保存しました。" );
 
 			// localシーケンスの保存
 			$data_id = 'sequence://' . $seq_name;
-			$session->set( s($data_id), $local_sequence );
+			$session->set( s($data_id), $local_seq );
 
-//			log_info( "debug,sequence",  "local_sequence:" . print_r($local_sequence,true) );
+//			log_info( "debug,sequence",  "localsequence:" . print_r($localsequence,true) );
 //			log_info( "system,sequence", "localシーケンス[$seq_name]を保存しました。" );
 		}
 

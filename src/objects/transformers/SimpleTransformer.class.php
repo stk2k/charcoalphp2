@@ -10,23 +10,6 @@
 */
 class Charcoal_SimpleTransformer extends Charcoal_CharcoalObject implements Charcoal_ITransformer
 {
-	/*
-	 * コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-	}
-
 	/**
 	 * 変換する
 	 */

@@ -19,11 +19,14 @@ class Charcoal_File extends Charcoal_Object
 	 * @param Charcoal_String $file_name    Name of the file or directory.
 	 * @param Charcoal_File $parent    Parent object
 	 */
-	public function __construct( Charcoal_String $file_name, Charcoal_File $parent = NULL )
+	public function __construct( $file_name, $parent = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $file_name );
+//		Charcoal_ParamTrait::checkFile( 2, $parent, TRUE );
+
 		parent::__construct();
 
-		$path = $parent ? $parent->getPath() . DIRECTORY_SEPARATOR . us($file_name) : us($file_name);
+		$path = $parent ? $parent->getPath() . DIRECTORY_SEPARATOR . $file_name : $file_name;
 
 		while( stripos($path,'//') !== FALSE ){
 			$path = str_replace('//','/',$path);
@@ -33,10 +36,14 @@ class Charcoal_File extends Charcoal_Object
 	}
 
 	/**
-	 *  Create object
+	 *  Create file object
+	 *
+	 * @param Charcoal_String $file_name    Name of the file or directory.
 	 */
-	public static function create( Charcoal_String $file_name )
+	public static function create( $file_name )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $file_name );
+
 		return new Charcoal_File( $file_name );
 	}
 
@@ -47,7 +54,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function canRead()
 	{
-		return is_readable($this->_path);
+		return is_readable( $this->_path );
 	}
 
 	/**
@@ -87,7 +94,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getPath()
 	{
-		return s( $this->_path );
+		return $this->_path;
 	}
 
 	/**
@@ -187,11 +194,11 @@ class Charcoal_File extends Charcoal_Object
 	 *
 	 * @return Charcoal_String
 	 */
-	public function getName( Charcoal_String $suffix = NULL )
+	public function getName( $suffix = NULL )
 	{
 		$name = basename( $this->_path, $suffix );
 
-		return s($name);
+		return $name;
 	}
 
 	/**
@@ -201,7 +208,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getDir()
 	{
-		return new Charcoal_File( s(dirname($this->_path)) );
+		return new Charcoal_File( dirname($this->_path) );
 	}
 
 	/**
@@ -219,9 +226,9 @@ class Charcoal_File extends Charcoal_Object
 	 *
 	 * @return Charcoal_File
 	 */
-	public function getChild( Charcoal_String $file_or_dir_name )
+	public function getChild( $file_or_dir_name )
 	{
-		return new Charcoal_File( s($this->_path . DIRECTORY_SEPARATOR . us($file_or_dir_name)) );
+		return new Charcoal_File( $this->_path . DIRECTORY_SEPARATOR . $file_or_dir_name );
 	}
 
 	/**
@@ -239,15 +246,15 @@ class Charcoal_File extends Charcoal_Object
 	 *
 	 * @return Charcoal_File
 	 */
-	public function putContents( Charcoal_String $contents )
+	public function putContents( $contents )
 	{
-		return file_put_contents( $this->_path, us($contents) );
+		return file_put_contents( $this->_path, $contents );
 	}
 
 	/**
 	 *  Rename the file or directory
 	 */
-	public function rename( Charcoal_File $new_file)
+	public function rename( $new_file )
 	{
 		$res = rename( $this->_path, $new_file->getPath() );
 		if ( $res === FALSE ){
@@ -264,15 +271,11 @@ class Charcoal_File extends Charcoal_Object
 	 *
 	 * @return void
 	 */
-	public function makeFile( Charcoal_String $mode, Charcoal_String $contents, Charcoal_Boolean $drilldown = NULL )
+	public function makeFile( $mode, $contents, $drilldown = TRUE )
 	{
 		$parent_dir = $this->getDir();
 
-		if ( $drilldown === NULL ){
-			$drilldown = b(TRUE);
-		}
-
-		$parent_dir->makeDirectory($mode, $drilldown);
+		$parent_dir->makeDirectory( $mode, $drilldown );
 
 		$path = $this->_path;
 
@@ -290,15 +293,13 @@ class Charcoal_File extends Charcoal_Object
 	 *
 	 * @return void
 	 */
-	public function makeDirectory( Charcoal_String $mode, Charcoal_Boolean $drilldown = NULL )
+	public function makeDirectory( Charcoal_String $mode, $drilldown = TRUE )
 	{
-		$drilldown = $drilldown ? $drilldown->isTrue() : FALSE;
-
 		$path = $this->_path;
 
 		if ( file_exists($path) )	return;
 
-		$res = mkdir( us($path), us($mode), $drilldown );
+		$res = mkdir( $path, $mode, $drilldown );
 		if ( $res === FALSE ){
 			_throw( new Charcoal_MakeDirectoryException( $path ) );
 		}
@@ -311,7 +312,7 @@ class Charcoal_File extends Charcoal_Object
 	 *
 	 * @return array of Charcoal_File            File objects which are found by the filter. If it fails, NULL is returned.
 	 */
-	public function listFiles( Charcoal_IFileFilter $filter = NULL )
+	public function listFiles( $filter = NULL )
 	{
 		$path = $this->_path;
 

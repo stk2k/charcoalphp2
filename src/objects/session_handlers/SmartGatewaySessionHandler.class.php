@@ -29,7 +29,7 @@ class Charcoal_SmartGatewaySessionHandler extends Charcoal_CharcoalObject implem
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 

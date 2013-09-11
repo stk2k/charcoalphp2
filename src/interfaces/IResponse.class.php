@@ -40,8 +40,8 @@ interface Charcoal_IResponse extends Charcoal_ICharcoalObject
 	 */
 	public function get( Charcoal_String $key );
 
-	/*
-	 *  Get all values from container.
+	/**
+	 *	Get all values with keys
 	 *
 	 * @return array
 	 */
@@ -58,10 +58,10 @@ interface Charcoal_IResponse extends Charcoal_ICharcoalObject
 	 */
 	public function set( Charcoal_String $key, $value, Charcoal_Boolean $skip_filters = NULL );
 
-	/*
-	 *	Merge all elements of an array into container
-	 *
-	 * @param array $array   Array to merge
+	/**
+	 *	Set all array elements
+	 *	
+	 *	@param array $array   array data to set
 	 */
 	public function setArray( array $array );
 

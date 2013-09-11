@@ -23,27 +23,33 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_CharcoalObject impleme
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 	}
 
 	/**
 	 * Render debug trace
 	 *
 	 */
-	public function render( Exception $e )
+	public function render( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		echo $this->output( $e );
 
-		return b(TRUE);
+		return TRUE;
 	}
 
 	/**
 	 * Output HTML
 	 *
 	 */
-	public function output( Exception $e )
+	public function output( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		$out = '';
 		$version = Charcoal_Framework::getVersion();
 

@@ -11,7 +11,7 @@
 
 class Charcoal_ProcessEventException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_IEvent $event, Charcoal_ITask $task, $result, Charcoal_String $message, $prev = NULL )
+	public function __construct( $event, $task, $result, $message, $prev = NULL )
 	{
 		parent::__construct( "Event processing failed. [event]$event [task]$task [result]$result [message]$message", $prev );
 	}

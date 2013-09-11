@@ -11,43 +11,47 @@
 */
 class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Charcoal_IConfigProvider
 {
-	private $_debug;
+	private $debug;
 
 	/**
 	 * set options
 	 *
 	 * @param Charcoal_Properties $options   option set to apply
 	 */
-	public function setOptions( Charcoal_Properties $options )
+	public function setOptions( $options )
 	{
-		$this->_debug = $options->getBoolean( s('debug'), b(FALSE) );
+//		Charcoal_ParamTrait::checkProperties( 1, $options );
+		if ( is_array( $options ) ){
+			$this->debug = isset($options['debug']) ? $options['debug'] : FALSE;
+		}
+		else{
+			$this->debug = $options->getBoolean( 'debug', FALSE );
+		}
 	}
 
 	/**
 	 *  load config
 	 *
-	 * @param  Charcoal_String $config_root   root name
-	 * @param  Charcoal_String $config_name   config name
+	 * @param  string $key          config key
 	 *
 	 * @return mixed   configure data
 	 */
-	public function loadConfig( Charcoal_String $config_root, Charcoal_String $config_name )
+	public function loadConfig( $key )
 	{
-		$config_root = us($config_root);
-		$config_name = us($config_name);
+//		Charcoal_ParamTrait::checkString( 1, $key );
 
-		$source = $config_root . $config_name . '.ini';
+		$source = $key . '.ini';
 
 		// check if ini file exists
-		if ( !is_file($source) ){	
-			if ( $this->_debug->isTrue() )	print "[$source]is not exists!" . eol();	
+		if ( !is_file($source) ){
+			if ( $this->debug === TRUE )	print "[$source]is not exists!" . eol();	
 //			log_info( "system, debug, config", "config", "ini file[$source] does not exist." );
 			return NULL;
 		}
 
 		// read ini file
 	    $ini_config = parse_ini_file( $source, TRUE );
-		if ( $this->_debug->isTrue() ){
+		if ( $this->debug === TRUE ){
 			print "[$source] parse_ini_file($source)=" . eol();
 			ad( $ini_config );
 		}

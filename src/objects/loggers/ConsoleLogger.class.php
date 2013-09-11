@@ -24,7 +24,7 @@ class Charcoal_ConsoleLogger extends Charcoal_CharcoalObject implements Charcoal
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 	}
@@ -48,7 +48,7 @@ class Charcoal_ConsoleLogger extends Charcoal_CharcoalObject implements Charcoal
 		$message = System::toString( $message );
 
 		// エンコーディング変換
-		$conv = Charcoal_EncodingConverter::fromString( s('PHP'), s('LOG') );
+		$conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'LOG' );
 		$message = $conv->convertEncoding( $message );
 
 		// 画面出力

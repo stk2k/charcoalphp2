@@ -22,7 +22,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 
 		if ( $value ){
 			if ( $value instanceof Charcoal_Vector ){
-				$this->_value = $value->toArray();
+				$this->_value = $value->unbox();
 			}
 			else if ( is_array($value) ){
 				$this->_value = $value;
@@ -138,8 +138,10 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 		return array_splice ( $this->_value, $index, $length );
 	}
 
-	/*
-	 *	空か
+	/**
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
 	public function isEmpty()
 	{

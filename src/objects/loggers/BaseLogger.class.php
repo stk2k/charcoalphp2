@@ -24,7 +24,20 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 	{
 		parent::__construct();
 
-		$this->_converter = Charcoal_EncodingConverter::fromString( s('PHP'), s('LOG') );
+	}
+
+	/**
+	 * Initialize instance
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function configure( $config )
+	{
+		parent::configure( $config );
+
+		$this->_log_format   = $config->getString( s('log_format'), s(self::DEFAULT_LOG_FORMAT) );
+
+		$this->_converter = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'LOG' );
 
 		$now_time = time();
 
@@ -45,18 +58,6 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 				'%REQUEST_ID%' => Charcoal_Framework::getRequestID(),
 				'%REQUEST_PATH%' => Charcoal_Framework::getRequestPath(),
 			);
-	}
-
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-		parent::configure( $config );
-
-		$this->_log_format   = $config->getString( s('log_format'), s(self::DEFAULT_LOG_FORMAT) );
 	}
 
 
@@ -94,6 +95,8 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 	 */
 	public function formatMessage( Charcoal_LogMessage $msg )
 	{
+//		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_LogMessage', $msg );
+
 		$level   = $msg->getLevel();
 		$tag     = $msg->getTag();
 		$message = $msg->getMessage();
@@ -135,8 +138,10 @@ class Charcoal_BaseLogger extends Charcoal_CharcoalObject
 	/*
 	 * Format log file name
 	 */
-	public function formatFileName( Charcoal_String $file_name )
+	public function formatFileName( $file_name )
 	{
+		Charcoal_ParamTrait::checkString( 1, $file_name );
+
 		$out = us($file_name);
 
 		// replace keyword

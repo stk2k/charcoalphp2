@@ -11,10 +11,10 @@
 
 class Charcoal_HttpResponse extends Charcoal_BaseResponse
 {
-	private $_status;
-	private $_cookie;
+	private $status;
+	private $cookie;
 
-	private $_headers;	// array of Charcoal_HttpHeader
+	private $headers;	// array of Charcoal_HttpHeader
 
 	/*
 	 *	Construct object
@@ -24,8 +24,21 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 		parent::__construct();
 
 		$this->_vars     = array();
-		$this->_cookie   = new Charcoal_Cookie();
-		$this->_headers  = array();
+		$this->headers  = array();
+	}
+
+	/**
+	 * Initialize instance
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function configure( $config )
+	{
+		parent::configure( $config );
+
+		// use cookie
+		$usecookie  = $this->getSandbox()->getProfile()->getBoolean( 'USE_COOKIE', FALSE );
+		$this->cookie = $usecookie ? new Charcoal_CookieWriter() : NULL;
 	}
 
 	/**
@@ -51,7 +64,7 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 		if ( $replace === NULL ){
 			$replace = b(TRUE);
 		}
-		$this->_headers[] = new Charcoal_HttpHeader( $header, $replace );
+		$this->headers[] = new Charcoal_HttpHeader( $header, $replace );
 	}
 
 	/*
@@ -60,16 +73,18 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	public function flushHeaders()
 	{
 		// add cookie headers
-		$this->_cookie->writeAll();
+		if ( $this->cookie ){
+			$this->cookie->writeAll();
+		}
 
 		// output headers
-		foreach( $this->_headers as $h ){
+		foreach( $this->headers as $h ){
 			header( $h->getHeader(), $h->getReplace() );
 			log_debug( "system, debug, response", "header flushed: $h" );
 		}
 
 		// erase all headers
-		$this->_headers = array();
+		$this->headers = array();
 	}
 
 	/*
@@ -80,7 +95,7 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 		header_remove();
 
 		// erase all headers
-		$this->_headers = array();
+		$this->headers = array();
 	}
 
 	/*
@@ -134,7 +149,7 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	 */
 	public function getCookies()
 	{
-		return $this->_cookie->toArray();
+		return $this->cookie ? $this->cookie->toArray() : NULL;
 	}
 
 	/*
@@ -146,7 +161,7 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	 */
 	public function getCookie( Charcoal_String $name )
 	{
-		return $this->_cookie->getValue( $name );
+		return $this->cookie ? $this->cookie->getValue( $name ) : NULL;
 	}
 
 	/*
@@ -159,7 +174,9 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	 */
 	public function setCookie( Charcoal_String $name, Charcoal_String $value )
 	{
-		$this->_cookie->setValue( $name, $value );
+		if ( $this->cookie ){
+			$this->cookie->setValue( $name, $value );
+		}
 	}
 
 	/*
@@ -169,7 +186,7 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	 */
 	public function getStatusCode()
 	{
-		return $this->_status;
+		return $this->status;
 	}
 
 	/*
@@ -179,7 +196,7 @@ class Charcoal_HttpResponse extends Charcoal_BaseResponse
 	 */
 	public function setStatusCode( Charcoal_Integer $status_code )
 	{
-		$this->_status = ui(status_code);
+		$this->status = ui(status_code);
 	}
 
 

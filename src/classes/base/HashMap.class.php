@@ -18,11 +18,11 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 	/*
 	 *	constructor
 	 */
-	public function __construct( array $values = NULL )
+	public function __construct( $values = NULL )
 	{
 		parent::__construct();
 
-		$this->_values = $values ? $values : array();
+		$this->_values = $values ? um($values) : array();
 	}
 
     /**
@@ -89,6 +89,8 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 
 	/**
 	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
 	 */
 	public function isEmpty()
 	{
@@ -105,6 +107,8 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 
 	/**
 	 *	Get all values with keys
+	 *
+	 * @return array
 	 */
 	public function getAll()
 	{
@@ -191,18 +195,26 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 
 	/**
 	 *	Set all array elements
+	 *	
+	 *	@param array $array   array data to set
 	 */
-	public function setArray( array $array )
+	public function setArray( $data )
 	{
-		$this->_values = array_merge( $this->_values, $array );
+//		Charcoal_ParamTrait::checkRawArray( 1, $data );
+
+		$this->_values = $this->_values ? array_merge( $this->_values, $data ) : $data;
 	}
 
 	/**
 	 *	Set all hashmap elements
+	 *	
+	 *	@param array $array   hashmap data to set
 	 */
-	public function setHashMap( Charcoal_HashMap $map )
+	public function setHashMap( $data )
 	{
-		$this->_values = array_merge( $this->_values, $map->getAll() );
+//		Charcoal_ParamTrait::checkHashMap( 1, $data );
+
+		$this->_values = $this->_values ? array_merge( $this->_values, $map->getAll() ) : $data;
 	}
 
 	/**
@@ -234,6 +246,102 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 	}
 
 	/**
+	 *  Get element value as string
+	 *
+	 * @param string $key             Key string to get
+	 * @param string $default_value   default value
+	 *
+	 * @return string
+	 */
+	public function getString( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
+		return Charcoal_ArrayTrait::getString( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as array
+	 *
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
+	 *
+	 * @return array
+	 */
+	public function getArray( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
+
+		return Charcoal_ArrayTrait::getArray( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as associative array
+	 *
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
+	 *
+	 * @return array
+	 */
+	public function getHashMap( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkHashMap( 2, $default_value, TRUE );
+
+		return Charcoal_ArrayTrait::getHashMap( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as boolean
+	 *
+	 * @param string $key           Key string to get
+	 * @param bool $default_value   default value
+	 *
+	 * @return bool
+	 */
+	public function getBoolean( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+
+		return Charcoal_ArrayTrait::getBoolean( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as integer
+	 *
+	 * @param string $key          Key string to get
+	 * @param int $default_value   default value
+	 *
+	 * @return int
+	 */
+	public function getInteger( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+
+		return Charcoal_ArrayTrait::getInteger( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as float
+	 *
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
+	 *
+	 * @return float
+	 */
+	public function getFloat( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+
+		return Charcoal_ArrayTrait::getFloat( $this->_values, $key, $default_value );
+	}
+
+	/**
 	 * convert to array
 	 * 
 	 * @return array
@@ -252,16 +360,6 @@ class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAcce
 	public function implodeAssoc( $glue = ',' )
 	{
 		return Charcoal_System::implodeAssoc( $glue, $this->_values );
-	}
-
-	/**
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return $this->implodeAssoc();
 	}
 
 }

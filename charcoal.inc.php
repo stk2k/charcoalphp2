@@ -5,9 +5,9 @@
 
 define( 'PROC_KEYWORD', 'proc' );
 define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
-define( 'CHARCOAPHP_VERSION_MINOR', 19 );
+define( 'CHARCOAPHP_VERSION_MINOR', 20 );
 define( 'CHARCOAPHP_VERSION_REVISION', 0 );
-define( 'CHARCOAPHP_VERSION_BUILD', 147 );
+define( 'CHARCOAPHP_VERSION_BUILD', 148 );
 define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
 define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
  
@@ -78,55 +78,37 @@ function eol()
 // TRACE出力
 function log_trace( $logger_names, $message, $tag = NULL )
 {
-	if ( $tag )
-		Charcoal_Logger::writeln( s("T:$logger_names"), s($message), s($tag) );
-	else
-		Charcoal_Logger::writeln( s("T:$logger_names"), s($message) );
+	Charcoal_Framework::writeLog( "T:$logger_names", $message, $tag );
 }
 
 // INFO出力
 function log_info( $logger_names, $message, $tag = NULL )
 {
-	if ( $tag )
-		Charcoal_Logger::writeln( s("I:$logger_names"), s($message), s($tag) );
-	else
-		Charcoal_Logger::writeln( s("I:$logger_names"), s($message) );
+	Charcoal_Framework::writeLog( "I:$logger_names", $message, $tag );
 }
 
 // WARNING出力
 function log_warning( $logger_names, $message, $tag = NULL )
 {
-	if ( $tag )
-		Charcoal_Logger::writeln( s("W:$logger_names"), s($message), s($tag) );
-	else
-		Charcoal_Logger::writeln( s("W:$logger_names"), s($message) );
+	Charcoal_Framework::writeLog( "W:$logger_names", $message, $tag );
 }
 
 // DEBUG出力
 function log_debug( $logger_names, $message, $tag = NULL )
 {
-	if ( $tag )
-		Charcoal_Logger::writeln( s("D:$logger_names"), s($message), s($tag) );
-	else
-		Charcoal_Logger::writeln( s("D:$logger_names"), s($message) );
+	Charcoal_Framework::writeLog( "D:$logger_names", $message, $tag );
 }
 
 // ERROR出力
 function log_error( $logger_names, $message, $tag = NULL )
 {
-	if ( $tag )
-		Charcoal_Logger::writeln( s("E:$logger_names"), s($message), s($tag) );
-	else
-		Charcoal_Logger::writeln( s("E:$logger_names"), s($message) );
+	Charcoal_Framework::writeLog( "E:$logger_names", $message, $tag );
 }
 
 // FATAL出力
 function log_fatal( $logger_names, $message, $tag = NULL )
 {
-	if ( $tag )
-		Charcoal_Logger::writeln( s("F:$logger_names"), s($message), s($tag) );
-	else
-		Charcoal_Logger::writeln( s("F:$logger_names"), s($message) );
+	Charcoal_Framework::writeLog( "F:$logger_names", $message, $tag );
 }
 
 //==================================================================
@@ -334,8 +316,16 @@ function _throw( Exception $e, Charcoal_Integer $back = null )
 		$clazz = get_class($e);
 		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
 		$message = $e->getMessage();
-		log_debug( "system,error,debug", "_throw $clazz ($id) $message @$file($line)", "exception" );
+
+		try{
+			log_debug( "system,error,debug", "_throw $clazz ($id) $message @$file($line)", "exception" );
+		}
+		catch( Exception $ex ){
+			echo "exeption while wrting log:" . $e->getMessage() . eol();
+			exit;
+		}
 	}
+
 	throw $e;
 }
 
@@ -348,7 +338,14 @@ function _catch( Exception $e )
 		$clazz = get_class($e);
 		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
 		$message = $e->getMessage();
-		log_debug( "system,error,debug", "_catch $clazz ($id) $message @$file($line)", "exception" );
+
+		try{
+			log_debug( "system,error,debug", "_catch $clazz ($id) $message @$file($line)", "exception" );
+		}
+		catch( Exception $ex ){
+			echo "exeption while wrting log:" . $e->getMessage() . eol();
+			exit;
+		}
 	}
 }
 

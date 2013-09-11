@@ -17,8 +17,11 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_String $from, Charcoal_String $to )
+	public function __construct( $from, $to )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $from );
+//		Charcoal_ParamTrait::checkString( 2, $to );
+
 		$this->_from = $from;
 		$this->_to = $to;
 	}
@@ -26,10 +29,14 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	/*
 	 *	文字列からコンバータを作成
 	 */
-	public static function fromString( Charcoal_String $from, Charcoal_String $to )
+	public static function fromString( $sandbox, $from, $to )
 	{
-		$from = self::getEncodingStringFromCode( $from );
-		$to = self::getEncodingStringFromCode( $to );
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkString( 2, $from );
+//		Charcoal_ParamTrait::checkString( 3, $to );
+
+		$from = self::getEncodingStringFromCode( $sandbox, $from );
+		$to = self::getEncodingStringFromCode( $sandbox, $to );
 
 		return new Charcoal_EncodingConverter( $from, $to );
 	}
@@ -37,8 +44,10 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	/*
 	 *	変換
 	 */
-	public function convert( Charcoal_String $str )
+	public function convert( $str )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $str );
+
 		$str  = us($str);
 		$from = us($this->_from);
 		$to   = us($this->_to);
@@ -49,8 +58,10 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	/*
 	 *	配列を変換
 	 */
-	public function convertArray( Charcoal_Vector $ary )
+	public function convertArray( $ary )
 	{
+		Charcoal_ParamTrait::checkVector( 1, $ary );
+
 		$from = us($this->_from);
 		$to   = us($this->_to);
 
@@ -113,11 +124,14 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	/*
 	 *	エンコーディング文字列を取得
 	 */
-	private static function getEncodingStringFromCode( Charcoal_String $encoding )
+	private static function getEncodingStringFromCode( $sandbox, $encoding )
 	{
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkString( 2, $encoding );
+
 		$encoding_string = null;
 
-		$encoding = us($encoding->toUpper());
+		$encoding = strtoupper( $encoding );
 
 		switch( $encoding ){
 
@@ -136,7 +150,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 			$encoding_string = s('UTF8');									break;
 
 		default:
-			$encoding_string = Charcoal_Profile::getString( s($encoding . '_CODE') );			break;
+			$encoding_string = $sandbox->getProfile()->getString( s($encoding . '_CODE') );			break;
 		}
 
 		if ( !$encoding_string ){

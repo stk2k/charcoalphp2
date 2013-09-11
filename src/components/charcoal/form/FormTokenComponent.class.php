@@ -30,8 +30,10 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		log_debug( "debug", "config: " . print_r($config,true) );
 
 		$this->_token_key        = $config->getString( s('token_key'), s('charcoal_token_key') )->getValue();
@@ -42,7 +44,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 		log_debug( "debug", "debug mode: {$this->_debug_mode}" );
 		log_debug( "debug", "token generator: {$this->_token_generator}" );
 
-		$this->_token_generator = Charcoal_Factory::createObject( s($this->_token_generator), s('token_generator') );
+		$this->_token_generator = $this->getSandbox()->createObject( $this->_token_generator, 'token_generator' );
 	}
 
 	/*

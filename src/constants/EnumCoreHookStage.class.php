@@ -44,8 +44,8 @@ class Charcoal_EnumCoreHookStage
 	const PRE_PROCEDURE_FORWARD           = 30;
 	const POST_PROCEDURE_FORWARD          = 31;
 	const AFTER_PROCEDURE_FORWARD         = 32;
-	const BEFORE_CREATE_CONTAINER         = 33;
-	const AFTER_CREATE_CONTAINER          = 34;
+//	const BEFORE_CREATE_CONTAINER         = 33;
+//	const AFTER_CREATE_CONTAINER          = 34;
 //	const BEFORE_REG_RESPONSE_FILTERS     = 35;
 //	const CREATE_RESPONSE_FILTER          = 36;
 //	const AFTER_REG_RESPONSE_FILTERS      = 37;
@@ -59,8 +59,8 @@ class Charcoal_EnumCoreHookStage
 	const AFTER_SAVE_SESSION              = 45;
 	const BEFORE_DESTROY_CONTAINER        = 46;
 	const AFTER_DESTROY_CONTAINER         = 47;
-	const BEFORE_TERMINATE_LOGGERS        = 48;
-	const AFTER_TERMINATE_LOGGERS         = 49;
+//	const BEFORE_TERMINATE_LOGGERS        = 48;
+//	const AFTER_TERMINATE_LOGGERS         = 49;
 	const END_OF_SHUTDOWN                 = 50;
 }
 

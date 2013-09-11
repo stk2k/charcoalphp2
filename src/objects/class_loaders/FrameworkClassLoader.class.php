@@ -46,8 +46,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// core classes
 				'Charcoal_AnnotationValue'			=> 'classes/core',
-				'Charcoal_Cache'					=> 'classes/core',
-				'Charcoal_Cookie'					=> 'classes/core',
+				'Charcoal_CookieReader'				=> 'classes/core',
+				'Charcoal_CookieWriter'				=> 'classes/core',
 				'Charcoal_EventContext'				=> 'classes/core',
 				'Charcoal_EventQueue'				=> 'classes/core',
 				'Charcoal_HttpHeader'				=> 'classes/core',
@@ -57,7 +57,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SequenceHolder'			=> 'classes/core',
 				'Charcoal_Session'					=> 'classes/core',
 				'Charcoal_SimpleModule'				=> 'classes/core',
-				'Charcoal_TableModelCache'			=> 'classes/core',
 				'Charcoal_TransformerCache'			=> 'classes/core',
 
 		// utility classes
@@ -77,7 +76,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ICharcoalObject'			=> 'interfaces',
 				'Charcoal_IClassLoader'				=> 'interfaces',
 				'Charcoal_IComponent'				=> 'interfaces',
-				'Charcoal_ICoreHook'				=> 'interfaces',
 				'Charcoal_IDataSource'				=> 'interfaces',
 				'Charcoal_IEvent'					=> 'interfaces',
 				'Charcoal_IEventContext'			=> 'interfaces',
@@ -111,6 +109,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_AbortEvent'							=> 'objects/events',
 				'Charcoal_AuthTokenEvent'						=> 'objects/events',
 				'Charcoal_Event'								=> 'objects/events',
+				'Charcoal_ExceptionEvent'						=> 'objects/events',
 				'Charcoal_HttpRequestEvent'						=> 'objects/events',
 				'Charcoal_PermissionDeniedEvent'				=> 'objects/events',
 				'Charcoal_RenderLayoutEvent'					=> 'objects/events',
@@ -124,10 +123,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// exception classes
 				'Charcoal_AnnotaionException'					=> 'exceptions',
-				'Charcoal_ArrayFormatException'					=> 'exceptions',
 				'Charcoal_BadExitCodeException'					=> 'exceptions',
 				'Charcoal_BenchmarkException'					=> 'exceptions',
-				'Charcoal_BooleanFormatException'				=> 'exceptions',
 				'Charcoal_CacheDriverException'					=> 'exceptions',
 				'Charcoal_ComponentConfigException'				=> 'exceptions',
 				'Charcoal_ComponentNotRegisteredException'		=> 'exceptions',
@@ -154,11 +151,9 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_FileUploadNoTmpDirException'			=> 'exceptions',
 				'Charcoal_FileUploadPartialException'			=> 'exceptions',
 				'Charcoal_FileSystemException'					=> 'exceptions',
-				'Charcoal_FloatFormatException'					=> 'exceptions',
 				'Charcoal_HttpException'						=> 'exceptions',
 				'Charcoal_ImageGetSizeException'				=> 'exceptions',
 				'Charcoal_InterfaceNotFoundException'			=> 'exceptions',
-				'Charcoal_IntegerFormatException'				=> 'exceptions',
 				'Charcoal_InvalidEncodingCodeException'			=> 'exceptions',
 				'Charcoal_InvalidMailAddressException'			=> 'exceptions',
 				'Charcoal_LoggerConfigException'				=> 'exceptions',
@@ -179,7 +174,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SessionHandlerException'				=> 'exceptions',
 				'Charcoal_SmartyRendererTaskException'			=> 'exceptions',
 				'Charcoal_SQLBuilderException'					=> 'exceptions',
-				'Charcoal_StringFormatException'				=> 'exceptions',
 				'Charcoal_TableModelException'					=> 'exceptions',
 				'Charcoal_TableModelFieldException'				=> 'exceptions',
 				'Charcoal_TaskNotFoundException'				=> 'exceptions',
@@ -206,9 +200,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_XmlRenderer'						=> 'classes/xml',
 
 		// module classes
-
-		// core hook classes
-				'Charcoal_DefaultCoreHook'					=> 'objects/core_hooks',
 
 		// table model classes
 				'Charcoal_AnnotaionTableModel'				=> 'objects/table_models',

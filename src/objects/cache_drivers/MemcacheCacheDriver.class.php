@@ -32,7 +32,7 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_CharcoalObject implements Ch
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 
@@ -54,10 +54,14 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_CharcoalObject implements Ch
 	/**
 	 * Get non-typed data which is associated with a string key
 	 *
-	 * @param Charcoal_String $key         The key of the item to retrieve.
+	 * @param string $key         The key of the item to retrieve.
+	 *
+	 * @return mixed              cache data
 	 */
-	public function get( Charcoal_String $key )
+	public function get( $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 		$key = us($key);
 
 		$value = $this->_memcache->get( $key );
@@ -69,11 +73,16 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_CharcoalObject implements Ch
 	/**
 	 * Save a value to cache
 	 *
-	 * @param Charcoal_String $key         The key under which to store the value.
-	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
+	 * @param string $key                   The key under which to store the value.
+	 * @param Charcoal_Object $value        value to save
+	 * @param int $duration                 specify expiration span which the cache will be removed.
 	 */
-	public function set( Charcoal_String $key, Charcoal_Object $value, Charcoal_Integer $duration = NULL )
+	public function set( $key, $value, $duration = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkObject( 2, $value );
+//		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
+
 		$key = us($key);
 		$duration = $duration ? ui($duration) : ui($this->_default_duration);
 
@@ -85,41 +94,49 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_CharcoalObject implements Ch
 	/**
 	 * Remove a cache data
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
-	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
+	 * @param string $key         The key of the item to remove. Shell wildcards are accepted.
 	 */
-	public function delete( Charcoal_String $key, Charcoal_Boolean $regEx = NULL )
+	public function delete( Charcoal_String $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 	}
 
 	/**
 	 * Remove a cache data searched by regular expression
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Regular expression are accepted.
-	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
+	 * @param string $key         The key of the item to remove. Regular expression are accepted.
 	 */
 	public function deleteRegEx( Charcoal_String $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 	}
 
 	/**
 	 * Rewrite cache expiration time
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
-	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
+	 * @param string $key         The key of the item to remove. Shell wildcards are accepted.
+	 * @param int $duration   specify expiration span which the cache will be removed.
 	 */
 	public function touch( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+
 	}
 
 	/**
 	 * Rewrite cache expiration time searched by regular expression
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Regular expression are accepted.
-	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
+	 * @param string $key         The key of the item to remove. Regular expression are accepted.
+	 * @param int $duration   specify expiration span which the cache will be removed.
 	 */
 	public function touchRegEx( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+
 	}
 
 }

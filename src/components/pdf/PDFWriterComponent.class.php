@@ -51,8 +51,10 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_unit              = $config->getString( s('unit'), s("mm") )->getValue();
 		$this->_creator           = $config->getString( s('creator'), s("CharcoalPHP") )->getValue();
 		$this->_authhor           = $config->getString( s('authhor'), s("CharcoalPHP") )->getValue();

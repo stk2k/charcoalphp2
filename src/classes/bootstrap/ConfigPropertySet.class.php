@@ -14,16 +14,20 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	/**
 	 *  Constructor
 	 */
-	public function __construct( array $data = NULL )
+	public function __construct( $values = NULL )
 	{
-		parent::__construct( $data );
+//		Charcoal_ParamTrait::checkRawArray( 1, $values, TRUE );
+
+		parent::__construct( $values );
 	}
 
 	/**
 	 *  Get child section
 	 */
-	public function getSection( Charcoal_String $section )
+	public function getSection( $section )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $section );
+
 		$value = parent::get( us($section) );
 
 		if ( !is_array($value) ){
@@ -36,129 +40,90 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	/**
 	 * Get as string value
 	 *
-	 * @param Charcoal_String $key             key string for hash map
-	 * @param Charcoal_String $default_value   default value
+	 * @param string $key             key string for hash map
+	 * @param string $default_value   default value
+	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 *
+	 * @return string
 	 */
-	public function getString( Charcoal_String $key, Charcoal_String $default_value = NULL )
+	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-		$value = parent::get( us($key) );
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
 
-		// return default value if the element is null
-		if ( NULL === $value ){
-			return $default_value;
-		}
+		$key = us($key);
+		$value = parent::getString( $key, $default_value );
 
-		// throws exception if the element's type is not match for required type
-		if ( !is_string($value) && !($value instanceof Charcoal_String) ){
-			_throw( new Charcoal_StringFormatException( $key ) );
-		}
-
-		// processes macro
-		$value = Charcoal_ResourceLocator::processMacro( s($value) );
-
-		return s($value);
+		return $process_macro ? Charcoal_ResourceLocator::processMacro( $value ) : $value;
 	}
 
 	/**
 	 * Get as array value
 	 *
-	 * @param Charcoal_String $key             key string for hash map
-	 * @param Charcoal_Vector $default_value   default value
+	 * @param string $key             key string for hash map
+	 * @param array $default_value   default value
+	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 *
+	 * @return array
 	 */
-	public function getArray( Charcoal_String $key, Charcoal_Vector $default_value = NULL )
+	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-		$value = parent::get( us($key) );
+//		Charcoal_ParamTrait::checkString( 1, $key );
 
-		// return default value if the element is null
-		if ( NULL === $value ){
-			return $default_value;
+		$key = us($key);
+		$items = parent::getArray( $key, $default_value );
+		if ( $process_macro === TRUE ){
+			$items = array_map( 'Charcoal_ResourceLocator::processMacro', $items );
 		}
-
-		// split values by comma
-		$array = explode( ',', $value );
-
-		// remove spaces
-		foreach( $array as $_key => $value ){
-			$value = trim($value);
-			if ( strlen($value) == 0 ){
-				unset( $array[$_key] );
-			}
-			else{
-				$array[$_key] = us( $value );
-			}
-		}
-
-		// return default value if the element count is one and whitespace
-		if ( count($array) == 1 && $array[0] === '' ){
-			return $default_value !== NULL ? $default_value : new Charcoal_Vector();
-		}
-
-		// throws exception if the element's type is not match for required type
-		if ( !is_array($array) ){
-			_throw( new Charcoal_ArrayFormatException( $key ) );
-		}
-
-		// processes macro
-		foreach( $array as $_key => $value ){
-			$value = Charcoal_ResourceLocator::processMacro(s($value));
-			$array[$_key] = us($value);
-		}
-
-		return  v($array);
+		return $items;
 	}
 
 	/**
 	 * Get as boolean value
 	 *
-	 * @param Charcoal_String $key             key string for hash map
-	 * @param Charcoal_Boolean $default_value   default value
+	 * @param string $key             key string for hash map
+	 * @param bool $default_value   default value
+	 *
+	 * @return bool
 	 */
-	public function getBoolean( Charcoal_String $key, Charcoal_Boolean $default_value = NULL )
+	public function getBoolean( $key, $default_value = NULL )
 	{
-		$value = parent::get( us($key) );
+//		Charcoal_ParamTrait::checkString( 1, $key );
 
-		// return default value if the element is null
-		if ( NULL === $value ){
-			return $default_value;
-		}
-
-		if ( is_string($value) ){
-			$value = (strlen($value) > 0 );
-		}
-
-		// throws exception if the element's type is not match for required type
-		if ( !is_bool($value) && !($value instanceof Charcoal_Boolean) ){
-			_throw( new BooleanFormatException( $value, "key=[$key]" ) );
-		}
-
-		return b($value);
+		$key = us($key);
+		return parent::getBoolean( $key, $default_value );
 	}
 
 	/**
 	 * Get as integer value
 	 *
-	 * @param Charcoal_String $key             key string for hash map
-	 * @param Charcoal_Integer $default_value   default value
+	 * @param string $key             key string for hash map
+	 * @param int $default_value   default value
+	 *
+	 * @return int
 	 */
-	public function getInteger( Charcoal_String $key, Charcoal_Integer $default_value = NULL )
+	public function getInteger( $key, $default_value = NULL )
 	{
-		$value = parent::get( us($key) );
+//		Charcoal_ParamTrait::checkString( 1, $key );
 
-		// return default value if the element is null
-		if ( NULL === $value ){
-			return $default_value;
-		}
+		$key = us($key);
+		return parent::getInteger( $key, $default_value );
+	}
 
-		if ( $value instanceof Charcoal_Integer ){
-			return $value;
-		}
+	/**
+	 *  Get element value as float
+	 *
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
+	 *
+	 * @return float
+	 */
+	public function getFloat( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
 
-		// throws exception if the element's type is not match for required type
-		if ( !is_numeric($value) ){
-			_throw( new Charcoal_IntegerFormatException( $key ) );
-		}
-
-		return i($value);
+		$key = us($key);
+		return parent::getFloat( $key, $default_value );
 	}
 
 }

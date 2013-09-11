@@ -65,9 +65,9 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		parent::configure($config);
+		parent::configure( $config );
 
 		$this->_backend    = $config->getString( s('backend'), s('') );
 		$this->_user       = $config->getString( s('user'), s('') );
@@ -420,7 +420,7 @@ class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charc
 		$sql = $sql->getValue();
 
 //print "SQL:$sql start<BR>";
-		$conv = Charcoal_EncodingConverter::fromString( s('DB'), s('PHP') );
+		$conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'DB', 'PHP' );
 		$log_params = $conv->convertArray( v($params) );
 		$log_message = "[SQL]" . $sql . ($params ? " [params]" . implode(",",$log_params) :'');
 		log_debug( "sql,debug", $log_message );

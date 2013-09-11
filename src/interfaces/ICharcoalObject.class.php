@@ -23,14 +23,14 @@ interface Charcoal_ICharcoalObject
 	/**
 	 *   オブジェクトパスを設定
 	 */
-	public function setObjectPath( Charcoal_ObjectPath $obj_path );
+	public function setObjectPath( $obj_path );
 
 	/**
 	 * Initialize instance
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config );
+	public function configure( $config );
 
 	/**
 	 * destruct instance

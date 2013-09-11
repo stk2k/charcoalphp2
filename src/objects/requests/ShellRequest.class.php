@@ -35,15 +35,6 @@ class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_
 		$this->_id = strval(microtime(TRUE));
 	}
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( Charcoal_Config $config )
-	{
-	}
-
 	/*
 	 *    プロシージャパスを取得
 	 */
@@ -76,8 +67,10 @@ class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_
 		return array_keys( $this->_data );
 	}
 
-	/*
-	 *    すべてのパラメータをハッシュマップで取得
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
 	 */
 	public function getAll()
 	{
@@ -235,8 +228,10 @@ class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_
 		return f($value);
 	}
 
-	/*
-	 *	配列の全要素を追加
+	/**
+	 *	Set all array elements
+	 *	
+	 *	@param array $array   array data to set
 	 */
 	public function setArray( array $array )
 	{

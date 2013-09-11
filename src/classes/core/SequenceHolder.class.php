@@ -25,8 +25,8 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		$this->_local  = $local;
 	}
 
-	/*
-	 *  Get all values
+	/**
+	 *	Get all values with keys
 	 *
 	 * @return array
 	 */
@@ -38,14 +38,14 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		return array_merge( $global_values, $local_values );
 	}
 
-	/*
+	/**
 	 *  Return if property has specified key
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key   Key string to get
 	 *
 	 * @return bool   TRUE if the key exists, otherwise FALSE
 	 */
-	public function keyExists( Charcoal_String $key )
+	public function keyExists( $key )
 	{
 		if ( $this->_global->keyExists($key) ){
 			return true;
@@ -60,12 +60,16 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	/**
 	 *  Get element value as string
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key             Key string to get
+	 * @param string $default_value   default value
 	 *
-	 * @return Charcoal_String
+	 * @return string
 	 */
-	public function getString( Charcoal_String $key, Charcoal_String $default_value = NULL )
+	public function getString( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getString( $key );
 		}
@@ -79,12 +83,16 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	/**
 	 *  Get element value as array
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
 	 *
-	 * @return Charcoal_Vector
+	 * @return array
 	 */
-	public function getArray( Charcoal_String $key, Charcoal_Vector $default_value = NULL )
+	public function getArray( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
+
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getArray( $key );
 		}
@@ -98,12 +106,16 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	/**
 	 *  Get element value as boolean
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key           Key string to get
+	 * @param bool $default_value   default value
 	 *
-	 * @return Charcoal_Vector
+	 * @return bool
 	 */
-	public function getBoolean( Charcoal_String $key, Charcoal_Boolean $default_value = NULL )
+	public function getBoolean( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getBoolean( $key );
 		}
@@ -117,12 +129,16 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	/**
 	 *  Get element value as integer
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key          Key string to get
+	 * @param int $default_value   default value
 	 *
-	 * @return Charcoal_Vector
+	 * @return int
 	 */
-	public function getInteger( Charcoal_String $key, Charcoal_Integer $default_value = NULL )
+	public function getInteger( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getInteger( $key );
 		}
@@ -136,12 +152,16 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	/**
 	 *  Get element value as float
 	 *
-	 * @param Charcoal_String $key   Key string to get
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
 	 *
-	 * @return Charcoal_Vector
+	 * @return float
 	 */
-	public function getFloat( Charcoal_String $key, Charcoal_Float $default_value = NULL )
+	public function getFloat( $key, $default_value = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getFloat( $key );
 		}
@@ -216,11 +236,18 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		return $keys;
 	}
 
-	/*
-	 *    パラメータを取得
+	/**
+	 *  Get element value
+	 *
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
+	 *
+	 * @return mixed
 	 */
-	public function get( Charcoal_String $key )
+	public function get( $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 		$key = us($key);
 
 		if ( isset($this->_local[$key]) ){
@@ -233,11 +260,17 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		return NULL;
 	}
 
-	/*
-	 *    globalパラメータを取得
+	/**
+	 *  Get a global parameter
+	 *
+	 * @param string $key            Key string to get
+	 *
+	 * @return mixed
 	 */
-	public function getGlobal( Charcoal_String $key )
+	public function getGlobal( $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 		$key = us($key);
 
 		if ( isset($this->_global[$key]) ){
@@ -247,11 +280,17 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		return NULL;
 	}
 
-	/*
-	 *    localパラメータを取得
+	/**
+	 *  Get a local parameter
+	 *
+	 * @param string $key            Key string to get
+	 *
+	 * @return mixed
 	 */
-	public function getLocal( Charcoal_String $key )
+	public function getLocal( $key )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+
 		$key = us($key);
 
 		if ( isset($this->_local[$key]) ){
@@ -261,10 +300,13 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		return NULL;
 	}
 
-	/*
-	 *    パラメータを設定
+	/**
+	 *  set a parameter
+	 *
+	 * @param string $key            Key string to get
+	 * @param mixed $value           value to set
 	 */
-	public function set( Charcoal_String $key, $value )
+	public function set( $key, $value )
 	{
 		$key = us($key);
 
@@ -276,18 +318,24 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		}
 	}
 
-	/*
-	 *    globalパラメータを設定
+	/**
+	 *  set a global parameter
+	 *
+	 * @param string $key            Key string to get
+	 * @param mixed $value           value to set
 	 */
-	public function setGlobal( Charcoal_String $key, $value )
+	public function setGlobal( $key, $value )
 	{
 		$this->_global->set( $key, $value );
 	}
 
-	/*
-	 *    localパラメータを設定
+	/**
+	 *  set a local parameter
+	 *
+	 * @param string $key            Key string to get
+	 * @param mixed $value           value to set
 	 */
-	public function setLocal( Charcoal_String $key, $value )
+	public function setLocal( $key, $value )
 	{
 		$this->_local->set( $key, $value );
 	}

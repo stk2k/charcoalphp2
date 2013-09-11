@@ -85,7 +85,7 @@ class Charcoal_PopupScreenLogger extends Charcoal_CharcoalObject implements Char
 		$message = System::toString( $message );
 
 		// エンコーディング変換
-		$conv = Charcoal_EncodingConverter::fromString( s('PHP'), s('HTML') );
+		$conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'HTML' );
 		$message = $conv->convertEncoding( s($message) );
 
 		// ￥を／に変換

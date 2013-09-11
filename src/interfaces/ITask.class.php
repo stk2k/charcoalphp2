@@ -43,7 +43,7 @@ interface Charcoal_ITask extends Charcoal_ICharcoalObject
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context );
+	public function processEvent( $context );
 
 }
 

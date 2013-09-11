@@ -23,7 +23,9 @@ class Charcoal_Benchmark
 	 */
 	public static function start( $timer_id = '' )
 	{
-		return self::$start[$timer_id] = microtime();
+		$start = self::$start[$timer_id] = microtime();
+
+		return $start;
 	}
 
 	/**
@@ -35,6 +37,7 @@ class Charcoal_Benchmark
 	 */
 	public static function stop( $timer_id = '', $precision = 2 )
 	{
+
 		self::$stop[$timer_id] = microtime();
 		return self::score( $timer_id, $precision );
 	}
@@ -49,8 +52,9 @@ class Charcoal_Benchmark
 	 */
 	public function score( $timer_id = '', $precision = 2 )
 	{
+
 		if ( !isset(self::$start[$timer_id]) ){
-			_throw( new Charcoal_BenchmarkException( "timer[$timer_id] is not started yet" ) );
+			self::$start[$timer_id] = microtime();
 		}
 		$start = self::$start[$timer_id];
 

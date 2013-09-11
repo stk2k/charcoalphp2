@@ -10,30 +10,47 @@
 */
 interface Charcoal_ISequence extends Charcoal_IProperties
 {
-	/*
-	 *    globalパラメータを取得
+	/**
+	 *  Get a global parameter
+	 *
+	 * @param string $key            Key string to get
+	 *
+	 * @return mixed
 	 */
-	public function getGlobal( Charcoal_String $key );
+	public function getGlobal( $key );
 
-	/*
-	 *    localパラメータを取得
+	/**
+	 *  Get a local parameter
+	 *
+	 * @param string $key            Key string to get
+	 *
+	 * @return mixed
 	 */
-	public function getLocal( Charcoal_String $key );
+	public function getLocal( $key );
 
-	/*
-	 *    パラメータを設定
+	/**
+	 *  set a parameter
+	 *
+	 * @param string $key            Key string to get
+	 * @param mixed $value           value to set
 	 */
-	public function set( Charcoal_String $key, $value );
+	public function set( $key, $value );
 
-	/*
-	 *    globalパラメータを設定
+	/**
+	 *  set a global parameter
+	 *
+	 * @param string $key            Key string to get
+	 * @param mixed $value           value to set
 	 */
-	public function setGlobal( Charcoal_String $key, $value );
+	public function setGlobal( $key, $value );
 
-	/*
-	 *    localパラメータを設定
+	/**
+	 *  set a local parameter
+	 *
+	 * @param string $key            Key string to get
+	 * @param mixed $value           value to set
 	 */
-	public function setLocal( Charcoal_String $key, $value );
+	public function setLocal( $key, $value );
 
 
 

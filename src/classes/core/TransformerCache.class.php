@@ -46,7 +46,7 @@ class Charcoal_TransformerCache
 		}
 
 		// ないので作る
-		$transformer = Charcoal_Factory::createObject( s($transformer_name), $instance->_type_name );
+		$transformer = $this->getSandbox()->createObject( $transformer_name, $instance->_type_name );
 
 		// 設定
 		$instance->_cache[us($transformer_name)] = $transformer;

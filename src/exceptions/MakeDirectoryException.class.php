@@ -13,7 +13,7 @@ class Charcoal_MakeDirectoryException extends Charcoal_RuntimeException
 {
 	public function __construct( $path, Exception $prev = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $path );
+//		Charcoal_ParamTrait::checkString( 1, $path );
 
 		parent::__construct( "mkdir failed: $path", $prev );
 	}

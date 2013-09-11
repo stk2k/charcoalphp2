@@ -14,14 +14,19 @@ class Charcoal_ConfigLoader
 	/*
 	 * load configure file
 	 */
-	public static function loadConfig( Charcoal_ObjectPath $object_path, Charcoal_String $type_name )
+	public static function loadConfig( $sandbox, $obj_path, $type_name )
 	{
-		$object_name = $object_path->getObjectName();
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
+//		Charcoal_ParamTrait::checkString( 3, $type_name );
 
-//		log_info( "system", "config", "loading object config: path=[$object_path] type=[$type_name]" );
+		if ( Charcoal_ParamTrait::isString( $obj_path ) ){
+			$obj_path = new Charcoal_ObjectPath( $obj_path );
+		}
 
-		// create config povier
-		$provider = Charcoal_Factory::createConfigProvider();
+		$object_name = $obj_path->getObjectName();
+
+//		log_info( "system", "config", "loading object config: path=[$obj_path] type=[$type_name]" );
 
 		// get root path of framework,project,web_app
 		$root_framework = Charcoal_ResourceLocator::getFrameworkPath();
@@ -34,7 +39,7 @@ class Charcoal_ConfigLoader
 		$root_webapp_modules    = s($root_webapp . '/modules');
 
 		// get real path(relative path)
-		$real_path = $object_path->getRealPath();
+		$real_path = $obj_path->getRealPath();
 
 		// config target set
 		$config_target_list = NULL;
@@ -88,7 +93,7 @@ class Charcoal_ConfigLoader
 		else{
 			$config_name = strlen($real_path) > 0 ? $real_path . '/' . $type_name : $type_name;
 		}
-		$config_target_list[] = array( $root_framework_modules, $config_name );
+//		$config_target_list[] = array( $root_framework_modules, $config_name );
 		$config_target_list[] = array( $root_project_modules, $config_name );
 		$config_target_list[] = array( $root_webapp_modules, $config_name );
 
@@ -115,11 +120,15 @@ class Charcoal_ConfigLoader
 			}
 		}
 
+		// get registry from sandbox
+		$registry = $sandbox->getRegistry();
+
 		// load all config files
 		$config = array();
-		foreach( $config_target_list as $target ){
+		foreach( $config_target_list as $key => $target ){
 			list($root, $name) = $target;
-			$data = $provider->loadConfig( s($root), s($name), $config );
+			$registry_key = str_replace( '//', '/', "$root/$name" );
+			$data = $registry->get( $registry_key );
 			if ( $data ){
 				$config = array_merge( $config, $data );
 			}
@@ -129,7 +138,7 @@ class Charcoal_ConfigLoader
 		$import = isset($config['import']) ? $config['import'] : NULL;
 		if ( $import ){
 			$import_path = new Charcoal_ObjectPath( s($import) );
-			$data = self::loadConfig( $import_path, $type_name );
+			$data = self::loadConfig( $sandbox, $import_path, $type_name );
 			if ( $data ){
 				$config = array_merge( $config, $data );
 			}

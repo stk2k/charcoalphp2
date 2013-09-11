@@ -11,8 +11,9 @@
 
 class Charcoal_ArrayFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $key, $prev = NULL )
+	public function __construct( $value, $prev = NULL )
 	{
-		parent::__construct( "must be an ARRAY value for key[$key]", $prev );
+		$value = Charcoal_System::toString( $value );
+		parent::__construct( "must be an ARRAY value: $value(" . gettype($value) . ")", $prev );
 	}
 }

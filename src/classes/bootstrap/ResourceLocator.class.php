@@ -16,8 +16,10 @@ class Charcoal_ResourceLocator
 	/*
 	 * マクロ展開
 	 */
-	public static function processMacro( Charcoal_String $value )
+	public static function processMacro( $value )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $value );
+
 		// 展開キーワード
 		if ( self::$macro_defs === NULL ){
 			self::$macro_defs = array(
@@ -33,7 +35,7 @@ class Charcoal_ResourceLocator
 		}
 
 		// 展開
-		$value = $value->getValue();
+		$value = us( $value );
 		if ( strpos($value,'%') !== FALSE ){
 			foreach( self::$macro_defs as $macro_key => $macro_value ){
 				if ( strpos($value,$macro_key) !== FALSE ){
@@ -42,23 +44,26 @@ class Charcoal_ResourceLocator
 			}
 		}
 
-		return s($value);
+		return $value;
 	}
 
 	/**
 	 * Get framework/project/application path
 	 *
-	 * @param Charcoal_String $virtual_path          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
-	 * @param Charcoal_Object $value                 cache data to save
+	 * @param string $virtual_path          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param string $filename              file name
 	 *
-	 * @return Charcoal_String        full path string
+	 * @return string        full path string
 	 */
-	public function getPath( Charcoal_String $virtual_path, Charcoal_String $filename = NULL )
+	public function getPath( $virtual_path, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		$path = self::processMacro( $virtual_path );
 
 		if ( $filename ){
-			$path .= '/' . $filename->getValue();
+			$path .= '/' . $filename;
 		}
 
 		return $path;
@@ -67,16 +72,19 @@ class Charcoal_ResourceLocator
 	/*
 	 * フレームワーク以下のリソースのパスを取得
 	 */
-	public static function getFrameworkPath( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getFrameworkPath( $folder = NULL, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $folder );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		if ( !$folder ){
 			return CHARCOAL_HOME;
 		}
 
-		$path = CHARCOAL_HOME . '/' . $folder->getValue();
+		$path = CHARCOAL_HOME . '/' . $folder;
 
 		if ( $filename ){
-			$path .= '/' . $filename->getValue();
+			$path .= '/' . $filename;
 		}
 
 		return $path;
@@ -85,16 +93,19 @@ class Charcoal_ResourceLocator
 	/*
 	 * プロジェクト以下のリソースのパスを取得
 	 */
-	public static function getProjectPath( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getProjectPath( $folder = NULL, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $folder );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		if ( !$folder ){
 			return CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT;
 		}
 
-		$path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/' . $folder->getValue();
+		$path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/' . $folder;
 
 		if ( $filename ){
-			$path .= '/' . $filename->getValue();
+			$path .= '/' . $filename;
 		}
 
 		return $path;
@@ -103,16 +114,19 @@ class Charcoal_ResourceLocator
 	/*
 	 * アプリケーション以下のリソースのパスを取得
 	 */
-	public static function getApplicationPath( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getApplicationPath( $folder = NULL, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $folder );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		if ( !$folder ){
 			return CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION;
 		}
 
-		$path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/' . $folder->getValue();
+		$path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/' . $folder;
 
 		if ( $filename ){
-			$path .= '/' . $filename->getValue();
+			$path .= '/' . $filename;
 		}
 
 		return $path;
@@ -121,16 +135,19 @@ class Charcoal_ResourceLocator
 	/*
 	 * CHARCOAL_BASE_DIR以下のリソースのパスを取得
 	 */
-	public static function getBasePath( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getBasePath( $folder = NULL, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $folder );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		if ( !$folder ){
 			return CHARCOAL_BASE_DIR;
 		}
 
-		$path = CHARCOAL_BASE_DIR . '/' . $folder->getValue();
+		$path = CHARCOAL_BASE_DIR . '/' . $folder;
 
 		if ( $filename ){
-			$path .= '/' . $filename->getValue();
+			$path .= '/' . $filename;
 		}
 
 		return $path;
@@ -139,56 +156,50 @@ class Charcoal_ResourceLocator
 	/**
 	 * Get framework/project/application file
 	 *
-	 * @param Charcoal_String $virtual_path          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_String $folder          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
 	 * @param Charcoal_Object $value                 cache data to save
 	 *
 	 * @return Charcoal_File        file object
 	 */
-	public function getFile( Charcoal_String $virtual_path, Charcoal_String $filename = NULL )
+	public function getFile( $folder, $filename = NULL )
 	{
-		if ( $filename )
-			return new Charcoal_File( s(self::getPath($virtual_path,$filename)) );
-		else
-			return new Charcoal_File( s(self::getPath($virtual_path)) );
+//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
+		return new Charcoal_File( self::getPath( $folder, $filename ) );
 	}
 
 	/*
 	 * フレームワークリソースのパスをFileインスタンスとして取得
 	 */
-	public static function getFrameworkFile( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getFrameworkFile( $folder = NULL, $filename = NULL )
 	{
-		if ( $filename )
-			return new Charcoal_File( s(self::getFrameworkPath($folder,$filename)) );
-		else if ( $folder )
-			return new Charcoal_File( s(self::getFrameworkPath($folder)) );
-		else
-			return new Charcoal_File( s(self::getFrameworkPath()) );
+//		Charcoal_ParamTrait::checkString( 1, $folder, TRUE );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
+		return new Charcoal_File( self::getFrameworkPath( $folder, $filename ) );
 	}
 
 	/*
 	 * プロジェクトリソースのパスをFileインスタンスとして取得
 	 */
-	public static function getProjectFile( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getProjectFile( $folder = NULL, $filename = NULL )
 	{
-		if ( $filename )
-			return new Charcoal_File( s(self::getProjectPath($folder,$filename)) );
-		else if ( $folder )
-			return new Charcoal_File( s(self::getProjectPath($folder)) );
-		else
-			return new Charcoal_File( s(self::getProjectPath()) );
+//		Charcoal_ParamTrait::checkString( 1, $folder, TRUE );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
+		return new Charcoal_File( self::getProjectPath( $folder, $filename ) );
 	}
 
 	/*
 	 * web_app以下のリソースのパスをFileインスタンスとして取得
 	 */
-	public static function getApplicationFile( Charcoal_String $folder = NULL, Charcoal_String $filename = NULL )
+	public static function getApplicationFile( $folder = NULL, $filename = NULL )
 	{
-		if ( $filename )
-			return new Charcoal_File( s(self::getApplicationPath($folder,$filename)) );
-		else if ( $folder )
-			return new Charcoal_File( s(self::getApplicationPath($folder)) );
-		else
-			return new Charcoal_File( s(self::getApplicationPath()) );
+//		Charcoal_ParamTrait::checkString( 1, $folder, TRUE );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
+		return new Charcoal_File( self::getApplicationPath( $folder, $filename ) );
 	}
 
 

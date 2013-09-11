@@ -13,49 +13,41 @@ class Charcoal_HttpErrorDocumentExceptionHandler extends Charcoal_CharcoalObject
 {
 	private $_show_exception_stack;
 
-	/*
-	 *	Construct object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
 	/**
 	 * Initialize instance
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$this->_show_exception_stack = $config->getBoolean( s('show_exception_stack'), b(TRUE) )->getValue();
+		parent::configure( $config );
+
+		$this->_show_exception_stack = $config->getBoolean( 'show_exception_stack', TRUE );
 	}
 
 	/**
-	 * Handle framework exception
+	 * execute exception handlers
+	 * 
+	 * @param Exception $e     exception to handle
+	 * 
+	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
 	 */
-	public function handleFrameworkException( Charcoal_CharcoalException $e )
+	public function handleException( $e )
 	{
+		Charcoal_ParamTrait::checkException( 1, $e );
+
 		if ( $e instanceof Charcoal_HttpException )
 		{
-			$status_code = $e->getStatusCode()->getValue();
+			$status_code = $e->getStatusCode();
 
 			// Show HTTP error document
-			Charcoal_Framework::showHttpErrorDocument( i($status_code) );
+			Charcoal_Framework::showHttpErrorDocument( $status_code );
 
 			log_error( 'system,error', 'exception', "http_exception: status_code=$status_code");
 
 			return TRUE;
 		}
 
-		return FALSE;
-	}
-
-	/**
-	 * Handle non-framework exception
-	 */
-	public function handleException( Exception $e )
-	{
 		return FALSE;
 	}
 

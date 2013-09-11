@@ -11,7 +11,7 @@
 
 abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITask
 {
-	private $_is_secure;
+	private $is_secure;
 
 	/*
 	 *	コンストラクタ
@@ -26,11 +26,11 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure($config);
 
-		$this->_is_secure     = $config->getBoolean( s('is_secure'), b(FALSE) );
+		$this->is_secure     = $config->getBoolean( 'is_secure', FALSE );
 
 	}
 
@@ -39,28 +39,28 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	 */
 	public function isSecure()
 	{
-		return $this->_is_secure;
+		return $this->is_secure;
 	}
 
 	/**
 	 * ログインしているか
 	 */
-	public abstract function isAuthorized (Charcoal_ISequence $sequence );
+	public abstract function isAuthorized( $sequence );
 
 	/**
 	 * 権限を持っているか
 	 */
-	public abstract function hasPermission( Charcoal_IEventContext $context );
+	public abstract function hasPermission( $context );
 
 	/**
 	 * ログインが必要なページでイベントを処理する
 	 */
-	public abstract function processEventSecure( Charcoal_IEventContext $context );
+	public abstract function processEventSecure( $context );
 
 	/**
 	 * パーミッションがない場合の処理をする
 	 */
-	public function permissionDenied( Charcoal_IEventContext $context )
+	public function permissionDenied( $context )
 	{
 		return NULL;
 	}
@@ -70,26 +70,26 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$sequence = $context->getSequence();
 		$request  = $context->getRequest();
 
 		// ログインチェック
-		if ( $this->_is_secure->isTrue() && !$this->isAuthorized($sequence)->isTrue() )
+		if ( $this->is_secure === TRUE && !$this->isAuthorized( $sequence ) === TRUE )
 		{
 			// セキュリティ違反イベントを作成
 			return Charcoal_Factory::createEvent( s('security_fault') );
 		}
 
 		// 権限チェック
-		if ( $this->_is_secure->isTrue() && $this->isAuthorized($sequence)->isTrue() )
+		if ( $this->is_secure === TRUE && $this->isAuthorized( $sequence ) === TRUE )
 		{
 			$has_permission = $this->hasPermission( $context );
 			if ( $has_permission === NULL ){
-				$has_permission = b(FALSE);
+				$has_permission = FALSE;
 			}
-			if ( !$has_permission->isTrue() )
+			if ( $has_permission !== TRUE )
 			{
 				// パーミッションがない場合の処理
 				$event = $this->permissionDenied( $context );
@@ -98,7 +98,7 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 				}
 
 				// パーミッション拒否イベントを生成
-				return Charcoal_Factory::createEvent( s('permission_denied') );
+				return $this->getSandbox()->createEvent( 'permission_denied' );
 			}
 		}
 

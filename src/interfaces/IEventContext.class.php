@@ -22,7 +22,7 @@ interface Charcoal_IEventContext
 	 *
 	 * @param Charcoal_IProcedure $procedure   Procedure object to set
 	 */
-	public function setProcedure( Charcoal_IProcedure $procedure );
+	public function setProcedure( $procedure );
 
 	/**
 	 *	Get current request object
@@ -36,7 +36,7 @@ interface Charcoal_IEventContext
 	 *
 	 * @param Charcoal_IRequest $request   Request object to set
 	 */
-	public function setRequest( Charcoal_IRequest $request );
+	public function setRequest( $request );
 
 	/**
 	 *	Get current event object
@@ -50,7 +50,7 @@ interface Charcoal_IEventContext
 	 *
 	 * @param Charcoal_IEvent $event   Event object to set
 	 */
-	public function setEvent( Charcoal_IEvent $event );
+	public function setEvent( $event );
 
 	/**
 	 *	Get current sequence object
@@ -66,7 +66,7 @@ interface Charcoal_IEventContext
 	 *
 	 * @param Charcoal_ISequence $sequence   Ssequence object to set
 	 */
-	public function setSequence( Charcoal_ISequence $sequence );
+	public function setSequence( $sequence );
 
 	/**
 	 *	Get current response object
@@ -80,7 +80,7 @@ interface Charcoal_IEventContext
 	 *
 	 * @param Charcoal_IResponse $response   Response object to set
 	 */
-	public function setResponse( Charcoal_IResponse $response );
+	public function setResponse( $response );
 
 }
 

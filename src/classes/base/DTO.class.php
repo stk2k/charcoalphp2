@@ -100,6 +100,8 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 
 	/**
 	 *	Get all values with keys
+	 *
+	 * @return array
 	 */
 	public function getAll()
 	{
@@ -190,8 +192,10 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 
 	/**
 	 *	Set all array elements
+	 *	
+	 *	@param array $array   array data to set
 	 */
-	public function setArray( array $array )
+	public function setArray(  $array )
 	{
 		foreach( $array as $key => $value ){
 			$this->offsetSet( $key, $value );

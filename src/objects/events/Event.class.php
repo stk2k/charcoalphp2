@@ -22,7 +22,7 @@ abstract class Charcoal_Event extends Charcoal_CharcoalObject implements Charcoa
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_String $obj_name = NULL )
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -34,11 +34,11 @@ abstract class Charcoal_Event extends Charcoal_CharcoalObject implements Charcoa
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 
-		$this->_priority           = $config->getInteger( s('priority'), i(Charcoal_EnumEventPriority::NORMAL) )->getValue();
+		$this->_priority = $config->getInteger( 'priority', Charcoal_EnumEventPriority::NORMAL );
 	}
 
 	/**
@@ -46,8 +46,10 @@ abstract class Charcoal_Event extends Charcoal_CharcoalObject implements Charcoa
 	 *
 	 * @return int 
 	 */
-	public function setPriority( Charcoal_Integer $priority )
+	public function setPriority( $priority )
 	{
+		Charcoal_ParamTrait::checkInteger( 1, $priority );
+
 		$this->_priority = ui($priority);
 	}
 

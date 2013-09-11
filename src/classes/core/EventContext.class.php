@@ -16,13 +16,18 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	private $event;
 	private $sequence;
 	private $response;
+	private $sandbox;
 
 	/**
 	 *	Construct
 	 */
-	public function __construct()
+	public function __construct( $sandbox )
 	{
 		parent::__construct();
+
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+
+		$this->sandbox = $sandbox;
 	}
 
 	/**
@@ -40,8 +45,10 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_IProcedure $procedure   Procedure object to set
 	 */
-	public function setProcedure( Charcoal_IProcedure $procedure )
+	public function setProcedure( $procedure )
 	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IProcedure', $procedure );
+
 		$this->procedure = $procedure;
 	}
 
@@ -60,8 +67,10 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_IRequest $request   Request object to set
 	 */
-	public function setRequest( Charcoal_IRequest $request )
+	public function setRequest( $request )
 	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IRequest', $request );
+
 		$this->request = $request;
 	}
 
@@ -80,8 +89,10 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_IEvent $event   Event object to set
 	 */
-	public function setEvent( Charcoal_IEvent $event )
+	public function setEvent( $event )
 	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IEvent', $event );
+
 		$this->event = $event;
 	}
 
@@ -102,8 +113,10 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_ISequence $sequence   Ssequence object to set
 	 */
-	public function setSequence( Charcoal_ISequence $sequence )
+	public function setSequence( $sequence )
 	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ISequence', $sequence );
+
 		$this->sequence = $sequence;
 	}
 
@@ -122,8 +135,10 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_IResponse $response   Response object to set
 	 */
-	public function setResponse( Charcoal_IResponse $response )
+	public function setResponse( $response )
 	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IResponse', $response );
+
 		$this->response = $response;
 	}
 
@@ -133,10 +148,14 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_IResponse $response   Response object to set
 	 */
-	public function getObject( Charcoal_String $obj_path, Charcoal_String $type_name, Charcoal_Config $config = NULL )
+	public function getObject( $obj_path, $type_name, $config = NULL )
 	{
+//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::checkString( 2, $type_name );
+//		Charcoal_ParamTrait::checkConfig( 3, $config, TRUE );
+
 		try{
-			$object = Charcoal_Factory::createObject( $obj_path, $type_name );
+			$object = $this->sandbox->createObject( $obj_path, $type_name );
 
 			if ( $config ){
 				$object->configure( $config );
@@ -156,10 +175,13 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *
 	 * @param Charcoal_IResponse $response   Response object to set
 	 */
-	public function getComponent( Charcoal_String $obj_path, Charcoal_Config $config = NULL )
+	public function getComponent( $obj_path, $config = NULL )
 	{
+//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::checkConfig( 2, $config, TRUE );
+
 		try{
-			$component = Charcoal_DIContainer::getComponent( $obj_path );
+			$component = $this->sandbox->getContainer()->getComponent( $obj_path );
 
 			if ( $config ){
 				$component->configure( $config );
@@ -181,8 +203,11 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 * @param Charcoal_String $key                   string name to identify cached data
 	 * @param Charcoal_String $type_name_checked     checks type(class/interface) if not NULL
 	 */
-	public function getCache( Charcoal_String $key, Charcoal_String $type_name_checked = NULL )
+	public function getCache( $key, Charcoal_String $type_name_checked = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $type_name_checked, TRUE );
+
 		try{
 			$type_name_checked = us($type_name_checked);
 
@@ -219,8 +244,11 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 * @param Charcoal_String $key                   string name to identify cached data
 	 * @param Charcoal_Object $value                 cache data to save
 	 */
-	public function setCache( Charcoal_String $key, Charcoal_Object $value )
+	public function setCache( $key, $value )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkObject( 2, $value, TRUE );
+
 		try{
 			Charcoal_Cache::set( $key, $value );
 		}
@@ -252,8 +280,11 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 * @see Charcoal_ResourceLocator
 	 *
 	 */
-	public function getPath( Charcoal_String $virtual_path, Charcoal_String $filename = NULL )
+	public function getPath( $virtual_path, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		if ( $filename )
 			return Charcoal_ResourceLocator::getPath( $virtual_path, $filename );
 		else
@@ -281,8 +312,11 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 * @see Charcoal_ResourceLocator
 	 *
 	 */
-	public function getFile( Charcoal_String $virtual_path, Charcoal_String $filename = NULL )
+	public function getFile( $virtual_path, $filename = NULL )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
+//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+
 		if ( $filename )
 			return Charcoal_ResourceLocator::getFile( $virtual_path, $filename );
 		else

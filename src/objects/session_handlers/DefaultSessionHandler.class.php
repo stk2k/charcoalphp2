@@ -26,14 +26,16 @@ class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements 
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
-		$session_name  = $config->getString( s('session_name'), s('') );
-		$save_path     = $config->getString( s('save_path'), s('') );
-		$lifetime      = $config->getInteger( s('lifetime'), i(0) );
-		$valid_path    = $config->getString( s('valid_path'), s('') );
-		$valid_domain  = $config->getString( s('valid_domain'), s('') );
-		$ssl_only      = $config->getBoolean( s('ssl_only'), b(FALSE) );
+		parent::configure( $config );
+
+		$session_name  = $config->getString( 'session_name', '' );
+		$save_path     = $config->getString( 'save_path', '', TRUE );
+		$lifetime      = $config->getInteger( 'lifetime', 0 );
+		$valid_path    = $config->getString( 'valid_path', '' );
+		$valid_domain  = $config->getString( 'valid_domain', '' );
+		$ssl_only      = $config->getBoolean( 'ssl_only', FALSE );
 
 		$save_path = us($save_path);
 		$lifetime  = ui($lifetime);
@@ -42,7 +44,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_CharcoalObject implements 
 
 		// デフォルトのセッション保存先
 		if ( !$save_path || !is_dir($save_path) ){
-			$save_path = Charcoal_ResourceLocator::getApplicationPath( s('sessions') );
+			$save_path = Charcoal_ResourceLocator::getApplicationPath( 'sessions' );
 		}
 
 		// セッション初期化処理

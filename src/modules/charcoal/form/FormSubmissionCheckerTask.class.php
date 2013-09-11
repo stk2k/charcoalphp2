@@ -25,7 +25,7 @@ class Charcoal_FormSubmissionChekerTask extends Charcoal_Task implements Charcoa
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 	}
@@ -35,7 +35,7 @@ class Charcoal_FormSubmissionChekerTask extends Charcoal_Task implements Charcoa
 	 *
 	 * @param Charcoal_IEventContext $context   event context
 	 */
-	public function processEvent( Charcoal_IEventContext $context )
+	public function processEvent( $context )
 	{
 		$request   = $context->getRequest();
 		$response  = $context->getResponse();

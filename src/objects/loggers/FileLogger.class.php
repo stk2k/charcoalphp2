@@ -43,12 +43,12 @@ class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogge
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
 		parent::configure( $config );
 
-		$file_name   = $config->getString( s('file_name') );
-		$logs_dir    = $config->getString( s('logs_dir') );
+		$file_name   = $config->getString( 'file_name', 'charcoal.log', TRUE );
+		$logs_dir    = $config->getString( 'logs_dir', '%WEBAPP_DIR%/logs', TRUE );
 
 		if ( $file_name === NULL ){
 			_throw( new Charcoal_ComponentConfigException( 'file_name', 'mandatory' ) );
@@ -60,10 +60,10 @@ class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogge
 			$this->_file_name = $logs_dir . DIRECTORY_SEPARATOR . $file_name;
 		}
 		else{
-			$this->_file_name = Charcoal_ResourceLocator::getApplicationPath( s('logs'), $file_name );
+			$this->_file_name = Charcoal_ResourceLocator::getApplicationPath( 'logs', $file_name );
 		}
 
-		$this->_line_end  = $config->getString( s('line_end'), s(self::CRLF) );
+		$this->_line_end  = $config->getString( 'line_end', self::CRLF );
 	}
 
 	/*

@@ -32,8 +32,10 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_base_root  = $config->getString( s('base_root'), s(CHARCOAL_BASE_DIR) )->getValue();
 		$this->_mode       = $config->getString( s('mode'), s("777") )->getValue();
 		$this->_overwrite  = $config->getBoolean( s('overwrite'), b(TRUE) )->getValue();

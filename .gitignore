@@ -1,3 +1,4 @@
--vendor/
--composer.lock
--composer.phar
+.idea
+/src/nbproject/private/
+/nbproject/private/
+/test/nbproject/private/

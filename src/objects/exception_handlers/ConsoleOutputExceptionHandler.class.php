@@ -12,30 +12,29 @@
 class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_CharcoalObject implements Charcoal_IExceptionHandler
 {
 	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
+	 * execute exception handlers
+	 * 
+	 * @param Exception $e     exception to handle
+	 * 
+	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
 	 */
-	public function configure( Charcoal_Config $config )
+	public function handleException( $e )
 	{
-	}
+		Charcoal_ParamTrait::checkException( 1, $e );
 
-	/**
-	 * フレームワーク例外ハンドラ
-	 */
-	public function handleFrameworkException( Charcoal_CharcoalException $e )
-	{
 		log_info( "system, debug", "exception", "handled a framework exception!" );
 
 		// Create Debug Trace Renderer
-		$renderer = Charcoal_Profile::getString( s('DEBUGTRACE_RENDERER'), s("html") );
+		$renderer = $this->getSandbox()->getProfile()->getString( 'DEBUGTRACE_RENDERER', 'html' );
 		log_info( "system, debug", "exception", "renderer: $renderer" );
 
 		try{
-			$renderer = Charcoal_Factory::createObject( s($renderer), s('debugtrace_renderer'), v(array()), s('Charcoal_IDebugtraceRenderer') );
+			$renderer = $this->getSandbox()->createObject( $renderer, 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
 
 			// Render exception
 			$renderer->render( $e );
+
+			return TRUE;
 		}
 		catch ( Exception $e )
 		{
@@ -44,16 +43,7 @@ class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_CharcoalObject imp
 			log_info( "system, debug", "exception", "debugtrace_renderer[$renderer] creation failed." );
 		}
 
-		return TRUE;
-	}
-
-	/**
-	 * 例外ハンドラ
-	 */
-	public function handleException( Exception $e )
-	{
-		log_info( "system, debug", "exception", " handled an exception!" );
-
+		return FALSE;
 	}
 
 }

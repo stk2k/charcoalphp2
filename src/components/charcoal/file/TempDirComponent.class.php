@@ -30,8 +30,10 @@ class Charcoal_TempDirComponent extends Charcoal_CharcoalComponent implements Ch
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_mode       = $config->getString( s('mode'), s("777") )->getValue();
 		$this->_overwrite  = $config->getBoolean( s('overwrite'), b(TRUE) )->getValue();
 		$this->_dir_path   = $config->getString( s('dir_path'), s(CHARCOAL_BASE_DIR) )->getValue();

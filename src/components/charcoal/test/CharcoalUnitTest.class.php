@@ -30,8 +30,10 @@ class Charcoal_CharcoalUnitTest extends Charcoal_CharcoalObject implements Charc
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
 		$this->_test_class_dir      = $config->getString( s('test_class_dir'), s('test_classes') );
 	}
 

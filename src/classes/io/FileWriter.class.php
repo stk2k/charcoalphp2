@@ -18,12 +18,16 @@ class Charcoal_FileWriter
 	/**
 	 * Construct object
 	 *
-	 * Charcoal_String $pattern      shell wildcard pattern
+	 * Charcoal_File $pattern      shell wildcard pattern
+	 * string $mode                shell wildcard pattern
 	 */
-	public function __construct( Charcoal_File $file, Charcoal_String $mode = NULL )
+	public function __construct( $file, $mode = NULL )
 	{
+//		Charcoal_ParamTrait::checkFile( 1, $pattern );
+//		Charcoal_ParamTrait::checkString( 2, $extension, TRUE );
+
 		$this->file = $file;
-		$this->mode = $mode ? $mode : s('w');
+		$this->mode = $mode ? $mode : 'w';
 		$this->fp = NULL;
 	}
 

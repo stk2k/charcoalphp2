@@ -32,8 +32,8 @@ class Charcoal_BaseResponse extends Charcoal_CharcoalObject implements Charcoal_
 		return array_keys($this->_vars);
 	}
 
-	/*
-	 *  Get all values from container.
+	/**
+	 *	Get all values with keys
 	 *
 	 * @return array
 	 */
@@ -75,10 +75,10 @@ class Charcoal_BaseResponse extends Charcoal_CharcoalObject implements Charcoal_
 		$this->_vars[us($key)] = $value;
 	}
 
-	/*
-	 *	Merge all elements of an array into container
-	 *
-	 * @param array $data   Array data to merge
+	/**
+	 *	Set all array elements
+	 *	
+	 *	@param array $array   array data to set
 	 */
 	public function setArray( array $data )
 	{
@@ -132,10 +132,12 @@ class Charcoal_BaseResponse extends Charcoal_CharcoalObject implements Charcoal_
 		if ( !$this->_filters ){
 			$this->_filters = array();
 
-			$response_filters = Charcoal_Profile::getArray( s('RESPONSE_FILTERS'), v(array()) );
-			if ( !$response_filters->isEmpty() ){
+			$response_filters = $this->getSandbox()->getProfile()->getArray( 'RESPONSE_FILTERS', array() );
+			if ( $response_filters ){
 				foreach( $response_filters as $filter_name ){
-					$filter = Charcoal_Factory::createObject( s($filter_name), s('response_filter'), v(array()), s('Charcoal_IResponseFilter') );
+					if ( strlen($filter_name) === 0 )    continue;
+
+					$filter = $this->getSandbox()->createObject( $filter_name, 'response_filter', array(), 'Charcoal_IResponseFilter' );
 					$this->_filters[] = $filter;
 				}
 			}

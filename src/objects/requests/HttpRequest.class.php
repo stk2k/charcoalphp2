@@ -9,13 +9,13 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_IRequest
+class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Iterator, ArrayAccess, Charcoal_IRequest
 {
 	private $_proc_path;
-	private $_vars;
 	private $_id;
 	private $_cookie;
 	private $_proc_key;
+	private $_values;
 
 	/*
 	 *	コンストラクタ
@@ -23,9 +23,6 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->_vars     = array();
-		$this->_cookie   = new Charcoal_Cookie();
 
 		// magic_quotes_gpc対策
 		if ( get_magic_quotes_gpc() == 1 ){
@@ -37,17 +34,11 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 			$post = $_POST;
 		}
 
-		$a = array_merge( $get, $post );
-
-		foreach( $a as $key => $value ){
-			$this->_vars[ $key ] = $value;
-		}
+		$this->_values = array_merge( $get, $post );
 
 		// リクエストID
 		$this->_id = Charcoal_System::hash();
 
-		// プロシージャキー
-		$this->_proc_key  = Charcoal_Profile::getString( s('PROC_KEY'), s('proc') );
 	}
 
 	/**
@@ -55,8 +46,17 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
-	public function configure( Charcoal_Config $config )
+	public function configure( $config )
 	{
+		parent::configure( $config );
+
+		// use cookie
+		$use_cookie  = $this->getSandbox()->getProfile()->getString( 'USE_COOKIE', FALSE );
+		$this->_cookie = $use_cookie ? new Charcoal_CookieReader() : NULL;
+
+		// プロシージャキー
+		$this->_proc_key  = $this->getSandbox()->getProfile()->getString( 'PROC_KEY', 'proc' );
+
 	}
 
 	/*
@@ -118,171 +118,334 @@ class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Charcoal_I
 		return new Charcoal_UploadedFile( $userfile );
 	}
 
-	/*
-	 *	キー一覧を取得
+	/**
+	 *	get key list
 	 */
-	public function getKeys() 
-	{
-		return array_keys($this->_vars);
+	public function getKeys() {
+		return array_keys($this->_values);
 	}
 
-	/*
-	 *    すべてのパラメータをハッシュマップで取得
+	/**
+	 *  check if specified key is in the list
+	 */
+	public function keyExists( $key )
+	{
+		$key = us($key);
+		return array_key_exists($key,$this->_values);
+	}
+
+	/**
+	 *	Iterator interface: rewind() implementation
+	 */
+	public function rewind() {
+		reset($this->_values);
+	}
+
+	/**
+	 *	Iterator interface: current() implementation
+	 */
+	public function current() {
+		$var = current($this->_values);
+		return $var;
+	}
+
+	/**
+	 *	Iterator interface: key() implementation
+	 */
+	public function key() {
+		$var = key($this->_values);
+		return $var;
+	}
+
+	/**
+	 *	Iterator interface: next() implementation
+	 */
+	public function next() {
+		$var = next($this->_values);
+		return $var;
+	}
+
+	/**
+	 *	Iterator interface: valid() implementation
+	 */
+	public function valid() {
+		$var = $this->current() !== false;
+		return $var;
+	}
+
+	/**
+	 *	Check if the collection is empty
+	 *	
+	 *	@return bool        TRUE if this collection has no elements, FALSE otherwise
+	 */
+	public function isEmpty()
+	{
+		return count( $this->_values ) === 0;
+	}
+
+	/**
+	 *	Get an element value
+	 */
+	public function get( $key )
+	{
+		return $this->offsetGet( $key );
+	}
+
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
 	 */
 	public function getAll()
 	{
-		return $this->_vars;
+		return $this->_values;
 	}
 
-	/*
-	 *    キーがあるか
+	/**
+	 *	update an element value
 	 */
-	public function keyExists( Charcoal_String $key )
+	public function set( $key, $value )
 	{
 		$key = us($key);
-		return isset($this->_vars[$key]);
+		$this->offsetSet( $key, $value );
 	}
 
-	/*
-	 *   パラメータの取得
+	/**
+	 *	Get an element value
 	 */
-	public function get( Charcoal_String $key )
+	public function __get( $key )
 	{
 		$key = us($key);
-		return isset($this->_vars[$key]) ? $this->_vars[$key] : NULL;
+		return $this->offsetGet( $key );
 	}
 
-	/*
-	 *    パラメータを設定
+	/**
+	 *	Set an element value
 	 */
-	public function set( Charcoal_String $key, $value )
+	public function __set( $key, $value )
 	{
 		$key = us($key);
-
-		$this->_vars[$key] = $value;
+		$this->offsetSet( $key, $value );
 	}
 
-	/*
-	 * パラメータを文字列として取得する
+	/**
+	 *	ArrayAccess interface : offsetGet() implementation
 	 */
-	public function getString( Charcoal_String $key, Charcoal_String $default_value = NULL )
+	public function offsetGet($key)
 	{
-		$value = $this->get( $key );
-
-		$value = us($value);
-
-		// 文字列として不正ならデフォルト値を返す
-		if ( NULL === $value || !is_string($value) ){
-			return $default_value;
-		}
-
-		return s($value);
+		$key = us($key);
+		return isset($this->_values[ $key ]) ? $this->_values[ $key ] : NULL;
 	}
 
-	/*
-	 * パラメータを配列として取得する
+	/**
+	 *	ArrayAccess interface : offsetSet() implementation
 	 */
-	public function getArray( Charcoal_String $key, Charcoal_Vector $default_value = NULL )
+	public function offsetSet($key, $value)
 	{
-		$value = $this->get( $key );
-
-		$value = uv($value);
-
-		// 配列値として不正ならデフォルト値を返す
-		if ( NULL === $value || !is_array($value) ){
-			return $default_value;
-		}
-
-		// 配列を返却
-		return  v($value);
+		$key = us($key);
+		$this->_values[ $key ] = $value;
 	}
 
-	/*
-	 * パラメータをブール値として取得する
+	/**
+	 *	ArrayAccess interface : offsetExists() implementation
 	 */
-	public function getBoolean( Charcoal_String $key, Charcoal_Boolean $default_value = NULL )
+	public function offsetExists($key)
 	{
-		$value = $this->get( $key );
-
-		$value = ub($value);
-
-		if ( is_string($value) ){
-			$value = (strlen($value) > 0 );
-		}
-
-		// ブール値として不正ならデフォルト値を返す
-		if ( NULL === $value || !is_bool($value) ){
-			return $default_value;
-		}
-
-		// ブール型にして返却
-		return b($value);
+		$key = us($key);
+		return isset($this->_values[$key]);
 	}
 
-	/*
-	 * パラメータを整数値として取得する
+	/**
+	 *	ArrayAccess interface : offsetUnset() implementation
 	 */
-	public function getInteger( Charcoal_String $key, Charcoal_Integer $default_value = NULL )
+	public function offsetUnset($key)
 	{
-		$value = $this->get( $key );
-
-		$value = ui($value);
-
-		// 整数値として不正ならデフォルト値を返す
-		if ( NULL === $value || !is_numeric($value) ){
-			return $default_value;
-		}
-
-		// 整数型にして返却
-		return i($value);
+		$key = us($key);
+		unset($this->_values[$key]);
 	}
 
-	/*
-	 * パラメータを浮動小数点数として取得する
+	/**
+	 *	Countable interface: count() implementation
 	 */
-	public function getFloat( Charcoal_String $key, Float $default_value = NULL )
+	public function count()
 	{
-		$value = $this->get( $key );
-
-		$value = uf($value);
-
-		// 浮動小数点数として不正ならデフォルト値を返す
-		if ( NULL === $value || !is_numeric($value) ){
-			return $default_value;
-		}
-
-		// 浮動小数点数型にして返却
-		return f($value);
+		return count( $this->_values );
 	}
 
-	/*
-	 *	配列の全要素を追加
+	/**
+	 *	get key list
 	 */
-	public function setArray( array $array )
+	public function keys()
 	{
-		$this->_vars = array_merge( $this->_vars, $array );
+		return array_keys($this->_values);
 	}
 
-	/*
-	 *	プロパティ配列の全要素を追加
+	/**
+	 *	Set all array elements
+	 *	
+	 *	@param array $array   array data to set
 	 */
-	public function setProperties( Charcoal_Properties $data )
+	public function setArray( $data )
 	{
-		$this->_vars = array_merge( $this->_vars, $data->getAll() );
+//		Charcoal_ParamTrait::checkRawArray( 1, $data );
+
+		$this->_values = $this->_values ? array_merge( $this->_values, $data ) : $data;
 	}
 
-	/*
-	 *	プロパティ配列をマージ
+	/**
+	 *	Set all hashmap elements
+	 *	
+	 *	@param array $array   hashmap data to set
 	 */
-	public function mergeProperties( Charcoal_Properties $data, Charcoal_Boolean $overwrite = NULL )
+	public function setHashMap( $data )
 	{
-		$overwrite = $overwrite ? $overwrite->isTrue() : FALSE;
+//		Charcoal_ParamTrait::checkHashMap( 1, $data );
 
-		foreach( $data as $key => $value ){
-			if ( !isset($this->_vars[$key]) || $overwrite ){
-				$this->_vars[$key] = $value;
+		$this->_values = $this->_values ? array_merge( $this->_values, $map->getAll() ) : $data;
+	}
+
+	/**
+	 *	Merge with array
+	 */
+	public function mergeArray( array $array, Charcoal_Boolean $overwrite = NULL )
+	{
+		$overwrite = $overwrite ? $overwrite->isTrue() : TRUE;
+
+		foreach( $array as $key => $value ){
+			if ( !$this->keyExists($key) || $overwrite ){
+				$this->offsetSet( $key, $value );
 			}
 		}
 	}
+
+	/**
+	 *	Merge with hashmap
+	 */
+	public function mergeHashMap( Charcoal_HashMap $obj, Charcoal_Boolean $overwrite = NULL )
+	{
+		$overwrite = $overwrite ? $overwrite->isTrue() : TRUE;
+
+		foreach( $obj as $key => $value ){
+			if ( !$this->keyExists($key) || $overwrite ){
+				$this->offsetSet( $key, $value );
+			}
+		}
+	}
+
+	/**
+	 *  Get element value as string
+	 *
+	 * @param string $key             Key string to get
+	 * @param string $default_value   default value
+	 *
+	 * @return string
+	 */
+	public function getString( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
+		$key = us($key);
+		return Charcoal_ArrayTrait::getString( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as array
+	 *
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
+	 *
+	 * @return array
+	 */
+	public function getArray( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
+
+		$key = us($key);
+		return Charcoal_ArrayTrait::getArray( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as associative array
+	 *
+	 * @param string $key            Key string to get
+	 * @param array $default_value   default value
+	 *
+	 * @return array
+	 */
+	public function getHashMap( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkHashMap( 2, $default_value, TRUE );
+
+		$key = us($key);
+		return Charcoal_ArrayTrait::getHashMap( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as boolean
+	 *
+	 * @param string $key           Key string to get
+	 * @param bool $default_value   default value
+	 *
+	 * @return bool
+	 */
+	public function getBoolean( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+
+		$key = us($key);
+		return Charcoal_ArrayTrait::getBoolean( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as integer
+	 *
+	 * @param string $key          Key string to get
+	 * @param int $default_value   default value
+	 *
+	 * @return int
+	 */
+	public function getInteger( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+
+		$key = us($key);
+		return Charcoal_ArrayTrait::getInteger( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 *  Get element value as float
+	 *
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
+	 *
+	 * @return float
+	 */
+	public function getFloat( $key, $default_value = NULL )
+	{
+//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+
+		$key = us($key);
+		return Charcoal_ArrayTrait::getFloat( $this->_values, $key, $default_value );
+	}
+
+	/**
+	 * convert to array
+	 * 
+	 * @return array
+	 */
+	public function toArray()
+	{
+		if ( is_array($this->_values) ){
+			return $this->_values;
+		}
+		return array_diff( $this->_values, array() );
+	}
+
 }
 

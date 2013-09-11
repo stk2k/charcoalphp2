@@ -16,15 +16,18 @@ class Charcoal_Class extends Charcoal_Object
 	/*
 	 *	Constructor
 	 */
-	public function __construct( Charcoal_String $class_name )
+	public function __construct( $class_name )
 	{
-		parent::__construct();
+//		Charcoal_ParamTrait::checkString( 1, $class_name );
 
+		parent::__construct();
+/*
 		if ( !class_exists($class_name) ){
 			_throw( new Charcoal_ClassNotFoundException( $class_name ) );
 		}
+*/
 
-		$this->class_name = $class_name;
+		$this->class_name = us($class_name);
 	}
 
 	/*
@@ -40,26 +43,44 @@ class Charcoal_Class extends Charcoal_Object
 	/*
 	 *  Create new instance
 	 *
+	 * @param array $args       arguments for constructoor
+	 *
 	 * @return string
 	 */
-	public function newInstance( Charcoal_Vector $args = NULL )
+	public function newInstance( $args = NULL )
 	{
+//		Charcoal_ParamTrait::checkVector( 1, $args, TRUE );
+
+		$args = uv($args);
+
+		switch( count($args) ){
+		case 0:	return new $this->class_name();
+		case 1:	return new $this->class_name( $args[0] );
+		case 2:	return new $this->class_name( $args[0], $args[1] );
+		case 3:	return new $this->class_name( $args[0], $args[1], $args[2] );
+		case 4:	return new $this->class_name( $args[0], $args[1], $args[2], $args[3] );
+		case 5:	return new $this->class_name( $args[0], $args[1], $args[2], $args[3], $args[4] );
+		case 6:	return new $this->class_name( $args[0], $args[1], $args[2], $args[3], $args[4], $args[5] );
+		case 7:	return new $this->class_name( $args[0], $args[1], $args[2], $args[3], $args[4], $args[5], $args[6] );
+		}
+
+		return NULL;
+/*
 		try{
 			// reflection object
-			$ref_class = new ReflectionClass( us($this->class_name) );
+			$ref_class = new ReflectionClass( $this->class_name );
 
 			$object = $args ? $ref_class->newInstanceArgs( uv($args) ) : $ref_class->newInstanceArgs();
 
 			return $object;
 		}
 		catch( ReflectionException $ex ){
-			$args = $args ? $args : new Charcoal_Vector();
 			_throw( new Charcoal_ClassNewException( $this, $args, $ex ) );
 		}
 		catch( Exception $ex ){
-			$args = $args ? $args : new Charcoal_Vector();
 			_throw( new Charcoal_ClassNewException( $this, $args, $ex ) );
 		}
+*/
 	}
 
 	/*

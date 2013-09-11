@@ -13,49 +13,48 @@ interface Charcoal_ICacheDriver extends Charcoal_ICharcoalObject
 	/**
 	 * Get non-typed data which is associated with a string key
 	 *
-	 * @param Charcoal_String $key         The key of the item to retrieve.
+	 * @param string $key         The key of the item to retrieve.
 	 */
-	public function get( Charcoal_String $key );
+	public function get( $key );
 
 	/**
 	 * Save a value to cache
 	 *
-	 * @param Charcoal_String $key         The key under which to store the value.
-	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
+	 * @param string $key                   The key under which to store the value.
+	 * @param Charcoal_Object $value        value to save
+	 * @param int $duration                 specify expiration span which the cache will be removed.
 	 */
-	public function set( Charcoal_String $key, Charcoal_Object $value, Charcoal_Integer $duration = NULL );
+	public function set( $key, $value, $duration = NULL );
 
 	/**
 	 * Remove a cache data
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
-	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
+	 * @param string $key         The key of the item to remove. Shell wildcards are accepted.
 	 */
-	public function delete( Charcoal_String $key );
+	public function delete( $key );
 
 	/**
 	 * Remove a cache data searched by regular expression
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Regular expression are accepted.
-	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
+	 * @param string $key         The key of the item to remove. Regular expression are accepted.
 	 */
-	public function deleteRegEx( Charcoal_String $key );
+	public function deleteRegEx( $key );
 
 	/**
 	 * Rewrite cache expiration time
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
-	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
+	 * @param string $key         The key of the item to remove. Shell wildcards are accepted.
+	 * @param int $duration       specify expiration span which the cache will be removed.
 	 */
-	public function touch( Charcoal_String $key, Charcoal_Integer $duration = NULL );
+	public function touch( $key, $duration = NULL );
 
 	/**
 	 * Rewrite cache expiration time searched by regular expression
 	 *
-	 * @param Charcoal_String $key         The key of the item to remove. Regular expression are accepted.
-	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
+	 * @param string $key         The key of the item to remove. Regular expression are accepted.
+	 * @param int $duration   specify expiration span which the cache will be removed.
 	 */
-	public function touchRegEx( Charcoal_String $key, Charcoal_Integer $duration = NULL );
+	public function touchRegEx( $key, $duration = NULL );
 
 }
 
