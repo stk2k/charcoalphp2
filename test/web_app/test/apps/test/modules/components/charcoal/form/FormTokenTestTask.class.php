@@ -29,7 +29,7 @@ class FormTokenTestTask extends Charcoal_TestTask
 	/**
 	 * execute tests
 	 */
-	public function test( Charcoal_String $action, Charcoal_IEventContext $context )
+	public function test( $action, $context )
 	{
 		$action = us($action);
 

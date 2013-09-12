@@ -17,31 +17,48 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	private $expected_exception;
 
 	/**
+	 * Initialize instance
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function configure( $config )
+	{
+		parent::configure( $config );
+
+		$this->setPostActions( array('remove_task') );
+
+		if ( $this->getSandbox()->isDebug() )
+		{
+			log_debug( "debug", "Task[$this] post actions: " . implode( ',', $this->getPostActions() ), self::TAG );
+		}
+	}
+
+	/**
 	 * check if action will be processed
 	 */
-	public abstract function isValidAction( Charcoal_String $action );
+	public abstract function isValidAction( $action );
 
 	/**
 	 * セットアップ
 	 */
-	public abstract function setUp( Charcoal_String $action );
+	public abstract function setUp( $action );
 
 	/**
 	 * クリーンアップ
 	 */
-	public abstract function cleanUp( Charcoal_String $action );
+	public abstract function cleanUp( $action );
 
 	/**
 	 * テスト
 	 */
-	public abstract function test( Charcoal_String $action, Charcoal_IEventContext $context );
+	public abstract function test( $action, $context );
 
 	/**
 	 * Set expected exception class name
 	 */
-	public function setExpectedException( Charcoal_String $expected_exception )
+	public function setExpectedException( $expected_exception )
 	{
-		$this->expected_exception = us($expected_exception);
+		$this->expected_exception = $expected_exception;
 	}
 
 	/**
@@ -165,14 +182,16 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 		$procedure = $context->getProcedure();
 
 		// パラメータを取得
-		$actions       = $request->getString( s("actions") );
-
-		$action_list = $actions->split( s(',') );
+		$actions       = $request->getArray( 'actions');
 
 		// アクションに対するテストが記述されているか確認する
 		$total_actions = 0;
-		foreach( $action_list as $action ){
-			if ( $this->isValidAction(s($action)) )	$total_actions ++;
+		if ( $actions ){
+			foreach( $actions as $action ){
+				if ( strlen($action) === 0 )    continue;
+
+				if ( $this->isValidAction( $action ) )	$total_actions ++;
+			}
 		}
 		if ( $total_actions === 0 ){
 			return b(TRUE);
@@ -192,16 +211,18 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 		print "TargetTask:" . $this->getObjectName() . eol();
 		print "Test started(total=$total_actions)." . eol();
 
-		foreach( $action_list as $action ){
-			$this->action = $action = trim( $action );
+		foreach( $actions as $action ){
+			if ( strlen($action) === 0 )    continue;
 
-			if ( !$this->isValidAction(s($action)) )	continue;
+			$this->action = $action;
+
+			if ( !$this->isValidAction( $action ) )	continue;
 
 			print "-------------------------------------" . eol();
 			print "$action" . eol();
 
 			try{
-				$this->setUp( s($action) );
+				$this->setUp( $action );
 			}
 			catch( Exception $e ){
 				print "Test execution failed while setup:" . $e . eol();
@@ -209,7 +230,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			}
 
 			try{
-				$this->test( s($action), $context );
+				$this->test( $action, $context );
 			}
 			catch( Exception $e ){
 				print "[Info]Caught exception:" . get_class($e) . eol();
@@ -226,7 +247,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			}
 
 			try{
-				$this->cleanUp( s($action) );
+				$this->cleanUp( $action );
 			}
 			catch( Exception $e ){
 				print "Test execution failed while clean up:" . $e . eol();

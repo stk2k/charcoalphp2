@@ -14,7 +14,7 @@ class CommandLineUtilTestTask extends Charcoal_TestTask
 	/**
 	 * check if action will be processed
 	 */
-	public function isValidAction( Charcoal_String $action )
+	public function isValidAction( $action )
 	{
 		switch( $action ){
 		case "split_params1":
@@ -28,7 +28,7 @@ class CommandLineUtilTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( Charcoal_String $action )
+	public function setUp( $action )
 	{
 
 	}
@@ -36,14 +36,14 @@ class CommandLineUtilTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( Charcoal_String $action )
+	public function cleanUp( $action )
 	{
 	}
 
 	/**
 	 * execute tests
 	 */
-	public function test( Charcoal_String $action, Charcoal_IEventContext $context )
+	public function test( $action, $context )
 	{
 		$action = us($action);
 

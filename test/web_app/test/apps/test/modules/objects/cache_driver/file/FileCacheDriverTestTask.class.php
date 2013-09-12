@@ -17,7 +17,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 	/**
 	 * check if action will be processed
 	 */
-	public function isValidAction( Charcoal_String $action )
+	public function isValidAction( $action )
 	{
 		switch( $action ){
 		case "get_empty_data":
@@ -42,7 +42,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 	/**
 	 * セットアップ
 	 */
-	public function setUp( Charcoal_String $action )
+	public function setUp( $action )
 	{
 		$action = us($action);
 
@@ -96,7 +96,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 	/**
 	 * クリーンアップ
 	 */
-	public function cleanUp( Charcoal_String $action )
+	public function cleanUp( $action )
 	{
 		$action = us($action);
 
@@ -139,7 +139,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 	/**
 	 * テスト
 	 */
-	public function test( Charcoal_String $action, Charcoal_IEventContext $context )
+	public function test( $action, $context )
 	{
 		$action = us($action);
 

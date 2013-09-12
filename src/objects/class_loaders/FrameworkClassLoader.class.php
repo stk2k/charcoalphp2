@@ -118,8 +118,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SystemEvent'							=> 'objects/events',
 				'Charcoal_URLRedirectEvent'						=> 'objects/events',
 				'Charcoal_UserEvent'							=> 'objects/events',
-				'Charcoal_TestEvent'							=> 'objects/events',
 				'Charcoal_RequestEvent'							=> 'objects/events',
+				'Charcoal_TestEvent'							=> 'objects/events',
 
 		// exception classes
 				'Charcoal_AnnotaionException'					=> 'exceptions',
@@ -307,7 +307,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 	/*
 	 * クラスをロード
 	 */
-	public function loadClass( Charcoal_String $class_name )
+	public function loadClass( $class_name )
 	{
 //		log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] FrameworkClassLoader#loadClass() called: class_name=[$class_name]" );
 

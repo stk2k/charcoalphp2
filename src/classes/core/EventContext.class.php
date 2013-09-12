@@ -16,6 +16,7 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	private $event;
 	private $sequence;
 	private $response;
+	private $task_manager;
 	private $sandbox;
 
 	/**
@@ -142,6 +143,27 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 		$this->response = $response;
 	}
 
+	/**
+	 *	Get current task manager
+     *
+     * @return Charcoal_Response
+	 */
+	public function getTaskManager()
+	{
+		return $this->task_manager;
+	}
+
+	/**
+	 *	Set current task manager
+	 *
+	 * @param Charcoal_IResponse $response   Response object to set
+	 */
+	public function setTaskManager( $task_manager )
+	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ITaskManager', $task_manager );
+
+		$this->task_manager = $task_manager;
+	}
 
 	/**
 	 *	Create and configure an object 

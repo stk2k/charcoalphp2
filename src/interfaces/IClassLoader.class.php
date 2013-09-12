@@ -14,7 +14,7 @@ interface Charcoal_IClassLoader
 	/*
 	 * クラスをロード
 	 */
-	public function loadClass( Charcoal_String $class_name );
+	public function loadClass( $class_name );
 
 }
 

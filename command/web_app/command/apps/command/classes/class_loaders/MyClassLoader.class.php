@@ -4,7 +4,7 @@ class MyClassLoader extends Charcoal_UserClassLoader implements Charcoal_IClassL
 	/*
 	 * クラスとパスの対応を表す連想配列を取得
 	 */
-	public function getClassPathAssoc( Charcoal_String $class_name )
+	public function getClassPathAssoc( $class_name )
 	{
 		return array(
 				// constant classes

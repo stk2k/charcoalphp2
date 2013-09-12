@@ -82,5 +82,19 @@ interface Charcoal_IEventContext
 	 */
 	public function setResponse( $response );
 
+	/**
+	 *	Get current task manager
+     *
+     * @return Charcoal_Response
+	 */
+	public function getTaskManager();
+
+	/**
+	 *	Set current task manager
+	 *
+	 * @param Charcoal_IResponse $response   Response object to set
+	 */
+	public function setTaskManager( $task_manager );
+
 }
 

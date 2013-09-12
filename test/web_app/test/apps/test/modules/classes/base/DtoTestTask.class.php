@@ -19,7 +19,7 @@ class DtoTestTask extends Charcoal_TestTask
 	/**
 	 * check if action will be processed
 	 */
-	public function isValidAction( Charcoal_String $action )
+	public function isValidAction( $action )
 	{
 		switch( $action ){
 		case "dto_array_access":
@@ -44,7 +44,7 @@ class DtoTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( Charcoal_String $action )
+	public function setUp( $action )
 	{
 
 	}
@@ -52,14 +52,14 @@ class DtoTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( Charcoal_String $action )
+	public function cleanUp( $action )
 	{
 	}
 
 	/**
 	 * execute tests
 	 */
-	public function test( Charcoal_String $action, Charcoal_IEventContext $context )
+	public function test( $action, $context )
 	{
 		$action = us($action);
 
@@ -70,7 +70,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto["foo"] = 1;
 			$dto["bar"] = "apple";
 			$dto["baz"] = NULL;
-			$dto["qux"] = new Charcoal_Float(0.5);
+			$dto["qux"] = 0.5;
 
 			//echo print_r($dto,true);
 
@@ -78,7 +78,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			return TRUE;
 
@@ -88,7 +88,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto["foo"] = 1;
 			$dto["bar"] = "apple";
 			$dto["baz"] = NULL;
-			$dto["qux"] = new Charcoal_Float(0.5);
+			$dto["qux"] = 0.5;
 
 			$keys = $dto->keys();
 
@@ -107,7 +107,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto["foo"] = 1;
 			$dto["bar"] = "apple";
 			$dto["baz"] = NULL;
-			$dto["qux"] = new Charcoal_Float(0.5);
+			$dto["qux"] = 0.5;
 
 			//echo "dto[foo]:" . $dto["foo"] . eol();
 			//echo "dto[bar]:" . $dto["bar"] . eol();
@@ -117,7 +117,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			//echo "dto->foo:" . $dto->foo . eol();
 			//echo "dto->bar:" . $dto->bar . eol();
@@ -127,7 +127,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto->foo );
 			$this->assertEquals( "apple", $dto->bar );
 			$this->assertEquals( NULL, $dto->baz );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto->qux );
+			$this->assertEquals( 0.5, $dto->qux );
 
 			return TRUE;
 
@@ -152,7 +152,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->foo = 1;
 			$dto->bar = "apple";
 			$dto->baz = NULL;
-			$dto->qux = new Charcoal_Float(0.5);
+			$dto->qux = 0.5;
 
 			//echo "dto[foo]:" . $dto["foo"] . eol();
 			//echo "dto[bar]:" . $dto["bar"] . eol();
@@ -162,7 +162,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			//echo "dto->foo:" . $dto->foo . eol();
 			//echo "dto->bar:" . $dto->bar . eol();
@@ -172,7 +172,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto->foo );
 			$this->assertEquals( "apple", $dto->bar );
 			$this->assertEquals( NULL, $dto->baz );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto->qux );
+			$this->assertEquals( 0.5, $dto->qux );
 
 			return TRUE;
 
@@ -249,7 +249,7 @@ class DtoTestTask extends Charcoal_TestTask
 					"foo" => 1, 
 					"bar" => "apple", 
 					"baz" => NULL, 
-					"qux" => new Charcoal_Float(0.5),
+					"qux" => 0.5,
 				);
 
 			$dto->setArray( $data );
@@ -262,7 +262,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			return TRUE;
 
@@ -273,10 +273,10 @@ class DtoTestTask extends Charcoal_TestTask
 					"foo" => 1, 
 					"bar" => "apple", 
 					"baz" => NULL, 
-					"qux" => new Charcoal_Float(0.5),
+					"qux" => 0.5,
 				);
 
-			$dto->setHashMap( m($data) );
+			$dto->setHashMap( $data );
 
 			echo "dto[foo]:" . $dto["foo"] . eol();
 			echo "dto[bar]:" . $dto["bar"] . eol();
@@ -286,7 +286,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			return TRUE;
 
@@ -296,7 +296,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->foo = 1;
 			$dto->bar = "apple";
 			$dto->baz = NULL;
-			$dto->qux = new Charcoal_Float(0.5);
+			$dto->qux = 0.5;
 
 			$data = array(
 					"foo" => 2, 
@@ -304,7 +304,7 @@ class DtoTestTask extends Charcoal_TestTask
 				);
 
 			$dto->mergeArray( array("foo" => 2, "bar" => "banana") );
-			$dto->mergeArray( array("baz" => -1, "qux" => new Charcoal_Float(1.2)), b(FALSE) );
+			$dto->mergeArray( array("baz" => -1, "qux" => 1.2), FALSE );
 
 			echo "dto[foo]:" . $dto["foo"] . eol();
 			echo "dto[bar]:" . $dto["bar"] . eol();
@@ -314,9 +314,9 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 2, $dto["foo"] );
 			$this->assertEquals( "banana", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
-			$dto->mergeArray( array("foo" => 3, "bar" => "peach"), b(TRUE) );
+			$dto->mergeArray( array("foo" => 3, "bar" => "peach"), TRUE );
 
 			echo "dto[foo]:" . $dto["foo"] . eol();
 			echo "dto[bar]:" . $dto["bar"] . eol();
@@ -326,7 +326,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 3, $dto["foo"] );
 			$this->assertEquals( "peach", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			return TRUE;
 
@@ -337,15 +337,15 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->foo = 1;
 			$dto->bar = "apple";
 			$dto->baz = NULL;
-			$dto->qux = new Charcoal_Float(0.5);
+			$dto->qux = 0.5;
 
 			$data = array(
 					"foo" => 2, 
 					"bar" => "banana", 
 				);
 
-			$dto->mergeHashMap( m(array("foo" => 2, "bar" => "banana")) );
-			$dto->mergeHashMap( m(array("baz" => -1, "qux" => new Charcoal_Float(1.2))), b(FALSE) );
+			$dto->mergeHashMap( array("foo" => 2, "bar" => "banana") );
+			$dto->mergeHashMap( array("baz" => -1, "qux" => 1.2), FALSE );
 
 			echo "dto[foo]:" . $dto["foo"] . eol();
 			echo "dto[bar]:" . $dto["bar"] . eol();
@@ -355,9 +355,9 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 2, $dto["foo"] );
 			$this->assertEquals( "banana", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
-			$dto->mergeHashMap( m(array("foo" => 3, "bar" => "peach")), b(TRUE) );
+			$dto->mergeHashMap( array("foo" => 3, "bar" => "peach"), TRUE );
 
 			echo "dto[foo]:" . $dto["foo"] . eol();
 			echo "dto[bar]:" . $dto["bar"] . eol();
@@ -367,7 +367,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 3, $dto["foo"] );
 			$this->assertEquals( "peach", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto["qux"] );
+			$this->assertEquals( 0.5, $dto["qux"] );
 
 			return TRUE;
 
@@ -378,7 +378,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->foo = 1;
 			$dto->bar = "apple";
 			$dto->baz = NULL;
-			$dto->qux = new Charcoal_Float(0.5);
+			$dto->qux = 0.5;
 
 			$dto_array = $dto->toArray();
 
@@ -386,7 +386,7 @@ class DtoTestTask extends Charcoal_TestTask
 			$this->assertEquals( 1, $dto_array["foo"] );
 			$this->assertEquals( "apple", $dto_array["bar"] );
 			$this->assertEquals( NULL, $dto_array["baz"] );
-			$this->assertEquals( new Charcoal_Float(0.5), $dto_array["qux"] );
+			$this->assertEquals( 0.5, $dto_array["qux"] );
 
 			return TRUE;
 
@@ -397,13 +397,13 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->foo = 1;
 			$dto->bar = "apple";
 			$dto->baz = NULL;
-			$dto->qux = new Charcoal_Float(0.5);
+			$dto->qux = 0.5;
 
 			$expected = array(
 					"foo" => 1, 
 					"bar" => "apple", 
 					"baz" => NULL, 
-					"qux" => new Charcoal_Float(0.5),
+					"qux" => 0.5,
 				);
 
 			foreach( $dto as $key => $value ){

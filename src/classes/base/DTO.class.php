@@ -16,7 +16,7 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 	/**
 	 *	constructor
 	 */
-	public function __construct( array $values = array() )
+	public function __construct( $values = array() )
 	{
 		parent::__construct();
 
@@ -195,7 +195,7 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 	 *	
 	 *	@param array $array   array data to set
 	 */
-	public function setArray(  $array )
+	public function setArray( $array )
 	{
 		foreach( $array as $key => $value ){
 			$this->offsetSet( $key, $value );
@@ -205,9 +205,11 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 	/**
 	 *	Set all hashmap elements
 	 */
-	public function setHashMap( Charcoal_HashMap $map )
+	public function setHashMap( $map )
 	{
-		foreach( $map->getAll() as $key => $value ){
+		$map = um($map);
+
+		foreach( $map as $key => $value ){
 			$this->offsetSet( $key, $value );
 		}
 	}
@@ -215,10 +217,8 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 	/**
 	 *	Merge with array
 	 */
-	public function mergeArray( array $array, Charcoal_Boolean $overwrite = NULL )
+	public function mergeArray( $array, $overwrite = TRUE )
 	{
-		$overwrite = $overwrite ? $overwrite->isTrue() : TRUE;
-
 		foreach( $array as $key => $value ){
 			if ( !$this->keyExists($key) || $overwrite ){
 				$this->offsetSet( $key, $value );
@@ -229,10 +229,8 @@ class Charcoal_DTO extends Charcoal_Object implements Iterator, ArrayAccess
 	/**
 	 *	Merge with hashmap
 	 */
-	public function mergeHashMap( Charcoal_HashMap $obj, Charcoal_Boolean $overwrite = NULL )
+	public function mergeHashMap( $obj, $overwrite = TRUE )
 	{
-		$overwrite = $overwrite ? $overwrite->isTrue() : TRUE;
-
 		foreach( $obj as $key => $value ){
 			if ( !$this->keyExists($key) || $overwrite ){
 				$this->offsetSet( $key, $value );

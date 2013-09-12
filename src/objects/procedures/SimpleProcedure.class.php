@@ -202,6 +202,7 @@ class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charco
 		$context->setProcedure( $this );
 		$context->setRequest( $request );
 		$context->setResponse( $response );
+		$context->setTaskManager( $task_manager );
 
 		$exit_code = $task_manager->processEvents( $context );
 		if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){

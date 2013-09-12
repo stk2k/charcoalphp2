@@ -14,7 +14,7 @@ class ConfigPropertySetTestTask extends Charcoal_TestTask
 	/**
 	 * check if action will be processed
 	 */
-	public function isValidAction( Charcoal_String $action )
+	public function isValidAction( $action )
 	{
 		switch( $action ){
 		case "get_section":
@@ -26,9 +26,9 @@ class ConfigPropertySetTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( Charcoal_String $action )
+	public function setUp( $action )
 	{
-		$temp_dir = Charcoal_ResourceLocator::getApplicationPath( s('tmp') );
+		$temp_dir = Charcoal_ResourceLocator::getApplicationPath( 'tmp' );
 
 		switch( $action ){
 		case "get_section":
@@ -58,7 +58,7 @@ INI_FILE;
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( Charcoal_String $action )
+	public function cleanUp( $action )
 	{
 		switch( $action ){
 		case "get_section":
@@ -69,7 +69,7 @@ INI_FILE;
 	/**
 	 * execute tests
 	 */
-	public function test( Charcoal_String $action, Charcoal_IEventContext $context )
+	public function test( $action, $context )
 	{
 		$action = us($action);
 

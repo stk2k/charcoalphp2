@@ -41,6 +41,8 @@ class Charcoal_ModuleLoader
 		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		try{
+			log_debug( 'debug, event', "loading module: $module_path" );
+
 			if ( is_string($module_path) ){
 				$module_path = new Charcoal_ObjectPath( $module_path );
 			}

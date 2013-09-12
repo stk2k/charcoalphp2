@@ -14,7 +14,7 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( Charcoal_String $action )
+	public function setUp( $action )
 	{
 
 	}
@@ -22,14 +22,14 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( Charcoal_String $action )
+	public function cleanUp( $action )
 	{
 	}
 
 	/**
 	 * execute tests
 	 */
-	public function test( Charcoal_String $action, Charcoal_IEventContext $context )
+	public function test( $action, $context )
 	{
 		$action = us($action);
 

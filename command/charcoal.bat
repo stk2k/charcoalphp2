@@ -1,7 +1,5 @@
 @echo OFF
 
-cls
-
 set PROC_PATH="@:shell"
 
 

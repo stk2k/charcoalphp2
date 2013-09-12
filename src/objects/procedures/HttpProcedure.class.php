@@ -268,6 +268,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		$context->setRequest( $request );
 		$context->setSequence( $sequence );
 		$context->setResponse( $response );
+		$context->setTaskManager( $task_manager );
 
 		$exit_code = $task_manager->processEvents( $context );
 		if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){

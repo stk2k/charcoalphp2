@@ -13,25 +13,11 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 {
 	const TAG = "Task";
 
-	private $_name_space;
-	private $_guard_conditions;
-	private $_event_filters;
-	private $_post_actions;
-	private $_priority;
-
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->_name_space        = NULL;
-		$this->_guard_conditions  = v(array());
-		$this->_event_filters     = v(array());
-		$this->_post_actions      = v(array());
-		$this->_priority          = 0;
-	}
+	private $name_space;
+	private $guard_conditions;
+	private $event_filters;
+	private $post_actions;
+	private $priority;
 
 	/**
 	 * Initialize instance
@@ -42,17 +28,17 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	{
 		parent::configure( $config );
 
-		$this->_name_space         = $config->getString( 'name_space', '' );
-		$this->_event_filters      = $config->getArray( 'event_filters', array() );
-		$this->_post_actions       = $config->getArray( 'post_actions', array('remove_task', 'remove_event') );
-		$this->_priority           = $config->getInteger( 'priority', 0 );
+		$this->name_space         = $config->getString( 'name_space', '' );
+		$this->event_filters      = $config->getArray( 'event_filters', array() );
+		$this->post_actions       = $config->getArray( 'post_actions', array('remove_task', 'remove_event') );
+		$this->priority           = $config->getInteger( 'priority', 0 );
 
 		if ( $this->getSandbox()->isDebug() )
 		{
-			log_debug( "debug", "Task[$this] name space: {$this->_name_space}", self::TAG );
-			log_debug( "debug", "Task[$this] event filters: " . implode( ',', $this->_event_filters ), self::TAG );
-			log_debug( "debug", "Task[$this] post actions: " . implode( ',', $this->_post_actions ), self::TAG );
-			log_debug( "debug", "Task[$this] priority: {$this->_priority}", self::TAG );
+			log_debug( "debug", "Task[$this] name space: {$this->name_space}", self::TAG );
+			log_debug( "debug", "Task[$this] event filters: " . implode( ',', $this->event_filters ), self::TAG );
+			log_debug( "debug", "Task[$this] post actions: " . implode( ',', $this->post_actions ), self::TAG );
+			log_debug( "debug", "Task[$this] priority: {$this->priority}", self::TAG );
 		}
 	}
 
@@ -65,46 +51,107 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function handleException( $e )
 	{
+		return FALSE;
 	}
 
 	/**
-	 * 名前空間を取得する
+	 * get name space
+	 * 
+	 * @return string      name space of this task
 	 */
 	public function getNameSpace()
 	{
-		return $this->_name_space;
+		return $this->name_space;
 	}
 
 	/**
-	 * ガード条件を取得する
+	 * se name space
+	 * 
+	 * @param array $name_space      name space of this task
+	 */
+	public function setNameSpace( $name_space )
+	{
+		$this->name_space = $name_space;
+	}
+
+	/**
+	 * get guard conditions
+	 * 
+	 * @return array      guard conditions of this task
 	 */
 	public function getGuardConditions()
 	{
-		return $this->_guard_conditions;
+		return $this->guard_conditions;
 	}
 
 	/**
-	 * イベントフィルタを取得する
+	 * set guard conditions
+	 * 
+	 * @param array $guard_conditions      guard conditions of this task
+	 */
+	public function setGuardConditions( $guard_conditions )
+	{
+		$this->guard_conditions = $guard_conditions;
+	}
+
+	/**
+	 * get event filters
+	 * 
+	 * @return array      event filters of this task
 	 */
 	public function getEventFilters()
 	{
-		return $this->_event_filters;
+		return $this->event_filters;
 	}
 
 	/**
-	 * ポストアクションを取得する
+	 * se event filters
+	 * 
+	 * @param array $event_filters      event filters of this task
+	 */
+	public function setEventFilters( $event_filters )
+	{
+		$this->event_filters = $event_filters;
+	}
+
+	/**
+	 * get post actions
+	 * 
+	 * @return array      post actions of this task
 	 */
 	public function getPostActions()
 	{
-		return $this->_post_actions;
+		return $this->post_actions;
 	}
 
 	/**
-	 * 実行優先度を取得する
+	 * set post actions
+	 * 
+	 * @param array $post_actions      post actions of this task
+	 */
+	public function setPostActions( $post_actions )
+	{
+		$this->post_actions = $post_actions;
+	}
+
+	/**
+	 * get priority
+	 * 
+	 * @return integer      priority of this task
 	 */
 	public function getPriority()
 	{
-		return $this->_priority;
+		return $this->priority;
+	}
+
+	/**
+	 * set priority
+	 * 
+	 * @param integer $priority      priority of this task
+	 */
+	public function setPriority( $priority )
+	{
+		$this->priority = $priority;
 	}
 
 	/**
