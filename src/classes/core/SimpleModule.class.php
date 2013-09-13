@@ -69,7 +69,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		Charcoal_Framework::loadSourceFile( $path );
 
 		// create new instance
-		$klass = new Charcoal_Class( s($class_name) );
+		$klass = new Charcoal_Class( $class_name );
 		$task = $klass->newInstance();
 
 //		log_info( "system,debug,task", "created task[$task] in module[$obj_path]");
@@ -127,7 +127,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		// build object path for the event
 		$obj_name = $event->getObjectName();
 		$event_path = $obj_name . '@' . $obj_path->getVirtualPath();
-		$event_path = new Charcoal_ObjectPath(s($event_path));
+//		$event_path = new Charcoal_ObjectPath( $event_path );
 //		log_info( "system,debug,event", "module", "event[$event] path: [$event_path]");
 
 		// set task property

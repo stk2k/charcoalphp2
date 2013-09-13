@@ -34,10 +34,8 @@ class Charcoal_Date extends Charcoal_Primitive
 	/*
 	 *	文字列から生成
 	 */
-	public static function parse( Charcoal_String $date_string )
+	public static function parse( $date_string )
 	{
-		$date_string = us($date_string);
-
 		$timestamp = strtotime( $date_string );
 
 		if ( $timestamp === FALSE || $timestamp === -1 ){
@@ -90,7 +88,7 @@ class Charcoal_Date extends Charcoal_Primitive
 	 */
 	public function format( Charcoal_String $format_pattern )
 	{
-		return date( us($format_pattern), $this->_timestamp );
+		return date( $format_pattern, $this->_timestamp );
 	}
 
 	/*

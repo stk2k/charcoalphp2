@@ -34,26 +34,22 @@ class Charcoal_DateWithTime extends Charcoal_Object
 	/*
 	 *	文字列から生成
 	 */
-	public static function parse( Charcoal_String $datetime_string )
+	public static function parse( $datetime_string )
 	{
-		$datetime_string = us($datetime_string);
-
 		$timestamp = strtotime( $datetime_string );
 
 		if ( $timestamp === FALSE || $timestamp === -1 ){
 			_throw ( new DateWithTimeFormatException( $datetime_string ) );
 		}
 
-		return self::fromTimestamp( i($timestamp) );
+		return self::fromTimestamp( $timestamp );
 	}
 
 	/*
 	 *	UNIXタイムスタンプから生成
 	 */
-	public static function fromTimestamp( Charcoal_Integer $timestamp )
+	public static function fromTimestamp( $timestamp )
 	{
-		$timestamp = ui($timestamp);
-
 		$y = i(date( 'Y', $timestamp ));
 		$m = i(date( 'n', $timestamp ));
 		$d = i(date( 'j', $timestamp ));
@@ -117,7 +113,7 @@ class Charcoal_DateWithTime extends Charcoal_Object
 	 */
 	public function format( Charcoal_String $format_pattern )
 	{
-		return date( us($format_pattern), $this->_timestamp );
+		return date( $format_pattern, $this->_timestamp );
 	}
 
 	/*

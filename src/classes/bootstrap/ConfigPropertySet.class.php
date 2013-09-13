@@ -28,7 +28,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	{
 //		Charcoal_ParamTrait::checkString( 1, $section );
 
-		$value = parent::get( us($section) );
+		$value = parent::get( $section );
 
 		if ( !is_array($value) ){
 			_throw( new Charcoal_ConfigSectionNotFoundException( $section ) );

@@ -136,7 +136,9 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 	 */
 	public function processEvents( Charcoal_IEventContext $context  )
 	{
-		log_info( "system,event", "processEvents start." );
+		$debug = $this->getSandbox()->isDebug();
+
+		if ( $debug ) log_info( "system,event", "processEvents start." );
 
 		$procedure = $context->getProcedure();
 		$request   = $context->getRequest();
@@ -148,7 +150,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 //		try{
 			$queue = $this->_queue;
 
-			Charcoal_Benchmark::start( 'charcoal.task_manager.total' );
+			Charcoal_Benchmark::start();
 
 			$loop_id = 0;
 			while( !$queue->isEmpty() ){
@@ -160,7 +162,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 				$loop_id ++;
 
 				// task list for this loop
-				$task_exec_list = clone $this->_tasks;
+				$task_exec_list = /* clone */ $this->_tasks;
 
 				// イベント一覧を優先度でソートする
 				$queue->sortByPriority();
@@ -172,7 +174,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 
 				$context->setEvent( $event );
 
-				log_info( "system,event", "[loop:$loop_id/$event_name] event loop start.");
+				if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name] event loop start.");
 
 				// タスクの一覧を退避
 				$next_task_exec_list = clone $task_exec_list;
@@ -187,17 +189,17 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 				$task_exec_list = v($a_task_exec_list);
 
 				// すべてのタスクにイベントをディスパッチする
-//				log_info( "system,event", "[loop:$loop_id/$event_name] task list: [$task_exec_list]" );
+//				if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name] task list: [$task_exec_list]" );
 				foreach( $task_exec_list as $task ){
 
 					$task_name = $task->getObjectName();
 					$task_id   = $task->getObjectPath();
-					log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$event_name] is dispatching to task[$task_name].");
+					if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$event_name] is dispatching to task[$task_name].");
 
 					// イベントフィルタ
 					$process = FALSE;
 					$event_filters = $task->getEventFilters();
-					log_info( "event", "[loop:$loop_id/$event_name/$task_name] task event filter: " . implode( ',', $event_filters ) );
+					if ( $debug ) log_info( "event", "[loop:$loop_id/$event_name/$task_name] task event filter: " . implode( ',', $event_filters ) );
 					foreach( $event_filters as $filter ){
 						if ( $event_id == us($filter) ){
 							$process = TRUE;
@@ -206,12 +208,13 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 					}
 
 					if ( !$process ){
-						log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$event_name] is NOT found in task's event filters: [" . implode(',', $event_filters ) . "]. Passing this task.");
+						if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$event_name] is NOT found in task's event filters: [" . implode(',', $event_filters ) . "]. Passing this task.");
 						continue;
 					}
-					log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$event_name] is found in task's event filters: [" . implode(',', $event_filters ) . "].");
+					if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event[$event_name] is found in task's event filters: [" . implode(',', $event_filters ) . "].");
 
 					// ガード条件判定
+/*
 					$process = TRUE;
 					$guard_conditions = $task->getGuardConditions();
 					log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] task guard conditions are : [$guard_conditions]" );
@@ -251,13 +254,14 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 							}
 						}
 					}
-
 					if ( !$process ){
 						continue;
 					}
+*/
+
 
 					// task timer start
-					Charcoal_Benchmark::start( 'charcoal.task_manager.task' );
+					Charcoal_Benchmark::start();
 
 					$result = NULL;
 					try{
@@ -266,7 +270,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 					catch( Exception $e ){
 						_catch( $e );
 						
-						log_info( "system,event,error", "[loop:$loop_id/$event_name/$task_name] an exception(" . get_class($e) . ") was raised:" . $e->getMessage() );
+						if ( $debug ) log_info( "system,event,error", "[loop:$loop_id/$event_name/$task_name] an exception(" . get_class($e) . ") was raised:" . $e->getMessage() );
 
 						$ret = $task->handleException( $e );
 
@@ -274,38 +278,38 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 						}
 						else if ( $ret instanceof Charcoal_IEvent ){
 							$queue->enqueue( $ret );
-							log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler, but event object was returned." );
+							if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler, but event object was returned." );
 						}
 						else if ( is_string($ret) || ($ret instanceof Charcoal_String) ){
 							$e = $this->getSandbox->createEvent( $ret );
 							$queue->enqueue( $ret );
-							log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler, but event name was returned." );
+							if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler, but event name was returned." );
 						}
 						else{
 							$e = $this->getSandbox()->createEvent( 'exception', array($e) );
 							$queue->enqueue( $e );
-							log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] exception was not handled by task's exception handler.enqued an exception event." );
+							if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] exception was not handled by task's exception handler.enqued an exception event." );
 						}
 					}
 
 					// task timer stop
-					$elapse = Charcoal_Benchmark::stop( 'charcoal.task_manager.task' );
+					$elapse = Charcoal_Benchmark::stop();
 
 					// result value handling
 					if ( $result )
 					{
-						log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result] time=[$elapse]sec." );
+						if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result] time=[$elapse]sec." );
 
 						if ( $result === FALSE || $result === TRUE || ($result instanceof Charcoal_Boolean) ){
 						}
 						else if ( is_string($result) || ($result instanceof Charcoal_String) ){
 							$e = $this->getSandbox()->createEvent( $result );
 							$queue->enqueue( $e );
-							log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
+							if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
 						}
 						else if ( $result instanceof Charcoal_IEvent ){
 							$queue->enqueue( $result );
-							log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
+							if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
 						}
 						else{
 							_throw( new Charcoal_ProcessEventException( $event, $task, $result, "processEvent() must return a [boolean] or [IEvent] value." ) );
@@ -327,7 +331,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 							}
 							else{
 								$action = trim($action);
-								log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] post action[$action].");	
+								if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] post action[$action].");	
 							}
 							switch( $action ){
 							case "remove_task";
@@ -337,7 +341,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 								}
 								if ( $target == $task_id ){
 									unset( $next_task_exec_list["$target"] );
-									log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] task was unregistered from execution list: [$next_task_exec_list]" );
+									if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] task was unregistered from execution list: [$next_task_exec_list]" );
 								}
 								break;
 							case "remove_event":
@@ -346,7 +350,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 									$target = $event_id;
 								}
 								if ( $target == $event_id ){
-									log_info( "event", "[loop:$loop_id/$event_name/$task_name] event[$target] was removed.");		
+									if ( $debug ) log_info( "event", "[loop:$loop_id/$event_name/$task_name] event[$target] was removed.");		
 									$event = NULL;
 								}
 								break;
@@ -357,7 +361,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 						}
 					}
 					else{
-						log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] no post action is  defined for event.");	
+						if ( $debug ) log_info( "system,event", "[loop:$loop_id/$event_name/$task_name] no post action is  defined for event.");	
 					}
 
 					// イベント削除ならループを抜ける
@@ -369,7 +373,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 					if ( $result instanceof Charcoal_AbortEvent ){
 						$exit_code  = $result->getExitCode()->getValue();
 						$abort_type = $result->getAbortType()->getValue();
-						log_info( "event", "event loop aborted(exit code:$exit_code");
+						if ( $debug ) log_info( "event", "event loop aborted(exit code:$exit_code");
 						if ( $abort_type == Event::ABORT_TYPE_IMMEDIATELY ){
 							log_warning( "system,event", "[loop:$loop_id/$event_name/$task_name] aborting by request immediately.");
 							break 2;
@@ -404,19 +408,19 @@ class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Cha
 			} // event loop end
 
 			if ( $queue->isEmpty() ){
-				log_info( "system,event", "event queue is empty.");
+				if ( $debug ) log_info( "system,event", "event queue is empty.");
 				$exit_code = Charcoal_Event::EXIT_CODE_OK;
 			}
 
 			// ログ
-			$elapse = Charcoal_Benchmark::stop( 'charcoal.task_manager.total' );
-			log_info( "system,event", "event loop end. time=[$elapse]msec.");
+			$elapse = Charcoal_Benchmark::stop();
+			if ( $debug ) log_info( "system,event", "event loop end. time=[$elapse]msec.");
 //		}
 //		catch( Exception $ex ){
 //			print "catch: $ex <BR>";
 //		}
 
-		log_info( "system,event", "processEvents end: exit_code=" . print_r($exit_code,true) );
+		if ( $debug ) log_info( "system,event", "processEvents end: exit_code=" . print_r($exit_code,true) );
 
 		return $exit_code;
 	}

@@ -27,7 +27,7 @@ class Charcoal_Class extends Charcoal_Object
 		}
 */
 
-		$this->class_name = us($class_name);
+		$this->class_name = $class_name;
 	}
 
 	/*

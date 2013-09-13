@@ -253,22 +253,21 @@ class Charcoal_Sandbox
 			if ( $source_file === NULL ){
 				_throw( new Charcoal_ClassLoaderConfigException( 'source_file', 'mandatory' ) );
 			}
-			$source_file = us($source_file);
 
 			// ソースの取り込み
 			$source_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/classes/' . $source_file;
 			if ( is_readable($source_path) ){
-				require( $source_path );
+				include( $source_path );
 			}
 			else{
 				$source_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/classes/' . $source_file;
 				if ( is_readable($source_path) ){
-					require( $source_path );
+					include( $source_path );
 				}
 			}
 
 			// クラスローダのインスタンス生成
-			$klass = new Charcoal_Class( s($class_name) );
+			$klass = new Charcoal_Class( $class_name );
 			$class_loader = $klass->newInstance();
 
 			// インタフェース確認
@@ -306,7 +305,7 @@ class Charcoal_Sandbox
 		$options = $this->profile->getHashMap( 'CONFIG_PROVIDER_OPTIONS' );
 
 		// create class object
-		$klass = new Charcoal_Class( s($class_name) );
+		$klass = new Charcoal_Class( $class_name );
 
 		// 設定プロバイダのインスタンス生成
 		$provider = $klass->newInstance();

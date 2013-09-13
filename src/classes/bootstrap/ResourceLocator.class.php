@@ -24,12 +24,14 @@ class Charcoal_ResourceLocator
 		if ( self::$macro_defs === NULL ){
 			self::$macro_defs = array(
 
-					'%APPLICATION_DIR%'  => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION,
-					'%PROJECT_DIR%'      => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT,
-					'%WEBAPP_DIR%'       => CHARCOAL_WEBAPP_DIR,
-					'%CHARCOAL_HOME%'    => CHARCOAL_HOME,
-					'%BASE_DIR%'         => CHARCOAL_BASE_DIR,
-					'%APPLICATION%'      => CHARCOAL_APPLICATION,
+					'%APPLICATION_DIR%'          => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION,
+					'%APPLICATION_CLASSES_DIR%'  => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/classes',
+					'%PROJECT_DIR%'              => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT,
+					'%PROJECT_CLASSES_DIR%'      => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/classes',
+					'%WEBAPP_DIR%'               => CHARCOAL_WEBAPP_DIR,
+					'%CHARCOAL_HOME%'            => CHARCOAL_HOME,
+					'%BASE_DIR%'                 => CHARCOAL_BASE_DIR,
+					'%APPLICATION%'              => CHARCOAL_APPLICATION,
 
 				);
 		}

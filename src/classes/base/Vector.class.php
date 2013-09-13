@@ -377,17 +377,9 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	/*
 	 *	文字列で連結する
 	 */
-	public function join( Charcoal_String $delimiter = NULL, Charcoal_Boolean $with_type = NULL, Charcoal_Integer $max_size = NULL )
+	public function join( $delimiter = ',', $with_type = FALSE, $max_size = 0 )
 	{
-		$with_type = $with_type ? ub($with_type) : FALSE;
-		$max_size  = $max_size ? ui($max_size) : 0;
-
-		$array      = $this->_values;
-		$delimiter  = $delimiter ? us($delimiter) : ',';
-
-		$implode    = Charcoal_System::implodeArray( $delimiter, $array, $with_type, $max_size );
-
-		return us( $implode );
+		return Charcoal_System::implodeArray( $delimiter, $this->_values, $with_type, $max_size );
 	}
 
 	/*
@@ -395,7 +387,7 @@ class Charcoal_Vector extends Charcoal_Primitive implements Iterator, ArrayAcces
 	 */
 	public function toString()
 	{
-		return us( $this->join() );
+		return $this->join();
 	}
 
 }

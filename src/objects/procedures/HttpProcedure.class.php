@@ -95,7 +95,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function getForwardTarget()
 	{
-		return new Charcoal_ObjectPath( $this->forward_target );
+		return $this->forward_target;
 	}
 
 	/*
@@ -103,6 +103,8 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function execute( $request, $response, $session = NULL )
 	{
+		Charcoal_Benchmark::start();
+
 		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IRequest', $request );
 		Charcoal_ParamTrait::checkImplements( 2, 'Charcoal_IResponse', $response );
 		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_Session', $session, TRUE );
@@ -166,6 +168,7 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 		//=======================================
 		// ステートフルタスクの復帰
 		//
+
 		$use_session = $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' );
 
 		if ( $use_session ){
@@ -308,6 +311,9 @@ class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal
 			// ステートフルタスクの保存
 			$task_manager->saveStatefulTasks( $session );
 		}
+
+		$score = Charcoal_Benchmark::stop();
+		log_debug( 'system, debug', "procedure execute method end: [$score] msec" );
 
 //		log_info( "system", "procedure", "プロシージャ[$proc_name]を実行しました。" );
 	}

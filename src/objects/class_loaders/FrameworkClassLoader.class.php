@@ -11,22 +11,7 @@
 
 class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements Charcoal_IClassLoader
 {
-	static $class_paths;
-
-	/**
-	 *	constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/*
-	 * クラスパスの初期化
-	 */
-	public static function initClassPath()
-	{
-		self::$class_paths = array(
+	static $class_paths = array(
 
 		// base classes
 				'Charcoal_DTO'						=> 'classes/base',
@@ -138,7 +123,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_DBException'							=> 'exceptions',
 				'Charcoal_DBConnectException'					=> 'exceptions',
 				'Charcoal_DBRollbackTransactionException'		=> 'exceptions',
-				'Charcoal_EmptyStackException'					=> 'exceptions',
 				'Charcoal_EventContextException'				=> 'exceptions',
 				'Charcoal_FileOpenException'					=> 'exceptions',
 				'Charcoal_FileOutputException'					=> 'exceptions',
@@ -173,6 +157,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_QueryTargetException'					=> 'exceptions',
 				'Charcoal_SessionHandlerException'				=> 'exceptions',
 				'Charcoal_SmartyRendererTaskException'			=> 'exceptions',
+				'Charcoal_StackEmptyException'					=> 'exceptions',
 				'Charcoal_SQLBuilderException'					=> 'exceptions',
 				'Charcoal_TableModelException'					=> 'exceptions',
 				'Charcoal_TableModelFieldException'				=> 'exceptions',
@@ -301,7 +286,12 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		);
 
-		return self::$class_paths;
+	/**
+	 *	constructor
+	 */
+	public function __construct()
+	{
+		parent::__construct();
 	}
 
 	/*
@@ -316,10 +306,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 //print "loadClass($class_name)<br>";
 
 		$class_paths = self::$class_paths;
-		if ( !$class_paths ){
-			// クラスパスの初期化
-			$class_paths = self::initClassPath();
-		}
 
 		// フレームワークのクラスではない場合はFALSEを返却
 		if ( !isset($class_paths[ $class_name ]) ){

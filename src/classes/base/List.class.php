@@ -11,7 +11,7 @@
 
 class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 {
-	private $_value;
+	private $_values;
 
 	/*
 	 *	コンストラクタ
@@ -22,14 +22,14 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 
 		if ( $value ){
 			if ( is_array($value) ){
-				$this->_value = $value;
+				$this->_values = $value;
 			}
 			else{
 				_throw( new NonArrayException($value) );
 			}
 		}
 		else{
-			$this->_value = array();
+			$this->_values = array();
 		}
 	}
 
@@ -37,14 +37,14 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 *	Iteratorインタフェース:rewidの実装
 	 */
 	public function rewind() {
-		reset($this->_value);
+		reset($this->_values);
 	}
 
 	/*
 	 *	Iteratorインタフェース:currentの実装
 	 */
 	public function current() {
-		$var = current($this->_value);
+		$var = current($this->_values);
 		return $var;
 	}
 
@@ -52,7 +52,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 *	Iteratorインタフェース:keyの実装
 	 */
 	public function key() {
-		$var = key($this->_value);
+		$var = key($this->_values);
 		return $var;
 	}
 
@@ -60,7 +60,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 *	Iteratorインタフェース:nextの実装
 	 */
 	public function next() {
-		$var = next($this->_value);
+		$var = next($this->_values);
 		return $var;
 	}
 
@@ -77,9 +77,9 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function getHead()
 	{
-		$cnt = count( $this->_value );
+		$cnt = count( $this->_values );
 		if ( $cnt > 0 ){
-			return $this->_value[ 0 ];
+			return $this->_values[ 0 ];
 		}
 		return NULL;
 	}
@@ -89,12 +89,12 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function isFirst() 
 	{ 
-		$hasPrevious = prev($this->_value); 
+		$hasPrevious = prev($this->_values); 
 		// now undo 
 		if ($hasPrevious) { 
-			next($this->_value); 
+			next($this->_values); 
 		} else { 
-			reset($this->_value); 
+			reset($this->_values); 
 		} 
 		return !$hasPrevious; 
 	} 
@@ -104,12 +104,12 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function hasNext() 
 	{ 
-		$hasNext = next($this->_value); 
+		$hasNext = next($this->_values); 
 		// now undo 
 		if ($hasNext) { 
-			prev($this->_value); 
+			prev($this->_values); 
 		} else { 
-			end($this->_value); 
+			end($this->_values); 
 		} 
 		return $hasNext; 
 	}
@@ -119,12 +119,12 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function isLast() 
 	{ 
-		$hasNext = next($this->_value); 
+		$hasNext = next($this->_values); 
 		// now undo 
 		if ($hasNext) { 
-			prev($this->_value); 
+			prev($this->_values); 
 		} else { 
-			end($this->_value); 
+			end($this->_values); 
 		} 
 		return !$hasNext; 
 	}
@@ -134,9 +134,9 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function getTail()
 	{
-		$cnt = count( $this->_value );
+		$cnt = count( $this->_values );
 		if ( $cnt > 0 ){
-			return $this->_value[ $cnt - 1 ];
+			return $this->_values[ $cnt - 1 ];
 		}
 		return NULL;
 	}
@@ -147,7 +147,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function removeTail()
 	{
-		return array_pop( $this->_value );
+		return array_pop( $this->_values );
 	}
 
 	/*
@@ -155,7 +155,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function removeHead()
 	{
-		return array_shift( $this->_value );
+		return array_shift( $this->_values );
 	}
 
 	/*
@@ -169,7 +169,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 		$index  = $index->getValue();
 		$length = $length->getValue();
 
-		return array_splice ( $this->_value, $index, $length );
+		return array_splice ( $this->_values, $index, $length );
 	}
 
 	/**
@@ -179,7 +179,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function isEmpty()
 	{
-		return count( $this->_value ) === 0;
+		return count( $this->_values ) === 0;
 	}
 
 	/*
@@ -187,7 +187,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function contains( Object $o )
 	{
-		foreach( $this->_value as $item ){
+		foreach( $this->_values as $item ){
 			if ( $o->equals($item) ){
 				return TRUE;
 			}
@@ -200,7 +200,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function add( $item )
 	{
-		$new_array_cnt = array_push( $this->_value, $item );
+		$new_array_cnt = array_push( $this->_values, $item );
 
 		return $new_array_cnt;
 	}
@@ -211,10 +211,10 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	public function addAll( Charcoal_Vector $items )
 	{
 		foreach( $items as $item ){
-			array_push( $this->_value, $item );
+			array_push( $this->_values, $item );
 		}
 
-		return count($this->_value);
+		return count($this->_values);
 	}
 
 	/*
@@ -222,7 +222,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function getValue()
 	{
-		return $this->_value;
+		return $this->_values;
 	}
 
 	/*
@@ -230,7 +230,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	protected function setValue( array $value )
 	{
-		$this->_value = $value;
+		$this->_values = $value;
 	}
 
 	/*
@@ -238,7 +238,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function count()
 	{
-		return count( $this->_value );
+		return count( $this->_values );
 	}
 
 	/*
@@ -246,7 +246,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function size()
 	{
-		return count( $this->_value );
+		return count( $this->_values );
 	}
 
 	/*
@@ -254,7 +254,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function shift()
 	{
-		return array_shift( $this->_value );
+		return array_shift( $this->_values );
 	}
 
 	/*
@@ -262,7 +262,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function push()
 	{
-		return array_shift( $this->_value );
+		return array_shift( $this->_values );
 	}
 
 	/*
@@ -270,7 +270,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function map( $callback )
 	{
-		$new_array = array_map( $callback, $this->_value );
+		$new_array = array_map( $callback, $this->_values );
 		return new Charcoal_List( $new_array );
 	}
 
@@ -279,7 +279,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function toArray()
 	{
-		return array_diff( $this->_value, array() );
+		return array_diff( $this->_values, array() );
 	}
 
 	/*
@@ -287,23 +287,15 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function reverse()
 	{
-		return new Charcoal_List( array_reverse( $this->_value ) );
+		return new Charcoal_List( array_reverse( $this->_values ) );
 	}
 
 	/*
 	 *	文字列で連結する
 	 */
-	public function join( Charcoal_String $delimiter = NULL, Charcoal_Boolean $with_type = NULL, Charcoal_Integer $max_size = NULL )
+	public function join( $delimiter = ',', $with_type = FALSE, $max_size = 0 )
 	{
-		$with_type = $with_type ? ub($with_type) : FALSE;
-		$max_size  = $max_size ? ui($max_size) : 0;
-
-		$array	  = $this->_value;
-		$delimiter  = $delimiter ? us($delimiter) : ',';
-
-		$implode	= Charcoal_System::implodeArray( $delimiter, $array, $with_type, $max_size );
-
-		return us( $implode );
+		return Charcoal_System::implodeArray( $delimiter, $this->_values, $with_type, $max_size );
 	}
 
 	/*
@@ -311,7 +303,7 @@ class Charcoal_List extends Charcoal_Object implements Iterator, Countable
 	 */
 	public function toString()
 	{
-		return us( $this->join() );
+		return $this->join();
 	}
 
 }

@@ -22,7 +22,7 @@ class Charcoal_Interface extends Charcoal_Object
 
 		parent::__construct();
 
-		$this->interface_name = us($interface_name);
+		$this->interface_name = $interface_name;
 	}
 
 	/*
@@ -39,7 +39,7 @@ class Charcoal_Interface extends Charcoal_Object
 	 *  Check if an object implements this interface
 	 *
 	 */
-	public function checkImplements( Charcoal_Object $object )
+	public function checkImplements( $object )
 	{
 		$interface_name = $this->interface_name;
 
@@ -53,15 +53,5 @@ class Charcoal_Interface extends Charcoal_Object
 		}
 	}
 
-
-	/*
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return __CLASS__ . '[' . $this->interface_name . ']';
-	}
 }
 

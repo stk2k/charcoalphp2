@@ -11,8 +11,6 @@
 
 class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charcoal_ICoreHook
 {
-	const TIMER_ID = 'core_hook';
-
 	/**
 	 * Initialize instance
 	 *
@@ -31,7 +29,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 	{
 		switch( $stage ){
 		case Charcoal_EnumCoreHookStage::START_OF_BOOTSTRAP:
-			Charcoal_Benchmark::start( self::TIMER_ID );
+			Charcoal_Benchmark::start();
 			// starting message
 			log_info( 'system,debug,screen', "[$stage] Starting framework bootstrap process." );
 			log_info( 'system,debug,screen', "[$stage] ===============================================" );
@@ -156,7 +154,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 			break;
 */
 		case Charcoal_EnumCoreHookStage::END_OF_BOOTSTRAP:
-			$elapse = Charcoal_Benchmark::score( self::TIMER_ID );
+			$elapse = Charcoal_Benchmark::score();
 			log_info( 'system,debug,screen', "[$stage] Finished framework bootstrap process.");
 			log_info( 'system,debug,screen', "[$stage] bootstrap processing time: [$elapse] msec");
 			break;
@@ -199,7 +197,7 @@ class Charcoal_DefaultCoreHook extends Charcoal_CharcoalObject implements Charco
 
 			if ( $this->getSandbox()->isDebug() ){
 				// whole ellapse time
-				$elapse = Charcoal_Benchmark::stop( self::TIMER_ID );
+				$elapse = Charcoal_Benchmark::stop();
 				log_info( 'system,debug,screen', "[$stage] total processing time: [$elapse] msec");
 
 				$peak_usage = memory_get_peak_usage(FALSE);

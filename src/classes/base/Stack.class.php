@@ -104,7 +104,7 @@ class Charcoal_Stack extends Charcoal_Object
 	{
 		$tail = $this->_data->removeTail();
 		if ( !$tail ){
-			_throw( new Charcoal_EmptyStackException( $this ) );
+			_throw( new Charcoal_StackEmptyException( $this ) );
 		}
 
 		return $tail;

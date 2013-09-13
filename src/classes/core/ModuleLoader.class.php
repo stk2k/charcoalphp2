@@ -43,9 +43,9 @@ class Charcoal_ModuleLoader
 		try{
 			log_debug( 'debug, event', "loading module: $module_path" );
 
-			if ( is_string($module_path) ){
-				$module_path = new Charcoal_ObjectPath( $module_path );
-			}
+//			if ( is_string($module_path) ){
+//				$module_path = new Charcoal_ObjectPath( $module_path );
+//			}
 
 			$path_string = $module_path->toString();
 

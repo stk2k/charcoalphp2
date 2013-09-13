@@ -20,6 +20,9 @@ class Charcoal_Object
 	public function __construct()
 	{
 		$class_name = get_class($this);
+
+//		static $id_master = 0;
+//		$this->_object_hash = ++$id_master;
 		$cnt = isset(self::$id_master[$class_name]) ? self::$id_master[$class_name] : 0;
 		$this->_object_hash = ++$cnt;
 		self::$id_master[$class_name] = $cnt;
@@ -28,10 +31,12 @@ class Charcoal_Object
 	/**
 	 *	
 	 */
+
 	public static function dump()
 	{
 		echo nl2br(print_r(self::$id_master,true));
 	}
+
 
 	/**
 	 *	make hash code of this object
@@ -48,8 +53,11 @@ class Charcoal_Object
 	 *
 	 * @return boolean   returns TRUE if this object is regarded as same object to target object.
 	 */
-	public function equals( Charcoal_Object $object )
+	public function equals( $object )
 	{
+		if ( !($object instanceof Charcoal_Object) ){
+			return FALSE;
+		}
 		return $this->_object_hash === $object->_object_hash;
 	}
 
@@ -58,9 +66,8 @@ class Charcoal_Object
 	 *
 	 * @return boolean   returns TRUE if this object implements interface, or derived from target class.
 	 */
-	public function isInstanceOf( Charcoal_String $target )
+	public function isInstanceOf( $target )
 	{
-		$target = us( $target );
 		return $this instanceof $target;
 	}
 
@@ -79,7 +86,7 @@ class Charcoal_Object
 	 */
 	public function getClass()
 	{
-		return new Charcoal_Class( s($this->getClassName()) );
+		return new Charcoal_Class( get_class( $this ) );
 	}
 
 	/*
@@ -89,7 +96,7 @@ class Charcoal_Object
 	 */
 	public function __toString()
 	{
-		return us($this->toString());	// __toString() must return string type only!
+		return $this->toString();	// __toString() must return string type only!
 	}
 
 	/*

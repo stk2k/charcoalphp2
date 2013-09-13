@@ -11,8 +11,9 @@
 
 class Charcoal_Benchmark
 {
-	static private $start;
-	static private $stop;
+	const DEFAULT_PRECISION    = 4;
+
+	static private $stack = array();
 
 	/**
 	 *  start timer
@@ -21,11 +22,9 @@ class Charcoal_Benchmark
 	 *  
 	 *  @return string      now time
 	 */
-	public static function start( $timer_id = '' )
+	public static function start()
 	{
-		$start = self::$start[$timer_id] = microtime();
-
-		return $start;
+		self::$stack[] = microtime(true);
 	}
 
 	/**
@@ -35,34 +34,37 @@ class Charcoal_Benchmark
 	 *  
 	 *  @return string      now score
 	 */
-	public static function stop( $timer_id = '', $precision = 2 )
+	public static function stop( $precision = self::DEFAULT_PRECISION )
 	{
+		$start = array_pop( self::$stack );
+		$stop = microtime(true);
 
-		self::$stop[$timer_id] = microtime();
-		return self::score( $timer_id, $precision );
+		if ( $start === NULL ){
+			_throw( new Charcoal_StackEmptyException( self::$stack ) );
+		}
+
+		return round( ($stop - $start) * 1000, $precision );
 	}
 
 	/**
-	 *  get score in msec
+	 *    score
 	 *  
-	 *  @param string $timer_id      key of timer to stop
-	 *  @param integer $precision    precision of score
+	 *  @param string $timer_id    key of timer to stop
 	 *  
-	 *  @return string      msec time elapsed
+	 *  @return string      now score
 	 */
-	public function score( $timer_id = '', $precision = 2 )
+	public static function score( $precision = self::DEFAULT_PRECISION )
 	{
+		$start = array_pop( self::$stack );
+		$stop = microtime(true);
 
-		if ( !isset(self::$start[$timer_id]) ){
-			self::$start[$timer_id] = microtime();
+		if ( $start === NULL ){
+			_throw( new Charcoal_StackEmptyException( self::$stack ) );
 		}
-		$start = self::$start[$timer_id];
 
-		$stop = isset(self::$stop[$timer_id]) ? self::$stop[$timer_id] : microtime();
+		self::$stack[] = $start;
 
-		$diff = Charcoal_System::diffMicrotime( $stop, $start );
-
-		return round( $diff, $precision );
+		return round( ($stop - $start) * 1000, $precision );
 	}
 
 }

@@ -20,6 +20,8 @@ class Charcoal_ConfigLoader
 //		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
 //		Charcoal_ParamTrait::checkString( 3, $type_name );
 
+		Charcoal_Benchmark::start();
+
 		if ( Charcoal_ParamTrait::isString( $obj_path ) ){
 			$obj_path = new Charcoal_ObjectPath( $obj_path );
 		}
@@ -137,12 +139,15 @@ class Charcoal_ConfigLoader
 		// import
 		$import = isset($config['import']) ? $config['import'] : NULL;
 		if ( $import ){
-			$import_path = new Charcoal_ObjectPath( s($import) );
-			$data = self::loadConfig( $sandbox, $import_path, $type_name );
+//			$import_path = new Charcoal_ObjectPath( $import );
+			$data = self::loadConfig( $sandbox, $import, $type_name );
 			if ( $data ){
 				$config = array_merge( $config, $data );
 			}
 		}
+
+		$elapse = Charcoal_Benchmark::stop();
+		log_info( "system,config", "loadConfig end. time=[$elapse]msec.");
 
 		return $config;
 	}

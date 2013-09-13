@@ -85,13 +85,9 @@ class Charcoal_String extends Charcoal_Primitive
 	 *
 	 * @param Charcoal_String $delimiter      delimiter string
 	 */
-	public function split( Charcoal_String $delimiter )
+	public function split( $delimiter )
 	{
-		$string     = $this->_value;
-		$delimiter  = us( $delimiter );
-		$explode    = explode( $delimiter, $string );
-
-		return new Charcoal_Vector( $explode );
+		return explode( $delimiter, $this->_value );
 	}
 
 	/**
@@ -99,10 +95,9 @@ class Charcoal_String extends Charcoal_Primitive
 	 *
 	 * @param Charcoal_String $regex      regular expression string
 	 */
-	public function splitRegEx( Charcoal_String $regex )
+	public function splitRegEx( $regex )
 	{
 		$string = $this->_value;
-		$regex  = us( $regex );
 		$matches = array();
 		$split_word_list = NULL;
 

@@ -337,7 +337,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		Charcoal_ParamTrait::checkString( 1, $sql );
 		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
 
-		Charcoal_Benchmark::start( 'charcoal.data_sources.pdo' );
+		Charcoal_Benchmark::start();
 
 		$command_id = $this->command_id++;
 
@@ -380,7 +380,7 @@ class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charco
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id ...success(numRows=$numRows)" );
 
 		// ログ
-		$elapse = Charcoal_Benchmark::stop( 'charcoal.data_sources.pdo' );
+		$elapse = Charcoal_Benchmark::stop();
 		log_debug( 'data_source,sql,debug', "data_source", "[ID]$command_id prepareExecute() end. time=[$elapse]msec.");
 
 		return $stmt;

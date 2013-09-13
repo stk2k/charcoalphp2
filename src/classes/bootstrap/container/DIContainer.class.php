@@ -55,7 +55,7 @@ class Charcoal_DIContainer extends Charcoal_Object implements Charcoal_IContaine
 //		log_info( "system,container", "container", "Loading component: [$component_name]");
 
 		// コンポーネント設定ファイルの読み込み
-		$obj_path = new Charcoal_ObjectPath( s($component_name) );
+		$obj_path = new Charcoal_ObjectPath( $component_name );
 
 		$config = Charcoal_ConfigLoader::loadConfig( $this->sandbox, $obj_path, 'component' );
 		$config = new Charcoal_Config( $config );

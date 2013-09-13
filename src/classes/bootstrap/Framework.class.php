@@ -49,7 +49,7 @@ class Charcoal_Framework
 	public static function loadSourceFile( $path )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $path );
-
+/*
 		if ( !is_file($path) ){
 			_throw( new Charcoal_FileNotFoundException( $path ) );
 		}
@@ -57,8 +57,9 @@ class Charcoal_Framework
 		if ( !is_readable($path) ){
 			_throw( new Charcoal_FileNotReadableException( $path ) );
 		}
+*/
 
-		require( $path );
+		include( $path );
 		self::$loaded_files[] = $path;
 //		log_info( "system,debug,loaded_files","loaded source file: [$file]", 'framework' );
 	}
@@ -333,8 +334,13 @@ class Charcoal_Framework
 
 		//==================================================================
 		// load sandbox
+
+		Charcoal_Benchmark::start();
+
 		$profile = $sandbox->load();
 
+		$score = Charcoal_Benchmark::stop();
+		log_debug( 'system, debug', "sandbox profile loading time: [$score] msec" );
 
 		//=======================================
 		// Start bootstrap
@@ -641,7 +647,7 @@ class Charcoal_Framework
 	 */
 	public static function run( $debug = NULL, $sandbox = NULL )
 	{
-		Charcoal_Benchmark::start( 'charcoal.framework' );
+		Charcoal_Benchmark::start();
 
 //		Charcoal_ParamTrait::checkBoolean( 1, $debug, TRUE );
 //		Charcoal_ParamTrait::checkSandbox( 2, $sandbox, TRUE );
@@ -691,7 +697,7 @@ class Charcoal_Framework
 		}
 
 		// finally process
-		$score = Charcoal_Benchmark::stop( 'charcoal.framework' );
+		$score = Charcoal_Benchmark::stop();
 		log_debug( 'system, debug', "total framework process time: [$score] msec" );
  
 //Charcoal_Object::dump();

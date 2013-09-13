@@ -28,7 +28,7 @@ class Charcoal_ObjectPath extends Charcoal_Object
 
 		list($object_name,$virtual_path,$real_path,$dir_list) = self::_parsePath( $object_path_string );
 
-		$this->_object_path_string  = us($object_path_string);
+		$this->_object_path_string  = $object_path_string;
 		$this->_virtual_path        = $virtual_path;
 		$this->_real_path           = $real_path;
 		$this->_object_name         = $object_name;
@@ -100,7 +100,7 @@ class Charcoal_ObjectPath extends Charcoal_Object
 
 		$parent_path = substr($this->_virtual_path,0,$pos);
 
-		return new Charcoal_ObjectPath( s($parent_path) );
+		return new Charcoal_ObjectPath( $parent_path );
 	}
 
 	/*

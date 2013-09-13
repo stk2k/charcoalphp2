@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EmptyStackException extends Charcoal_RuntimeException
+class Charcoal_StackEmptyException extends Charcoal_RuntimeException
 {
 	public function __construct( $stack, $prev = NULL )
 	{
