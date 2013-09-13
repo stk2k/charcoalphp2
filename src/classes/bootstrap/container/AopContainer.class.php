@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_AopContainer extends Charcoal_Object implements Charcoal_ICodebase
+class Charcoal_AopContainer extends Charcoal_AbstractContainer
 {
 	private $sandbox;
 

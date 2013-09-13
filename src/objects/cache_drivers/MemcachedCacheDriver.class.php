@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_MemcachedCacheDriver extends Charcoal_CharcoalObject implements Charcoal_ICacheDriver
+class Charcoal_MemcachedCacheDriver extends Charcoal_AbstractCacheDriver
 {
 	private $_memcached;
 	private $_host;

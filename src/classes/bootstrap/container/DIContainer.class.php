@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_DIContainer extends Charcoal_Object implements Charcoal_IContainer
+class Charcoal_DIContainer extends Charcoal_AbstractContainer
 {
 	const SCOPE_TRANSIENT		= "transient";	// 毎回新しいインスタンスが返される
 	const SCOPE_REQUEST 		= "request";	// １リクエスト中は同じインスタンスが返される

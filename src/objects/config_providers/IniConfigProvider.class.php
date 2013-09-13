@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_IniConfigProvider extends Charcoal_CharcoalObject implements Charcoal_IConfigProvider
+class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 {
 	private $debug;
 

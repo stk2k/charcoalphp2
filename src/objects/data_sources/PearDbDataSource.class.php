@@ -1,6 +1,6 @@
 <?php
 /**
-* PEAR:DBデータソースコンポーネント
+* data source for PEAR:DB
 *
 * PHP version 5
 *
@@ -36,7 +36,7 @@ class Charcoal_DeprecateFlaggOff
 }
 
 
-class Charcoal_PearDbDataSource extends Charcoal_CharcoalObject implements Charcoal_IDataSource
+class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 {
 	private $_connected = false;
 	private $_connection;

@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ShellResponse extends Charcoal_BaseResponse
+class Charcoal_ShellResponse extends Charcoal_AbstractResponse
 {
 	/*
 	 *	Construct object

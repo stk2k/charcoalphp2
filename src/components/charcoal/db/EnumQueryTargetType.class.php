@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EnumQueryTargetType extends Charcoal_Object
+class Charcoal_EnumQueryTargetType extends Charcoal_Enum
 {
 	const TARGET_MODEL         = 1;	// model
 	const TARGET_INNER_JOIN    = 2;	// INNER JOIN : +

@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_CharcoalObject implements Charcoal_IDebugtraceRenderer
+class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstracteDebugtraceRenderer
 {
 	/*
 	 *	コンストラクタ

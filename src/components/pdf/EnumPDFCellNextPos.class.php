@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFCellNextPos
+class EnumPDFCellNextPos extends Charcoal_Enum
 {
 	const RIGHT              = 0;		// 右
 	const NEXT_LINE_HEAD     = 1;		// 次の行の先頭

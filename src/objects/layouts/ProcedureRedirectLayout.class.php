@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ProcedureRedirectLayout extends Charcoal_Layout implements Charcoal_IRedirectLayout
+class Charcoal_ProcedureRedirectLayout extends Charcoal_AbstractLayout
 {
 	private $_obj_path;
 	private $_params;

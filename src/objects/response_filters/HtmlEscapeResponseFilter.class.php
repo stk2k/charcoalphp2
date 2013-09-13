@@ -1,6 +1,6 @@
 <?php
 /**
-* HTMLレスポンスフィルタ
+* response filter for html escaping
 *
 * PHP version 5
 *
@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_HtmlEscapeResponseFilter extends Charcoal_CharcoalObject implements Charcoal_IResponseFilter
+class Charcoal_HtmlEscapeResponseFilter extends Charcoal_AbstractResponseFilter
 {
 	/**
 	 * セットされた値を加工する

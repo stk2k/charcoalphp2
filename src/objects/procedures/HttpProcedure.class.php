@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_HttpProcedure extends Charcoal_CharcoalObject implements Charcoal_IProcedure
+class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 {
 	private $task_manager;
 	private $use_session;

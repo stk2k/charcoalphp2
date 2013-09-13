@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EnumSmtpStatusCode extends Charcoal_Object
+class Charcoal_EnumSmtpStatusCode extends Charcoal_Enum
 {
 	//=================================
 	// 1xx : Positive Preliminary reply

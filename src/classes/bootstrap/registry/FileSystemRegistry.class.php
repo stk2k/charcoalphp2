@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_FileSystemRegistry extends Charcoal_Object implements Charcoal_IRegistry
+class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 {
 	private $sandbox;
 

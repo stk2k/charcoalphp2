@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_PreparedContext extends Charcoal_Object
+class Charcoal_PreparedContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -27,9 +25,9 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function bind( Charcoal_Vector $params )
 	{
-		$this->_context->getCriteria()->addParams( $params );
+		$this->getContext()->getCriteria()->addParams( $params );
 
-		return new Charcoal_BindedContext( $this->_context );
+		return new Charcoal_BindedContext( $this->getContext() );
 	}
 
 	/**
@@ -37,7 +35,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function count()
 	{
-		return $this->_context->count();
+		return $this->getContext()->count();
 	}
 
 	/**
@@ -45,7 +43,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function max()
 	{
-		return $this->_context->max();
+		return $this->getContext()->max();
 	}
 
 	/**
@@ -53,7 +51,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function min()
 	{
-		return $this->_context->min();
+		return $this->getContext()->min();
 	}
 
 	/**
@@ -61,7 +59,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function sum()
 	{
-		return $this->_context->sum();
+		return $this->getContext()->sum();
 	}
 
 	/**
@@ -69,7 +67,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function avg()
 	{
-		return $this->_context->avg();
+		return $this->getContext()->avg();
 	}
 
 	/**
@@ -79,7 +77,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function findFirst()
 	{
-		return $this->_context->findFirst();
+		return $this->getContext()->findFirst();
 	}
 
 	/**
@@ -89,7 +87,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function findAll()
 	{
-		return $this->_context->findAll();
+		return $this->getContext()->findAll();
 	}
 
 	/**
@@ -99,7 +97,7 @@ class Charcoal_PreparedContext extends Charcoal_Object
 	 */
 	public function findAllForUpdate()
 	{
-		return $this->_context->findAllForUpdate();
+		return $this->getContext()->findAllForUpdate();
 	}
 
 

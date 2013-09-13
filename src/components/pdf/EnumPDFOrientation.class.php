@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFOrientation
+class EnumPDFOrientation extends Charcoal_Enum
 {
 	const PORTRAIT             = 0;		// 縦
 	const LANDSCAPE            = 1;		// 横

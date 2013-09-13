@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_CombinedFileFilter implements Charcoal_IFileFilter
+class Charcoal_CombinedFileFilter extends Charcoal_AbstractFileFilter
 {
 	private $filters;
 

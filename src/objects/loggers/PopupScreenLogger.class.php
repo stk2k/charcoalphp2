@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_PopupScreenLogger extends Charcoal_CharcoalObject implements Charcoal_ILogger
+class Charcoal_PopupScreenLogger extends Charcoal_AbstractLogger implements Charcoal_ILogger
 {
 	private $_window_open;
 	private $_line;

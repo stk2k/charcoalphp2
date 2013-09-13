@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFFontFamily
+class EnumPDFFontFamily extends Charcoal_Enum
 {
 	const KOZMIN            = 0;
 	const GOTHIC            = 1;

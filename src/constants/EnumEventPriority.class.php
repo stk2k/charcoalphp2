@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EnumEventPriority extends Charcoal_Object
+class Charcoal_EnumEventPriority extends Charcoal_Enum
 {
 	// relative priority
 	const HIGHEST           =  900;	// highest priority

@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_BaseResponse extends Charcoal_CharcoalObject implements Charcoal_IResponse
+class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charcoal_IResponse
 {
 	private $_vars;
 	private $_filters;

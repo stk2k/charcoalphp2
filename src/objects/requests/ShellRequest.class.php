@@ -1,6 +1,6 @@
 <?php
 /**
-* シェルリからの起動引数を表現するクラス
+* request class for shell
 *
 * PHP version 5
 *
@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ShellRequest extends Charcoal_CharcoalObject implements Charcoal_IRequest
+class Charcoal_ShellRequest extends Charcoal_AbstractRequest
 {
 	private $_proc_path;
 	private $_id;

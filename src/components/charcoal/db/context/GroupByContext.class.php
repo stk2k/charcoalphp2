@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_GroupByContext extends Charcoal_Object
+class Charcoal_GroupByContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -25,7 +23,7 @@ class Charcoal_GroupByContext extends Charcoal_Object
 	 */
 	public function prepare()
 	{
-		return new Charcoal_PreparedContext( $this->_context );
+		return new Charcoal_PreparedContext( $this->getContext() );
 	}
 
 

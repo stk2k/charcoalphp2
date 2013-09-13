@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_WhereContext extends Charcoal_Object
+class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -27,7 +25,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function prepare()
 	{
-		return new Charcoal_PreparedContext( $this->_context );
+		return new Charcoal_PreparedContext( $this->getContext() );
 	}
 
 	/**
@@ -37,9 +35,9 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function orderBy( Charcoal_String $order_by )
 	{
-		$this->_context->getCriteria()->setOrderBy( $order_by );
+		$this->getContext()->getCriteria()->setOrderBy( $order_by );
 
-		return new Charcoal_OrderByContext( $this->_context );
+		return new Charcoal_OrderByContext( $this->getContext() );
 	}
 
 	/**
@@ -47,7 +45,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function compare( Charcoal_String $field, Charcoal_Primitive $value, Charcoal_String $operator )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} {$operator} ?";
 		$params = array( $value->unbox() );
@@ -159,7 +157,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function between( Charcoal_String $field, Charcoal_Primitive $value1, Charcoal_Primitive $value2 )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} BETWEEN ? AND ?";
 		$params = array( $value1->unbox(), $value2->unbox() );
@@ -175,7 +173,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function notBetween( Charcoal_String $field, Charcoal_Primitive $value1, Charcoal_Primitive $value2 )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} NOT BETWEEN ? AND ?";
 		$params = array( $value1->unbox(), $value2->unbox() );
@@ -207,7 +205,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function isNull( Charcoal_String $field )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} IS NULL";
 
@@ -221,7 +219,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function isNotNull( Charcoal_String $field )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} IS NOT NULL";
 
@@ -235,7 +233,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function in( Charcoal_String $field, Charcoal_Vector $values )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} IN (";
 		$params = array();
@@ -259,7 +257,7 @@ class Charcoal_WhereContext extends Charcoal_Object
 	 */
 	public function notIn( Charcoal_String $field, Charcoal_Vector $values )
 	{
-		$criteria = $this->_context->getCriteria();
+		$criteria = $this->getContext()->getCriteria();
 
 		$where = "{$field} NOT IN (";
 		$params = array();

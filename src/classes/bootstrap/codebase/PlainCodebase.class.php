@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_PlainCodebase extends Charcoal_Object implements Charcoal_ICodebase
+class Charcoal_PlainCodebase extends Charcoal_AbstractCodebase
 {
 	private $sandbox;
 

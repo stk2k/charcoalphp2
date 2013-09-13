@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_SelectContext extends Charcoal_Object
+class Charcoal_SelectContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -36,9 +34,9 @@ class Charcoal_SelectContext extends Charcoal_Object
 			$query_target->setAlias( $alias );
 		}
 
-		$this->_context->setQueryTarget( $query_target );
+		$this->getContext()->setQueryTarget( $query_target );
 
-		return new Charcoal_FromContext( $this->_context );
+		return new Charcoal_FromContext( $this->getContext() );
 	}
 
 }

@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_PostgreSQL_SQLBuilder extends Charcoal_DefaultSQLBuilder
+class Charcoal_PostgreSQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 {
 	/*
 	 *	コンストラクタ

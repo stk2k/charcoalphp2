@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_OrderByContext extends Charcoal_Object
+class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -25,7 +23,7 @@ class Charcoal_OrderByContext extends Charcoal_Object
 	 */
 	public function prepare()
 	{
-		return new Charcoal_PreparedContext( $this->_context );
+		return new Charcoal_PreparedContext( $this->getContext() );
 	}
 
 	/**
@@ -33,9 +31,9 @@ class Charcoal_OrderByContext extends Charcoal_Object
 	 */
 	public function limit( Charcoal_Integer $limit )
 	{
-		$this->_context->getCriteria()->setLimit( $limit );
+		$this->getContext()->getCriteria()->setLimit( $limit );
 
-		return new Charcoal_LimitContext( $this->_context );
+		return new Charcoal_LimitContext( $this->getContext() );
 	}
 
 	/**
@@ -43,9 +41,9 @@ class Charcoal_OrderByContext extends Charcoal_Object
 	 */
 	public function offset( Charcoal_Integer $offset )
 	{
-		$this->_context->getCriteria()->setOffset( $offset );
+		$this->getContext()->getCriteria()->setOffset( $offset );
 
-		return new Charcoal_OffsetContext( $this->_context );
+		return new Charcoal_OffsetContext( $this->getContext() );
 	}
 
 	/**
@@ -53,9 +51,9 @@ class Charcoal_OrderByContext extends Charcoal_Object
 	 */
 	public function groupBy( Charcoal_String $group_by )
 	{
-		$this->_context->getCriteria()->setGroupBy( $group_by );
+		$this->getContext()->getCriteria()->setGroupBy( $group_by );
 
-		return new Charcoal_GroupByContext( $this->_context );
+		return new Charcoal_GroupByContext( $this->getContext() );
 	}
 
 

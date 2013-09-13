@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_FileCacheDriver extends Charcoal_CharcoalObject implements Charcoal_ICacheDriver
+class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 {
 	const CACHE_FILE_EXT_META               = 'meta';
 	const CACHE_FILE_EXT_DATA               = 'data';

@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_FromContext extends Charcoal_Object
+class Charcoal_FromContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -34,9 +32,9 @@ class Charcoal_FromContext extends Charcoal_Object
 		if ( $alias && !$alias->isEmpty() ){
 			$join->setAlias( $alias );
 		}
-		$this->_context->getQueryTarget()->addJoin( $join );
+		$this->getContext()->getQueryTarget()->addJoin( $join );
 
-		return new Charcoal_JoinContext( $this->_context, $join );
+		return new Charcoal_JoinContext( $this->getContext(), $join );
 	}
 
 	/**
@@ -80,7 +78,7 @@ class Charcoal_FromContext extends Charcoal_Object
 	 */
 	public function where()
 	{
-		return new Charcoal_WhereContext( $this->_context );
+		return new Charcoal_WhereContext( $this->getContext() );
 	}
 
 }

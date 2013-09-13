@@ -8,16 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_ResultContext extends Charcoal_Object
+class Charcoal_ResultContext extends Charcoal_AbstractWrapperContext
 {
-	private $_context;
-
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_QueryContext $context )
+	public function __construct( $context )
 	{
-		$this->_context = $context;
+		parent::__construct( $context );
 	}
 
 	/**
@@ -25,7 +23,7 @@ class Charcoal_ResultContext extends Charcoal_Object
 	 */
 	public function result()
 	{
-		return $this->_context->getResultSet();
+		return $this->getContext()->getResultSet();
 	}
 
 	/**
@@ -33,7 +31,7 @@ class Charcoal_ResultContext extends Charcoal_Object
 	 */
 	public function pack( Charcoal_DTO $target_dto )
 	{
-		$rs = $this->_context->getResultSet();
+		$rs = $this->getContext()->getResultSet();
 
 		if ( $rs && is_array($rs) ){
 			$collected_rs = array();
@@ -49,7 +47,7 @@ class Charcoal_ResultContext extends Charcoal_Object
 
 				$collected_rs[] = $to_dto;
 			}
-			$this->_context->setResultSet( v($collected_rs) );
+			$this->getContext()->setResultSet( v($collected_rs) );
 		}
 		return $this;
 	}
@@ -59,7 +57,7 @@ class Charcoal_ResultContext extends Charcoal_Object
 	 */
 	public function transform( Charcoal_ITransformer $transformer, Charcoal_DTO $target_dto, Charcoal_Properties $options = NULL )
 	{
-		$rs = $this->_context->getResultSet();
+		$rs = $this->getContext()->getResultSet();
 
 		if ( $rs && is_array($rs) ){
 			$transformed_rs = array();
@@ -73,7 +71,7 @@ class Charcoal_ResultContext extends Charcoal_Object
 
 				$transformed_rs[] = $to_dto;
 			}
-			$this->_context->setResultSet( v($transformed_rs) );
+			$this->getContext()->setResultSet( v($transformed_rs) );
 		}
 
 		return $this;

@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_SimpleTransformer extends Charcoal_CharcoalObject implements Charcoal_ITransformer
+class Charcoal_SimpleTransformer extends Charcoal_AbstractTransformer
 {
 	/**
 	 * 変換する

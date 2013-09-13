@@ -1,6 +1,6 @@
 <?php
 /**
-* HTTPリクエストをラップするクラス
+* request class for http
 *
 * PHP version 5
 *
@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_HttpRequest extends Charcoal_CharcoalObject implements Iterator, ArrayAccess, Charcoal_IRequest
+class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 {
 	private $_proc_path;
 	private $_id;

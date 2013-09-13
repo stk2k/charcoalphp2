@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_HttpErrorDocumentExceptionHandler extends Charcoal_CharcoalObject implements Charcoal_IExceptionHandler
+class Charcoal_HttpErrorDocumentExceptionHandler extends Charcoal_AbstractExceptionHandler
 {
 	private $_show_exception_stack;
 

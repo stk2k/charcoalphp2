@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_MySQL_SQLBuilder extends Charcoal_DefaultSQLBuilder
+class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 {
 	/*
 	 *	コンストラクタ

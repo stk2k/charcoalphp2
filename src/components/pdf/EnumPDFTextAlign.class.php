@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFTextAlign
+class EnumPDFTextAlign extends Charcoal_Enum
 {
 	const LEFT                 = 0;
 	const TOP                  = 1;

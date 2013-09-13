@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_SimpleTokenGenerator extends Charcoal_CharcoalObject implements Charcoal_ITokenGenerator
+class Charcoal_SimpleTokenGenerator extends Charcoal_AbstractTokenGenerator
 {
 	private $_algorithm;
 

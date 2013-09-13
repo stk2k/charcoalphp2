@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_CharcoalObject implements Charcoal_IExceptionHandler
+class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_AbstractExceptionHandler
 {
 	/**
 	 * execute exception handlers

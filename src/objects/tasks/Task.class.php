@@ -1,6 +1,6 @@
 <?php
 /**
-* タスクの基底クラス
+* base class for task
 *
 * PHP version 5
 *

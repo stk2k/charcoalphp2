@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EnumCoreHookStage
+class Charcoal_EnumCoreHookStage extends Charcoal_Enum
 {
 //	const SYSTEM_LOG_INIT                 = 0;
 	const START_OF_BOOTSTRAP              = 1;

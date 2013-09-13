@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_SmartGatewaySessionHandler extends Charcoal_CharcoalObject implements Charcoal_ISessionHandler
+class Charcoal_SmartGatewaySessionHandler extends Charcoal_AbstractSessionHandler
 {
 	private $gw;
 	private $target;

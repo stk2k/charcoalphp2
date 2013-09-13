@@ -11,7 +11,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_HashMap extends Charcoal_Primitive implements Iterator, ArrayAccess, Countable
+class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 {
 	private $_values;
 

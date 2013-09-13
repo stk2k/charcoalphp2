@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_BaseLogger extends Charcoal_CharcoalObject
+class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 {
 	private $_log_format;
 	private $_converter;

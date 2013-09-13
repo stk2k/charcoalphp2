@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_SimpleProcedure extends Charcoal_CharcoalObject implements Charcoal_IProcedure
+class Charcoal_SimpleProcedure extends Charcoal_AbstractProcedure
 {
 	private $_task_manager;
 	private $_forward_target;

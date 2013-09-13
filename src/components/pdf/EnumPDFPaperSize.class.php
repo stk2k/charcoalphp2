@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFPaperSize
+class EnumPDFPaperSize extends Charcoal_Enum
 {
 	const A3                   = 0;		// A3
 	const A4                   = 1;		// A4

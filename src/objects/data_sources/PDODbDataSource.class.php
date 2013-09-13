@@ -1,6 +1,6 @@
 <?php
 /**
-* PDOデータソースコンポーネント
+* data source for PDO
 *
 * PHP version 5
 *
@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_PDODbDataSource extends Charcoal_CharcoalObject implements Charcoal_IDataSource
+class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 {
 	private $connected = false;
 	private $connection;

@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFFontStyle
+class EnumPDFFontStyle extends Charcoal_Enum
 {
 	const NOTHING          = 0x0000;
 	const BOLD             = 0x0001;

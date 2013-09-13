@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_RegExFileFilter implements Charcoal_IFileFilter
+class Charcoal_RegExFileFilter extends Charcoal_AbstractFileFilter
 {
 	private $pattern;
 	private $extension;

@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_List extends Charcoal_Object implements Iterator, Countable
+class Charcoal_List extends Charcoal_Collection
 {
 	private $_values;
 

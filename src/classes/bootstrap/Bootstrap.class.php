@@ -169,14 +169,16 @@ class Charcoal_Bootstrap
 				'Charcoal_Primitive' 					=> 'classes/base',
 				'Charcoal_Number' 						=> 'classes/base',
 				'Charcoal_Boolean'						=> 'classes/base',
-				'Charcoal_Date' 							=> 'classes/base',
+				'Charcoal_Date' 						=> 'classes/base',
 				'Charcoal_DateWithTime'					=> 'classes/base',
 				'Charcoal_Float' 						=> 'classes/base',
 				'Charcoal_Integer' 						=> 'classes/base',
 				'Charcoal_String' 						=> 'classes/base',
 
 				// Basic collection classes
-				'Charcoal_List' 							=> 'classes/base',
+				'Charcoal_Enum' 						=> 'classes/base',
+				'Charcoal_Collection'						=> 'classes/base',
+				'Charcoal_List' 						=> 'classes/base',
 				'Charcoal_Vector' 						=> 'classes/base',
 				'Charcoal_HashMap' 						=> 'classes/base',
 				'Charcoal_Properties' 					=> 'classes/base',
@@ -184,6 +186,7 @@ class Charcoal_Bootstrap
 				'Charcoal_Stack' 						=> 'classes/base',
 
 				// Basic config provider classes
+				'Charcoal_AbstractConfigProvider'		=> 'objects/config_providers',
 				'Charcoal_IniConfigProvider'			=> 'objects/config_providers',
 				'Charcoal_CachedIniConfigProvider'		=> 'objects/config_providers',
 				'Charcoal_PhpConfigProvider'			=> 'classes/config_providers',
@@ -212,11 +215,13 @@ class Charcoal_Bootstrap
 				'Charcoal_UserClassLoader'				=> 'objects/class_loaders',
 
 				// exception handler classes
+				'Charcoal_AbstractExceptionHandler'					=> 'objects/exception_handlers',
 				'Charcoal_HttpErrorDocumentExceptionHandler'	=> 'objects/exception_handlers',
 				'Charcoal_HtmlFileOutputExceptionHandler'		=> 'objects/exception_handlers',
 				'Charcoal_ConsoleOutputExceptionHandler'		=> 'objects/exception_handlers',
 
 				// debugtrace renderer classes
+				'Charcoal_AbstracteDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
 				'Charcoal_HtmlDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
 				'Charcoal_ConsoleDebugtraceRenderer'		=> 'objects/debugtrace_renderers',
 				'Charcoal_LogDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
@@ -234,7 +239,7 @@ class Charcoal_Bootstrap
 				'Charcoal_PopupDebugWindow'			=> 'classes/debug',
 
 				// logger classes
-				'Charcoal_BaseLogger'							=> 'objects/loggers',
+				'Charcoal_AbstractLogger'							=> 'objects/loggers',
 				'Charcoal_CsvFileLogger'						=> 'objects/loggers',
 				'Charcoal_FileLogger'							=> 'objects/loggers',
 				'Charcoal_HtmlFileLogger'						=> 'objects/loggers',
@@ -243,13 +248,16 @@ class Charcoal_Bootstrap
 				'Charcoal_ConsoleLogger'						=> 'objects/loggers',
 
 				// registry classes
+				'Charcoal_AbstractRegistry'					=> 'classes/bootstrap/registry',
 				'Charcoal_FileSystemRegistry'					=> 'classes/bootstrap/registry',
 				'Charcoal_MemoryRegistry'						=> 'classes/bootstrap/registry',
 
 				// codebase classes
+				'Charcoal_AbstractCodebase'						=> 'classes/bootstrap/codebase',
 				'Charcoal_PlainCodebase'						=> 'classes/bootstrap/codebase',
 
 				// container classes
+				'Charcoal_AbstractContainer' 						=> 'classes/bootstrap/container',
 				'Charcoal_DIContainer' 							=> 'classes/bootstrap/container',
 				'Charcoal_AopContainer'							=> 'classes/bootstrap/container',
 
@@ -257,6 +265,7 @@ class Charcoal_Bootstrap
 				'Charcoal_EncodingConverter'					=> 'classes/util',
 
 				// core hook classes
+				'Charcoal_AbstractCoreHook'							=> 'objects/core_hooks',
 				'Charcoal_DefaultCoreHook'						=> 'objects/core_hooks',
 
 			);

@@ -1,7 +1,6 @@
 <?php
-
 /**
-* デフォルトのSQLビルダ
+* base class for SQL builder
 *
 * PHP version 5
 *
@@ -9,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-abstract class Charcoal_DefaultSQLBuilder extends Charcoal_CharcoalObject implements Charcoal_ISQLBuilder
+abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject implements Charcoal_ISQLBuilder
 {
 	private $_type_mapping;
 

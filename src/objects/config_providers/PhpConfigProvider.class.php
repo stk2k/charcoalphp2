@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-class Charcoal_PhpConfigProvider extends Charcoal_Object implements Charcoal_IConfigProvider
+class Charcoal_PhpConfigProvider extends Charcoal_AbstractConfigProvider
 {
 
 	/*

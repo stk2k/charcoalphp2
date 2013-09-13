@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_FileLogger extends Charcoal_BaseLogger implements Charcoal_ILogger
+class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_ILogger
 {
 	private $_open;
 	private $_fp;

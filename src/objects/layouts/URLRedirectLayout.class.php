@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_URLRedirectLayout extends Charcoal_Layout implements Charcoal_IRedirectLayout
+class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
 {
 	private $_url;
 

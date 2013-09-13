@@ -1,6 +1,6 @@
 <?php
 /**
-* 単純なタスクマネージャを実装するクラス
+* simple task manager
 *
 * PHP version 5
 *
@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_DefaultTaskManager extends Charcoal_CharcoalObject implements Charcoal_ITaskManager
+class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 {
 	private $_tasks;
 	private $_queue;

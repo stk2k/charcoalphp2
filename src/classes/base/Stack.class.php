@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_Stack extends Charcoal_Object
+class Charcoal_Stack extends Charcoal_Collection
 {
 	private $_data;
 

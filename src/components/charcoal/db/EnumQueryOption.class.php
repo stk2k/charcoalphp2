@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_EnumQueryOption extends Charcoal_Object
+class Charcoal_EnumQueryOption extends Charcoal_Enum
 {
 	const FOR_UPDATE    = 0x00000001;	// SELECT ... FOR UPDATE
 	const DISTINCT      = 0x00000002;	// SELECT DISTINCT ...

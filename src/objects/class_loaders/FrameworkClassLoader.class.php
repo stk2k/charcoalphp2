@@ -166,11 +166,13 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// I/O classes
 				'Charcoal_FileWriter'						=> 'classes/io',
+				'Charcoal_AbstractFileFilter'					=> 'classes/io',
 				'Charcoal_RegExFileFilter'					=> 'classes/io',
 				'Charcoal_WildcardFileFilter'				=> 'classes/io',
 				'Charcoal_CombinedFileFilter'				=> 'classes/io',
 
 		// task manager classes
+				'Charcoal_AbstractTaskManager'					=> 'objects/task_managers',
 				'Charcoal_DefaultTaskManager'				=> 'objects/task_managers',
 
 		// task classes
@@ -178,11 +180,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SmartyRendererTask'				=> 'objects/tasks',
 				'Charcoal_SecureTask'						=> 'objects/tasks',
 				"Charcoal_TestTask"							=> "objects/tasks",
-
-
-		// xml support classes
-				'Charcoal_XmlElement'						=> 'classes/xml',
-				'Charcoal_XmlRenderer'						=> 'classes/xml',
 
 		// module classes
 
@@ -196,28 +193,32 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SessionTableDTO'					=> 'objects/DTOs',
 
 		// data source classes
+				'Charcoal_AbstractDataSource'					=> 'objects/data_sources',
 				'Charcoal_PearDbDataSource'					=> 'objects/data_sources',
 				'Charcoal_PDODbDataSource'					=> 'objects/data_sources',
 
 		// request classes
+				'Charcoal_AbstractRequest'						=> 'objects/requests',
 				'Charcoal_ShellRequest'						=> 'objects/requests',
 				'Charcoal_HttpRequest'						=> 'objects/requests',
 
 		// response classes
-				'Charcoal_BaseResponse'						=> 'objects/responses',
+				'Charcoal_AbstractResponse'						=> 'objects/responses',
 				'Charcoal_ShellResponse'					=> 'objects/responses',
 				'Charcoal_HttpResponse'						=> 'objects/responses',
 
 		// session hanlder classes
+				'Charcoal_AbstractSessionHandler'				=> 'objects/session_handlers',
 				'Charcoal_DefaultSessionHandler'			=> 'objects/session_handlers',
 				'Charcoal_SmartGatewaySessionHandler'		=> 'objects/session_handlers',
 
 		// SQL Builder classes
-				'Charcoal_DefaultSQLBuilder'				=> 'objects/sql_builders',
+				'Charcoal_AbstractSQLBuilder'					=> 'objects/sql_builders',
 				'Charcoal_MySQL_SQLBuilder'					=> 'objects/sql_builders',
 				'Charcoal_PostgreSQL_SQLBuilder'			=> 'objects/sql_builders',
 
 		// procedure classes
+				'Charcoal_AbstractProcedure'					=> 'objects/procedures',
 				'Charcoal_HttpProcedure'					=> 'objects/procedures',
 				'Charcoal_SimpleProcedure'					=> 'objects/procedures',
 
@@ -247,6 +248,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_QueryTarget'						=> 'components/charcoal/db',
 				'Charcoal_QueryTargetElement'				=> 'components/charcoal/db',
 
+				'Charcoal_AbstractWrapperContext'				=> 'components/charcoal/db/context',
 				'Charcoal_SelectContext'					=> 'components/charcoal/db/context',
 				'Charcoal_FromContext'						=> 'components/charcoal/db/context',
 				'Charcoal_JoinContext'						=> 'components/charcoal/db/context',
@@ -261,25 +263,32 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_QueryContext'						=> 'components/charcoal/db/context',
 
 		// transformer classes
+				'Charcoal_AbstractTransformer'					=> 'objects/transformers',
 				'Charcoal_SimpleTransformer'				=> 'objects/transformers',
 
 		// layout classes
+				'Charcoal_AbstractLayout'						=> 'objects/layouts',
 				'Charcoal_ProcedureRedirectLayout'			=> 'objects/layouts',
 				'Charcoal_URLRedirectLayout'				=> 'objects/layouts',
 
 		// service classes
+				'Charcoal_AbstractResponseFilter'				=> 'objects/response_filters',
 				'Charcoal_HtmlEscapeResponseFilter'			=> 'objects/response_filters',
 
 		// Router classes
+				'Charcoal_AbstractRouter'						=> 'objects/routers',
 				'Charcoal_SimpleRouter'						=> 'objects/routers',
 
 		// Routing rules classes
+				'Charcoal_AbstractRoutingRule'					=> 'objects/routing_rules',
 				'Charcoal_ArrayRoutingRule'					=> 'objects/routing_rules',
 
 		// Token genertor classes
+				'Charcoal_AbstractTokenGenerator'				=> 'objects/token_generators',
 				'Charcoal_SimpleTokenGenerator'				=> 'objects/token_generators',
 
 		// Cache Driver classes
+				'Charcoal_AbstractCacheDriver'					=> 'objects/cache_drivers',
 				'Charcoal_MemcachedCacheDriver'				=> 'objects/cache_drivers',
 				'Charcoal_MemcacheCacheDriver'				=> 'objects/cache_drivers',
 				'Charcoal_FileCacheDriver'					=> 'objects/cache_drivers',

@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_WildcardFileFilter implements Charcoal_IFileFilter
+class Charcoal_WildcardFileFilter extends Charcoal_AbstractFileFilter
 {
 	private $pattern;
 	private $extension;

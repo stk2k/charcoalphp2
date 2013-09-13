@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class EnumPDFCellBorder
+class EnumPDFCellBorder extends Charcoal_Enum
 {
 	const ALL               = 0xffff;		// LEFT | TOP | RIGHT | BOTTOM
 	const NOTHING           = 0x0000;		// 

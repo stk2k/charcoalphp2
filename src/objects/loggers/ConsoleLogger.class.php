@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_ConsoleLogger extends Charcoal_CharcoalObject implements Charcoal_ILogger
+class Charcoal_ConsoleLogger extends Charcoal_AbstractLogger implements Charcoal_ILogger
 {
 	/*
 	 * コンストラクタ
