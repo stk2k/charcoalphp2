@@ -11,28 +11,16 @@
 
 class Charcoal_Stack extends Charcoal_Collection
 {
-	private $_data;
+	private $_values;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_Vector $data = NULL )
+	public function __construct( $value = array() )
 	{
 		parent::__construct();
 
-		$data = $data ? $data : new Charcoal_Vector();
-
-		$this->_data = $data->reverse();
-	}
-
-	/**
-	 *	Get all values with keys
-	 *
-	 * @return array
-	 */
-	public function getAll()
-	{
-		return $this->_data->getAll();
+		$this->_values = $value;
 	}
 
 	/*
@@ -40,11 +28,12 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function getHead()
 	{
-		$cnt = $this->_data->count();
-		if ( $cnt > 0 ){
-			return $this->_data->getHead();
+		$cnt = count($this->_values);
+		if ( $cnt === 0 ){
+			_throw( new EmptyStackException( $this ) );
 		}
-		_throw( new EmptyStackException( $this ) );
+
+		return $this->_values[0];
 	}
 
 	/*
@@ -52,11 +41,12 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function getTail()
 	{
-		$cnt = $this->_data->count();
-		if ( $cnt > 0 ){
-			return $this->_data->getTail();
+		$cnt = count($this->_values);
+		if ( $cnt === 0 ){
+			_throw( new EmptyStackException( $this ) );
 		}
-		_throw( new EmptyStackException( $this ) );
+		$i = $cnt - 1;
+		return isset($this->_values[$i]) ? $this->_values[$i] : NULL;
 	}
 
 	/**
@@ -66,7 +56,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function isEmpty()
 	{
-		return $this->_data->isEmpty();
+		return empty( $this->_values );
 	}
 
 	/*
@@ -74,7 +64,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function count()
 	{
-		return $this->_data->count();
+		return count( $this->_values );
 	}
 
 	/*
@@ -82,7 +72,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function clear()
 	{
-		$this->_data = new Charcoal_Vector();
+		$this->_values = array();
 	}
 
 	/*
@@ -90,11 +80,9 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function push( $item )
 	{
-		Charcoal_ParamTrait::checkObject( 1, $item );
+//		Charcoal_ParamTrait::checkObject( 1, $item );
 
-		$ret = $this->_data->add( $item );
-
-		return $ret;
+		$this->_values[] = $item;
 	}
 
 	/*
@@ -102,7 +90,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function pop()
 	{
-		$tail = $this->_data->removeTail();
+		$tail = array_pop( $this->_values );
 		if ( !$tail ){
 			_throw( new Charcoal_StackEmptyException( $this ) );
 		}
@@ -110,12 +98,53 @@ class Charcoal_Stack extends Charcoal_Collection
 		return $tail;
 	}
 
-	/*
-	 *	配列化
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
 	 */
-	public function toArray()
+	public function getAll()
 	{
-		return $this->_data->toArray();
+		return $this->_values;
+	}
+
+	/*
+	 *	Iteratorインタフェース:rewidの実装
+	 */
+	public function rewind() {
+		reset($this->_values);
+	}
+
+	/*
+	 *	Iteratorインタフェース:currentの実装
+	 */
+	public function current() {
+		$var = current($this->_values);
+		return $var;
+	}
+
+	/*
+	 *	Iteratorインタフェース:keyの実装
+	 */
+	public function key() {
+		$var = key($this->_values);
+		return $var;
+	}
+
+	/*
+	 *	Iteratorインタフェース:nextの実装
+	 */
+	public function next() {
+		$var = next($this->_values);
+		return $var;
+	}
+
+	/*
+	 *	Iteratorインタフェース:validの実装
+	 */
+	public function valid() {
+		$var = $this->current() !== false;
+		return $var;
 	}
 
 }

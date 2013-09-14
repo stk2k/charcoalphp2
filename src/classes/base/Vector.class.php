@@ -46,14 +46,6 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 		return $this->_values;
 	}
 
-    /**
-     *	unbox primitive value
-     */
-    public function unbox()
-    {
-        return $this->_values;
-    }
-
 	/*
 	 *	Iteratorインタフェース:rewidの実装
 	 */
