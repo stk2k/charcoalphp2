@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_AbstractCoreHook extends Charcoal_CharcoalObject implements Charcoal_ICoreHook
+abstract class Charcoal_AbstractCoreHook extends Charcoal_CharcoalObject implements Charcoal_ICoreHook
 {
 }
 
