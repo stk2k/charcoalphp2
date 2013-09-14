@@ -11,13 +11,13 @@
 
 class Charcoal_CookieWriter extends Charcoal_Object
 {
-	var $_expire;
-	var $_path;
-	var $_domain;
-	var $_secure;
-	var $_httponly;
+	private $expire;
+	private $path;
+	private $domain;
+	private $secure;
+	private $httponly;
 
-	var $_values;	// array
+	private $values;	// array
 
 	/*
 	 *	Construct object
@@ -26,12 +26,12 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	{
 		parent::__construct();
 
-		$this->_values = array();
+		$this->values = array();
 
 		// store client cookies
 		if ( $_COOKIE && is_array($_COOKIE) ){
 			foreach( $_COOKIE as $key => $value ){
-				$this->_values[$key] = $value;
+				$this->values[$key] = $value;
 			}
 		}
 	}
@@ -41,7 +41,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function setValue( $name, $value )
 	{
-		$this->_values[ us($name) ] = us($value);
+		$this->values[ us($name) ] = us($value);
 	}
 
 	/*
@@ -49,7 +49,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function setExpire(  $expire )
 	{
-		$this->_expire = ui($expire);
+		$this->expire = ui($expire);
 	}
 
 	/*
@@ -57,7 +57,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function getExpire()
 	{
-		return $this->_expire;
+		return $this->expire;
 	}
 
 	/*
@@ -65,7 +65,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function setPath( $path )
 	{
-		$this->_path = us($path);
+		$this->path = us($path);
 	}
 
 	/*
@@ -73,7 +73,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function getPath()
 	{
-		return $this->_path;
+		return $this->path;
 	}
 
 	/*
@@ -81,7 +81,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function setDomain( $domain )
 	{
-		$this->_domain = us($domain);
+		$this->domain = us($domain);
 	}
 
 	/*
@@ -89,7 +89,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function getDomain()
 	{
-		return $this->_domain;
+		return $this->domain;
 	}
 
 	/*
@@ -97,7 +97,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function setSecure( $secure )
 	{
-		$this->_secure = ub($secure);
+		$this->secure = ub($secure);
 	}
 
 	/*
@@ -105,7 +105,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function isSecure()
 	{
-		return $this->_secure;
+		return $this->secure;
 	}
 
 	/*
@@ -113,7 +113,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function setHttpOnly( $httponly )
 	{
-		$this->_httponly = ub($httponly);
+		$this->httponly = ub($httponly);
 	}
 
 	/*
@@ -121,7 +121,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function isHttpOnly()
 	{
-		return $this->_httponly;
+		return $this->httponly;
 	}
 
 	/*
@@ -129,7 +129,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	private function _write( $name, $value )
 	{
-		setcookie( us($name), us($value), $this->_expire, $this->_path, $this->_domain, $this->_secure, $this->_httponly );
+		setcookie( us($name), us($value), $this->expire, $this->path, $this->domain, $this->secure, $this->httponly );
 	}
 
 	/*
@@ -146,7 +146,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function writeAll()
 	{
-		foreach( $this->_values as $name => $value ){
+		foreach( $this->values as $name => $value ){
 			$this->_write( s($name), s($value) );
 		}
 	}
@@ -156,7 +156,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	private function _write_raw( $name, $value )
 	{
-		setrawcookie( us($name), us($value), $this->_expire, $this->_path, $this->_domain, $this->_secure, $this->_httponly );
+		setrawcookie( us($name), us($value), $this->expire, $this->path, $this->domain, $this->secure, $this->httponly );
 	}
 
 	/*
@@ -173,7 +173,7 @@ class Charcoal_CookieWriter extends Charcoal_Object
 	 */
 	public function writeRawAll()
 	{
-		foreach( $this->_values as $name => $value ){
+		foreach( $this->values as $name => $value ){
 			$this->_write_raw( s($name), s($value) );
 		}
 	}

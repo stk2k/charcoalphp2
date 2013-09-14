@@ -12,7 +12,7 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
 {
 	const TAG = 'array_routing_rule';
 
-	var $_proc_paths;
+	private $proc_paths;
 
 	/*
 	 * Construct object
@@ -40,10 +40,10 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
 			if ( $proc_path === NULL ){
 				_throw( new Charcoal_RoutingRuleConfigException( $this, s($pattern), ('can not be NULL') ) );
 			}
-			$this->_proc_paths[$pattern] = us($proc_path);
+			$this->proc_paths[$pattern] = us($proc_path);
 		}
 			
-		log_info( 'system,debug,router', "_proc_paths:" . print_r($this->_proc_paths,true), self::TAG );
+		log_info( 'system,debug,router', "proc_paths:" . print_r($this->proc_paths,true), self::TAG );
 	}
 
 	/*
@@ -53,7 +53,7 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
 	 */
 	public function getKeys()
 	{
-		return array_keys( $this->_proc_paths );
+		return array_keys( $this->proc_paths );
 	}
 
 	/*
@@ -65,7 +65,7 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
 	{
 		$pattern = us($pattern);
 
-		return isset($this->_proc_paths[$pattern]) ? $this->_proc_paths[$pattern] : NULL;
+		return isset($this->proc_paths[$pattern]) ? $this->proc_paths[$pattern] : NULL;
 	}
 
 }

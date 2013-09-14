@@ -10,16 +10,16 @@
 */
 class Charcoal_QueryTargetElement extends Charcoal_Object
 {
-	var $_type;
-	var $_string;
+	private $type;
+	private $string;
 
 	/*
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_Integer $type, Charcoal_String $string = NULL )
+	public function __construct( Charcoal_Integer $type, Charcoalstring $string = NULL )
 	{
-		$this->_type   = ui($type);
-		$this->_string = us($string);
+		$this->type   = ui($type);
+		$this->string = us($string);
 	}
 
 	/*
@@ -27,7 +27,7 @@ class Charcoal_QueryTargetElement extends Charcoal_Object
 	 */
 	public function getType()
 	{
-		return $this->_type;
+		return $this->type;
 	}
 
 	/*
@@ -35,7 +35,7 @@ class Charcoal_QueryTargetElement extends Charcoal_Object
 	 */
 	public function getString()
 	{
-		return $this->_string;
+		return $this->string;
 	}
 }
 

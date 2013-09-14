@@ -11,8 +11,8 @@
 
 class Charcoal_HttpHeader extends Charcoal_Object
 {
-	var $_header;
-	var $_replace;
+	private $_header;
+	private $_replace;
 
 	/*
 	 *	Construct object

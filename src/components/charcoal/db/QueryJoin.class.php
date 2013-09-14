@@ -10,17 +10,17 @@
 */
 class Charcoal_QueryJoin extends Charcoal_Object
 {
-	var $_join_type;
-	var $_model_name;
-	var $_alias;
-	var $_condition;
+	private $join_type;
+	private $model_name;
+	private $alias;
+	private $condition;
 
 	/*
 	 *  Constructor
 	 */
 	public function __construct( Charcoal_Integer $join_type )
 	{
-		$this->_join_type = ui($join_type);
+		$this->join_type = ui($join_type);
 	}
 
 	/*
@@ -28,7 +28,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function getJoinType()
 	{
-		return $this->_join_type;
+		return $this->join_type;
 	}
 
 	/*
@@ -36,7 +36,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function getModelName()
 	{
-		return $this->_model_name;
+		return $this->model_name;
 	}
 
 	/*
@@ -44,7 +44,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function setModelName( Charcoal_String $model_name )
 	{
-		$this->_model_name = $model_name;
+		$this->model_name = $model_name;
 	}
 
 	/*
@@ -52,7 +52,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function getAlias()
 	{
-		return $this->_alias;
+		return $this->alias;
 	}
 
 	/*
@@ -60,7 +60,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function setAlias( Charcoal_String $alias )
 	{
-		$this->_alias = $alias;
+		$this->alias = $alias;
 	}
 
 	/*
@@ -68,7 +68,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function getCondition()
 	{
-		return $this->_condition;
+		return $this->condition;
 	}
 
 	/*
@@ -76,7 +76,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	 */
 	public function setCondition( Charcoal_String $condition )
 	{
-		$this->_condition = $condition;
+		$this->condition = $condition;
 	}
 
 

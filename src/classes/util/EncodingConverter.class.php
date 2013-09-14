@@ -11,8 +11,8 @@
 
 class Charcoal_EncodingConverter extends Charcoal_Object
 {
-	var $_from;
-	var $_to;
+	private $from;
+	private $to;
 
 	/*
 	 *	コンストラクタ
@@ -22,8 +22,8 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 //		Charcoal_ParamTrait::checkString( 1, $from );
 //		Charcoal_ParamTrait::checkString( 2, $to );
 
-		$this->_from = $from;
-		$this->_to = $to;
+		$this->from = $from;
+		$this->to = $to;
 	}
 
 	/*
@@ -49,8 +49,8 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 //		Charcoal_ParamTrait::checkString( 1, $str );
 
 		$str  = us($str);
-		$from = us($this->_from);
-		$to   = us($this->_to);
+		$from = us($this->from);
+		$to   = us($this->to);
 
 		return mb_convert_encoding( $str, $to, $from );
 	}
@@ -62,8 +62,8 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	{
 		Charcoal_ParamTrait::checkVector( 1, $ary );
 
-		$from = us($this->_from);
-		$to   = us($this->_to);
+		$from = us($this->from);
+		$to   = us($this->to);
 
 		$new_array = array();
 		foreach( uv($ary) as $key => $value ){
@@ -110,7 +110,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function getFromEncoding()
 	{
-		return $this->_from;
+		return $this->from;
 	}
 
 	/*
@@ -118,7 +118,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function getToEncoding()
 	{
-		return $this->_to;
+		return $this->to;
 	}
 
 	/*
@@ -167,7 +167,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return "[EncodingConverter]" . us($this->_from) . " => " . us($this->_to);
+		return "[EncodingConverter]" . us($this->from) . " => " . us($this->to);
 	}
 
 }

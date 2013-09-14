@@ -10,7 +10,7 @@
 */
 class Charcoal_ClassLoader
 {
-	var $_loaders;
+	private $_loaders;
 
 	/**
 	 *  constructor

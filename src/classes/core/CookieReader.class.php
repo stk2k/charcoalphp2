@@ -11,7 +11,7 @@
 
 class Charcoal_CookieReader extends Charcoal_Object
 {
-	var $_values;	// array
+	private $_values;	// array
 
 	/*
 	 *	Construct object

@@ -12,9 +12,9 @@ require_once( 'EnumQueryTargetType' . CHARCOAL_CLASS_FILE_SUFFIX );
 
 class Charcoal_QueryTarget extends Charcoal_Object
 {
-	var $_model_name;
-	var $_alias;
-	var $_joins;
+	private $model_name;
+	private $alias;
+	private $joins;
 
 	/*
 	 *  Constructor
@@ -171,9 +171,9 @@ class Charcoal_QueryTarget extends Charcoal_Object
 
 //		log_debug( "debug, smart_gateway", "joins: " . print_r($joins,true) );
 
-		$this->_model_name  = $main_model;
-		$this->_alias       = $alias;
-		$this->_joins       = $joins;
+		$this->model_name  = $main_model;
+		$this->alias       = $alias;
+		$this->joins       = $joins;
 
 //		log_debug( "debug, smart_gateway", "query_target_list: " . print_r($this,true) );
 	}
@@ -183,7 +183,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function getModelName()
 	{
-		return $this->_model_name;
+		return $this->model_name;
 	}
 
 	/*
@@ -191,7 +191,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function getAlias()
 	{
-		return $this->_alias;
+		return $this->alias;
 	}
 
 	/*
@@ -199,7 +199,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function setAlias( Charcoal_String $alias )
 	{
-		$this->_alias = $alias;
+		$this->alias = $alias;
 	}
 
 	/*
@@ -207,7 +207,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function getJoins()
 	{
-		return v($this->_joins);
+		return v($this->joins);
 	}
 
 	/*
@@ -215,7 +215,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function addJoin( Charcoal_QueryJoin $join )
 	{
-		$this->_joins[] = $join;
+		$this->joins[] = $join;
 	}
 
 	/*

@@ -11,11 +11,11 @@
 
 class Charcoal_UploadedFile extends Charcoal_File
 {
-	var $_name;
-	var $_type;
-	var $_size;
-	var $_tmp_name;
-	var $_error;
+	private $name;
+	private $type;
+	private $size;
+	private $tmpname;
+	private $error;
 
 	/*
 	 *  コンストラクタ
@@ -30,13 +30,13 @@ log_debug( "debug", "debug", "userfile:" . print_r($userfile,true) );
 log_debug( "debug", "debug", "file:" . print_r($file,true) );
 
 
-		$this->_name     = $file['name'];
-		$this->_type     = $file['type'];
-		$this->_size     = $file['size'];
-		$this->_tmp_name = $file['tmp_name'];
-		$this->_error    = $file['error'];
+		$this->name     = $file['name'];
+		$this->type     = $file['type'];
+		$this->size     = $file['size'];
+		$this->tmpname = $file['tmpname'];
+		$this->error    = $file['error'];
 
-		parent::__construct( s($file['tmp_name']) );
+		parent::__construct( s($file['tmpname']) );
 	}
 
 	/*
@@ -45,7 +45,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getName()
 	{
-		return $this->_name;
+		return $this->name;
 	}
 
 	/*
@@ -54,7 +54,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getType()
 	{
-		return $this->_type;
+		return $this->type;
 	}
 
 	/*
@@ -63,7 +63,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getSize()
 	{
-		return $this->_size;
+		return $this->size;
 	}
 
 	/*
@@ -72,7 +72,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getTmpName()
 	{
-		return $this->_tmp_name;
+		return $this->tmpname;
 	}
 
 	/*
@@ -81,7 +81,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getTmpFile()
 	{
-		return new Charcoal_File( s($this->_tmp_name) );
+		return new Charcoal_File( s($this->tmpname) );
 	}
 
 	/*
@@ -90,10 +90,10 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getTmpFileContents()
 	{
-		if ( !file_exists($this->_tmp_name) || !is_readable($this->_tmp_name) ){
+		if ( !file_exists($this->tmpname) || !is_readable($this->tmpname) ){
 			return NULL;
 		}
-		return file_get_contents( $this->_tmp_name );
+		return file_get_contents( $this->tmpname );
 	}
 
 	/*
@@ -102,7 +102,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getError()
 	{
-		return $this->_error;
+		return $this->error;
 	}
 
 	/*
@@ -111,7 +111,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function toFile()
 	{
-		return new Charcoal_File( s($this->_tmp_name) );
+		return new Charcoal_File( s($this->tmpname) );
 	}
 
 	/*
@@ -120,9 +120,9 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getExtension()
 	{
-		$pos = strrpos( $this->_name, '.' );
+		$pos = strrpos( $this->name, '.' );
 		if ( is_int($pos) ){
-			return substr( $this->_name, $pos );
+			return substr( $this->name, $pos );
 		}
 		return '';
 	}
@@ -133,16 +133,16 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function checkErrors()
 	{
-		switch( $this->_error ){
+		switch( $this->error ){
 		case UPLOAD_ERR_OK:
 			log_info( "system,debug", "UPLOAD_ERR_OK" );
 			break;
-		case UPLOAD_ERR_INI_SIZE:
-			log_info( "system,debug", "UPLOAD_ERR_INI_SIZE" );
+		case UPLOAD_ERR_INIsize:
+			log_info( "system,debug", "UPLOAD_ERR_INIsize" );
 			_throw( new Charcoal_FileUploadIniSizeException($this) );
 			break;
-		case UPLOAD_ERR_FORM_SIZE:
-			log_info( "system,debug", "UPLOAD_ERR_FORM_SIZE" );
+		case UPLOAD_ERR_FORMsize:
+			log_info( "system,debug", "UPLOAD_ERR_FORMsize" );
 			_throw( new Charcoal_FileUploadFormSizeException($this) );
 			break;
 		case UPLOAD_ERR_PARTIAL:
@@ -166,7 +166,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 			_throw( new Charcoal_FileUploadExtensionException($this) );
 			break;
 		default:
-			log_warning( "system,debug", "unexpected upload error:" . $this->_error );
+			log_warning( "system,debug", "unexpected upload error:" . $this->error );
 			break;
 		}
 	}

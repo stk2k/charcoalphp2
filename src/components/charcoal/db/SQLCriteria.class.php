@@ -10,24 +10,24 @@
 */
 class Charcoal_SQLCriteria extends Charcoal_Object
 {
-	var $_where;
-	var $_params;
-	var $_order_by;
-	var $_limit;
-	var $_offset;
-	var $_group_by;
+	private $where;
+	private $params;
+	private $order_by;
+	private $limit;
+	private $offset;
+	private $group_by;
 
 	/*
 	 *    コンストラクタ
 	 */
 	public function __construct( Charcoal_String $where = NULL, Charcoal_Vector $params = NULL, Charcoal_String $order_by = NULL, Charcoal_Integer $limit = NULL, Charcoal_Integer $offset = NULL, Charcoal_String $group_by = NULL )
 	{
-		$this->_where     = $where ? $where->trim() : NULL;
-		$this->_params    = $params;
-		$this->_order_by  = $order_by ? $order_by->trim() : NULL;
-		$this->_limit     = $limit;
-		$this->_offset    = $offset;
-		$this->_group_by  = $group_by ? $group_by->trim() : NULL;
+		$this->where     = $where ? $where->trim() : NULL;
+		$this->params    = $params;
+		$this->order_by  = $order_by ? $order_by->trim() : NULL;
+		$this->limit     = $limit;
+		$this->offset    = $offset;
+		$this->group_by  = $group_by ? $group_by->trim() : NULL;
 	}
 
 	/*
@@ -35,7 +35,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function getWhere()
 	{
-		return $this->_where;
+		return $this->where;
 	}
 
 	/*
@@ -43,7 +43,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setWhere( Charcoal_String $where )
 	{
-		$this->_where = $where;
+		$this->where = $where;
 	}
 
 	/**
@@ -55,11 +55,11 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 			$operator = s('AND');
 		}
 
-		if ( $this->_where && !$this->_where->isEmpty() ){
-			$this->_where = "({$this->_where}) {$operator} ({$where})";
+		if ( $this->where && !$this->where->isEmpty() ){
+			$this->where = "({$this->where}) {$operator} ({$where})";
 		}
 		else{
-			$this->_where = $where;
+			$this->where = $where;
 		}
 	}
 
@@ -68,7 +68,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function getParams()
 	{
-		return $this->_params;
+		return $this->params;
 	}
 
 	/*
@@ -76,7 +76,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setParams( Charcoal_Vector $params )
 	{
-		$this->_params = $params;
+		$this->params = $params;
 	}
 
 	/*
@@ -84,11 +84,11 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function addParams( Charcoal_Vector $params )
 	{
-		if ( $this->_params ){
-			$this->_params->addAll( $params );
+		if ( $this->params ){
+			$this->params->addAll( $params );
 		}
 		else{
-			$this->_params = $params;
+			$this->params = $params;
 		}
 	}
 
@@ -97,7 +97,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function getOrderBy()
 	{
-		return $this->_order_by;
+		return $this->order_by;
 	}
 
 	/*
@@ -105,7 +105,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setOrderBy( Charcoal_String $order_by )
 	{
-		$this->_order_by = $order_by;
+		$this->order_by = $order_by;
 	}
 
 	/*
@@ -113,7 +113,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function getLimit()
 	{
-		return $this->_limit;
+		return $this->limit;
 	}
 
 	/*
@@ -121,7 +121,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setLimit( Charcoal_Integer $limit )
 	{
-		$this->_limit = $limit;
+		$this->limit = $limit;
 	}
 
 	/*
@@ -129,7 +129,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function getOffset()
 	{
-		return $this->_offset;
+		return $this->offset;
 	}
 
 	/*
@@ -137,7 +137,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setOffset( Charcoal_Integer $offset )
 	{
-		$this->_offset = $offset;
+		$this->offset = $offset;
 	}
 
 	/*
@@ -145,7 +145,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function getGroupBy()
 	{
-		return $this->_group_by;
+		return $this->group_by;
 	}
 
 	/*
@@ -153,7 +153,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setGroupBy( Charcoal_String $group_by )
 	{
-		$this->_group_by = $group_by;
+		$this->group_by = $group_by;
 	}
 
 	/*
@@ -164,11 +164,11 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	public function toString()
 	{
 		$str  = "[SQLCondition: ";
-		$str .= "where=" . $this->_where;
-		$str .= "params=" . $this->_params;
-		$str .= "order_by=" . $this->_order_by;
-		$str .= "limit=" . $this->_limit;
-		$str .= "offset=" . $this->_offset;
+		$str .= "where=" . $this->where;
+		$str .= "params=" . $this->params;
+		$str .= "order_by=" . $this->order_by;
+		$str .= "limit=" . $this->limit;
+		$str .= "offset=" . $this->offset;
 		$str .= "]";
 
 		return $str;

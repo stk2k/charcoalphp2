@@ -15,8 +15,8 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 	const SCOPE_REQUEST 		= "request";	// １リクエスト中は同じインスタンスが返される
 	const SCOPE_SESSION 		= "session";	// セッション継続中は同じインスタンスが返される
 
-	var $components;
-	var $component_configs;
+	private $components;
+	private $component_configs;
 
 	/**
 	 *  Constructor

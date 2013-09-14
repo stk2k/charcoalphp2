@@ -11,7 +11,7 @@
 
 class Charcoal_Session extends Charcoal_Object
 {
-	var $_data;
+	private $values;
 
 	/*
 	 *	コンストラクタ
@@ -20,7 +20,7 @@ class Charcoal_Session extends Charcoal_Object
 	{
 		parent::__construct();
 
-		$this->_data = array();
+		$this->values = array();
 
 //		$req_path = Charcoal_Framework::getRequestPath();
 //		log_info( "debug, session", "request_path=" . $req_path );
@@ -65,7 +65,7 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function clear()
 	{
-		$this->_data = array();
+		$this->values = array();
 
 //		log_info( "debug, session", "clear()" );
 	}
@@ -89,7 +89,7 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function getKeys()
 	{
-		return array_keys( $this->_data );
+		return array_keys( $this->values );
 	}
 
 	/*
@@ -98,7 +98,7 @@ class Charcoal_Session extends Charcoal_Object
 	public function get( Charcoal_String $key )
 	{
 		$key = us( $key );
-		$value = isset($this->_data[ $key ]) ? $this->_data[ $key ] : NULL;
+		$value = isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
 
 //		log_debug( "debug, session", "session", "get($key)=$value" );
 
@@ -111,7 +111,7 @@ class Charcoal_Session extends Charcoal_Object
 	public function set( Charcoal_String $key, $value )
 	{
 		$key = us( $key );
-		$this->_data[ $key ] = $value;
+		$this->values[ $key ] = $value;
 
 //		log_debug( "debug, session", "session", "set($key," . print_r($value,true) . ")" );
 	}
@@ -122,10 +122,10 @@ class Charcoal_Session extends Charcoal_Object
 	public function remove( Charcoal_String $key )
 	{
 		$key = us( $key );
-		$value = isset($this->_data[ $key ]) ? $this->_data[ $key ] : NULL;
+		$value = isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
 
 		if ( $value ){
-			unset( $this->_data[ $key ] );
+			unset( $this->values[ $key ] );
 		}
 
 //		log_debug( "debug, session", "session", "remove($key)=$value" );
@@ -176,7 +176,7 @@ class Charcoal_Session extends Charcoal_Object
 	{
 //		log_info( "debug, session", "restore() start" );
 //		log_info( "debug, session", "_SESSION:" . print_r($_SESSION,true) );
-//		log_info( "debug, session", "this->_data:" . print_r($this->_data,true) );
+//		log_info( "debug, session", "this->values:" . print_r($this->values,true) );
 
 		// 配列の初期化
 		$this->clear();
@@ -194,7 +194,7 @@ class Charcoal_Session extends Charcoal_Object
 		}
 
 
-		log_info( "debug, session", "restored :" . print_r($this->_data,true) );
+		log_info( "debug, session", "restored :" . print_r($this->values,true) );
 //		log_info( "debug, session", "restore() end" );
 	}
 

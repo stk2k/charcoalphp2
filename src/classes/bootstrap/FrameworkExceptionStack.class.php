@@ -11,7 +11,7 @@
 
 class Charcoal_FrameworkExceptionStack extends Charcoal_Object
 {
-	var $_stack;
+	private $_stack;
 
 	/*
 	 *	Construct object
