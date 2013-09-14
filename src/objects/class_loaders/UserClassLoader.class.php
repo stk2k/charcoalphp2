@@ -76,8 +76,8 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		// プロジェクトディレクトリ配下のクラスファイルをロード
 		$file_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/' . $class_path . '/' . $file_name;
 
-		if ( is_readable($file_path) ){
-			require_once( $file_path );
+		if ( is_file($file_path) ){
+			include( $file_path );
 //			log_info( "system,debug,include,class_loader", "class_loader", "[" . get_class($this) . "] class file loaded: class=[$class_name] file=[$file_path]" );
 			return TRUE;
 		}
@@ -85,8 +85,8 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		// アプリケーションディレクトリ配下のクラスファイルをロード
 		$file_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/' . $class_path . '/' . $file_name;
 
-		if ( is_readable($file_path) ){
-			require_once( $file_path );
+		if ( is_file($file_path) ){
+			include( $file_path );
 //			log_info( "system,debug,include,class_loader", "class_loader", "[" . get_class($this) . "] class file loaded: class=[$class_name] file=[$file_path]" );
 			return TRUE;
 		}
