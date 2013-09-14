@@ -17,12 +17,12 @@ class Charcoal_HttpHeader extends Charcoal_Object
 	/*
 	 *	Construct object
 	 */
-	public function __construct( Charcoal_String $header, Charcoal_Boolean $replace )
+	public function __construct( $header, $replace )
 	{
 		parent::__construct();
 
-		$this->_header  = us($header);
-		$this->_replace = ub($replace);
+		$this->_header  = $header;
+		$this->_replace = $replace;
 	}
 
 	/*
@@ -40,9 +40,9 @@ class Charcoal_HttpHeader extends Charcoal_Object
 	 *
 	 * @param string
 	 */
-	public function setHeader( Charcoal_String $header )
+	public function setHeader( $header )
 	{
-		$this->_header = us($header);
+		$this->_header = $header;
 	}
 
 	/*
@@ -60,9 +60,9 @@ class Charcoal_HttpHeader extends Charcoal_Object
 	 *
 	 * @param string
 	 */
-	public function setReplace( Charcoal_Boolean $replace )
+	public function setReplace( $replace )
 	{
-		$this->_replace = ub($replace);
+		$this->_replace = $replace;
 	}
 
 	/*

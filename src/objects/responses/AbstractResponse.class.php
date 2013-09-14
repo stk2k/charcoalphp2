@@ -132,7 +132,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 		if ( !$this->_filters ){
 			$this->_filters = array();
 
-			$response_filters = $this->getSandbox()->getProfile()->getArray( 'RESPONSE_FILTERS', array() );
+			$response_filters = $this->getSandbox()->getProfile()->getArray( 'RESPONSE_FILTERS', array('html_escape') );
 			if ( $response_filters ){
 				foreach( $response_filters as $filter_name ){
 					if ( strlen($filter_name) === 0 )    continue;
@@ -177,5 +177,6 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 			}
 		}
 	}
+
 }
 

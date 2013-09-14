@@ -34,7 +34,6 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 		$this->sequence            = $config->getString( 'sequence', '' );
 		$this->modules             = $config->getArray( 'modules', array() );
 		$this->events              = $config->getArray( 'events', array() );
-		$this->response_filters    = $config->getArray( 'response_filters', array() );
 
 		$layout_manager      = $config->getString( 'layout_manager' );
 
@@ -146,23 +145,6 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 			}
 	
 //			log_info( "system", "procedure", 'loaded additional modules.' );
-		}
-
-		//=======================================
-		// レスポンスフィルタのロード
-		//
-
-		if ( $this->response_filters ) {
-//			log_info( "system", "procedure", 'プロシージャの追加レスポンスフィルタを読み込みます。' );
-
-			foreach( $this->response_filters as $filter_name ) {
-				// モジュールのロード
-				$filter = $this->getSandbox()->createObject( $filter_name, 'response_filter' );
-				// リストに追加
-				$response->addResponseFilter( $filter );
-			}
-	
-//			log_info( "system", "procedure", 'プロシージャの追加レスポンスフィルタを読み込みました。' );
 		}
 
 		//=======================================

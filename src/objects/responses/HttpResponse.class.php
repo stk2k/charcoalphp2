@@ -59,11 +59,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 *
 	 * @return Charcoal_String
 	 */
-	public function addHeader( Charcoal_String $header, Charcoal_Boolean $replace = NULL )
+	public function addHeader( $header, $replace = TRUE )
 	{
-		if ( $replace === NULL ){
-			$replace = b(TRUE);
-		}
 		$this->headers[] = new Charcoal_HttpHeader( $header, $replace );
 	}
 
@@ -104,30 +101,13 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 * @param Charcoal_String $header            header to output
 	 * @param Charcoal_Boolean $flush_now        flushes header immediately
 	 */
-	public function header( Charcoal_String $header, Charcoal_Boolean $flush_now = NULL )
+	public function header( $header, $flush_now = FALSE )
 	{
-		$this->addHeader( s($header) );
+		$this->addHeader( $header );
 
-		if ( !$flush_now || $flush_now->isTrue() ){
+		if ( $flush_now ){
 			$this->flushHeaders();
 		}
-	}
-
-	/*
-	 *  HTTP redirect
-	 *
-	 * @param Charcoal_URL $url   Redirect URL
-	 * @param Charcoal_Boolean $flush_now   Flushes header immediately
-	 */
-	public function redirect_( Charcoal_URL $url, Charcoal_Boolean $flush_now = NULL )
-	{
-		if ( $flush_now == NULL ){
-			$flush_now = b(TRUE);
-		}
-
-//		$this->header( s("HTTP/1.0 302 Found"), $flush_now );
-		$this->clearHeaders();
-		$this->header( s("Location: $url"), $flush_now );
 	}
 
 	/*
@@ -138,8 +118,9 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 */
 	public function redirect( $url, $flush_now = FALSE )
 	{
-		$url = new Charcoal_URL( s($url) );
-		$this->redirect_( $url, b($flush_now) );
+//		$this->header( s("HTTP/1.0 302 Found"), $flush_now );
+		$this->clearHeaders();
+		$this->header( "Location: $url", $flush_now );
 	}
 
 	/*
@@ -159,7 +140,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 *
 	 * @return Charcoal_String
 	 */
-	public function getCookie( Charcoal_String $name )
+	public function getCookie( $name )
 	{
 		return $this->cookie ? $this->cookie->getValue( $name ) : NULL;
 	}
@@ -172,7 +153,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 *
 	 * @return Charcoal_String
 	 */
-	public function setCookie( Charcoal_String $name, Charcoal_String $value )
+	public function setCookie( $name, $value )
 	{
 		if ( $this->cookie ){
 			$this->cookie->setValue( $name, $value );
@@ -194,7 +175,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 *
 	 * @return Charcoal_Integer $status_code   HTTP status code
 	 */
-	public function setStatusCode( Charcoal_Integer $status_code )
+	public function setStatusCode( $status_code )
 	{
 		$this->status = ui(status_code);
 	}

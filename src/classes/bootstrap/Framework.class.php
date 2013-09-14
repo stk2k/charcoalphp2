@@ -700,6 +700,7 @@ class Charcoal_Framework
 		$score = Charcoal_Benchmark::stop();
 		log_debug( 'system, debug', "total framework process time: [$score] msec" );
  
+
 //Charcoal_Object::dump();
 
 		self::$loggers->terminate();
