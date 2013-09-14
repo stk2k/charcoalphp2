@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_DateWithTime extends Charcoal_Object
+class Charcoal_DateWithTime extends Charcoal_Primitive
 {
 	private $_timestamp;
 

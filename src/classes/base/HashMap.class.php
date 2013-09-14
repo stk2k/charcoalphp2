@@ -25,14 +25,6 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 		$this->_values = $values ? um($values) : array();
 	}
 
-    /**
-     *	unbox primitive value
-     */
-    public function unbox()
-    {
-        return $this->_value;
-    }
-
 	/**
 	 *	get key list
 	 */
