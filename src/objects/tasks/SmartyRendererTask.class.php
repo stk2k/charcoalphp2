@@ -10,7 +10,7 @@
 */
 require_once( 'Smarty/Smarty.class.php' );
 
-class CharcoalsmartyRendererTask extends Charcoal_Task implements Charcoal_ITask
+class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITask
 {
 	private $template_files;
 	private $smarty;

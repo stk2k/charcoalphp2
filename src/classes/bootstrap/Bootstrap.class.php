@@ -99,7 +99,7 @@ class Charcoal_Bootstrap
 			}
 		}
 
-		self::$loggers->terminate();
+		Charcoal_Framework::$loggers->terminate();
 	}
 
 	static $bootstrap_classes  = array(
@@ -221,7 +221,7 @@ class Charcoal_Bootstrap
 				'Charcoal_ConsoleOutputExceptionHandler'		=> 'objects/exception_handlers',
 
 				// debugtrace renderer classes
-				'Charcoal_AbstracteDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
+				'Charcoal_AbstractDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
 				'Charcoal_HtmlDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
 				'Charcoal_ConsoleDebugtraceRenderer'		=> 'objects/debugtrace_renderers',
 				'Charcoal_LogDebugtraceRenderer'			=> 'objects/debugtrace_renderers',
@@ -312,9 +312,9 @@ class Charcoal_Bootstrap
 		}
 
 		// register system handlers
-//		register_shutdown_function( 'Charcoal_Bootstrap::onShutdown' );
-//		set_error_handler( "Charcoal_Bootstrap::onUnhandledError" );
-//		set_exception_handler( "Charcoal_Bootstrap::onUnhandledException" );
+		register_shutdown_function( 'Charcoal_Bootstrap::onShutdown' );
+		set_error_handler( "Charcoal_Bootstrap::onUnhandledError" );
+		set_exception_handler( "Charcoal_Bootstrap::onUnhandledException" );
 
 	}
 

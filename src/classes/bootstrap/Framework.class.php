@@ -690,7 +690,7 @@ class Charcoal_Framework
 
 			// display debugtrace
 			if ( $ret === FALSE || ($ret instanceof Charcoal_Boolean) && $ret->isFalse() || $sandbox->isDebug() ){
-				self::renderExceptionFinally( $sandbox, $e );
+				self::renderExceptionFinally( $e );
 			}
 
 			self::$loggers->flush();
@@ -710,14 +710,10 @@ class Charcoal_Framework
 	/**
 	 *	Render not handled exception
 	 */
-	public static function renderExceptionFinally( $sandbox, $e )
+	public static function renderExceptionFinally( $e )
 	{
-		$rendered = FALSE;
-
 		// Render exception
-		if ( $sandbox->isDebug() ) {
-			$rendered = self::$debugtrace_renderers->render( $e );
-		}
+		$rendered = self::$debugtrace_renderers->render( $e );
 
 		// Show something if debugtrace rendering failed
 		if ( !$rendered || $rendered->isFalse() ){

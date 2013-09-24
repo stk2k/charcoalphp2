@@ -9,12 +9,12 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstracteDebugtraceRenderer
+class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 {
 	/**
 	 * Print HTML Header
 	 */
-	private static function _makeHtmlHead( Exception $e, Charcoal_String $title )
+	private static function _makeHtmlHead( $e, $title )
 	{
 		$html = <<< HTML_HEADER
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
@@ -310,7 +310,7 @@ HTML_HEADER;
 	/**
 	 * Print HTML Body
 	 */
-	private static function _makeHtmlBody( Exception $e, Charcoal_String $title, Charcoal_String $file, Charcoal_Integer $line )
+	private static function _makeHtmlBody( $e, $title, $file, $line )
 	{
 		$html = '';
 
@@ -454,7 +454,7 @@ HTML_HEADER;
 			$type  = isset($element['type']) ? $element['type'] : '';
 			$args  = isset($element['args']) ? $element['args'] : array();
 			$file  = isset($element['file']) ? $element['file'] : '';
-			$line  = isset($element['line']) ? $element['line'] : '';
+			$line  = isset($element['line']) ? $element['line'] : 0;
 
 			if ( $type == "::" ){
 				$ref_method = new ReflectionMethod( $klass, $func );
@@ -556,7 +556,7 @@ HTML_HEADER;
 
 		$title = 'CharcoalPHP: Exception List';
 
-		echo $this->_output( $e, s($title), s($file), i($line) );
+		echo $this->_output( $e, $title, $file, $line );
 
 		return TRUE;
 	}
@@ -573,7 +573,7 @@ HTML_HEADER;
 
 		$title = 'CharcoalPHP: Exception List';
 
-		return $this->_output( $e, s($title), s($file), i($line) );
+		return $this->_output( $e, $title, $file, $line );
 	}
 
 	/**
@@ -581,15 +581,15 @@ HTML_HEADER;
 	 *
 	 * @param Charcoal_String $title  title
 	 */
-	private function _output( Exception $e, Charcoal_String $title, Charcoal_String $file, Charcoal_Integer $line )
+	private function _output( $e, $title, $file, $line )
 	{
 		$html  = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		$html .= '<html lang="ja">';
 		$html .= '<head>';
-		$html .= self::_makeHtmlHead( $e, s($title) );
+		$html .= self::_makeHtmlHead( $e, $title );
 		$html .= '</head>';
 		$html .= '<body>' . PHP_EOL;
-		$html .= self::_makeHtmlBody( $e, s($title), s($file), i($line) );
+		$html .= self::_makeHtmlBody( $e, $title, $file, $line );
 		$html .= '</body>' . PHP_EOL;
 		$html .= '</html>' . PHP_EOL;
 

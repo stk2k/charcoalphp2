@@ -43,20 +43,18 @@ class Charcoal_ModuleLoader
 		try{
 			log_debug( 'debug, event', "loading module: $module_path" );
 
-//			if ( is_string($module_path) ){
-//				$module_path = new Charcoal_ObjectPath( $module_path );
-//			}
-
-			$path_string = $module_path->toString();
+			if ( $module_path instanceof Charcoal_ObjectPath ){
+				$module_path = $module_path->toString();
+			}
 
 			// check if module is already loaded
-			if ( isset(self::$loaded_paths[$path_string]) ){
-				log_warning( 'system, error, debug', "module[$path_string] is already loaded." );
+			if ( isset(self::$loaded_paths[$module_path]) ){
+				log_warning( 'system, warning, debug', "module[$module_path] is already loaded." );
 				return;
 			}
 
 			// create module object
-			$module = $sandbox->createObject( $path_string, 'module', array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
+			$module = $sandbox->createObject( $module_path, 'module', array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
 
 			// load module tasks
 			$module->loadTasks( $task_manager );
@@ -75,7 +73,7 @@ class Charcoal_ModuleLoader
 				}
 			}
 
-			self::$loaded_paths[$path_string] = $module_path;
+			self::$loaded_paths[$module_path] = $module_path;
 		}
 		catch( Exception $ex ){
 			_catch( $ex );

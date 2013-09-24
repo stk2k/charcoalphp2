@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_AbstractSessionHandler extends Charcoal_CharcoalObject implements Charcoal_ISessionHandler
+abstract class Charcoal_AbstractSessionHandler extends Charcoal_CharcoalObject implements Charcoal_ISessionHandler
 {
 }
 

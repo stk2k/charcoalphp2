@@ -104,7 +104,6 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 
 		$this->_fp = fopen($file_name, "a");
 		$this->_open = ($this->_fp != FALSE);
-
 	}
 
 	/*

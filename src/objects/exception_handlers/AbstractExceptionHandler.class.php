@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_AbstractExceptionHandler extends Charcoal_CharcoalObject implements Charcoal_IExceptionHandler
+abstract class Charcoal_AbstractExceptionHandler extends Charcoal_CharcoalObject implements Charcoal_IExceptionHandler
 {
 }
 

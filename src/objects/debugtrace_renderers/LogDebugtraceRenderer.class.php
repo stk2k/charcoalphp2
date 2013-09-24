@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstracteDebugtraceRenderer
+class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 {
 	const LOG_EOL		= "\n";
 

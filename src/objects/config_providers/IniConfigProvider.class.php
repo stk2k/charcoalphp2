@@ -22,11 +22,10 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	{
 //		Charcoal_ParamTrait::checkProperties( 1, $options );
 		if ( is_array( $options ) ){
-			$this->debug = isset($options['debug']) ? $options['debug'] : FALSE;
+			$options = new Charcoal_Config( $options );
 		}
-		else{
-			$this->debug = $options->getBoolean( 'debug', FALSE );
-		}
+
+		$this->debug = $options->getBoolean( 'debug', FALSE );
 	}
 
 	/**

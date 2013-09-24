@@ -30,7 +30,6 @@ class Charcoal_ResourceLocator
 					'%PROJECT_CLASSES_DIR%'      => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/classes',
 					'%WEBAPP_DIR%'               => CHARCOAL_WEBAPP_DIR,
 					'%CHARCOAL_HOME%'            => CHARCOAL_HOME,
-					'%BASE_DIR%'                 => CHARCOAL_BASE_DIR,
 					'%APPLICATION%'              => CHARCOAL_APPLICATION,
 
 				);
@@ -126,27 +125,6 @@ class Charcoal_ResourceLocator
 		}
 
 		$path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/' . $folder;
-
-		if ( $filename ){
-			$path .= '/' . $filename;
-		}
-
-		return $path;
-	}
-
-	/*
-	 * CHARCOAL_BASE_DIR以下のリソースのパスを取得
-	 */
-	public static function getBasePath( $folder = NULL, $filename = NULL )
-	{
-//		Charcoal_ParamTrait::checkString( 1, $folder );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
-
-		if ( !$folder ){
-			return CHARCOAL_BASE_DIR;
-		}
-
-		$path = CHARCOAL_BASE_DIR . '/' . $folder;
 
 		if ( $filename ){
 			$path .= '/' . $filename;

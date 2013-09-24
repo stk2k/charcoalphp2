@@ -303,6 +303,8 @@ class Charcoal_File extends Charcoal_Object
 //		Charcoal_ParamTrait::checkBool( 2, $drilldown );
 
 		$path = $this->_path;
+		$mode = us( $mode );
+		$drilldown = ub( $drilldown );
 
 		if ( file_exists($path) )	return;
 

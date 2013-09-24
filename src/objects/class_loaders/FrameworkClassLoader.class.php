@@ -149,6 +149,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_NonNumberException'					=> 'exceptions',
 				'Charcoal_NonObjectException'					=> 'exceptions',
 				'Charcoal_NonStringException'					=> 'exceptions',
+				'Charcoal_NotSupportedOperationException'		=> 'exceptions',
 				'Charcoal_ObjectPathFormatException'			=> 'exceptions',
 				'Charcoal_RoutingRuletConfigException'			=> 'exceptions',
 				'Charcoal_PhpSourceParserException'				=> 'exceptions',
@@ -193,9 +194,10 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SessionTableDTO'					=> 'objects/DTOs',
 
 		// data source classes
-				'Charcoal_AbstractDataSource'					=> 'objects/data_sources',
+				'Charcoal_AbstractDataSource'				=> 'objects/data_sources',
 				'Charcoal_PearDbDataSource'					=> 'objects/data_sources',
 				'Charcoal_PDODbDataSource'					=> 'objects/data_sources',
+				'Charcoal_SQLiteDataSource'					=> 'objects/data_sources',
 
 		// request classes
 				'Charcoal_AbstractRequest'						=> 'objects/requests',

@@ -26,9 +26,6 @@ class CalcTask extends Charcoal_Task
 	public function processEvent( $context )
 	{
 		$request   = $context->getRequest();
-		$response  = $context->getResponse();
-		$sequence  = $context->getSequence();
-		$procedure = $context->getProcedure();
 
 		// Get parameter from request
 		$a = $request->getInteger( 'a', 0 );
