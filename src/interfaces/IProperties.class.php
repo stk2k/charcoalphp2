@@ -8,15 +8,8 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-interface Charcoal_IProperties
+interface Charcoal_IProperties extends Charcoal_ICollection
 {
-	/**
-	 *	Get all values with keys
-	 *
-	 * @return array
-	 */
-	public function getAll();
-
 	/*
 	 *  Return if property has specified key
 	 *

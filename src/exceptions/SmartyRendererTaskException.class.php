@@ -11,7 +11,7 @@
 
 class Charcoal_SmartyRendererTaskException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $message, $prev = NULL )
+	public function __construct( $message, $prev = NULL )
 	{
 		parent::__construct( $message, $prev );
 	}

@@ -15,6 +15,18 @@ class Charcoal_System
 	const DUMP_MAX_LENGTH 		= 4096;
 
 	/*
+	 *  exit with output of caller information
+	 */
+	public static function quit()
+	{
+		list( $file, $line ) = self::caller();
+
+		echo "exit at $file($line)";
+
+		exit;
+	}
+
+	/*
 	 *  Convert PHP error number to string
 	 */
 	public static function phpErrorString( $errno )

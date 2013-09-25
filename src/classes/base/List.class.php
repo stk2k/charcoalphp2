@@ -11,7 +11,7 @@
 
 class Charcoal_List extends Charcoal_Collection
 {
-	private $_values;
+	private $values;
 
 	/*
 	 *	コンストラクタ
@@ -22,29 +22,37 @@ class Charcoal_List extends Charcoal_Collection
 
 		if ( $value ){
 			if ( is_array($value) ){
-				$this->_values = $value;
+				$this->values = $value;
 			}
 			else{
 				_throw( new NonArrayException($value) );
 			}
 		}
 		else{
-			$this->_values = array();
+			$this->values = array();
 		}
+	}
+
+	/**
+	 *	unbox primitive value
+	 */
+	public function unbox()
+	{
+		return $this->values;
 	}
 
 	/*
 	 *	Iteratorインタフェース:rewidの実装
 	 */
 	public function rewind() {
-		reset($this->_values);
+		reset($this->values);
 	}
 
 	/*
 	 *	Iteratorインタフェース:currentの実装
 	 */
 	public function current() {
-		$var = current($this->_values);
+		$var = current($this->values);
 		return $var;
 	}
 
@@ -52,7 +60,7 @@ class Charcoal_List extends Charcoal_Collection
 	 *	Iteratorインタフェース:keyの実装
 	 */
 	public function key() {
-		$var = key($this->_values);
+		$var = key($this->values);
 		return $var;
 	}
 
@@ -60,7 +68,7 @@ class Charcoal_List extends Charcoal_Collection
 	 *	Iteratorインタフェース:nextの実装
 	 */
 	public function next() {
-		$var = next($this->_values);
+		$var = next($this->values);
 		return $var;
 	}
 
@@ -77,9 +85,9 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function getHead()
 	{
-		$cnt = count( $this->_values );
+		$cnt = count( $this->values );
 		if ( $cnt > 0 ){
-			return $this->_values[ 0 ];
+			return $this->values[ 0 ];
 		}
 		return NULL;
 	}
@@ -89,12 +97,12 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function isFirst() 
 	{ 
-		$hasPrevious = prev($this->_values); 
+		$hasPrevious = prev($this->values); 
 		// now undo 
 		if ($hasPrevious) { 
-			next($this->_values); 
+			next($this->values); 
 		} else { 
-			reset($this->_values); 
+			reset($this->values); 
 		} 
 		return !$hasPrevious; 
 	} 
@@ -104,12 +112,12 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function hasNext() 
 	{ 
-		$hasNext = next($this->_values); 
+		$hasNext = next($this->values); 
 		// now undo 
 		if ($hasNext) { 
-			prev($this->_values); 
+			prev($this->values); 
 		} else { 
-			end($this->_values); 
+			end($this->values); 
 		} 
 		return $hasNext; 
 	}
@@ -119,12 +127,12 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function isLast() 
 	{ 
-		$hasNext = next($this->_values); 
+		$hasNext = next($this->values); 
 		// now undo 
 		if ($hasNext) { 
-			prev($this->_values); 
+			prev($this->values); 
 		} else { 
-			end($this->_values); 
+			end($this->values); 
 		} 
 		return !$hasNext; 
 	}
@@ -134,9 +142,9 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function getTail()
 	{
-		$cnt = count( $this->_values );
+		$cnt = count( $this->values );
 		if ( $cnt > 0 ){
-			return $this->_values[ $cnt - 1 ];
+			return $this->values[ $cnt - 1 ];
 		}
 		return NULL;
 	}
@@ -147,7 +155,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function removeTail()
 	{
-		return array_pop( $this->_values );
+		return array_pop( $this->values );
 	}
 
 	/*
@@ -155,7 +163,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function removeHead()
 	{
-		return array_shift( $this->_values );
+		return array_shift( $this->values );
 	}
 
 	/*
@@ -169,7 +177,7 @@ class Charcoal_List extends Charcoal_Collection
 		$index  = $index->getValue();
 		$length = $length->getValue();
 
-		return array_splice ( $this->_values, $index, $length );
+		return array_splice ( $this->values, $index, $length );
 	}
 
 	/**
@@ -179,7 +187,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function isEmpty()
 	{
-		return count( $this->_values ) === 0;
+		return count( $this->values ) === 0;
 	}
 
 	/*
@@ -187,7 +195,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function contains( Object $o )
 	{
-		foreach( $this->_values as $item ){
+		foreach( $this->values as $item ){
 			if ( $o->equals($item) ){
 				return TRUE;
 			}
@@ -200,7 +208,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function add( $item )
 	{
-		$new_array_cnt = array_push( $this->_values, $item );
+		$new_array_cnt = array_push( $this->values, $item );
 
 		return $new_array_cnt;
 	}
@@ -211,10 +219,10 @@ class Charcoal_List extends Charcoal_Collection
 	public function addAll( Charcoal_Vector $items )
 	{
 		foreach( $items as $item ){
-			array_push( $this->_values, $item );
+			array_push( $this->values, $item );
 		}
 
-		return count($this->_values);
+		return count($this->values);
 	}
 
 	/*
@@ -222,7 +230,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function getValue()
 	{
-		return $this->_values;
+		return $this->values;
 	}
 
 	/*
@@ -230,7 +238,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	protected function setValue( array $value )
 	{
-		$this->_values = $value;
+		$this->values = $value;
 	}
 
 	/*
@@ -238,7 +246,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function count()
 	{
-		return count( $this->_values );
+		return count( $this->values );
 	}
 
 	/*
@@ -246,7 +254,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function size()
 	{
-		return count( $this->_values );
+		return count( $this->values );
 	}
 
 	/*
@@ -254,7 +262,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function shift()
 	{
-		return array_shift( $this->_values );
+		return array_shift( $this->values );
 	}
 
 	/*
@@ -262,7 +270,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function push()
 	{
-		return array_shift( $this->_values );
+		return array_shift( $this->values );
 	}
 
 	/*
@@ -270,7 +278,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function map( $callback )
 	{
-		$new_array = array_map( $callback, $this->_values );
+		$new_array = array_map( $callback, $this->values );
 		return new Charcoal_List( $new_array );
 	}
 
@@ -279,7 +287,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function toArray()
 	{
-		return array_diff( $this->_values, array() );
+		return array_diff( $this->values, array() );
 	}
 
 	/*
@@ -287,7 +295,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function reverse()
 	{
-		return new Charcoal_List( array_reverse( $this->_values ) );
+		return new Charcoal_List( array_reverse( $this->values ) );
 	}
 
 	/*
@@ -295,7 +303,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function join( $delimiter = ',', $with_type = FALSE, $max_size = 0 )
 	{
-		return Charcoal_System::implodeArray( $delimiter, $this->_values, $with_type, $max_size );
+		return Charcoal_System::implodeArray( $delimiter, $this->values, $with_type, $max_size );
 	}
 
 	/*

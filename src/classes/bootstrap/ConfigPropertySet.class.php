@@ -73,20 +73,16 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 		$key = us($key);
 		$items = parent::getArray( $key, $default_value );
 
-		if ( !is_array($items) ){
-			return $items;
-		}
-
 		// remove empty entry
 		foreach( $items as $key => $item ){
 			if ( empty($item) )	unset($items[$key]);
 		}
 
 		if ( $process_macro === TRUE ){
-			$items = array_map( 'Charcoal_ResourceLocator::processMacro', $items );
+			$items = $items->map( 'Charcoal_ResourceLocator::processMacro' );
 		}
 
-		return $items;
+		return v($items);
 	}
 
 	/**

@@ -157,7 +157,9 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 			Charcoal_Benchmark::start();
 
 			$loop_id = 0;
-			while( !$queue->isEmpty() ){
+			while( !$queue->isEmpty() )
+			{
+				if ( $debug ) log_info( "system,event", "event queue contents: $queue");
 
 				// initialize values for this loop
 				$abort_after_this_loop = FALSE;
@@ -331,6 +333,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 						foreach( $post_actions as $key => $action )
 						{
 							$target = NULL;
+							$action = us($action);
 
 							if ( strpos(":",$action) !== FALSE ){
 								list( $action, $target ) = explode( ":", trim($action) );

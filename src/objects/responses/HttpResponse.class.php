@@ -130,7 +130,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 */
 	public function getCookies()
 	{
-		return $this->cookie ? $this->cookie->toArray() : NULL;
+		return $this->cookie ? $this->cookie->getAll() : NULL;
 	}
 
 	/*

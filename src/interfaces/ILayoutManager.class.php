@@ -14,6 +14,6 @@ interface Charcoal_ILayoutManager extends Charcoal_ICharcoalObject
 	/**
 	 * 名前からレイアウトを取得する
 	 */
-	public function getLayout( Charcoal_String $layout_name );
+	public function getLayout( $layout_name );
 }
 

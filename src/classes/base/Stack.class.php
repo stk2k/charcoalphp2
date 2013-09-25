@@ -11,8 +11,6 @@
 
 class Charcoal_Stack extends Charcoal_Collection
 {
-	private $values;
-
 	/*
 	 *	コンストラクタ
 	 */
@@ -21,6 +19,14 @@ class Charcoal_Stack extends Charcoal_Collection
 		parent::__construct();
 
 		$this->values = $values;
+	}
+
+	/**
+	 *	unbox primitive value
+	 */
+	public function unbox()
+	{
+		return $this->values;
 	}
 
 	/*

@@ -77,17 +77,6 @@ class Charcoal_Sandbox
 		return $this->sandbox_name;
 	}
 
-
-	/**
-	 * get factory
-	 * 
-	 * @return Charcoal_Factory         factory object
-	 */
-	public function getFactory()
-	{
-		return $this->factory;
-	}
-
 	/**
 	 * get registry
 	 * 

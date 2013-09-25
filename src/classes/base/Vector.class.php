@@ -11,8 +11,6 @@
 
 class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 {
-	private $values;
-
 	/*
 	 *	コンストラクタ
 	 */
@@ -34,6 +32,14 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 		else{
 			$this->values = array();
 		}
+	}
+
+	/**
+	 *	unbox primitive value
+	 */
+	public function unbox()
+	{
+		return $this->values;
 	}
 
 	/**
@@ -339,15 +345,6 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 	public function contains( $value )
 	{
 		return in_array( $value, $this->values );
-	}
-
-	/*
-	 *	コールバックを各要素に適用し、配列を生成する
-	 */
-	public function map( $callback )
-	{
-		$new_array = array_map( $callback, $this->values );
-		return new Vector( $new_array );
 	}
 
 	/*

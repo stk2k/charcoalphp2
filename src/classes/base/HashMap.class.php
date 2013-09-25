@@ -13,8 +13,6 @@
 
 class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 {
-	private $values;
-
 	/*
 	 *	constructor
 	 */
@@ -23,6 +21,14 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 		parent::__construct();
 
 		$this->values = $values ? um($values) : array();
+	}
+
+	/**
+	 *	unbox primitive value
+	 */
+	public function unbox()
+	{
+		return $this->values;
 	}
 
 	/**

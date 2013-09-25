@@ -112,6 +112,7 @@ class Charcoal_Bootstrap
 				'Charcoal_EnumCoreHookStage' 					=> 'constants',
 
 				// Basic interface classes	
+				'Charcoal_ICollection' 							=> 'interfaces',
 				'Charcoal_IProperties' 							=> 'interfaces',
 				'Charcoal_IClassLoader' 						=> 'interfaces',
 				'Charcoal_IConfigProvider'						=> 'interfaces',
@@ -124,6 +125,7 @@ class Charcoal_Bootstrap
 				'Charcoal_ICodebase'							=> 'interfaces',
 				'Charcoal_IContainer'							=> 'interfaces',
 				'Charcoal_ICoreHook'							=> 'interfaces',
+				'Charcoal_IUnboxable' 							=> 'interfaces',
 
 				// traits
 				'Charcoal_ParamTrait' 							=> 'traits',

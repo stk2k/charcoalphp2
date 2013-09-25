@@ -153,49 +153,5 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	{
 		$this->priority = $priority;
 	}
-
-	/**
-	 * レンダリングレイアウトイベントを作成
-	 */
-	public function createRenderEvent( Charcoal_IProcedure $procedure, Charcoal_String $layout_name )
-	{
-		// レイアウトマネージャを取得
-		$layout_manager = $procedure->getLayoutManager();
-
-		// レンダリングイベントを作成
-		$event = Charcoal_Factory::createEvent( s('render_layout') );
-
-		$layout = $layout_manager->getLayout( $layout_name );
-		$event->setLayout( $layout );
-
-		return $event;
-	}
-
-	/*
-	 *	リダイレクトイベントを作成する
-	 */
-	public function createRedirectedLayoutEvent( Charcoal_ObjectPath $obj_path, Charcoal_Properties $params = NULL )
-	{
-		// レンダリングイベントを作成
-		$event = Charcoal_Factory::createEvent( s('render_layout') );
-
-		$event->setLayout( new Charcoal_ProcedureRedirectLayout($obj_path,$params) );
-
-		return $event;
-	}
-
-
-	/*
-	 *	URLリダイレクトイベントを作成する
-	 */
-	public function createURLRedirectedLayoutEvent( Charcoal_String $url )
-	{
-		// レンダリングイベントを作成
-		$event = Charcoal_Factory::createEvent( s('render_layout') );
-
-		$event->setLayout( new Charcoal_URLRedirectLayout($url) );
-
-		return $event;
-	}
 }
 

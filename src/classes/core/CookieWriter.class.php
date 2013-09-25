@@ -178,6 +178,16 @@ class Charcoal_CookieWriter extends Charcoal_Object
 		}
 	}
 
+	/**
+	 *	Get all values with keys
+	 *
+	 * @return array
+	 */
+	public function getAll()
+	{
+		return $this->values;
+	}
+
 }
 
 

@@ -79,7 +79,7 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 		if ( $this->is_secure === TRUE && !$this->isAuthorized( $sequence ) === TRUE )
 		{
 			// セキュリティ違反イベントを作成
-			return Charcoal_Factory::createEvent( s('security_fault') );
+			return $this->getSandbox()->createEvent( s('security_fault') );
 		}
 
 		// 権限チェック

@@ -26,6 +26,18 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	}
 
 	/**
+	 *	Applies a callback to all elements
+	 *
+	 * @return array
+	 */
+	public function map( $callable )
+	{
+		$this->_global->map( $callable );
+		$this->_local->map( $callable );
+		return $this;
+	}
+
+	/**
 	 *	Get all values with keys
 	 *
 	 * @return array

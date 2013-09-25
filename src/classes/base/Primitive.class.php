@@ -9,12 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-abstract class Charcoal_Primitive extends Charcoal_Object
+abstract class Charcoal_Primitive extends Charcoal_Object implements Charcoal_IUnboxable
 {
-	/**
-	 *	unbox primitive value
-	 */
-	abstract public function unbox();
-
 }
 

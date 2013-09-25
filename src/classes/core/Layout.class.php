@@ -11,24 +11,26 @@
 
 class Charcoal_Layout extends Charcoal_Object
 {
-	private $_layout_attributes;
+	private $attributes;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_Properties $layout_attributes )
+	public function __construct( $attributes )
 	{
+		Charcoal_ParamTrait::checkProperties( 1, $attributes );
+
 		parent::__construct();
 
-		$this->_layout_attributes = $layout_attributes;
+		$this->attributes = p($attributes);
 	}
 
 	/**
 	 *	レイアウト属性を取得
 	 */
-	public function getAttribute( Charcoal_String $key )
+	public function getAttribute( $key )
 	{
-		return $this->_layout_attributes->get( $key );
+		return $this->attributes->get( $key );
 	}
 
 	/*
@@ -36,7 +38,7 @@ class Charcoal_Layout extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return "[Layout:" . $this->_layout_attributes->toString() . "]";
+		return "[Layout:{$this->attributes}]";
 	}
 }
 
