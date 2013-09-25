@@ -12,6 +12,20 @@
 class TokenGeneratorTestTask extends Charcoal_TestTask
 {
 	/**
+	 * check if action will be processed
+	 */
+	public function isValidAction( $action )
+	{
+		switch( $action ){
+		case "simple_default":
+		case "simple_sha1":
+		case "simple_md5":
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
 	 * setup test
 	 */
 	public function setUp( $action )
@@ -33,11 +47,12 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
 	{
 		$action = us($action);
 
+		// create token generator object
+		$generator = $context->getObject( 'simple', 'token_generator' );
+
 		switch( $action ){
 		case "simple_default":
 			// create token generator object
-			$generator = Charcoal_Factory::createObject( s('simple'), s('token_generator') );
-
 			$token = $generator->generateToken();
 
 			$this->assertEquals( strlen($token), 40 );
@@ -46,9 +61,6 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
 			echo "default token: $token";
 			break;
 		case "simple_sha1":
-			// create token generator object
-			$generator = Charcoal_Factory::createObject( s('simple'), s('token_generator') );
-
 			$config = new Charcoal_Config();
 			$config->set( s('algorithm'), 'sha1' );
 			$generator->configure( $config );
@@ -61,9 +73,6 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
 			echo "sha1 token: $token";
 			break;
 		case "simple_md5":
-			// create token generator object
-			$generator = Charcoal_Factory::createObject( s('simple'), s('token_generator') );
-
 			$config = new Charcoal_Config();
 			$config->set( s('algorithm'), 'md5' );
 			$generator->configure( $config );

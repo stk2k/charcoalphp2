@@ -89,12 +89,12 @@ class Charcoal_LoggerList extends Charcoal_Object
 
 		$this->init();
 
-		if ( $this->options['LOG_ENABLED'] === FALSE ){
+		if ( $this->options['LOG_ENABLED']->isFalse() ){
 			return;
 		}
 
 		// 対象ロガーに対してのみ出力
-		$output_loggers = array_flip( $this->options['LOG_LOGGERS'] );
+		$output_loggers = array_flip( uv($this->options['LOG_LOGGERS']) );
 
 		$level        = $msg->getLevel();
 		$logger_names = $msg->getLoggerNames();
@@ -106,14 +106,15 @@ class Charcoal_LoggerList extends Charcoal_Object
 		}
 
 		// タグフィルタが設定されている場合、マッチしないログは無視
-		$log_ta_filters = $this->options['LOG_TAG_FILTERS'];
-		if ( is_array($log_ta_filters) && count($log_ta_filters) > 0 ){
-			if ( !in_array( $msg->getTag(), $log_ta_filters ) ){
+		$log_tag_filters = uv($this->options['LOG_TAG_FILTERS']);
+		if ( is_array($log_tag_filters) && !empty($log_tag_filters) ){
+			if ( !in_array( $msg->getTag(), $log_tag_filters ) ){
 				return;
 			}
 		}
 
-		foreach( $logger_names as $key )
+
+		foreach( uv($logger_names) as $key )
 		{
 			// 登録されていて、かつプロファイルにエントリがあるログだけに出力する
 			if ( isset($this->loggers[$key]) && isset($output_loggers[$key]) ){

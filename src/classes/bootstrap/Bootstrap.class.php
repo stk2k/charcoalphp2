@@ -41,7 +41,9 @@ class Charcoal_Bootstrap
 			// create fake exception
 			$e = new Charcoal_PHPErrorException($errno, $errstr, $errfile, $errline);
 
-			Charcoal_FrameworkExceptionStack::push( $e );
+			_throw( $e );
+
+//			Charcoal_FrameworkExceptionStack::push( $e );
 
 			exit;	// prevent unnecessary errors to add
 		}
@@ -57,6 +59,8 @@ class Charcoal_Bootstrap
 	 */
 	public static function onUnhandledException( $e )
 	{ 
+		_catch( $e );
+
 		log_fatal( "system,error", "charcoal_global_exception_handler: $exception" );
 
 		// —áŠOƒnƒ“ƒhƒ‰‚Éˆ—‚ðˆÏ÷
@@ -142,6 +146,7 @@ class Charcoal_Bootstrap
 				'Charcoal_ConfigSectionNotFoundException'		=> 'exceptions',
 				'Charcoal_ConfigException' 						=> 'exceptions',
 				'Charcoal_ClassLoaderConfigException' 			=> 'exceptions',
+				'Charcoal_ClassLoaderRegistrationException' 	=> 'exceptions',
 				'Charcoal_ClassNewException'					=> 'exceptions',
 				'Charcoal_ClassNotFoundException' 				=> 'exceptions',
 				'Charcoal_CreateClassLoaderException'			=> 'exceptions',
@@ -162,7 +167,7 @@ class Charcoal_Bootstrap
 				'Charcoal_ProfileLoadingException'				=> 'exceptions',
 				'Charcoal_ProfileConfigFileNotFoundException'	=> 'exceptions',
 				'Charcoal_RuntimeException' 					=> 'exceptions',
-				'Charcoal_SanboxNotLoadedException'				=> 'exceptions',
+				'Charcoal_SandboxNotLoadedException'			=> 'exceptions',
 				'Charcoal_StringFormatException'				=> 'exceptions',
 
 				// Primitive classes
@@ -248,7 +253,7 @@ class Charcoal_Bootstrap
 				'Charcoal_ConsoleLogger'						=> 'objects/loggers',
 
 				// registry classes
-				'Charcoal_AbstractRegistry'					=> 'classes/bootstrap/registry',
+				'Charcoal_AbstractRegistry'						=> 'classes/bootstrap/registry',
 				'Charcoal_FileSystemRegistry'					=> 'classes/bootstrap/registry',
 				'Charcoal_MemoryRegistry'						=> 'classes/bootstrap/registry',
 
@@ -257,7 +262,7 @@ class Charcoal_Bootstrap
 				'Charcoal_PlainCodebase'						=> 'classes/bootstrap/codebase',
 
 				// container classes
-				'Charcoal_AbstractContainer' 						=> 'classes/bootstrap/container',
+				'Charcoal_AbstractContainer' 					=> 'classes/bootstrap/container',
 				'Charcoal_DIContainer' 							=> 'classes/bootstrap/container',
 				'Charcoal_AopContainer'							=> 'classes/bootstrap/container',
 
@@ -265,8 +270,9 @@ class Charcoal_Bootstrap
 				'Charcoal_EncodingConverter'					=> 'classes/util',
 
 				// core hook classes
-				'Charcoal_AbstractCoreHook'							=> 'objects/core_hooks',
-				'Charcoal_DefaultCoreHook'						=> 'objects/core_hooks',
+				'Charcoal_AbstractCoreHook'						=> 'objects/core_hooks',
+				'Charcoal_SimpleLogCoreHook'					=> 'objects/core_hooks',
+				'Charcoal_SimpleEchoCoreHook'					=> 'objects/core_hooks',
 
 			);
 
@@ -305,7 +311,7 @@ class Charcoal_Bootstrap
 		self::$debug = $debug;
 
 		// register bootstrap clas loader
-		if ( FALSE === spl_autoload_register('Charcoal_Bootstrap::loadClass',false) )
+		if ( !spl_autoload_register('Charcoal_Bootstrap::loadClass',false) )
 		{
 			echo "registering bootstrap class loader failed." . eol();
 			exit;

@@ -11,7 +11,7 @@
 
 class Charcoal_ResourceLocator
 {
-	static $macro_defs;
+	static $static_macro_defs;
 
 	/*
 	 * マクロ展開
@@ -20,10 +20,15 @@ class Charcoal_ResourceLocator
 	{
 //		Charcoal_ParamTrait::checkString( 1, $value );
 
-		// 展開キーワード
-		if ( self::$macro_defs === NULL ){
-			self::$macro_defs = array(
+		if ( strpos($value,'%') === FALSE ){
+			return s($value);
+		}
 
+		$value = us( $value );
+
+		// set static values
+		if ( self::$static_macro_defs === NULL ){
+			self::$static_macro_defs = array(
 					'%APPLICATION_DIR%'          => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION,
 					'%APPLICATION_CLASSES_DIR%'  => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/apps/' . CHARCOAL_APPLICATION . '/classes',
 					'%PROJECT_DIR%'              => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT,
@@ -31,21 +36,29 @@ class Charcoal_ResourceLocator
 					'%WEBAPP_DIR%'               => CHARCOAL_WEBAPP_DIR,
 					'%CHARCOAL_HOME%'            => CHARCOAL_HOME,
 					'%APPLICATION%'              => CHARCOAL_APPLICATION,
-
 				);
 		}
 
-		// 展開
-		$value = us( $value );
-		if ( strpos($value,'%') !== FALSE ){
-			foreach( self::$macro_defs as $macro_key => $macro_value ){
-				if ( strpos($value,$macro_key) !== FALSE ){
-					$value = str_replace( $macro_key, $macro_value, $value );
-				}
+		// fill static values
+		foreach( self::$static_macro_defs as $macro_key => $macro_value ){
+			if ( strpos($value,$macro_key) !== FALSE ){
+				$value = str_replace( $macro_key, $macro_value, $value );
 			}
 		}
 
-		return $value;
+		// set runtime values
+		$runtime_macro_defs = array(
+					'%PROC_PATH_REAL%'           => str_replace( ':', '/', substr(Charcoal_Framework::getRequestPath(),2) ),
+				);
+
+		// fill runtime values
+		foreach( $runtime_macro_defs as $macro_key => $macro_value ){
+			if ( strpos($value,$macro_key) !== FALSE ){
+				$value = str_replace( $macro_key, $macro_value, $value );
+			}
+		}
+
+		return s($value);
 	}
 
 	/**

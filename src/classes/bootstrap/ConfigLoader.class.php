@@ -58,15 +58,17 @@ class Charcoal_ConfigLoader
 		$config_target_list[] = array( $root_webapp . '/config', $config_name );
 
 		// read under global config folder(relative path)
-		if ( $object_name ){
-			$config_name = '/' . $type_name . 's' . $real_path . '/' . $object_name . '.' . $type_name;
+		if ( strlen($real_path) > 0 ){
+			if ( $object_name ){
+				$config_name = '/' . $type_name . 's' . $real_path . '/' . $object_name . '.' . $type_name;
+			}
+			else{
+				$config_name = '/' . $type_name . 's' . $real_path . '/' . $type_name;
+			}
+			$config_target_list[] = array( $root_framework . '/config', $config_name );
+			$config_target_list[] = array( $root_project . '/config', $config_name );
+			$config_target_list[] = array( $root_webapp . '/config', $config_name );
 		}
-		else{
-			$config_name = '/' . $type_name . 's' . $real_path . '/' . $type_name;
-		}
-		$config_target_list[] = array( $root_framework . '/config', $config_name );
-		$config_target_list[] = array( $root_project . '/config', $config_name );
-		$config_target_list[] = array( $root_webapp . '/config', $config_name );
 
 		// read under global server folder
 		if ( $object_name ){
@@ -79,14 +81,16 @@ class Charcoal_ConfigLoader
 		$config_target_list[] = array( $root_webapp . '/config', $config_name );
 
 		// read under server config folder
-		if ( $object_name ){
-			$config_name = '/servers/' . CHARCOAL_PROFILE . '/' . $type_name . 's' . $real_path . '/' . $object_name . '.' . $type_name;
+		if ( strlen($real_path) > 0 ){
+			if ( $object_name ){
+				$config_name = '/servers/' . CHARCOAL_PROFILE . '/' . $type_name . 's' . $real_path . '/' . $object_name . '.' . $type_name;
+			}
+			else{
+				$config_name = '/servers/' . CHARCOAL_PROFILE . '/' . $type_name . 's' . $real_path . '/' . $type_name;
+			}
+			$config_target_list[] = array( $root_project . '/config', $config_name );
+			$config_target_list[] = array( $root_webapp . '/config', $config_name );
 		}
-		else{
-			$config_name = '/servers/' . CHARCOAL_PROFILE . '/' . $type_name . 's' . $real_path . '/' . $type_name;
-		}
-		$config_target_list[] = array( $root_project . '/config', $config_name );
-		$config_target_list[] = array( $root_webapp . '/config', $config_name );
 
 		// read under modules directory(current object path)
 		if ( $object_name ){

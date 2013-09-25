@@ -126,7 +126,7 @@ class Charcoal_Sandbox
 	public function getProfile()
 	{
 		if ( !$this->loaded ){
-			list( $file, $line ) = Charcoal_Sysstem::caller(1);
+			list( $file, $line ) = Charcoal_System::caller(1);
 			_throw( new Charcoal_SandboxNotLoadedException( $file, $line ) );
 		}
 		return $this->profile;
@@ -177,7 +177,7 @@ class Charcoal_Sandbox
 
 			// get class name from configure file
 			$class_name = $config->getString( 'class_name' );
-			if ( $class_name !== NULL ){
+			if ( $class_name && !$class_name->isEmpty() ){
 				$klass = new Charcoal_Class( $class_name );
 			}
 			else{

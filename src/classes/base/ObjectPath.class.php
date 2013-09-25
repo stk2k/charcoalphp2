@@ -151,11 +151,12 @@ class Charcoal_ObjectPath extends Charcoal_Object
 	public function toString()
 	{
 		if ( strlen($this->_virtual_path) > 0 ){
-			return $this->_object_name . '@' . $this->_virtual_path;
+			$str = $this->_object_name . '@' . $this->_virtual_path;
 		}
 		else{
-			return $this->_object_name;
+			$str = $this->_object_name;
 		}
+		return us($str);
 	}
 }
 

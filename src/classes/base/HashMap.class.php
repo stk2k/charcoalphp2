@@ -13,7 +13,7 @@
 
 class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 {
-	private $_values;
+	private $values;
 
 	/*
 	 *	constructor
@@ -22,14 +22,14 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	{
 		parent::__construct();
 
-		$this->_values = $values ? um($values) : array();
+		$this->values = $values ? um($values) : array();
 	}
 
 	/**
 	 *	get key list
 	 */
 	public function getKeys() {
-		return array_keys($this->_values);
+		return array_keys($this->values);
 	}
 
 	/**
@@ -37,21 +37,21 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function keyExists( $key )
 	{
-		return array_key_exists($key,$this->_values);
+		return array_key_exists($key,$this->values);
 	}
 
 	/**
 	 *	Iterator interface: rewind() implementation
 	 */
 	public function rewind() {
-		reset($this->_values);
+		reset($this->values);
 	}
 
 	/**
 	 *	Iterator interface: current() implementation
 	 */
 	public function current() {
-		$var = current($this->_values);
+		$var = current($this->values);
 		return $var;
 	}
 
@@ -59,7 +59,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 *	Iterator interface: key() implementation
 	 */
 	public function key() {
-		$var = key($this->_values);
+		$var = key($this->values);
 		return $var;
 	}
 
@@ -67,7 +67,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 *	Iterator interface: next() implementation
 	 */
 	public function next() {
-		$var = next($this->_values);
+		$var = next($this->values);
 		return $var;
 	}
 
@@ -86,7 +86,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function isEmpty()
 	{
-		return count( $this->_values ) === 0;
+		return count( $this->values ) === 0;
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function getAll()
 	{
-		return $this->_values;
+		return $this->values;
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 		if ( is_object($offset) ){
 			$offset = $offset->__toString();
 		}
-		return isset($this->_values[ $offset ]) ? $this->_values[ $offset ] : NULL;
+		return isset($this->values[ $offset ]) ? $this->values[ $offset ] : NULL;
 	}
 
 	/**
@@ -150,7 +150,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 		if ( is_object($offset) ){
 			$offset = $offset->__toString();
 		}
-		$this->_values[ $offset ] = $value;
+		$this->values[ $offset ] = $value;
 	}
 
 	/**
@@ -158,7 +158,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function offsetExists($offset)
 	{
-		return isset($this->_values[$offset]);
+		return isset($this->values[$offset]);
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function offsetUnset($offset)
 	{
-		unset($this->_values[$offset]);
+		unset($this->values[$offset]);
 	}
 
 	/**
@@ -174,7 +174,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function count()
 	{
-		return count( $this->_values );
+		return count( $this->values );
 	}
 
 	/**
@@ -182,7 +182,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function keys()
 	{
-		return array_keys($this->_values);
+		return array_keys($this->values);
 	}
 
 	/**
@@ -194,7 +194,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	{
 //		Charcoal_ParamTrait::checkRawArray( 1, $data );
 
-		$this->_values = $this->_values ? array_merge( $this->_values, $data ) : $data;
+		$this->values = $this->values ? array_merge( $this->values, $data ) : $data;
 	}
 
 	/**
@@ -206,7 +206,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	{
 //		Charcoal_ParamTrait::checkHashMap( 1, $data );
 
-		$this->_values = $this->_values ? array_merge( $this->_values, $map->getAll() ) : $data;
+		$this->values = $this->values ? array_merge( $this->values, $map->getAll() ) : $data;
 	}
 
 	/**
@@ -250,7 +250,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getString( $this->_values, $key, $default_value );
+		return Charcoal_ArrayTrait::getString( $this->values, $key, $default_value );
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getArray( $this->_values, $key, $default_value );
+		return Charcoal_ArrayTrait::getArray( $this->values, $key, $default_value );
 	}
 
 	/**
@@ -282,7 +282,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkHashMap( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getHashMap( $this->_values, $key, $default_value );
+		return Charcoal_ArrayTrait::getHashMap( $this->values, $key, $default_value );
 	}
 
 	/**
@@ -298,7 +298,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getBoolean( $this->_values, $key, $default_value );
+		return Charcoal_ArrayTrait::getBoolean( $this->values, $key, $default_value );
 	}
 
 	/**
@@ -314,7 +314,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getInteger( $this->_values, $key, $default_value );
+		return Charcoal_ArrayTrait::getInteger( $this->values, $key, $default_value );
 	}
 
 	/**
@@ -330,7 +330,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getFloat( $this->_values, $key, $default_value );
+		return Charcoal_ArrayTrait::getFloat( $this->values, $key, $default_value );
 	}
 
 	/**
@@ -340,10 +340,10 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function toArray()
 	{
-		if ( is_array($this->_values) ){
-			return $this->_values;
+		if ( is_array($this->values) ){
+			return $this->values;
 		}
-		return array_diff( $this->_values, array() );
+		return array_diff( $this->values, array() );
 	}
 
 	/**
@@ -351,7 +351,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function implodeAssoc( $glue = ',' )
 	{
-		return Charcoal_System::implodeAssoc( $glue, $this->_values );
+		return Charcoal_System::implodeAssoc( $glue, $this->values );
 	}
 
 }

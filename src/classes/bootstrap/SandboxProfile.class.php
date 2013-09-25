@@ -30,12 +30,13 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function load( $sandbox_name, $debug_mode )
 	{
+		$config_file = "{$sandbox_name}.profile.ini";
+
 		try{
 			// get profile directory path
 			$profile_dir = Charcoal_ResourceLocator::getApplicationFile( 'config/profiles' );
 
 			// make config file object
-			$config_file = "{$sandbox_name}.profile.ini";
 			$config_file = new Charcoal_File( $config_file, $profile_dir );
 
 			// check if profile directory exists
@@ -70,7 +71,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 //			log_debug( "system,error,debug", "catch $e" );
 			_catch( $ex );
 
-			_throw( new Charcoal_ProfileLoadingException( self::$config_file, self::$sandbox_name, $ex ) );
+			_throw( new Charcoal_ProfileLoadingException( $config_file, $sandbox_name, $ex ) );
 		}
 	}
 

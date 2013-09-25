@@ -6,7 +6,7 @@ REM ====================================================
 REM 	file
 REM ====================================================
 
-set PROC_PATH="@:objects:cache_driver:file"
+set PROC_PATH="@:objects:cache_drivers:file"
 
 SET ACTIONS="get_empty_data,get_integer_data,get_string_data,get_array_data,get_boolean_data,get_float_data,get_object_data"
 REM php shell.php -proc %PROC_PATH% -actions %ACTIONS%
@@ -20,7 +20,7 @@ REM ====================================================
 REM 	memcached
 REM ====================================================
 
-set PROC_PATH="@:objects:cache_driver:memcached"
+set PROC_PATH="@:objects:cache_drivers:memcached"
 
 SET ACTIONS="get_empty_data,get_integer_data,get_string_data,get_array_data,get_boolean_data,get_float_data,get_object_data"
 php shell.php -proc %PROC_PATH% -actions %ACTIONS%
@@ -29,7 +29,7 @@ REM ====================================================
 REM 	memcache
 REM ====================================================
 
-set PROC_PATH="@:objects:cache_driver:memcache"
+set PROC_PATH="@:objects:cache_drivers:memcache"
 
 SET ACTIONS="get_empty_data,get_integer_data,get_string_data,get_array_data,get_boolean_data,get_float_data,get_object_data"
 php shell.php -proc %PROC_PATH% -actions %ACTIONS%

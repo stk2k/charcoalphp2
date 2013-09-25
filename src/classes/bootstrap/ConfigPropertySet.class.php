@@ -46,7 +46,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
+	public function getString( $key, $default_value = NULL, $process_macro = TRUE )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
@@ -66,15 +66,26 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 *
 	 * @return array
 	 */
-	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
+	public function getArray( $key, $default_value = NULL, $process_macro = TRUE )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 
 		$key = us($key);
 		$items = parent::getArray( $key, $default_value );
+
+		if ( !is_array($items) ){
+			return $items;
+		}
+
+		// remove empty entry
+		foreach( $items as $key => $item ){
+			if ( empty($item) )	unset($items[$key]);
+		}
+
 		if ( $process_macro === TRUE ){
 			$items = array_map( 'Charcoal_ResourceLocator::processMacro', $items );
 		}
+
 		return $items;
 	}
 

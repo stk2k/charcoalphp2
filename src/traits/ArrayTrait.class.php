@@ -26,7 +26,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return us($default_value);
+			return s($default_value);
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -34,7 +34,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_StringFormatException( $value ) );
 		}
 
-		return us($value);
+		return s($value);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return uv($default_value);
+			return v($default_value);
 		}
 
 		// cast to array
@@ -65,7 +65,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_ArrayFormatException( $value ) );
 		}
 
-		return uv($value);
+		return v($value);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return um($default_value);
+			return m($default_value);
 		}
 
 		// cast to array
@@ -96,7 +96,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_HashMapFormatException( $value ) );
 		}
 
-		return um($value);
+		return m($value);
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return ui($default_value);
+			return i($default_value);
 		}
 
 		// cast to integer
@@ -127,7 +127,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_IntegerFormatException( $key ) );
 		}
 
-		return ui($value);
+		return i($value);
 	}
 
 	/**
@@ -145,7 +145,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return uf($default_value);
+			return f($default_value);
 		}
 
 		// cast to float
@@ -158,7 +158,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_FloatFormatException( $key ) );
 		}
 
-		return uf($value);
+		return f($value);
 	}
 
 	/**
@@ -176,7 +176,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return ub($default_value);
+			return b($default_value);
 		}
 
 		// cast to float
@@ -189,7 +189,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_BooleanFormatException( $key ) );
 		}
 
-		return ub($value);
+		return b($value);
 	}
 
 }

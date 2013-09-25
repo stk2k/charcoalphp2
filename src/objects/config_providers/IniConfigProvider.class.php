@@ -43,14 +43,14 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 
 		// check if ini file exists
 		if ( !is_file($source) ){
-			if ( $this->debug === TRUE )	print "[$source]is not exists!" . eol();	
+			if ( $this->debug->isTrue() )	print "[$source]is not exists!" . eol();	
 //			log_info( "system, debug, config", "config", "ini file[$source] does not exist." );
 			return NULL;
 		}
 
 		// read ini file
 	    $ini_config = parse_ini_file( $source, TRUE );
-		if ( $this->debug === TRUE ){
+		if ( $this->debug->isTrue() ){
 			print "[$source] parse_ini_file($source)=" . eol();
 			ad( $ini_config );
 		}

@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_SanboxNotLoadedException extends Charcoal_RuntimeException
+class Charcoal_SandboxNotLoadedException extends Charcoal_RuntimeException
 {
 	public function __construct( $file, $line, $prev = NULL )
 	{

@@ -44,11 +44,11 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 *  => SELECT * FROM model_a INNER JOIN model_b ON model_b.id = model_a.id
 	 *
 	 */
-	public function __construct( Charcoal_String $expression )
+	public function __construct( $expression )
 	{
 		parent::__construct();
 
-		$tokens = $this->tokenize( s($expression) );
+		$tokens = $this->tokenize( $expression );
 
 		if ( count($tokens) < 1 ){
 			_throw( new Charcoal_QueryTargetException( "no query target element is not specified." ) );
@@ -197,7 +197,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	/*
 	 *  set alias
 	 */
-	public function setAlias( Charcoal_String $alias )
+	public function setAlias( $alias )
 	{
 		$this->alias = $alias;
 	}
@@ -207,7 +207,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function getJoins()
 	{
-		return v($this->joins);
+		return $this->joins;
 	}
 
 	/*
@@ -221,7 +221,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	/*
 	 *  tokenize
 	 */
-	private function tokenize( Charcoal_String $query_target )
+	private function tokenize( $query_target )
 	{
 		$query_target = us($query_target);
 

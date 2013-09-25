@@ -124,6 +124,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_DBConnectException'					=> 'exceptions',
 				'Charcoal_DBRollbackTransactionException'		=> 'exceptions',
 				'Charcoal_EventContextException'				=> 'exceptions',
+				'Charcoal_EventLoopCounterOverflowException'	=> 'exceptions',
 				'Charcoal_FileOpenException'					=> 'exceptions',
 				'Charcoal_FileOutputException'					=> 'exceptions',
 				'Charcoal_FileRenameException'					=> 'exceptions',

@@ -1,6 +1,6 @@
 <?php
 /**
-* Default core hook implementation for Charcoal_ICoreHook interface.
+* a core hook implementation of simply output into log file
 *
 * PHP version 5
 *
@@ -9,19 +9,8 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_DefaultCoreHook extends Charcoal_AbstractCoreHook
+class Charcoal_SimpleLogCoreHook extends Charcoal_AbstractCoreHook
 {
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
-
-	}
-
 	/**
 	 * Process core hook message
 	 */

@@ -134,7 +134,7 @@ class Charcoal_SimpleProcedure extends Charcoal_AbstractProcedure
 			foreach( $this->_modules as $module_name ) {
 				if ( strlen($module_name) === 0 )    continue;
 				// モジュールのロード
-				Charcoal_ModuleLoader::loadModule( $module_name, $task_manager );
+				Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $module_name, $task_manager );
 			}
 	
 			log_info( "system",  '追加モジュールを読み込みました。' );

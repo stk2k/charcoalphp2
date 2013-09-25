@@ -11,16 +11,16 @@
 
 class Charcoal_Stack extends Charcoal_Collection
 {
-	private $_values;
+	private $values;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( $value = array() )
+	public function __construct( $values = array() )
 	{
 		parent::__construct();
 
-		$this->_values = $value;
+		$this->values = $values;
 	}
 
 	/*
@@ -28,12 +28,12 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function getHead()
 	{
-		$cnt = count($this->_values);
+		$cnt = count($this->values);
 		if ( $cnt === 0 ){
 			_throw( new EmptyStackException( $this ) );
 		}
 
-		return $this->_values[0];
+		return $this->values[0];
 	}
 
 	/*
@@ -41,12 +41,12 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function getTail()
 	{
-		$cnt = count($this->_values);
+		$cnt = count($this->values);
 		if ( $cnt === 0 ){
 			_throw( new EmptyStackException( $this ) );
 		}
 		$i = $cnt - 1;
-		return isset($this->_values[$i]) ? $this->_values[$i] : NULL;
+		return isset($this->values[$i]) ? $this->values[$i] : NULL;
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function isEmpty()
 	{
-		return empty( $this->_values );
+		return empty( $this->values );
 	}
 
 	/*
@@ -64,7 +64,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function count()
 	{
-		return count( $this->_values );
+		return count( $this->values );
 	}
 
 	/*
@@ -72,7 +72,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function clear()
 	{
-		$this->_values = array();
+		$this->values = array();
 	}
 
 	/*
@@ -82,7 +82,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	{
 //		Charcoal_ParamTrait::checkObject( 1, $item );
 
-		$this->_values[] = $item;
+		$this->values[] = $item;
 	}
 
 	/*
@@ -90,7 +90,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function pop()
 	{
-		$tail = array_pop( $this->_values );
+		$tail = array_pop( $this->values );
 		if ( !$tail ){
 			_throw( new Charcoal_StackEmptyException( $this ) );
 		}
@@ -105,21 +105,21 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function getAll()
 	{
-		return $this->_values;
+		return $this->values;
 	}
 
 	/*
 	 *	Iteratorインタフェース:rewidの実装
 	 */
 	public function rewind() {
-		reset($this->_values);
+		reset($this->values);
 	}
 
 	/*
 	 *	Iteratorインタフェース:currentの実装
 	 */
 	public function current() {
-		$var = current($this->_values);
+		$var = current($this->values);
 		return $var;
 	}
 
@@ -127,7 +127,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 *	Iteratorインタフェース:keyの実装
 	 */
 	public function key() {
-		$var = key($this->_values);
+		$var = key($this->values);
 		return $var;
 	}
 
@@ -135,7 +135,7 @@ class Charcoal_Stack extends Charcoal_Collection
 	 *	Iteratorインタフェース:nextの実装
 	 */
 	public function next() {
-		$var = next($this->_values);
+		$var = next($this->values);
 		return $var;
 	}
 
@@ -145,6 +145,19 @@ class Charcoal_Stack extends Charcoal_Collection
 	public function valid() {
 		$var = $this->current() !== false;
 		return $var;
+	}
+
+	/**
+	 * convert to array
+	 * 
+	 * @return array
+	 */
+	public function toArray()
+	{
+		if ( is_array($this->values) ){
+			return $this->values;
+		}
+		return array_diff( $this->values, array() );
 	}
 
 }

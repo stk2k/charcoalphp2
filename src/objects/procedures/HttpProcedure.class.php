@@ -153,7 +153,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 
 		$use_session = $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' );
 
-		if ( $use_session ){
+		if ( $use_session->isTrue() ){
 //			log_info( "system", "procedure", 'ステートフルタスクの復元を開始します。' );
 
 			$task_manager->restoreStatefulTasks( $session );
@@ -169,7 +169,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 		$globalsequence = NULL;
 		$localsequence = NULL;
 
-		if ( $use_session ){
+		if ( $use_session->isTrue() ){
 
 			$seq_name = us($this->sequence);
 			$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
@@ -267,7 +267,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 		// 終了処理
 		//
 
-		if ( $use_session ){
+		if ( $use_session->isTrue() ){
 
 			$seq_name = us($this->sequence);
 			$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
@@ -288,7 +288,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 		}
 
 		// セッション情報の保存
-		if ( $use_session )
+		if ( $use_session->isTrue() )
 		{
 			// ステートフルタスクの保存
 			$task_manager->saveStatefulTasks( $session );

@@ -254,10 +254,10 @@ class DtoTestTask extends Charcoal_TestTask
 
 			$dto->setArray( $data );
 
-			echo "dto[foo]:" . $dto["foo"] . eol();
-			echo "dto[bar]:" . $dto["bar"] . eol();
-			echo "dto[baz]:" . $dto["baz"] . eol();
-			echo "dto[qux]:" . $dto["qux"] . eol();
+//			echo "dto[foo]:" . $dto["foo"] . eol();
+//			echo "dto[bar]:" . $dto["bar"] . eol();
+//			echo "dto[baz]:" . $dto["baz"] . eol();
+//			echo "dto[qux]:" . $dto["qux"] . eol();
 
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
@@ -278,10 +278,10 @@ class DtoTestTask extends Charcoal_TestTask
 
 			$dto->setHashMap( $data );
 
-			echo "dto[foo]:" . $dto["foo"] . eol();
-			echo "dto[bar]:" . $dto["bar"] . eol();
-			echo "dto[baz]:" . $dto["baz"] . eol();
-			echo "dto[qux]:" . $dto["qux"] . eol();
+//			echo "dto[foo]:" . $dto["foo"] . eol();
+//			echo "dto[bar]:" . $dto["bar"] . eol();
+//			echo "dto[baz]:" . $dto["baz"] . eol();
+//			echo "dto[qux]:" . $dto["qux"] . eol();
 
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
@@ -306,10 +306,10 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->mergeArray( array("foo" => 2, "bar" => "banana") );
 			$dto->mergeArray( array("baz" => -1, "qux" => 1.2), FALSE );
 
-			echo "dto[foo]:" . $dto["foo"] . eol();
-			echo "dto[bar]:" . $dto["bar"] . eol();
-			echo "dto[baz]:" . $dto["baz"] . eol();
-			echo "dto[qux]:" . $dto["qux"] . eol();
+//			echo "dto[foo]:" . $dto["foo"] . eol();
+//			echo "dto[bar]:" . $dto["bar"] . eol();
+//			echo "dto[baz]:" . $dto["baz"] . eol();
+//			echo "dto[qux]:" . $dto["qux"] . eol();
 
 			$this->assertEquals( 2, $dto["foo"] );
 			$this->assertEquals( "banana", $dto["bar"] );
@@ -318,10 +318,10 @@ class DtoTestTask extends Charcoal_TestTask
 
 			$dto->mergeArray( array("foo" => 3, "bar" => "peach"), TRUE );
 
-			echo "dto[foo]:" . $dto["foo"] . eol();
-			echo "dto[bar]:" . $dto["bar"] . eol();
-			echo "dto[baz]:" . $dto["baz"] . eol();
-			echo "dto[qux]:" . $dto["qux"] . eol();
+//			echo "dto[foo]:" . $dto["foo"] . eol();
+//			echo "dto[bar]:" . $dto["bar"] . eol();
+//			echo "dto[baz]:" . $dto["baz"] . eol();
+//			echo "dto[qux]:" . $dto["qux"] . eol();
 
 			$this->assertEquals( 3, $dto["foo"] );
 			$this->assertEquals( "peach", $dto["bar"] );
@@ -347,10 +347,10 @@ class DtoTestTask extends Charcoal_TestTask
 			$dto->mergeHashMap( array("foo" => 2, "bar" => "banana") );
 			$dto->mergeHashMap( array("baz" => -1, "qux" => 1.2), FALSE );
 
-			echo "dto[foo]:" . $dto["foo"] . eol();
-			echo "dto[bar]:" . $dto["bar"] . eol();
-			echo "dto[baz]:" . $dto["baz"] . eol();
-			echo "dto[qux]:" . $dto["qux"] . eol();
+//			echo "dto[foo]:" . $dto["foo"] . eol();
+//			echo "dto[bar]:" . $dto["bar"] . eol();
+//			echo "dto[baz]:" . $dto["baz"] . eol();
+//			echo "dto[qux]:" . $dto["qux"] . eol();
 
 			$this->assertEquals( 2, $dto["foo"] );
 			$this->assertEquals( "banana", $dto["bar"] );
@@ -359,10 +359,10 @@ class DtoTestTask extends Charcoal_TestTask
 
 			$dto->mergeHashMap( array("foo" => 3, "bar" => "peach"), TRUE );
 
-			echo "dto[foo]:" . $dto["foo"] . eol();
-			echo "dto[bar]:" . $dto["bar"] . eol();
-			echo "dto[baz]:" . $dto["baz"] . eol();
-			echo "dto[qux]:" . $dto["qux"] . eol();
+//			echo "dto[foo]:" . $dto["foo"] . eol();
+//			echo "dto[bar]:" . $dto["bar"] . eol();
+//			echo "dto[baz]:" . $dto["baz"] . eol();
+//			echo "dto[qux]:" . $dto["qux"] . eol();
 
 			$this->assertEquals( 3, $dto["foo"] );
 			$this->assertEquals( "peach", $dto["bar"] );
@@ -407,7 +407,7 @@ class DtoTestTask extends Charcoal_TestTask
 				);
 
 			foreach( $dto as $key => $value ){
-				echo "expected=[" . $expected[$key] . "] actual=[$value]" . eol();
+//				echo "expected=[" . $expected[$key] . "] actual=[$value]" . eol();
 				$this->assertEquals( $expected[$key], $value );
 			}
 

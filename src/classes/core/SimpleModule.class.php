@@ -119,7 +119,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		Charcoal_Framework::loadSourceFile( $path );
 
 		// create new instance
-		$klass = new Charcoal_Class( s($class_name) );
+		$klass = new Charcoal_Class( $class_name );
 		$event = $klass->newInstance();
 
 //		log_info( "system,debug,event", "module", "created event[$event] in module[$obj_path]");

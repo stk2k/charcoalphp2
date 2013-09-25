@@ -71,7 +71,7 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
 		$this->init();
 
 		foreach( $this->handlers as $handler ){
-			log_info( "system,debug,error", "exception", "calling exception handler[$handler]." );
+			log_info( "system,debug,error", "calling exception handler[$handler].", "exception" );
 			$handler->handleException( $e );
 		}
 	}

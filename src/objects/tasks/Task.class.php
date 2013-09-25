@@ -36,8 +36,8 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 		if ( $this->getSandbox()->isDebug() )
 		{
 			log_debug( "debug", "Task[$this] name space: {$this->name_space}", self::TAG );
-			log_debug( "debug", "Task[$this] event filters: " . implode( ',', $this->event_filters ), self::TAG );
-			log_debug( "debug", "Task[$this] post actions: " . implode( ',', $this->post_actions ), self::TAG );
+			log_debug( "debug", "Task[$this] event filters: " . $this->event_filters, self::TAG );
+			log_debug( "debug", "Task[$this] post actions: " . $this->post_actions, self::TAG );
 			log_debug( "debug", "Task[$this] priority: {$this->priority}", self::TAG );
 		}
 	}
@@ -131,7 +131,7 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function setPostActions( $post_actions )
 	{
-		$this->post_actions = $post_actions;
+		$this->post_actions = v($post_actions);
 	}
 
 	/**

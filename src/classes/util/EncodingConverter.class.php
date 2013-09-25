@@ -31,7 +31,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public static function fromString( $sandbox, $from, $to )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 //		Charcoal_ParamTrait::checkString( 2, $from );
 //		Charcoal_ParamTrait::checkString( 3, $to );
 

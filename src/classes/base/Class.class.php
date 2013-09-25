@@ -18,16 +18,15 @@ class Charcoal_Class extends Charcoal_Object
 	 */
 	public function __construct( $class_name )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $class_name );
+		Charcoal_ParamTrait::checkString( 1, $class_name );
 
 		parent::__construct();
-/*
+
 		if ( !class_exists($class_name) ){
 			_throw( new Charcoal_ClassNotFoundException( $class_name ) );
 		}
-*/
 
-		$this->class_name = $class_name;
+		$this->class_name = us( $class_name );
 	}
 
 	/*

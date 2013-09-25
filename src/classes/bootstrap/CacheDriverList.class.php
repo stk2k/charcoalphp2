@@ -34,7 +34,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	{
 		if ( !$this->init ){
 
-			$cache_drivers = Charcoal_Profile::getArray( 'CACHE_DRIVERS', array('file') );
+			$cache_drivers = $this->sandbox->getProfile()->getArray( 'CACHE_DRIVERS', array('file') );
 
 			foreach( $cache_drivers as $driver_name ){
 				$driver = $this->sandbox->createObject( $driver_name, 'cache_driver', array(), 'Charcoal_ICacheDriver' );
@@ -114,8 +114,10 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 
 		$this->init();
 
-		foreach( $this->drivers as $driver ){
-			$driver->delete( $key );
+		if ( is_array($this->drivers) ){
+			foreach( $this->drivers as $driver ){
+				$driver->delete( $key );
+			}
 		}
 	}
 

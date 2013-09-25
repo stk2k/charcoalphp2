@@ -16,7 +16,7 @@ class Charcoal_QueryTargetElement extends Charcoal_Object
 	/*
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_Integer $type, Charcoalstring $string = NULL )
+	public function __construct( $type, $string = NULL )
 	{
 		$this->type   = ui($type);
 		$this->string = us($string);

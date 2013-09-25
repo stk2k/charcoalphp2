@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_AbstractFileFilter implements Charcoal_IFileFilter
+abstract class Charcoal_AbstractFileFilter implements Charcoal_IFileFilter
 {
 }
 

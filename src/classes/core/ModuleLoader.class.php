@@ -46,6 +46,9 @@ class Charcoal_ModuleLoader
 			if ( $module_path instanceof Charcoal_ObjectPath ){
 				$module_path = $module_path->toString();
 			}
+			else{
+				$module_path = us( $module_path );
+			}
 
 			// check if module is already loaded
 			if ( isset(self::$loaded_paths[$module_path]) ){
@@ -77,7 +80,7 @@ class Charcoal_ModuleLoader
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
-			_throw( new Charcoal_ModuleLoaderException( 'loadModule', $ex ) );
+			_throw( new Charcoal_ModuleLoaderException( "failed to load  module: [$module_path]", $ex ) );
 		}
 	}
 

@@ -268,7 +268,7 @@ class SystemTestTask extends Charcoal_TestTask
 
 			foreach( $data as $key => $expected ){
 				$actual = Charcoal_System::pascalCase( $key );
-				echo "[original]$key [expected]$expected [actual]$actual" . eol();
+//				echo "[original]$key [expected]$expected [actual]$actual" . eol();
 				$this->assertEquals( $expected, $actual );
 			}
 

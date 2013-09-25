@@ -59,8 +59,8 @@ class FrameworkTestTask extends Charcoal_TestTask
 
 			$top_proc_id = $top_proc->hash();
 
-			echo "proc_id:$proc_id" . eol();
-			echo "top_proc_id:$top_proc_id" . eol();
+//			echo "proc_id:$proc_id" . eol();
+//			echo "top_proc_id:$top_proc_id" . eol();
 
 			$this->assertEquals( $proc_id, $top_proc_id );
 			

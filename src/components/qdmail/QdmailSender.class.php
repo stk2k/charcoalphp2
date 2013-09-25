@@ -46,24 +46,28 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 	{
 		parent::configure( $config );
 
+		if ( is_array($config) || $config === NULL ){
+			$config = new Chacoal_Config( $config );
+		}
+
 		// =========================================
 		// QdMail設定
 		// =========================================
 
 		// ログ設定
-		$qdmail_log_level    = $config->getInteger( s('qdmail.log_level'), i(0) )->getValue();
-		$qdmail_log_path     = $config->getString( s('qdmail.log_path'), s('') )->getValue();
-		$qdmail_log_filename = $config->getString( s('qdmail.log_filename'), s('') )->getValue();
+		$qdmail_log_level    = $config->getInteger( 'qdmail.log_level', 0 );
+		$qdmail_log_path     = $config->getString( 'qdmail.log_path', '' );
+		$qdmail_log_filename = $config->getString( 'qdmail.log_filename', '' );
 
 		$this->qdmail->logLevel( $qdmail_log_level );
 		$this->qdmail->logPath( $qdmail_log_path );
 		$this->qdmail->logFilename( "/" . $qdmail_log_filename );
 
 		// エラーログ設定
-		$qdmail_error_display      = $config->getBoolean( s('qdmail.error_display'), b(FALSE) )->getValue();
-		$qdmail_error_log_level    = $config->getInteger( s('qdmail.error_log_level'), i(0) )->getValue();
-		$qdmail_error_log_path     = $config->getString( s('qdmail.error_log_path'), s('') )->getValue();
-		$qdmail_error_log_filename = $config->getString( s('qdmail.error_log_filename'), s('') )->getValue();
+		$qdmail_error_display      = $config->getBoolean( 'qdmail.error_display', FALSE );
+		$qdmail_error_log_level    = $config->getInteger( 'qdmail.error_log_level', 0 );
+		$qdmail_error_log_path     = $config->getString( 'qdmail.error_log_path', '' );
+		$qdmail_error_log_filename = $config->getString( 'qdmail.error_log_filename', '' );
 
 		$this->qdmail->errorDisplay( $qdmail_error_display );
 		$this->qdmail->errorlogLevel( $qdmail_error_log_level );
@@ -74,17 +78,17 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 		// QdSMTP設定
 		// =========================================
 
-		$qdsmtp = $config->getBoolean( s('qdsmtp'), b(FALSE) );
-		if ( $qdsmtp->isFalse() ){
+		$qdsmtp = $config->getBoolean( 'qdsmtp', FALSE );
+		if ( !$qdsmtp ){
 			$this->qdmail->smtp(false);
 		}
 		else{
 			// ログ設定
-			$qdsmtp_log_level          = $config->getInteger( s('qdsmtp.log_level'), i(0) )->getValue();
-			$qdsmtp_log_filename       = $config->getString( s('qdsmtp.log_filename'), s('') )->getValue();
-			$qdsmtp_error_log_level    = $config->getInteger( s('qdsmtp.error_log_level'), i(0) )->getValue();
-			$qdsmtp_error_log_filename = $config->getString( s('qdsmtp.error_log_filename'), s('') )->getValue();
-			$qdsmtp_error_display      = $config->getBoolean( s('qdsmtp.error_display'), b(FALSE) )->getValue();
+			$qdsmtp_log_level          = $config->getInteger( 'qdsmtp.log_level', 0 );
+			$qdsmtp_log_filename       = $config->getString( 'qdsmtp.log_filename', '' );
+			$qdsmtp_error_log_level    = $config->getInteger( 'qdsmtp.error_log_level', 0 );
+			$qdsmtp_error_log_filename = $config->getString( 'qdsmtp.error_log_filename', '' );
+			$qdsmtp_error_display      = $config->getBoolean( 'qdsmtp.error_display', FALSE );
 
 			$this->qdmail->smtpObject()->logLevel( $qdsmtp_log_level );
 			$this->qdmail->smtpObject()->logFilename( $qdsmtp_log_filename );
@@ -93,12 +97,12 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 			$this->qdmail->smtpObject()->error_display = $qdsmtp_error_display;
 
 			// サーバ設定
-			$qdsmtp_host     = $config->getString( s('qdsmtp.host'), s('') )->getValue();
-			$qdsmtp_port     = $config->getString( s('qdsmtp.port'), s('') )->getValue();
-			$qdsmtp_from     = $config->getString( s('qdsmtp.from'), s('') )->getValue();
-			$qdsmtp_protocol = $config->getString( s('qdsmtp.protocol'), s('') )->getValue();
-			$qdsmtp_user     = $config->getString( s('qdsmtp.user'), s('') )->getValue();
-			$qdsmtp_pass     = $config->getString( s('qdsmtp.pass'), s('') )->getValue();
+			$qdsmtp_host     = $config->getString( 'qdsmtp.host', '' );
+			$qdsmtp_port     = $config->getString( 'qdsmtp.port', '' );
+			$qdsmtp_from     = $config->getString( 'qdsmtp.from', '' );
+			$qdsmtp_protocol = $config->getString( 'qdsmtp.protocol', '' );
+			$qdsmtp_user     = $config->getString( 'qdsmtp.user', '' );
+			$qdsmtp_pass     = $config->getString( 'qdsmtp.pass', '' );
 
 			$options = array(
 					'host' => $qdsmtp_host,

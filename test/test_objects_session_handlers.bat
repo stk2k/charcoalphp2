@@ -2,7 +2,7 @@
 
 cls
 
-set PROC_PATH="smart_gateway_session_handler_test@:objects:session_handler"
+set PROC_PATH="smart_gateway_session_handler_test@:objects:session_handlers"
 
 
 

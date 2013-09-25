@@ -4,8 +4,8 @@
 *
 * PHP version 5
 *
-* @package    core
-* @author     CharcoalPHP Development Team
+* @package	core
+* @author	 CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
@@ -33,8 +33,8 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 
 	/**
 	 *	Get current procedure object
-     *
-     * @return Charcoal_IProcedure
+	 *
+	 * @return Charcoal_IProcedure
 	 */
 	public function getProcedure()
 	{
@@ -101,8 +101,8 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 *	Get current sequence object
 	 *
 	 *	@return Charcoal_IEvent
-     *
-     * @return Charcoal_ISequence
+	 *
+	 * @return Charcoal_ISequence
 	 */
 	public function getSequence()
 	{
@@ -123,8 +123,8 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 
 	/**
 	 *	Get current response object
-     *
-     * @return Charcoal_Response
+	 *
+	 * @return Charcoal_Response
 	 */
 	public function getResponse()
 	{
@@ -145,8 +145,8 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 
 	/**
 	 *	Get current task manager
-     *
-     * @return Charcoal_Response
+	 *
+	 * @return Charcoal_Response
 	 */
 	public function getTaskManager()
 	{
@@ -163,6 +163,16 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 //		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ITaskManager', $task_manager );
 
 		$this->task_manager = $task_manager;
+	}
+
+	/**
+	 *	Get sandbox profile
+	 *
+	 * @return Charcoal_SandboxProfile
+	 */
+	public function getProfile()
+	{
+		return $this->sandbox->getProfile();
 	}
 
 	/**
@@ -222,8 +232,8 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	/**
 	 *	Get cache data
 	 *
-	 * @param Charcoal_String $key                   string name to identify cached data
-	 * @param Charcoal_String $type_name_checked     checks type(class/interface) if not NULL
+	 * @param Charcoal_String $key				   string name to identify cached data
+	 * @param Charcoal_String $type_name_checked	 checks type(class/interface) if not NULL
 	 */
 	public function getCache( $key, Charcoal_String $type_name_checked = NULL )
 	{
@@ -263,8 +273,8 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	/**
 	 *	Set cache data
 	 *
-	 * @param Charcoal_String $key                   string name to identify cached data
-	 * @param Charcoal_Object $value                 cache data to save
+	 * @param Charcoal_String $key				   string name to identify cached data
+	 * @param Charcoal_Object $value				 cache data to save
 	 */
 	public function setCache( $key, $value )
 	{
@@ -285,18 +295,18 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	/**
 	 * Get framework/project/application path
 	 *
-	 * @param Charcoal_String $virtual_path          virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
-	 * @param Charcoal_Object $value                 cache data to save
+	 * @param Charcoal_String $virtual_path		  virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_Object $value				 cache data to save
 	 *
-	 * @return Charcoal_String        full path string
+	 * @return Charcoal_String		full path string
 	 *
 	 * [macro keyword sample]
 	 *
-	 *      macro keyword       |                return value(real path)
+	 *	  macro keyword	   |				return value(real path)
 	 * -------------------------|------------------------------------------------
-	 *   %APPLICATION_DIR%      | (web_app_root)/webapp/(project_name)/apps/(application name)/
-	 *   %PROJECT_DIR%          | (web_app_root)/webapp/(project_name)/
-	 *   %WEBAPP_DIR%           | (web_app_root)/webapp/
+	 *   %APPLICATION_DIR%	  | (web_app_root)/webapp/(project_name)/apps/(application name)/
+	 *   %PROJECT_DIR%		  | (web_app_root)/webapp/(project_name)/
+	 *   %WEBAPP_DIR%		   | (web_app_root)/webapp/
 	 * 
 	 *
 	 * @see Charcoal_ResourceLocator
@@ -317,18 +327,18 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	/**
 	 * Get framework/project/application file
 	 *
-	 * @param Charcoal_String $virtual_path          virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
-	 * @param Charcoal_Object $value                 cache data to save
+	 * @param Charcoal_String $virtual_path		  virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_Object $value				 cache data to save
 	 *
-	 * @return Charcoal_File        file object
+	 * @return Charcoal_File		file object
 	 *
 	 * [macro keyword sample]
 	 *
-	 *      macro keyword       |                return value(real path)
-	 * -------------------------|------------------------------------------------
-	 *   %APPLICATION_DIR%      | (web_app_root)/webapp/(project_name)/apps/(application name)/
-	 *   %PROJECT_DIR%          | (web_app_root)/webapp/(project_name)/
-	 *   %WEBAPP_DIR%           | (web_app_root)/webapp/
+	 *	  macro keyword	    |				return value(real path)
+	 * ---------------------|------------------------------------------------
+	 *   %APPLICATION_DIR%	| (web_app_root)/webapp/(project_name)/apps/(application name)/
+	 *   %PROJECT_DIR%		| (web_app_root)/webapp/(project_name)/
+	 *   %WEBAPP_DIR%		| (web_app_root)/webapp/
 	 * 
 	 *
 	 * @see Charcoal_ResourceLocator

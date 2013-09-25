@@ -356,7 +356,7 @@ class Charcoal_Framework
 		// タイムアウトを指定
 		if ( !ini_get('safe_mode') ){
 			$timeout = $profile->getInteger( 'SCRIPT_TIMEOUT', 600 );
-			set_time_limit( $timeout );
+			set_time_limit( $timeout->unbox() );
 		}
 
 		self::setHookStage( Charcoal_EnumCoreHookStage::AFTER_INIT_FRAMEWORK );
@@ -394,10 +394,10 @@ class Charcoal_Framework
 		}
 
 		// register framework class loader
-		if ( !spl_autoload_register('Charcoal_ClassLoader::loadClass',false,false) )
+		if ( !spl_autoload_register('Charcoal_ClassLoader::loadClass',false) )
 		{
 			log_fatal( "debug,system,error", 'framework', "registering master class loader failed." );
-			exit;
+			_throw( new Charcoal_ClassLoaderRegistrationException( 'framework' ) );
 		}
 
 		self::setHookStage( Charcoal_EnumCoreHookStage::AFTER_REG_CLASS_LOADERS );
@@ -446,14 +446,14 @@ class Charcoal_Framework
 
 		$use_session = $profile->getBoolean( 'USE_SESSION', FALSE );
 
-		if ( $use_session )
+		if ( $use_session->isTrue() )
 		{
 			self::setHookStage( Charcoal_EnumCoreHookStage::BEFORE_SET_SESSION_HANDLER );
 
 			// セッションハンドラ名の取得
 			$session_handler_name = $profile->getString( 'SESSION_HANDLER_NAME' );
 
-			if ( $session_handler_name )
+			if ( !$session_handler_name->isEmpty() )
 			{
 				// セッションハンドラの作成
 				$session_handler = $sandbox->createObject( $session_handler_name, 'session_handler', array(), 'Charcoal_ISessionHandler' );
@@ -476,7 +476,7 @@ class Charcoal_Framework
 		//
 
 		$session = NULL;
-		if ( $use_session )
+		if ( $use_session->isTrue() )
 		{
 			// create session
 			$session = new Charcoal_Session();
@@ -505,7 +505,7 @@ class Charcoal_Framework
 
 		// register routers
 		$routing_rule = NULL;
-		if ( $routing_rule_name ){
+		if ( !$routing_rule_name->isEmpty()){
 			$routing_rule = $sandbox->createObject( $routing_rule_name, 'routing_rule', array(), 'Charcoal_IRoutingRule' );
 		}
 
@@ -532,7 +532,7 @@ class Charcoal_Framework
 					$res = $router->route( $request, $routing_rule );
 					if ( $res->isTrue() ){
 						self::$proc_path = $request->getProcedurePath();
-						log_debug( "debug,system","routed: proc_path=[self::$proc_path]", 'framework' );
+						log_debug( "debug,system","routed: proc_path=[" . self::$proc_path . "]", 'framework' );
 						break;
 					}
 				}
@@ -620,7 +620,7 @@ class Charcoal_Framework
 		$response->terminate();
 
 		// セッション情報の保存
-		if ( $use_session && $session )
+		if ( $use_session->isTrue() && $session )
 		{
 			// セッションを保存
 			$session->save();
@@ -658,9 +658,9 @@ class Charcoal_Framework
 
 		try{
 			try{
-//				ob_start();
+				ob_start();
 				self::_run( $sandbox );
-//				ob_end_flush();
+				ob_end_flush();
 			}
 			catch( Charcoal_ProcedureNotFoundException $ex )
 			{
@@ -689,7 +689,7 @@ class Charcoal_Framework
 			$ret = self::handleException( $e );
 
 			// display debugtrace
-			if ( $ret === FALSE || ($ret instanceof Charcoal_Boolean) && $ret->isFalse() || $sandbox->isDebug() ){
+			if ( $ret === NULL || $ret === FALSE || ($ret instanceof Charcoal_Boolean) && $ret->isFalse() || $sandbox->isDebug() ){
 				self::renderExceptionFinally( $e );
 			}
 
