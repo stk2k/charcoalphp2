@@ -184,6 +184,8 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 					$smarty->assign( $key, $value );
 				}
 
+				$smarty->assign( '_smarty', $smarty );
+
 				// render template
 				$template = $layout->getAttribute( s('layout') );
 

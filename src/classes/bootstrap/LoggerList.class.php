@@ -120,10 +120,6 @@ class Charcoal_LoggerList extends Charcoal_Object
 			if ( isset($this->loggers[$key]) && isset($output_loggers[$key]) ){
 				$logger = $this->loggers[ $key ];
 				$logger->writeln( $msg );
-ad($this->loggers);
-ad($output_loggers);
-exit;
-
 			}
 		}
 	}
