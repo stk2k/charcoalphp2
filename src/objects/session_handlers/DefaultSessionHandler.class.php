@@ -145,7 +145,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 		{
 			while( ($file = readdir($dh)) !== FALSE )
 			{
-				$file = $$this->save_path . DIRECTORY_SEPARATOR . $file;
+				$file = $this->save_path . DIRECTORY_SEPARATOR . $file;
 				if ( filemtime($file) + $max_lifetime < time() ){
 					@unlink( $file );
 				}

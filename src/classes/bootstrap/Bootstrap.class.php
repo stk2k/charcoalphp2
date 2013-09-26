@@ -126,6 +126,7 @@ class Charcoal_Bootstrap
 				'Charcoal_IContainer'							=> 'interfaces',
 				'Charcoal_ICoreHook'							=> 'interfaces',
 				'Charcoal_IUnboxable' 							=> 'interfaces',
+				'Charcoal_IEnvironment' 						=> 'interfaces',
 
 				// traits
 				'Charcoal_ParamTrait' 							=> 'traits',
@@ -154,6 +155,7 @@ class Charcoal_Bootstrap
 				'Charcoal_CreateClassLoaderException'			=> 'exceptions',
 				'Charcoal_CreateObjectException'				=> 'exceptions',
 				'Charcoal_HashMapFormatException'				=> 'exceptions',
+				'Charcoal_IllegalRunModeException'				=> 'exceptions',
 				'Charcoal_InterfaceImplementException'			=> 'exceptions',
 				'Charcoal_InterfaceNotFoundException'			=> 'exceptions',
 				'Charcoal_FileNotFoundException' 				=> 'exceptions',
@@ -267,6 +269,12 @@ class Charcoal_Bootstrap
 				'Charcoal_AbstractContainer' 					=> 'classes/bootstrap/container',
 				'Charcoal_DIContainer' 							=> 'classes/bootstrap/container',
 				'Charcoal_AopContainer'							=> 'classes/bootstrap/container',
+
+				// environment classes
+				'Charcoal_AbstractEnvironment' 					=> 'classes/bootstrap/environment',
+				'Charcoal_ArrayEnvironment' 					=> 'classes/bootstrap/environment',
+				'Charcoal_HttpEnvironment' 						=> 'classes/bootstrap/environment',
+				'Charcoal_ShellEnvironment' 					=> 'classes/bootstrap/environment',
 
 				// utility classes
 				'Charcoal_EncodingConverter'					=> 'classes/util',

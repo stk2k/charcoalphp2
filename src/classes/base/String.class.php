@@ -11,7 +11,7 @@
 
 class Charcoal_String extends Charcoal_Primitive
 {
-	private $_value;
+	private $value;
 
 	/**
 	 *	Constructor
@@ -21,19 +21,19 @@ class Charcoal_String extends Charcoal_Primitive
 		parent::__construct();
 
 		if ( is_string($value) ){
-			$this->_value = $value;
+			$this->value = $value;
 		}
 		else if ( $value instanceof Charcoal_String ){
-			$this->_value = $value->unbox();
+			$this->value = $value->unbox();
 		}
 		else if ( $value instanceof Charcoal_Object ){
-			$this->_value = $value->toString();
+			$this->value = $value->toString();
 		}
 		else if ( is_scalar($value) ){
-			$this->_value = strval($value);
+			$this->value = strval($value);
 		}
 		else if ( $value === NULL ){
-			$this->_value = '';
+			$this->value = '';
 		}
 		else{
 			_throw( new Charcoal_NonStringException( $value ) );
@@ -45,7 +45,7 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function unbox()
 	{
-		return $this->_value;
+		return $this->value;
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function getValue()
 	{
-		return $this->_value;
+		return $this->value;
 	}
 
 	/**
@@ -65,29 +65,20 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function length()
 	{
-		return $this->_value && is_string($this->_value) ? strlen($this->_value) : -1;
-	}
-
-	/**
-	 *	append another string
-	 *
-	 * @param Charcoal_String $add     string to add
-	 *
-	 * @return Charcoal_String         combined string
-	 */
-	public function append( Charcoal_String $add )
-	{
-		return new Charcoal_String( $this->_value . $add->_value );
+		return strlen($this->value);
 	}
 
 	/**
 	 *	split by delimiter
 	 *
-	 * @param Charcoal_String $delimiter      delimiter string
+	 * @param string $delimiter        delimiter string
+	 *
+	 * @return Charcoal_Vector         separated strings
 	 */
 	public function split( $delimiter )
 	{
-		return explode( $delimiter, $this->_value );
+		$strings = explode( us($delimiter), $this->value );
+		return v($strings);
 	}
 
 	/**
@@ -97,9 +88,9 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function splitRegEx( $regex )
 	{
-		$string = $this->_value;
+		$string = $this->value;
 		$matches = array();
-		$split_word_list = NULL;
+		$split_word_list = array();
 
 		if ( $cnt = preg_match_all( $regex, $string, $matches, PREG_OFFSET_CAPTURE ) ){
 			$start_pos = 0;
@@ -116,7 +107,7 @@ class Charcoal_String extends Charcoal_Primitive
 			}
 		}
 
-		return $split_word_list;
+		return v($split_word_list);
 	}
 
 	/**
@@ -126,10 +117,10 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function equals( Charcoal_Object $obj )
 	{
-		$str1 = $this->_value;
+		$str1 = $this->value;
 
 		if ( $obj instanceof Charcoal_String ){
-			$str2 = $obj->_value;
+			$str2 = $obj->value;
 		}
 		else if ( is_string($obj) ){
 			$str2 = $obj;
@@ -148,42 +139,75 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function isEmpty()
 	{
-		if ( !$this->_value ){
+		if ( !$this->value ){
 			return TRUE;
 		}
-		if ( is_string($this->_value) ){
-			return strlen($this->_value) === 0;
+		if ( is_string($this->value) ){
+			return strlen($this->value) === 0;
 		}
 		return TRUE;
 	}
 
 	/**
+	 *	append another string
+	 *
+	 * @param string $add     string to add
+	 *
+	 * @return Charcoal_String         this object
+	 */
+	public function append( $add )
+	{
+		$this->value .= us($add);
+		return $this;
+	}
+
+	/**
 	 *	covert this string to upper case
 	 *
+	 * @return Charcoal_String         this object
 	 */
 	public function toUpper()
 	{
-		return $this->_value ? strtoupper($this->_value) : NULL;
+		$this->value = strtoupper( $this->value );
+		return $this;
 	}
 
 	/**
 	 *	covert this string to lower case
 	 *
+	 * @return Charcoal_String         this object
 	 */
 	public function toLower()
 	{
-		return $this->_value ? strtolower($this->_value) : NULL;
+		$this->value = strtolower( $this->value );
+		return $this;
 	}
 
 	/**
-	 *	erase white spaces within this object
+	 *	erase white spaces(or specified characters) within this object
 	 *
+	 * @param array $charlist          trim target character set
+	 *
+	 * @return Charcoal_String         this object
 	 */
-	public function trim(String $charlist = NULL)
+	public function trim( $charlist = NULL )
 	{
-		$s = $this->_value;
-		$s = $charlist ?  trim($s,us($charlist)) : trim($s);
-		return s($s);
+		$this->value = $charlist ?  trim( $this->value, us($charlist) ) : trim( $this->value );
+		return $this;
+	}
+
+	/**
+	 *	replace some keyword into specified string
+	 *
+	 * @param string $search          The value being searched for
+	 * @param string $replace         The replacement value that replaces found search values.
+	 *
+	 * @return Charcoal_String         this object
+	 */
+	public function replace( $search, $replace )
+	{
+		$this->value = str_replace( $search, $replace, $this->value );
+		return $this;
 	}
 
 	/*
@@ -193,7 +217,7 @@ class Charcoal_String extends Charcoal_Primitive
 	 */
 	public function toString()
 	{
-		return $this->_value;
+		return $this->value;
 	}
 }
 

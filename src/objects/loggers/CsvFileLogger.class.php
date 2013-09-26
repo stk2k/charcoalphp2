@@ -74,8 +74,8 @@ class Charcoal_CsvFileLogger extends Charcoal_FileLogger implements Charcoal_ILo
 	 */
 	public function writeln( Charcoal_LogMessage $msg )
 	{
-		$req_path= Charcoal_Framework::getRequest()->getProcedurePath();
-		$req_id  = Charcoal_Framework::getRequestID();
+		$req_path= $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
+		$req_id  = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
 		$ip      = $_SERVER['REMOTE_ADDR'];
 		$level   = $msg->getLevel();
 		$message = $msg->getMessage();

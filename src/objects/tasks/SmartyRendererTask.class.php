@@ -171,8 +171,8 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				$charcoal['sequence'] = $sequence;
 
 				// Request ID and reauest path
-				$charcoal['request']['id']   = Charcoal_Framework::getRequestID();
-				$charcoal['request']['path'] = Charcoal_Framework::getRequestPath();
+				$charcoal['request']['id']   = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
+				$charcoal['request']['path'] = $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
 
 				// Assign all
 				$smarty->assign( 'charcoal', $charcoal );

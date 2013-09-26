@@ -11,9 +11,8 @@
 
 class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 {
-	private $_log_format;
-	private $_converter;
-	private $_value_cache;
+	private $log_format;
+	private $converter;
 
 	const DEFAULT_LOG_FORMAT = '%Y4%-%M2%-%D2% %H2%:%M%:%S% [%REMOTE_ADDR%] [%LEVEL%] [%TAG%] %MESSAGE%       @%FILENAME%(%LINE%)';
 
@@ -35,29 +34,10 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	{
 		parent::configure( $config );
 
-		$this->_log_format   = $config->getString( s('log_format'), s(self::DEFAULT_LOG_FORMAT) );
+		$this->log_format   = $config->getString( 'log_format', self::DEFAULT_LOG_FORMAT );
 
-		$this->_converter = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'LOG' );
+		$this->converter = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'LOG' );
 
-		$now_time = time();
-
-		$this->_value_cache = array(
-				'%Y4%' => date("Y",$now_time),
-				'%Y2%' => date("y",$now_time),
-				'%M2%' => date("m",$now_time),
-				'%M1%' => date("n",$now_time),
-				'%D2%' => date("d",$now_time),
-				'%D1%' => date("j",$now_time),
-				'%H2%' => date("H",$now_time),
-				'%H1%' => date("G",$now_time),
-				'%h2%' => date("h",$now_time),
-				'%h1%' => date("g",$now_time),
-				'%M%'  => date("i",$now_time),
-				'%S%'  => date("s",$now_time),
-				'%REMOTE_ADDR%' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : NULL,
-				'%REQUEST_ID%' => Charcoal_Framework::getRequestID(),
-				'%REQUEST_PATH%' => Charcoal_Framework::getRequestPath(),
-			);
 	}
 
 
@@ -87,7 +67,7 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	 */
 	public function convertEncoding( Charcoal_String $message )
 	{
-		return $this->_converter->convert( s($message) );
+		return $this->converter->convert( s($message) );
 	}
 
 	/**
@@ -111,8 +91,14 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 		// Get now time
 		$now_time = time();
 
-		// formatted date values
-		$formatted_values = array(
+		// set log format string as initial value
+		$out = $this->log_format;
+
+		// replace environment values
+		$out = $this->getSandbox()->getEnvironment()->replace( $out );
+
+		// logging context specific values
+		$log_values = array(
 				'%LEVEL%' => $level,
 				'%TAG%' => $tag,
 				'%MESSAGE%' => $message,
@@ -121,14 +107,8 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 				'%LINE%' => $line,
 			);
 
-		// merge values
-		$formatted_values = array_merge( $formatted_values, $this->_value_cache );
-
-		// set log format string as initial value
-		$out = $this->_log_format;
-
 		// replace keyword
-		foreach( $formatted_values as $key => $value ){
+		foreach( $log_values as $key => $value ){
 			$out = str_replace( $key, $value, $out );
 		}
 
@@ -142,15 +122,11 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	{
 		Charcoal_ParamTrait::checkString( 1, $file_name );
 
-		$out = us($file_name);
+		$file_name = us($file_name);
 
-		// replace keyword
-		foreach( $this->_value_cache as $key => $value ){
-			$value = str_replace( ':', '_', $value );
-			$out = str_replace( $key, $value, $out );
-		}
+		$file_name = $this->getSandbox()->getEnvironment()->replace( $file_name )->replace( ':', '_' );
 
-		return $out;
+		return $file_name;
 	}
 
 }

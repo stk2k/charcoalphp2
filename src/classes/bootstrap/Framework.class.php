@@ -223,14 +223,6 @@ class Charcoal_Framework
 		return self::$proc_path;
 	}
 
-	/*
-	 *	リクエストIDを取得
-	 */
-	public static function getRequestID()
-	{
-		return self::$request ? self::$request->getRequestID() : NULL;
-	}
-
 	/**
 	 * execute exception handlers
 	 * 
@@ -418,6 +410,8 @@ class Charcoal_Framework
 		if ( strlen(self::$proc_path) === 0 ){
 			self::$proc_path = $profile->getString( 'DEFAULT_PROCPATH' );
 		}
+
+		$sandbox->getEnvironment()->set( '%REQUEST_PATH%', self::$proc_path );
 
 		//=======================================
 		// 外部ライブラリの使用

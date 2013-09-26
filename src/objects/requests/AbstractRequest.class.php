@@ -11,7 +11,30 @@
 
 abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implements Charcoal_IRequest
 {
-	private $values;
+	protected $values;
+	protected $proc_key;
+
+	/**
+	 * Initialize instance
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function configure( $config )
+	{
+		parent::configure( $config );
+
+		$this->proc_key  = $this->getSandbox()->getProfile()->getString( 'PROC_KEY', 'proc' );
+	}
+
+	/*
+	 *  Retrieve the procedure path
+	 *
+	 * @return string     procedure path
+	 */
+	public function getProcedurePath()
+	{
+		return $this->getString( us($this->proc_key) );
+	}
 
 	/**
 	 *	Applies a callback to all elements

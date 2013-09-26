@@ -11,7 +11,7 @@
 
 class Charcoal_InvalidMailAddressException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $address, $prev = NULL )
+	public function __construct( $address, $prev = NULL )
 	{
 		parent::__construct( "Invalid Mail Address: address=$address", $prev );
 	}

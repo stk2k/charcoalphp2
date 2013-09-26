@@ -44,7 +44,7 @@ class Charcoal_LogMessage extends Charcoal_Object
 		$this->tag           = $tag;
 		$this->file          = $file;
 		$this->line          = $line;
-		$this->logger_names  = $logger_names;
+		$this->logger_names  = v($logger_names);
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Charcoal_LogMessage extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return "[{$this->level}]{$this->message}@{$this->file}({$this->line})";
+		return "[$this->logger_names][{$this->tag}][{$this->level}]{$this->message}@{$this->file}({$this->line})";
 	}
 }
 

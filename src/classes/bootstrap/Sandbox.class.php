@@ -19,6 +19,8 @@ class Charcoal_Sandbox
 	private $registry;
 	private $codebase;
 	private $container;
+	private $environment;
+
 	private $profile;
 	private $debug;
 	private $loaded;
@@ -41,7 +43,26 @@ class Charcoal_Sandbox
 		$this->registry = isset($config['registry'])? $config['registry'] : new Charcoal_FileSystemRegistry( $this );
 		$this->codebase = isset($config['codebase'])? $config['codebase'] : new Charcoal_PlainCodebase( $this );
 		$this->container = isset($config['container'])? $config['container'] : new Charcoal_DIContainer( $this );
+		$this->environment = isset($config['environment'])? $config['environment'] : $this->getDefaultEnvironment();
+
 		$this->profile = isset($config['profile'])? $config['profile'] : new Charcoal_SandboxProfile( $this );
+	}
+
+	/**
+	 * get proper environment for current run mode
+	 * 
+	 * @return Charcoal_IEnvironment         environment object
+	 */
+	private function getDefaultEnvironment()
+	{
+		switch( CHARCOAL_RUNMODE ){
+		case 'http':
+			return new Charcoal_HttpEnvironment();
+		case 'shell':
+			return new Charcoal_ShellEnvironment();
+		}
+
+		_throw( new Charcoal_IllegalRunModeException( CHARCOAL_RUNMODE ) );
 	}
 
 	/**
@@ -105,6 +126,16 @@ class Charcoal_Sandbox
 	public function getContainer()
 	{
 		return $this->container;
+	}
+
+	/**
+	 * get environment
+	 * 
+	 * @return Charcoal_IEnvironment         environment object
+	 */
+	public function getEnvironment()
+	{
+		return $this->environment;
 	}
 
 	/**

@@ -11,10 +11,7 @@
 
 class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 {
-	private $_proc_path;
-	private $_id;
-	private $_cookie;
-	private $_proc_key;
+	private $cookie;
 
 	/*
 	 *	コンストラクタ
@@ -34,10 +31,6 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 		}
 
 		$this->values = array_merge( $get, $post );
-
-		// リクエストID
-		$this->_id = Charcoal_System::hash();
-
 	}
 
 	/**
@@ -51,11 +44,7 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 
 		// use cookie
 		$use_cookie  = $this->getSandbox()->getProfile()->getString( 'USE_COOKIE', FALSE );
-		$this->_cookie = $use_cookie ? new Charcoal_CookieReader() : NULL;
-
-		// プロシージャキー
-		$this->_proc_key  = $this->getSandbox()->getProfile()->getString( 'PROC_KEY', 'proc' );
-
+		$this->cookie = $use_cookie ? new Charcoal_CookieReader() : NULL;
 	}
 
 	/*
@@ -65,54 +54,40 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 	 */
 	public function getCookies()
 	{
-		return $this->_cookie->toArray();
+		return $this->cookie->toArray();
 	}
 
 	/*
 	 *  Get cookie value
 	 *
-	 * @param Charcoal_String $name   cookie name to get
+	 * @param string $name   cookie name to get
 	 *
 	 * @return Charcoal_String
 	 */
-	public function getCookie( Charcoal_String $name )
+	public function getCookie( $name )
 	{
-		return $this->_cookie->getValue( $name );
+		$name = us($name);
+		return $this->cookie->getValue( $name );
 	}
 
 	/*
 	 *  Set cookie value
 	 *
-	 * @param Charcoal_String $name   cookie name to set
-	 * @param Charcoal_String $value   cookie value to set
+	 * @param string $name     cookie name to set
+	 * @param string $value   cookie value to set
 	 *
 	 * @return Charcoal_String
 	 */
-	public function setCookie( Charcoal_String $name, Charcoal_String $value )
+	public function setCookie( $name, $value )
 	{
-		$this->_cookie->setValue( $name, $value );
-	}
-
-	/*
-	 *    プロシージャパスを取得
-	 */
-	public function getProcedurePath()
-	{
-		return $this->getString( $this->_proc_key );
-	}
-
-	/*
-	 * リクエストIDを取得
-	 */
-	public function getRequestID()
-	{
-		return $this->_id;
+		$name = us($name);
+		$this->cookie->setValue( $name, $value );
 	}
 
 	/*
 	 *    アップロードファイルを取得
 	 */
-	public function getFile( Charcoal_String $userfile )
+	public function getFile( $userfile )
 	{
 		return new Charcoal_UploadedFile( $userfile );
 	}

@@ -11,9 +11,6 @@
 
 class Charcoal_ShellRequest extends Charcoal_AbstractRequest
 {
-	private $_proc_path;
-	private $_id;
-
 	/*
 	 *    コンストラクタ
 	 */
@@ -22,11 +19,7 @@ class Charcoal_ShellRequest extends Charcoal_AbstractRequest
 		parent::__construct();
 
 		$argv = $_SERVER[ 'argv' ];
-		$this->_values  = Charcoal_CommandLineUtil::parseParams( $argv );
-
-		log_debug( "debug", "argv:" . print_r($this->_data,true) );
-
-		$this->_id = strval(microtime(TRUE));
+		$this->values  = Charcoal_CommandLineUtil::parseParams( $argv );
 	}
 
 	/**
@@ -37,39 +30,6 @@ class Charcoal_ShellRequest extends Charcoal_AbstractRequest
 	public function configure( $config )
 	{
 		parent::configure( $config );
-
-		// プロシージャキー
-		$proc_key  = $this->getSandbox()->getProfile()->getString( 'PROC_KEY', 'proc' );
-
-		$obj_path = $this->get( $proc_key );
-
-		$this->_proc_path = new Charcoal_ObjectPath( $obj_path );
-
 	}
-
-	/*
-	 *    プロシージャパスを取得
-	 */
-	public function getProcedurePath()
-	{
-		return $this->_proc_path;
-	}
-
-	/*
-	 * リクエストIDを取得
-	 */
-	public function getRequestID()
-	{
-		return $this->_id;
-	}
-
-	/*
-	 *    URLを取得
-	 */
-	public function getURL()
-	{
-		return $this->_url;
-	}
-
 }
 

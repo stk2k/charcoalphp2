@@ -6,8 +6,8 @@
 define( 'PROC_KEYWORD', 'proc' );
 define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
 define( 'CHARCOAPHP_VERSION_MINOR', 21 );
-define( 'CHARCOAPHP_VERSION_REVISION', 1 );
-define( 'CHARCOAPHP_VERSION_BUILD', 154 );
+define( 'CHARCOAPHP_VERSION_REVISION', 2 );
+define( 'CHARCOAPHP_VERSION_BUILD', 155 );
 define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
 define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
  

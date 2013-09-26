@@ -15,10 +15,5 @@ interface Charcoal_IRequest extends Charcoal_ICharcoalObject, Charcoal_IProperti
 	 */
 	public function getProcedurePath();
 
-	/*
-	 *    リクエストIDを取得
-	 */
-	public function getRequestID();
-
 }
 

@@ -46,7 +46,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL, $process_macro = TRUE )
+	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
@@ -66,7 +66,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 *
 	 * @return array
 	 */
-	public function getArray( $key, $default_value = NULL, $process_macro = TRUE )
+	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 
