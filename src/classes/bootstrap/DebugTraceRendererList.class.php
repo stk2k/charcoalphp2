@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.bootstrap
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -19,7 +19,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -33,7 +33,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 */
 	public function add( $renderer )
 	{
-		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IDebugtraceRenderer', $renderer );
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IDebugtraceRenderer', $renderer );
 
 		$this->renderers[] = $renderer;
 	}
@@ -45,7 +45,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 */
 	public function render( Exception $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+//		Charcoal_ParamTrait::checkException( 1, $e );
 
 		if ( !$this->renderers ){
 			$this->renderers = array();
@@ -74,7 +74,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 		$result = b(FALSE);
 		foreach( $this->renderers as $renderer ){
 			$ret = $renderer->render( $e );
-			if ( $ret && $ret instanceof Charcoal_Boolean && $ret->isTrue() ){
+			if ( $ret === TRUE || $ret instanceof Charcoal_Boolean && $ret->isTrue() ){
 				$result = b(TRUE);
 			}
 		}

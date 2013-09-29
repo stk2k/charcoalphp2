@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    components.charcoal.file
+* @package    components.charcoal.form
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */

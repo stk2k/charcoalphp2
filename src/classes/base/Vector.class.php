@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    base
+* @package    classes.base
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -174,16 +174,18 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 		return $new_array_cnt;
 	}
 
-	/*
-	 *	最後尾に配列を追加
+	/**
+	 *  Add array data
+	 *  
+	 *  @param array $items        array data to add
 	 */
-	public function addAll( Charcoal_Vector $items )
+	public function addAll( $items )
 	{
+//		Charcoal_ParamTrait::checkVector( 1, $items );
+
 		foreach( $items as $item ){
 			array_push( $this->values, $item );
 		}
-
-		return count($this->values);
 	}
 
 	/*

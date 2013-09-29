@@ -24,9 +24,9 @@ class PostTableModel extends Charcoal_DefaultTableModel
     public $favorite           = '@field @type:int(11) @insert:value @update:value';
 
 	// returns model's own DTO
-    public function createDTO()
+    public function createDTO( $values = array() )
     {
-        return new PostTableDTO();
+        return new PostTableDTO( $values );
     }
 }
 

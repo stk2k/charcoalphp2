@@ -112,9 +112,9 @@ class ModelGenerateTask extends Charcoal_Task
 
 		$lines[] = "";
 		$lines[] = "\t// returns model's own DTO";
-		$lines[] = "    public function createDTO()";
+		$lines[] = "    public function createDTO( $values = array() )";
 		$lines[] = "    {";
-		$lines[] = "        return new {$table_dto_class_name}();";
+		$lines[] = "        return new {$table_dto_class_name}( $values );";
 		$lines[] = "    }";
 		$lines[] = "}";
 		$lines[] = "";

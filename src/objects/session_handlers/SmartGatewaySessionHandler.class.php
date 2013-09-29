@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    session_handlers
+* @package    objects.session_handlers
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -35,7 +35,7 @@ class Charcoal_SmartGatewaySessionHandler extends Charcoal_AbstractSessionHandle
 
 		$this->target = $config->getString( s('target'), s('session') );
 
-		$this->gw = Charcoal_DIContainer::getComponent( s('smart_gateway@:charcoal:db') );
+		$this->gw = $this->getSandbox()->getComponent( 'smart_gateway@:charcoal:db' );
 	}
 
 	/**

@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @version    0.1
+* @package    exceptions
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 * @license    http://www.opensource.org/licenses/mit-license.php MIT License

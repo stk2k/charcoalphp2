@@ -17,7 +17,7 @@ class Charcoal_CreateObjectException extends Charcoal_RuntimeException
 	{
 		$this->obj_path = $obj_path;
 
-		parent::__construct( "Creating Charcoal Object Failed. [obj_path]$obj_path [type_name]$type_name", $prev );
+		parent::__construct( "Failed to create object: obj_path=[$obj_path] type_name=[$type_name]", $prev );
 	}
 
 	/**

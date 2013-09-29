@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.core
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -18,7 +18,7 @@ class Charcoal_Layout extends Charcoal_Object
 	 */
 	public function __construct( $attributes )
 	{
-		Charcoal_ParamTrait::checkProperties( 1, $attributes );
+//		Charcoal_ParamTrait::checkProperties( 1, $attributes );
 
 		parent::__construct();
 

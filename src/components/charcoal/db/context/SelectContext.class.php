@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    components.db
+* @package    components.charcoal.db.context
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -26,8 +26,11 @@ class Charcoal_SelectContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_FromContext    from context
 	 */
-	public function from( Charcoal_String $model_name, Charcoal_String $alias = NULL )
+	public function from( $model_name, $alias = NULL )
 	{
+		Charcoal_ParamTrait::checkString( 1, $model_name );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+
 		$query_target = new Charcoal_QueryTarget( $model_name );
 
 		if ( $alias ){

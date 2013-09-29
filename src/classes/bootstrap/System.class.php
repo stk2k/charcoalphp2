@@ -4,15 +4,46 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.bootstrap
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
 class Charcoal_System
 {
+	/** length of output in string conversion methods */
 	const TOSTRING_MAX_LENGTH 	= 9999;
+
+	/** length of output in dump methods */
 	const DUMP_MAX_LENGTH 		= 4096;
+
+	/** Used at isBitSet(), means test if any of bit field is set */
+	const BITTEST_MODE_ALL = 1;
+
+	/** Used at isBitSet(), means test if any of bit field is set */
+	const BITTEST_MODE_ANY = 2;
+
+	/**
+	 *  Test if specified bit flag is set
+	 *  
+	 *  @param int $target              target value to test
+	 *  @param int $flag                target flag to test
+	 *  @param int $mode                test mode(see BITTEST_MODE_XXX constants)
+	 */
+	public static function isBitSet( $target, $flag, $mode = self::BITTEST_MODE_ALL )
+	{
+//		Charcoal_ParamTrait::checkInteger( 1, $target );
+//		Charcoal_ParamTrait::checkInteger( 2, $flag );
+//		Charcoal_ParamTrait::checkInteger( 3, $mode );
+
+		switch( ui($mode) ){
+		case self::BITTEST_MODE_ALL:
+			return ($target & $flag) === $flag;
+			break;
+		case self::BITTEST_MODE_ANY:
+			return ($target & $flag) != 0;
+		}
+	}
 
 	/*
 	 *  exit with output of caller information
@@ -31,6 +62,8 @@ class Charcoal_System
 	 */
 	public static function phpErrorString( $errno )
 	{
+//		Charcoal_ParamTrait::checkInteger( 1, $errno );
+		
 		$errors = array(
 			E_ERROR                => "E_ERROR",
 			E_WARNING              => "E_WARNING",
@@ -48,7 +81,14 @@ class Charcoal_System
 			E_USER_DEPRECATED      => "E_USER_DEPRECATED",
 		);
 
-		return isset($errors[$errno]) ? $errors[$errno] : '';
+		$errors_desc = array();
+		foreach( $errors as $key => $value ){
+			if ( self::isBitSet($errno,$key) ){
+				$errors_desc[] = $value;
+			}
+		}
+
+		return implode( "|", $errors_desc );
 	}
 
 	/*
@@ -426,7 +466,7 @@ class Charcoal_System
 				$ret = '';
 				foreach( $value as $k => $v ){
 					if ( strlen($ret) > 0 )		$ret .= '/';
-					$ret .= "$k=$v";
+					$ret .= "$k=" . self::toString( $v );
 					if ( $with_type ){
 						$ret .= '(' . gettype($v) . ')';
 					}

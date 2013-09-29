@@ -33,6 +33,6 @@ interface Charcoal_IModel extends Charcoal_ICharcoalObject
 	/*
 	 *   モデル固有のDTOを作成
 	 */
-	public function createDTO();
+	public function createDTO( $values = array() );
 }
 

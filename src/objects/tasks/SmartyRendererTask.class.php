@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    renderers
+* @package    objects.tasks
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -41,26 +41,13 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 		$this->smarty->compile_dir 			= $config->getString( 'compile_dir', '', TRUE )->unbox();
 		$this->smarty->config_dir 			= $config->getString( 'config_dir', '', TRUE )->unbox();
 		$this->smarty->cache_dir 			= $config->getString( 'cache_dir', '', TRUE )->unbox();
+		$this->smarty->left_delimiter 		= $config->getString( 'left_delimiter', '{', FALSE )->unbox();
+		$this->smarty->right_delimiter 		= $config->getString( 'right_delimiter', '}', FALSE )->unbox();
 //		$this->smarty->default_modifiers 	= $config->getArray( s('default_modifiers'), v(array()) )->unbox();
 
 		$plugins_dir = $config->getArray( 'plugins_dir', array(), TRUE )->unbox();
 
-		if ( $plugins_dir === NULL || count($plugins_dir) === 0 ){
-			$this->smarty->plugins_dir	= 'plugins';
-		}
-		else{
-			
-			$this->smarty->plugins_dir	= $plugins_dir;
-		}
-
-		$left_delimiter = $config->getString( 'left_delimiter', '{' )->unbox();
-		if ( $left_delimiter ){
-			$this->smarty->left_delimiter 	= $left_delimiter;
-		}
-		$right_delimiter = $config->getString( 'right_delimiter', '}' )->unbox();
-		if ( !$right_delimiter ){
-			$this->smarty->right_delimiter = $right_delimiter;
-		}
+		$this->smarty->plugins_dir	= empty($plugins_dir) ? 'plugins' : $plugins_dir;
 
 		if ( $this->getSandbox()->isDebug() )
 		{
@@ -110,11 +97,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 //		log_info( "smarty", "config_dir=" . $this->smarty->config_dir );
 //		log_info( "smarty", "cache_dir=" . $this->smarty->cache_dir );
 
-		$flags = E_ALL & ~E_STRICT & ~E_WARNING;
-		if ( defined('E_DEPRECATED') ){
-			$flags = $flags & ~E_DEPRECATED;
-		}
-		$error_flags = error_reporting($flags);
+		$error_handler_old = NULL;
 
 		try{
 			$charcoal = array();
@@ -189,6 +172,17 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				// render template
 				$template = $layout->getAttribute( s('layout') );
 
+				// set smarty error_reporting flags
+				$this->smarty->error_reporting = E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE;
+				if ( defined('E_DEPRECATED') ){
+					// E_DEPRECATED is defined upper PHP5.3
+					$this->smarty->error_reporting &= ~E_DEPRECATED;
+				}
+
+				// rewrite error handler
+				$error_handler_old = set_error_handler( array($this,"onUnhandledError") );
+
+				// compile and output template
 				log_info( "smarty","template=$template" );
 				$html = $smarty->fetch( $template );
 				log_info( "smarty","html=$html" );
@@ -203,9 +197,26 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 			_throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
 		}
 
-		error_reporting( $error_flags );
+		if ( $error_handler_old ){
+			set_error_handler( $error_handler_old );			
+		}
 
 		return b(TRUE);
 	}
+
+	/*
+	 *	smarty error handler
+	 */
+	public static function onUnhandledError( $errno, $errstr, $errfile, $errline )
+	{ 
+		$flags_handled = error_reporting() ;
+		if ( Charcoal_System::isBitSet( $errno, $flags_handled, Charcoal_System::BITTEST_MODE_ANY ) )
+		{
+			$errno_disp = Charcoal_System::phpErrorString( $errno );
+			echo "smarty error [errno]$errno($errno_disp) [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
+		}
+		return TRUE;	// Otherwise, ignore all errors
+	}
+
 }
 

@@ -26,7 +26,7 @@ class ConfigPropertySetTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( $action )
+	public function setUp( $action, $context )
 	{
 		$temp_dir = Charcoal_ResourceLocator::getApplicationPath( 'tmp' );
 
@@ -58,7 +58,7 @@ INI_FILE;
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( $action )
+	public function cleanUp( $action, $context )
 	{
 		switch( $action ){
 		case "get_section":

@@ -46,7 +46,7 @@ class CookieTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		// cookie component
-		$cookie = Charcoal_DIContainer::getComponent( s('cookie@:charcoal:http') );
+		$cookie = $context->getComponent( s('cookie@:charcoal:http') );
 
 		switch( $action ){
 		case "test1":

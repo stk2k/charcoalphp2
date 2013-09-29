@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.bootstrap.container
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */

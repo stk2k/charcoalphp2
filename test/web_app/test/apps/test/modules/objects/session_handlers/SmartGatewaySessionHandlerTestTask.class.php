@@ -35,12 +35,12 @@ class SmartGatewaySessionHandlerTestTask extends Charcoal_TestTask
 	/**
 	 * セットアップ
 	 */
-	public function setUp( $action )
+	public function setUp( $action, $context )
 	{
 		$action = us($action);
 
 		// SmartGateway
-		$this->gw = Charcoal_DIContainer::getComponent( s('smart_gateway@:charcoal:db') );
+		$this->gw = $context->getComponent( s('smart_gateway@:charcoal:db') );
 
 		$this->handler = Charcoal_Factory::createObject( s('smart_gateway'), s('session_handler') );
 
@@ -70,7 +70,7 @@ class SmartGatewaySessionHandlerTestTask extends Charcoal_TestTask
 	/**
 	 * クリーンアップ
 	 */
-	public function cleanUp( $action )
+	public function cleanUp( $action, $context )
 	{
 		$action = us($action);
 

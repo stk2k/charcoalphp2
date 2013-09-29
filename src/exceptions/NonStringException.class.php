@@ -13,6 +13,7 @@ class Charcoal_NonStringException extends Charcoal_RuntimeException
 {
 	public function __construct( $value, $prev = NULL )
 	{
+		$value = Charcoal_System::toString( $value );
 		parent::__construct( "can't convert to string object: $value", $prev );
 	}
 

@@ -5,6 +5,10 @@ cls
 set TEST_PROC="@:test"
 set TEST_TARGET="@:classes:base"
 
+SET ACTIONS="dto_array_access"
+php shell.php -proc %TEST_PROC% -p1 %TEST_TARGET% -actions %ACTIONS%
+exit /b;
+
 REM Array Interface Tests
 SET ACTIONS="dto_array_access,dto_offset_get,dto_magic_get,dto_offset_set,dto_magic_set"
 php shell.php -proc %TEST_PROC% -p1 %TEST_TARGET% -actions %ACTIONS%

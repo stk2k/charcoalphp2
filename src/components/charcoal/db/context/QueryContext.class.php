@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    components.db
+* @package    components.charcoal.db.context
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -21,6 +21,8 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function __construct( Charcoal_SmartGateway $gw )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_SmartGateway', $gw );
+
 		$this->_gw = $gw;
 		$this->_criteria = new Charcoal_SQLCriteria();
 	}
@@ -44,7 +46,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	/**
 	 *  Set query target
 	 */
-	public function setQueryTarget( Charcoal_QueryTarget $query_target )
+	public function setQueryTarget( $query_target )
 	{
 		$this->_query_target = $query_target;
 	}
@@ -60,7 +62,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	/**
 	 *  Set fields
 	 */
-	public function setFields( Charcoal_Vector $fields )
+	public function setFields( $fields )
 	{
 		$this->_fields = $fields;
 	}
@@ -76,7 +78,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	/**
 	 *  Set result set
 	 */
-	public function setResultSet( Charcoal_Vector $resultset )
+	public function setResultSet( $resultset )
 	{
 		$this->_resultset = $resultset;
 	}
@@ -94,12 +96,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function count()
 	{
-		if ( $this->_fields ){
-			return $this->_gw->count( $this->_query_target->toString(), $this->_criteria, $this->_fields );
-		}
-		else{
-			return $this->_gw->count( $this->_query_target->toString(), $this->_criteria );
-		}
+		return $this->_gw->count( $this->_query_target->toString(), $this->_criteria, $this->_fields );
 	}
 
 	/**
@@ -107,12 +104,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function max()
 	{
-		if ( $this->_fields ){
-			return $this->_gw->max( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			return $this->_gw->max( $this->_query_target, $this->_criteria );
-		}
+		return $this->_gw->max( $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
@@ -120,12 +112,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function min()
 	{
-		if ( $this->_fields ){
-			return $this->_gw->min( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			return $this->_gw->min( $this->_query_target, $this->_criteria );
-		}
+		return $this->_gw->min( $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
@@ -133,12 +120,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function sum()
 	{
-		if ( $this->_fields ){
-			return $this->_gw->sum( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			return $this->_gw->sum( $this->_query_target, $this->_criteria );
-		}
+		return $this->_gw->sum( $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
@@ -146,12 +128,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function avg()
 	{
-		if ( $this->_fields ){
-			return $this->_gw->avg( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			return $this->_gw->avg( $this->_query_target, $this->_criteria );
-		}
+		return $this->_gw->avg( $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
@@ -161,12 +138,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function findFirst()
 	{
-		if ( $fields ){
-			$this->_resultset = $this->_gw->findFirst( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			$this->_resultset = $this->_gw->findFirst( $this->_query_target, $this->_criteria );
-		}
+		$this->_resultset = $this->_gw->findFirst( $this->_query_target, $this->_criteria, $this->_fields );
 
 		return new Charcoal_ResultContext( $this );
 	}
@@ -178,12 +150,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function findAll()
 	{
-		if ( $fields ){
-			$this->_resultset = $this->_gw->findAll( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			$this->_resultset = $this->_gw->findAll( $this->_query_target, $this->_criteria );
-		}
+		$this->_resultset = $this->_gw->findAll( $this->_query_target, $this->_criteria, $this->_fields );
 
 		return new Charcoal_ResultContext( $this );
 	}
@@ -195,12 +162,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function findAllForUpdate()
 	{
-		if ( $fields ){
-			$this->_resultset = $this->_gw->findAllForUpdate( $this->_query_target, $this->_criteria, $this->_fields );
-		}
-		else{
-			$this->_resultset = $this->_gw->findAllForUpdate( $this->_query_target, $this->_criteria );
-		}
+		$this->_resultset = $this->_gw->findAllForUpdate( $this->_query_target, $this->_criteria, $this->_fields );
 
 		return new Charcoal_ResultContext( $this );
 	}

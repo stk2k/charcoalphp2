@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    renderers
+* @package    objects.tasks
 * @author     stk2k <stk2k@sazysoft.com>
 * @copyright  2008 stk2k, sazysoft
 */
@@ -39,12 +39,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	/**
 	 * セットアップ
 	 */
-	public abstract function setUp( $action );
+	public abstract function setUp( $action, $context );
 
 	/**
 	 * クリーンアップ
 	 */
-	public abstract function cleanUp( $action );
+	public abstract function cleanUp( $action, $context );
 
 	/**
 	 * テスト
@@ -220,7 +220,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			print "$action" . eol();
 
 			try{
-				$this->setUp( $action );
+				$this->setUp( $action, $context );
 			}
 			catch( Exception $e ){
 				print "Test execution failed while setup:" . $e . eol();
@@ -245,7 +245,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			}
 
 			try{
-				$this->cleanUp( $action );
+				$this->cleanUp( $action, $context );
 			}
 			catch( Exception $e ){
 				print "Test execution failed while clean up:" . $e . eol();

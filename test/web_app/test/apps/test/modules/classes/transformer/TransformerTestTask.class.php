@@ -14,7 +14,7 @@ class TransformerTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( $action )
+	public function setUp( $action, $context )
 	{
 
 	}
@@ -22,7 +22,7 @@ class TransformerTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( $action )
+	public function cleanUp( $action, $context )
 	{
 	}
 

@@ -18,9 +18,9 @@ class BlogCategoryTableModel extends Charcoal_DefaultTableModel
     public $blog_category_name  = '@field @type:vachar(255) @insert:value @update:value';
 
 	// returns model's own DTO
-    public function createDTO()
+    public function createDTO( $values = array() )
     {
-        return new BlogCategoryTableDTO();
+        return new BlogCategoryTableDTO( $values );
     }
 }
 

@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    events
+* @package    objects.exception_handlers
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -36,7 +36,7 @@ class Charcoal_HttpErrorDocumentExceptionHandler extends Charcoal_AbstractExcept
 	{
 		Charcoal_ParamTrait::checkException( 1, $e );
 
-		if ( $e instanceof Charcoal_HttpException )
+		if ( $e instanceof Charcoal_HttpStatusException )
 		{
 			$status_code = $e->getStatusCode();
 

@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    base
+* @package    classes.base
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -115,7 +115,7 @@ class Charcoal_String extends Charcoal_Primitive
 	 *
 	 * @return boolean    TRUE if this object is equal to the string which is passed by argument
 	 */
-	public function equals( Charcoal_Object $obj )
+	public function equals( $object )
 	{
 		$str1 = $this->value;
 

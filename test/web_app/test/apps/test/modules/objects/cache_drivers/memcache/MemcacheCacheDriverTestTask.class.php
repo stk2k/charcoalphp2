@@ -33,7 +33,7 @@ class MemcacheCacheDriverTestTask extends Charcoal_TestTask
 	/**
 	 * セットアップ
 	 */
-	public function setUp( $action )
+	public function setUp( $action, $context )
 	{
 		$action = us($action);
 
@@ -56,7 +56,7 @@ class MemcacheCacheDriverTestTask extends Charcoal_TestTask
 	/**
 	 * クリーンアップ
 	 */
-	public function cleanUp( $action )
+	public function cleanUp( $action, $context )
 	{
 	}
 

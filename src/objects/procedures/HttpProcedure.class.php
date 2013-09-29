@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    procedures
+* @package    objects.procedures
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -37,7 +37,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 
 		$layout_manager      = $config->getString( 'layout_manager' );
 
-		if ( $layout_manager ){
+		if ( !$layout_manager->isEmpty() ){
 			$this->setLayoutManager( $layout_manager );
 		}
 
@@ -52,15 +52,17 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 			}
 		}
 
-//		log_info( "system,config", "procedure", "task_manager:" . $this->task_manager );
-//		log_info( "system,config", "procedure", "use_session:" . $this->use_session );
-//		log_info( "system,config", "procedure", "forward_target:" . $this->forward_target );
-//		log_info( "system,config", "procedure", "sequence:" . $this->sequence );
-//		log_info( "system,config", "procedure", "modules:" . $this->modules );
-//		log_info( "system,config", "procedure", "events:" . $this->events );
-//		log_info( "system,config", "procedure", "layout_manager:" . $this->layout_manager );
-//		log_info( "system,config", "procedure", "response_filters:" . print_r($this->response_filters,true) );
-
+		if ( $this->getSandbox()->isDebug() )
+		{
+			log_info( "system,config", "procedure", "task_manager:" . $this->task_manager );
+			log_info( "system,config", "procedure", "use_session:" . $this->use_session );
+			log_info( "system,config", "procedure", "forward_target:" . $this->forward_target );
+			log_info( "system,config", "procedure", "sequence:" . $this->sequence );
+			log_info( "system,config", "procedure", "modules:" . $this->modules );
+			log_info( "system,config", "procedure", "events:" . $this->events );
+			log_info( "system,config", "procedure", "layout_manager:" . $this->layout_manager );
+			log_info( "system,config", "procedure", "response_filters:" . print_r($this->response_filters,true) );
+		}
 	}
 
 	/*
@@ -76,8 +78,15 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 	 */
 	public function setLayoutManager( $layout_manager )
 	{
-		if ( $layout_manager && strlen($layout_manager) > 0 ){
+		$layout_manager = us($layout_manager);
+
+		try{
 			$this->layout_manager = $this->getSandbox()->createObject( $layout_manager, 'layout_manager' );
+		}
+		catch( Exception $e ){
+			_catch( $e );
+
+			_throw( new Charcoal_LayoutManagerCreationException( $layout_manager, $e ) );
 		}
 	}
 

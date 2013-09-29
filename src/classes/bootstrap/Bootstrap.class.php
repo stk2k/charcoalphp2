@@ -21,12 +21,17 @@
  */
 
 /**
- *
  *	class : Charcoal_Bootstrap
  *
  *	Initialize minimum set of framework funtions(class loader, logger, DI container)
- *
- */
+*
+* PHP version 5
+*
+* @package    classes.bootstrap
+* @author     CharcoalPHP Development Team
+* @copyright  2008 - 2013 CharcoalPHP Development Team
+*/
+
 class Charcoal_Bootstrap
 {
 	static $debug;
@@ -36,7 +41,8 @@ class Charcoal_Bootstrap
 	 */
 	public static function onUnhandledError( $errno, $errstr, $errfile, $errline )
 	{ 
-		if ( $errno == E_ERROR || $errno == E_PARSE || $errno == E_RECOVERABLE_ERROR || $errno == E_USER_ERROR )
+		$flags_handled = error_reporting() ;
+		if ( Charcoal_System::isBitSet( $errno, $flags_handled, Charcoal_System::BITTEST_MODE_ANY ) )
 		{
 			// create fake exception
 			$e = new Charcoal_PHPErrorException($errno, $errstr, $errfile, $errline);
@@ -47,10 +53,10 @@ class Charcoal_Bootstrap
 
 			exit;	// prevent unnecessary errors to add
 		}
-		if ( (error_reporting() & $errno) === $errno ){
+//		if ( (error_reporting() & $errno) === $errno ){
 			$errno = Charcoal_System::phpErrorString( $errno );
 			echo "[errno]$errno [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
-		}
+//		}
 		return TRUE;	// Otherwise, ignore all errors
 	}
 

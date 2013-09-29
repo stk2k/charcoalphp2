@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.bootstrap
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -22,7 +22,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -85,7 +85,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function flushMessage( $msg )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_LogMessage', $msg );
+//		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_LogMessage', $msg );
 
 		$this->init();
 
@@ -112,7 +112,6 @@ class Charcoal_LoggerList extends Charcoal_Object
 				return;
 			}
 		}
-
 
 		foreach( uv($logger_names) as $key )
 		{

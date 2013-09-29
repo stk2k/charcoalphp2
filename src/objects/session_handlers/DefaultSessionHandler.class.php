@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    session_handlers
+* @package    objects.session_handlers
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */

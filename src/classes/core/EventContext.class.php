@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package	core
+* @package    classes.core
 * @author	 CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -26,7 +26,7 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	{
 		parent::__construct();
 
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 	}

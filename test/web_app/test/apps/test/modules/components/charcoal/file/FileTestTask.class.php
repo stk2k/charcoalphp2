@@ -46,7 +46,7 @@ class FileTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		// file system component
-		$fs = Charcoal_DIContainer::getComponent( s('file_system@:charcoal:file') );
+		$fs = $context->getComponent( s('file_system@:charcoal:file') );
 
 		switch( $action ){
 		case "create_dir":

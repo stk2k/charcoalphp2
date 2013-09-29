@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.util
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -31,7 +31,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public static function fromString( $sandbox, $from, $to )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 //		Charcoal_ParamTrait::checkString( 2, $from );
 //		Charcoal_ParamTrait::checkString( 3, $to );
 
@@ -60,7 +60,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function convertArray( $ary )
 	{
-		Charcoal_ParamTrait::checkVector( 1, $ary );
+//		Charcoal_ParamTrait::checkVector( 1, $ary );
 
 		$from = us($this->from);
 		$to   = us($this->to);

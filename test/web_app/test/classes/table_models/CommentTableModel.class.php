@@ -23,9 +23,9 @@ class CommentTableModel extends Charcoal_DefaultTableModel
     public $comment_user    = '@field @type:vachar(255) @insert:value @update:value';
 
 	// returns model's own DTO
-    public function createDTO()
+    public function createDTO( $values = array() )
     {
-        return new CommentTableDTO();
+        return new CommentTableDTO( $values );
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* リクエストを定義するインタフェース
+* interface of request object
 *
 * PHP version 5
 *
@@ -8,10 +8,10 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-interface Charcoal_IRequest extends Charcoal_ICharcoalObject, Charcoal_IProperties
+interface Charcoal_IRequest extends Charcoal_ICharcoalObject
 {
-	/*
-	 *    プロシージャパスを取得
+	/**
+	 *  Retrieve current procedure path
 	 */
 	public function getProcedurePath();
 

@@ -36,7 +36,7 @@ class FormTokenTestTask extends Charcoal_TestTask
 		$sequence  = new Charcoal_SequenceHolder( new Charcoal_Sequence(), new Charcoal_Sequence() );
 
 		// form token component
-		$form_token = Charcoal_DIContainer::getComponent( s('form_token@:charcoal:form') );
+		$form_token = $context->getComponent( s('form_token@:charcoal:form') );
 
 		$config = new Charcoal_Config();
 

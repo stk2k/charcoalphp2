@@ -36,7 +36,7 @@ class QdmailTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		// Qdmail
-		$qdmail = Charcoal_DIContainer::getComponent( s('qdmail@:qdmail') );
+		$qdmail = $context->getComponent( s('qdmail@:qdmail') );
 
 		$config = new Charcoal_Config();
 

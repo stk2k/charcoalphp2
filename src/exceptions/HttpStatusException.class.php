@@ -9,15 +9,15 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_HttpException extends Charcoal_RuntimeException
+class Charcoal_HttpStatusException extends Charcoal_RuntimeException
 {
-	private $status_code;
+	private $status;
 
-	public function __construct( $status_code, $prev = NULL )
+	public function __construct( $status, $prev = NULL )
 	{
-		$this->status_code = $status_code;
+		$this->status = $status;
 
-		parent::__construct( "[status_code]$status_code", $prev );
+		parent::__construct( "HTTP status error: status=[$status]", $prev );
 	}
 
 	/**
@@ -25,7 +25,7 @@ class Charcoal_HttpException extends Charcoal_RuntimeException
 	 */
 	function getStatusCode()
 	{
-		return $this->status_code;
+		return $this->status;
 	}
 }
 

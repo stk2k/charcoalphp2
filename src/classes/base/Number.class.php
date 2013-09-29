@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    base
+* @package    classes.base
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -61,7 +61,7 @@ class Charcoal_Number extends Charcoal_Primitive
 	/*
 	 *	一致
 	 */
-	public function equals( Charcoal_Object $object )
+	public function equals( $object )
 	{
 		if ( $object instanceof Charcoal_Number ){
 			return $this->_value == $object->_value;

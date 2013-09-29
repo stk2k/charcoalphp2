@@ -28,14 +28,14 @@ class RegExFileFilterTestTask extends Charcoal_TestTask
 	/**
 	 * setup test
 	 */
-	public function setUp( $action )
+	public function setUp( $action, $context )
 	{
 	}
 
 	/**
 	 * clean up test
 	 */
-	public function cleanUp( $action )
+	public function cleanUp( $action, $context )
 	{
 	}
 

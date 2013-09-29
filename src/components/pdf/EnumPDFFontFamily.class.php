@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    renderers
+* @package    components.pdf
 * @author     stk2k <stk2k@sazysoft.com>
 * @copyright  2008 stk2k, sazysoft
 */

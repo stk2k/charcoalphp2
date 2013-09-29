@@ -56,12 +56,12 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 	/**
 	 * セットアップ
 	 */
-	public function setUp( $action )
+	public function setUp( $action, $context )
 	{
 		$action = us($action);
 
 		// SmartGateway
-		$this->gw = Charcoal_DIContainer::getComponent( s('smart_gateway@:charcoal:db') );
+		$this->gw = $context->getComponent( s('smart_gateway@:charcoal:db') );
 
 		$this->gw->autoCommit( b(TRUE) );
 		$this->gw->execute( s("TRUNCATE blogs") );
@@ -133,7 +133,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 	/**
 	 * クリーンアップ
 	 */
-	public function cleanUp( $action )
+	public function cleanUp( $action, $context )
 	{
 	}
 
@@ -145,14 +145,14 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 	{
 		$action = us($action);
 
-		$this->gw = Charcoal_DIContainer::getComponent( s('smart_gateway@:charcoal:db') );
+		$this->gw = $context->getComponent( s('smart_gateway@:charcoal:db') );
 		switch( $action ){
 
 		case "commit":
 
 			$default_ds = $this->gw->getDataSource();
 
-			$another_ds = Charcoal_Factory::createObject( s('PDO'), s('data_source') );
+			$another_ds = $context->getObject( 'PDO', 'data_source' );
 
 			$data = array(
 					array( 1, "This is test.", "My first blog post!", "stk2k" ),
@@ -210,7 +210,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "select":
 			$where = "blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs'), $criteria );
+			$result = $this->gw->findAll( 'blogs', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -223,29 +223,30 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 			return TRUE;
 
 		case "select_cascade":
-			$where = "blog_id = ?";
-			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs as b + blog_category as c on "b.blog_category_id = c.blog_category_id"'), $criteria );
+			{
+				$where = "blog_id = ?";
+				$criteria = new Charcoal_SQLCriteria( $where, array(1) );
+				$target = 'blogs as b + blog_category as c on "b.blog_category_id = c.blog_category_id"';
+				$result = $this->gw->findAll( $target, $criteria );
 
 //			echo "result:" . print_r($result,true) . eol();
-			ad($result);
 
-			foreach( $result as $row ){
-				$blog_name     = $row->blog_name;
-				$category_name = $row->blog_category_name;
+				foreach( $result as $row ){
+					$blog_name     = $row->blog_name;
+					$category_name = $row->blog_category_name;
 //				echo "blog_name:$blog_name" . eol();
 //				echo "category_name:$category_name" . eol();
+				}
+
+				$this->assertEquals( 1, count($result) );
+				$this->assertEquals( "my blog", $blog_name );
 			}
-
-			$this->assertEquals( 1, count($result) );
-			$this->assertEquals( "my blog", $blog_name );
-
 			return TRUE;
 
 		case "select_alias":
 			$where = "b.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs as b'), $criteria );
+			$result = $this->gw->findAll( 'blogs as b', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -260,7 +261,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "select_alias_forupdate":
 			$where = "blog_name like ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array("My First Blog")) );
-			$result = $this->gw->findAllForUpdate( qt('blogs as b'), $criteria );
+			$result = $this->gw->findAllForUpdate( 'blogs as b', $criteria );
 
 			foreach( $result as $row ){
 				print print_r($row,true) . PHP_EOL;
@@ -271,7 +272,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "inner_join":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"'), $criteria );
+			$result = $this->gw->findAll( 'blogs + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -287,7 +288,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "left_join":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs (+ posts on "blogs.blog_id = posts.blog_id"'), $criteria );
+			$result = $this->gw->findAll( 'blogs (+ posts on "blogs.blog_id = posts.blog_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -303,7 +304,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "right_join":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs +) posts on "blogs.blog_id = posts.blog_id"'), $criteria );
+			$result = $this->gw->findAll( 'blogs +) posts on "blogs.blog_id = posts.blog_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -320,7 +321,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "inner_join_alias":
 			$where = "b.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs as b + posts as p on "b.blog_id = p.blog_id"'), $criteria );
+			$result = $this->gw->findAll( 'blogs as b + posts as p on "b.blog_id = p.blog_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -336,7 +337,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "inner_join_multi":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs  + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"'), $criteria );
+			$result = $this->gw->findAll( 'blogs  + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -352,7 +353,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "inner_join_multi_alias":
 			$where = "b.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( s($where), v(array(1)) );
-			$result = $this->gw->findAll( qt('blogs as b + posts as p on "b.blog_id = p.blog_id" + comments as c on "p.post_id = c.post_id"'), $criteria );
+			$result = $this->gw->findAll( 'blogs as b + posts as p on "b.blog_id = p.blog_id" + comments as c on "p.post_id = c.post_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -438,7 +439,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 			$criteria = new Charcoal_SQLCriteria();
 			$criteria->setOrderBy( s('favorite') );
 
-			$result = $this->gw->findFirst( qt('posts'), $criteria );
+			$result = $this->gw->findFirst( 'posts', $criteria );
 
 			echo "result:" . $result->post_title . eol();
 
@@ -453,7 +454,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 			$dto->post_body = 'New Post Body';
 			$dto->user = 'Ichiro';
 
-			$count = $this->gw->count( qt('posts'), new Charcoal_SQLCriteria() );
+			$count = $this->gw->count( 'posts', new Charcoal_SQLCriteria() );
 			echo "count(before save):" . $count . eol();
 			$this->assertEquals( 3, $count );
 
@@ -463,11 +464,11 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 			$criteria->setWhere( s('post_id = ?') );
 			$criteria->setParams( v(array($new_id)) );
 
-			$new_record = $this->gw->findFirst( qt('posts'), $criteria );
+			$new_record = $this->gw->findFirst( 'posts', $criteria );
 
 			echo "new_record:" . print_r($new_record,true) . eol();
 
-			$count = $this->gw->count( qt('posts'), new Charcoal_SQLCriteria() );
+			$count = $this->gw->count( 'posts', new Charcoal_SQLCriteria() );
 			echo "count(after save):" . $count . eol();
 			$this->assertEquals( 4, $count );
 			$this->assertEquals( 'New Post', $new_record->post_title );

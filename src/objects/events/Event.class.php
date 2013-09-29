@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    events
+* @package    objects.events
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -64,5 +64,14 @@ abstract class Charcoal_Event extends Charcoal_CharcoalObject implements Charcoa
 		return $this->_priority;
 	}
 
+	/*
+	 *  String expression of this object
+	 *
+	 * @return string
+	 */
+	public function toString()
+	{
+		return $this->getObjectName() ? $this->getObjectName() : '(new)';
+	}
 }
 

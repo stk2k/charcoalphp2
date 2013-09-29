@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    events
+* @package    objects.exception_handlers
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */

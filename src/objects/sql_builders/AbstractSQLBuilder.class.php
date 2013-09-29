@@ -4,21 +4,13 @@
 *
 * PHP version 5
 *
-* @package    sql_builders
+* @package    objects.sql_builders
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject implements Charcoal_ISQLBuilder
 {
 	private $_type_mapping;
-
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
 
 	/**
 	 * Initialize instance
@@ -29,15 +21,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	{
 		parent::configure( $config );
 
-		$this->_type_mapping = $config->getArray( s('type_mappings') );
-	}
-
-	/*
-	 * SQLビルダ名を取得
-	 */
-	public function getSQLBuilderName()
-	{
-		return "default SQL builder";
+		$this->_type_mapping = $config->getArray( 'type_mappings' );
 	}
 
 	/*
@@ -48,39 +32,42 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		return isset($this->_type_mapping[$type_name]) ? $this->_type_mapping[$type_name] : $type_name;
 	}
 
-	/*
-	 *	SQL作成(SELECT)
+	/**
+	 *	Generate RDBMS-specific SQL for SELECT
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param int $options                       options for SQL generation
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
+	 *	@param array $fields                      list of fields which will be returned in query result
+	 *	
+	 *	@return string                            SQL
 	 */
-	public  function buildSelectSQL( 
-					Charcoal_ITableModel $model, 
-					Charcoal_Integer $options, 
-					Charcoal_SQLCriteria $criteria, 
-					Charcoal_String $alias, 
-					Charcoal_Vector $joins, 
-					Charcoal_Vector $fields
-				)
+	public  function buildSelectSQL( $model, $alias, $options, $criteria, $joins, $fields = NULL )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::checkInteger( 3, $options );
+		Charcoal_ParamTrait::checkIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::checkVector( 5, $joins );
+		Charcoal_ParamTrait::checkVector( 6, $fields, NULL );
+
 		$options = ui($options);
+		$alias = us($alias);
 
 		$table = $model->getTableName();
 
-		$out_fields = '';
-		foreach( $fields as $field ){
-			$field = trim($field);
-			if ( strlen($out_fields) > 0 ){
-				$out_fields .= ',';
-			}
-			$out_fields .= $field;
-		}
+		$fields = s($fields)->split(",");
 
-		if ( ($options && Charcoal_EnumQueryOption::DISTINCT) === Charcoal_EnumQueryOption::DISTINCT ){
-			$sql = "SELECT DISTINCT {$out_fields} FROM " . us($table);
+		if ( Charcoal_System::isBitSet( $options, Charcoal_EnumQueryOption::DISTINCT ) ){
+			$sql = "SELECT DISTINCT {$fields} FROM " . us($table);
 		}
 		else{
-			$sql = "SELECT {$out_fields} FROM " . us($table);
+			$sql = "SELECT {$fields} FROM " . us($table);
 		}
 	
-		if ( !$alias->isEmpty() ){
+		if ( !empty($alias) ){
 			$sql .= ' AS ' . $alias;
 		}
 
@@ -117,34 +104,48 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		$offset       = $criteria->getOffset();
 		$group_by     = $criteria->getGroupBy();
 
-		if ( $where_clause && !$where_clause->isEmpty() ){
+		if ( !empty($where_clause) ){
 			$sql .= ' WHERE ' . $where_clause;
 		}
-		if ( $order_by && !$order_by->isEmpty() ){
+		if ( !empty($order_by) ){
 			$sql .= ' ORDER BY ' . $order_by;
 		}
-		if ( $limit != NULL ){
+		if ( !empty($limit) ){
 			$sql .= ' LIMIT ' . $limit;
 		}
-		if ( $offset != NULL ){
+		if ( !empty($offset) ){
 			$sql .= ' OFFSET ' . $offset;
 		}
-		if ( $group_by && !$group_by->isEmpty() ){
+		if ( !empty($group_by) ){
 			$sql .= ' GROUP BY ' . $group_by;
 		}
 
-		if ( ($options && Charcoal_EnumQueryOption::FOR_UPDATE) === Charcoal_EnumQueryOption::FOR_UPDATE ){
+		if ( Charcoal_System::isBitSet( $options, Charcoal_EnumQueryOption::FOR_UPDATE ) ){
 			$sql .= " FOR UPDATE";
 		}
 	
-		return s($sql);
+		return $sql;
 	}
 
-	/*
-	 *	SQL作成(UPDATE)
+	/**
+	 *	Generate RDBMS-specific SQL for UPDATE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param Charcoal_DTO $dto                  DTO object which includes the fields to update
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	@param array $override                    association field set which you want to override
+	 *	
+	 *	@return array                             the first element means SQL, the second element means parameter values
 	 */
-	public  function buildUpdateSQL( Charcoal_ITableModel $model, Charcoal_DTO $dto, Charcoal_SQLCriteria $criteria, Charcoal_Properties $override = NULL  )
+	public  function buildUpdateSQL( $model, $alias, $dto, $criteria, $override = NULL )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_DTO', $dto );
+		Charcoal_ParamTrait::checkIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::checkHashMap( 5, $override, TRUE );
+
 		try{
 			$SQL_params      = array();
 			$SQL_set         = array();
@@ -242,11 +243,23 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		}
 	}
 
-	/*
-	 *	SQL作成(INSERT)
+	/**
+	 *	Generate RDBMS-specific SQL for INSERT
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param Charcoal_DTO $dto                  DTO object which includes the fields to insert
+	 *	@param array $override                    association field set which you want to override
+	 *	
+	 *	@return array                             the first element means SQL, the second element means parameter values
 	 */
-	public  function buildInsertSQL( Charcoal_ITableModel $model, Charcoal_DTO $dto, Charcoal_Properties $override = NULL  )
+	public  function buildInsertSQL( $model, $alias, $dto, $override = NULL )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_DTO', $dto );
+		Charcoal_ParamTrait::checkHashMap( 4, $override, TRUE );
+
 		try{
 			$SQL_field_list   = NULL;
 			$SQL_value_list   = NULL;
@@ -318,21 +331,32 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		}
 	}
 
-	/*
-	 *	SQL作成(MIN/MAX/SUM/COUNT/AVG)
+	/**
+	 *	Generate RDBMS-specific SQL for MIN/MAX/SUM/COUNT/AVG
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param int $aggregate_func                specify aggregate function which is defined in Charcoal_EnumSQLAggregateFunc
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
+	 *	@param array $fields                      list of fields which will be returned in query result
+	 *	
+	 *	@return string                            SQL
 	 */
-	public  function buildAggregateSQL( 
-					Charcoal_Integer $aggregate_func, 
-					Charcoal_ITableModel $model, 
-					Charcoal_SQLCriteria $criteria, 
-					Charcoal_String $alias, 
-					Charcoal_Vector $joins, 
-					Charcoal_String $fields
-				)
+	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL )
 	{
-		$aggregate_func = ui($aggregate_func);
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::checkInteger( 3, $aggregate_func );
+		Charcoal_ParamTrait::checkIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::checkVector( 5, $joins );
+		Charcoal_ParamTrait::checkVector( 6, $fields, NULL );
 
 		$table_name = $model->getTableName();
+
+		$alias = s( $alias );
+
+		$aggregate_func = ui($aggregate_func);
 
 		$aggregate_func_map = array(
 				Charcoal_EnumSQLAggregateFunc::FUNC_MIN => 'MIN',
@@ -343,6 +367,8 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 			);
 
 		$func = $aggregate_func_map[$aggregate_func];
+
+		$fields = v($fields)->join(",");
 
 		$sql = "SELECT $func($fields) FROM " . us($table_name);
 
@@ -382,27 +408,37 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		$offset       = $criteria->getOffset();
 		$group_by     = $criteria->getGroupBy();
 
-		if ( $where_clause && !$where_clause->isEmpty() ){
+		if ( !empty($where_clause) ){
 			$sql .= ' WHERE ' . $where_clause;
 		}
-		if ( $limit != NULL ){
+		if ( !empty($limit) ){
 			$sql .= ' LIMIT ' . $limit;
 		}
-		if ( $offset != NULL ){
+		if ( !empty($offset) ){
 			$sql .= ' OFFSET ' . $offset;
 		}
-		if ( $group_by && !$group_by->isEmpty() ){
+		if ( !empty($group_by) ){
 			$sql .= ' GROUP BY ' . $group_by;
 		}
 
-		return s($sql);
+		return $sql;
 	}
 
-	/*
-	 *	SQL作成(DELETE)
+	/**
+	 *	Generate RDBMS-specific SQL for DELETE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	
+	 *	@return string                            SQL
 	 */
-	public  function buildDeleteSQL( Charcoal_ITableModel $model, Charcoal_SQLCriteria $criteria )
+	public  function buildDeleteSQL( $model, $alias, $criteria )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkString( 2, $alias );
+		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
+
 		$table_name = $model->getTableName();
 
 		$sql = "DELETE FROM " . us($table_name);
@@ -426,29 +462,6 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		}
 	
 		return $sql;
-	}
-
-	/*
-	 *	ページ情報からLIMIT句で指定する値を生成
-	 */
-	public  function getLimit( Charcoal_DBPageInfo $page_info )
-	{
-		$page_size = $page_info->getPageSize();
-
-		return i($page_size);
-	}
-
-	/*
-	 *	ページ情報からOFFSET句で指定する値を生成
-	 */
-	public  function getOffset( Charcoal_DBPageInfo $page_info )
-	{
-		$page = $page_info->getPage();
-		$page_size = $page_info->getPageSize();
-
-		$offset = ($page - 1) * $page_size;
-
-		return i($offset);
 	}
 
 }

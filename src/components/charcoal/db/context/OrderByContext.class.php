@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    components.db
+* @package    components.charcoal.db.context
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -28,8 +28,10 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 
 	/**
 	 *  switch to limit context 
+	 *  
+	 *  @param integer $limit       integer data used after LIMIT clause
 	 */
-	public function limit( Charcoal_Integer $limit )
+	public function limit( $limit )
 	{
 		$this->getContext()->getCriteria()->setLimit( $limit );
 

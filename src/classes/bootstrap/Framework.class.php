@@ -25,7 +25,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.bootstrap
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -85,9 +85,9 @@ class Charcoal_Framework
 	 */
 	public static function pushProcedure( $procedure )
 	{
-		$p1 = Charcoal_ParamTrait::checkStringOrObject( 1, 'Charcoal_IProcedure', $procedure );
+//		Charcoal_ParamTrait::checkStringOrObject( 1, 'Charcoal_IProcedure', $procedure );
 
-		if ( $p1 === 'string' || $p1 === 'Charcoal_String' ){
+		if ( is_string($procedure) || $procedure instanceof Charcoal_String ){
 			try{
 				$procedure = $sandbox->createObject( $procedure, 'procedure', array(), 'Charcoal_IProcedure' );
 			}
@@ -128,8 +128,8 @@ class Charcoal_Framework
 	 */
 	public static function setHookStage( $hook_stage, $data = NULL )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $hook_stage );
-		Charcoal_ParamTrait::checkObject( 2, $data, TRUE );
+//		Charcoal_ParamTrait::checkInteger( 1, $hook_stage );
+//		Charcoal_ParamTrait::checkObject( 2, $data, TRUE );
 
 		self::$hook_stage = $hook_stage;
 
@@ -149,7 +149,7 @@ class Charcoal_Framework
 	 */
 	public static function showHttpErrorDocument( $status_code )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $status_code );
+//		Charcoal_ParamTrait::checkInteger( 1, $status_code );
 
 		$status_code = ui($status_code);
 
@@ -232,7 +232,7 @@ class Charcoal_Framework
 	 */
 	public static function handleException( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+//		Charcoal_ParamTrait::checkException( 1, $e );
 
 		return self::$exception_handlers->handleException( $e );
 	}
@@ -240,7 +240,7 @@ class Charcoal_Framework
 	/*
 	 * write one message
 	 */
-	public function writeLog( $target, $message,  $tag = NULL )
+	public static function writeLog( $target, $message,  $tag = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $target );
 //		Charcoal_ParamTrait::checkString( 2, $message );
@@ -261,7 +261,7 @@ class Charcoal_Framework
 	 *
 	 * @return mixed                       cache data
 	 */
-	public  function getCache( $key )
+	public static function getCache( $key )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 
@@ -275,7 +275,7 @@ class Charcoal_Framework
 	 * @param Charcoal_Object $value       value to store
 	 * @param Charcoal_Integer $duration   specify expiration span which the cache will be removed.
 	 */
-	public function setCache( $key, $value, $duration = NULL )
+	public static function setCache( $key, $value, $duration = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 //		Charcoal_ParamTrait::checkObject( 2, $value );
@@ -290,7 +290,7 @@ class Charcoal_Framework
 	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
 	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
 	 */
-	public function deleteCache( $key )
+	public static function deleteCache( $key )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 
@@ -616,9 +616,11 @@ class Charcoal_Framework
 		// セッション情報の保存
 		if ( $use_session->isTrue() && $session )
 		{
+
 			// セッションを保存
 			$session->save();
 			$session->close();
+
 		}
 
 		self::setHookStage( Charcoal_EnumCoreHookStage::AFTER_SAVE_SESSION );
@@ -663,7 +665,7 @@ class Charcoal_Framework
 				switch( CHARCOAL_RUNMODE ){
 				// ランモードがhttpの時は404エラー
 				case 'http':
-					_throw( new Charcoal_HttpException( 404, $ex ) );
+					_throw( new Charcoal_HttpStatusException( 404, $ex ) );
 					break;
 				// それ以外の場合はリスロー
 				default:
@@ -714,9 +716,13 @@ class Charcoal_Framework
 			log_debug( 'system, debug','debugtrace was not rendered.', 'framework' );
 			switch( CHARCOAL_RUNMODE ){
 			case 'http':
-				log_debug( 'system, debug', 'showing 500 html(internal server error).', 'framework' );
-
-				self::showHttpErrorDocument( i(500) );
+				if ( $e instanceof Charcoal_HttpStatusException ){
+					$status = $e->getStatusCode();
+					self::showHttpErrorDocument( $status );
+				}
+				else{
+					self::showHttpErrorDocument( 500 );
+				}
 				break;
 			case 'shell':
 			default:

@@ -5,40 +5,23 @@
 *
 * PHP version 5
 *
-* @package    sql_builders
+* @package    objects.sql_builders
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 class Charcoal_PostgreSQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 {
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-	}
-
-	/*
-	 * SQLビルダ名を取得
-	 */
-	public function getSQLBuilderName()
-	{
-		return "MySQL SQL builder";
-	}
-
-	/*
-	 *	SQL作成(CREATE DATABASE)
-	 */
-	public  function buildCreateDatabaseSQL( $db_name, $charset = NULL )
-	{
-		return "CREATE DATABASE $db_name WITH ENCODING='$charset'";
-	}
-
-	/*
-	 *	SQL作成(CREATE TABLE)
+	/**
+	 *	Generate RDBMS-specific SQL for CREATE TABLE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	
+	 *	@return string                            SQL
 	 */
 	public  function buildCreateTableSQL( Charcoal_ITableModel $model )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+
 		try{
 			$field_list = $model->getFieldList();
 

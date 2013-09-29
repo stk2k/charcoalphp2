@@ -6,7 +6,7 @@
 *
 * PHP version 5
 *
-* @package    base
+* @package    classes.base
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -24,6 +24,14 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	}
 
 	/**
+	 *	Remove all elements
+	 */
+	public function clear()
+	{
+		$this->values = array();
+	}
+
+	/**
 	 *	unbox primitive value
 	 */
 	public function unbox()
@@ -35,7 +43,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 *	get key list
 	 */
 	public function getKeys() {
-		return array_keys($this->values);
+		return array_keys( $this->values );
 	}
 
 	/**
@@ -43,7 +51,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 */
 	public function keyExists( $key )
 	{
-		return array_key_exists($key,$this->values);
+		return array_key_exists( $key, $this->values );
 	}
 
 	/**
@@ -184,23 +192,15 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	}
 
 	/**
-	 *	get key list
-	 */
-	public function keys()
-	{
-		return array_keys($this->values);
-	}
-
-	/**
 	 *	Set all array elements
 	 *	
 	 *	@param array $array   array data to set
 	 */
-	public function setArray( $data )
+	public function setArray( $array )
 	{
-//		Charcoal_ParamTrait::checkRawArray( 1, $data );
+//		Charcoal_ParamTrait::checkRawArray( 1, $array );
 
-		$this->values = $this->values ? array_merge( $this->values, $data ) : $data;
+		$this->values = $this->values ? array_merge( $this->values, $array ) : $array;
 	}
 
 	/**
@@ -208,19 +208,25 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	 *	
 	 *	@param array $array   hashmap data to set
 	 */
-	public function setHashMap( $data )
+	public function setHashMap( $map )
 	{
-//		Charcoal_ParamTrait::checkHashMap( 1, $data );
+//		Charcoal_ParamTrait::checkHashMap( 1, $map );
 
-		$this->values = $this->values ? array_merge( $this->values, $map->getAll() ) : $data;
+		$this->values = $this->values ? array_merge( $this->values, $map->getAll() ) : $map->getAll();
 	}
 
 	/**
 	 *	Merge with array
+	 *	
+	 *	@param array $array            array data to merge
+	 *	@param boolean $overwrite      TRUE means overwrite if the original element exists
 	 */
-	public function mergeArray( array $array, Charcoal_Boolean $overwrite = NULL )
+	public function mergeArray( $array, $overwrite = TRUE )
 	{
-		$overwrite = $overwrite ? $overwrite->isTrue() : TRUE;
+//		Charcoal_ParamTrait::checkRawArray( 1, $array );
+//		Charcoal_ParamTrait::checkBoolean( 2, $overwrite );
+
+		$overwrite = ub($overwrite);
 
 		foreach( $array as $key => $value ){
 			if ( !$this->keyExists($key) || $overwrite ){
@@ -231,12 +237,18 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 
 	/**
 	 *	Merge with hashmap
+	 *	
+	 *	@param array $array            hash map data to merge
+	 *	@param boolean $overwrite      TRUE means overwrite if the original element exists
 	 */
-	public function mergeHashMap( Charcoal_HashMap $obj, Charcoal_Boolean $overwrite = NULL )
+	public function mergeHashMap( $map, $overwrite  = TRUE )
 	{
-		$overwrite = $overwrite ? $overwrite->isTrue() : TRUE;
+//		Charcoal_ParamTrait::checkHashMap( 1, $map );
+//		Charcoal_ParamTrait::checkBoolean( 2, $overwrite );
 
-		foreach( $obj as $key => $value ){
+		$overwrite = ub($overwrite);
+
+		foreach( $map as $key => $value ){
 			if ( !$this->keyExists($key) || $overwrite ){
 				$this->offsetSet( $key, $value );
 			}
@@ -358,6 +370,25 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	public function implodeAssoc( $glue = ',' )
 	{
 		return Charcoal_System::implodeAssoc( $glue, $this->values );
+	}
+
+	/**
+	 *  String expression of this object
+	 *
+	 * @return string
+	 */
+	public function toString()
+	{
+		$b = '';
+		foreach ($this->values as $key => $value) {
+			if ( !empty($b) ){
+				$b .= '/';
+			}
+			$key = Charcoal_System::toString($key);
+			$value = Charcoal_System::toString($value);
+			$b .= "$key=$value";
+		}
+		return "[$b]";
 	}
 
 }

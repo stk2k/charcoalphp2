@@ -6,7 +6,7 @@
 *
 * PHP version 5
 *
-* @package    renderers
+* @package    modules.charcoal.form
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -44,7 +44,7 @@ class Charcoal_FormSubmissionChekerTask extends Charcoal_Task implements Charcoa
 		$event     = $context->getEvent();
 
 		// form token component
-		$form_token = Charcoal_DIContainer::getComponent( s('form_token@:charcoal:form') );
+		$form_token = $context->getComponent( s('form_token@:charcoal:form') );
 
 		if ( $event instanceof Charcoal_SetupEvent ){
 			$form_token->setupForm( $sequence, $response );

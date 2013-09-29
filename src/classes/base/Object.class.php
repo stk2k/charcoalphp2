@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    base
+* @package    classes.base
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -23,6 +23,7 @@ class Charcoal_Object
 
 //		static $id_master = 0;
 //		$this->_object_hash = ++$id_master;
+
 		$cnt = isset(self::$id_master[$class_name]) ? self::$id_master[$class_name] : 0;
 		$this->_object_hash = ++$cnt;
 		self::$id_master[$class_name] = $cnt;

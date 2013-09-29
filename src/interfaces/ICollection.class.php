@@ -18,6 +18,11 @@ interface Charcoal_ICollection
 	public function getAll();
 
 	/**
+	 *	Remove all elements
+	 */
+	public function clear();
+
+	/**
 	 *	Applies a callback to all elements
 	 *
 	 * @return array

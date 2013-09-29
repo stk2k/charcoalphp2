@@ -6,8 +6,8 @@
 define( 'PROC_KEYWORD', 'proc' );
 define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
 define( 'CHARCOAPHP_VERSION_MINOR', 21 );
-define( 'CHARCOAPHP_VERSION_REVISION', 2 );
-define( 'CHARCOAPHP_VERSION_BUILD', 155 );
+define( 'CHARCOAPHP_VERSION_REVISION', 3 );
+define( 'CHARCOAPHP_VERSION_BUILD', 156 );
 define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
 define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
  
@@ -19,9 +19,6 @@ date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );
 
 // ユーザによる中断を無視する
 //ignore_user_abort( TRUE );
-
-// 内部例外トレース
-define( 'ENABLE_INTERNAL_EXCEPTION_TRACE', true );
 
 // magic_quotes_runtimeをOFFにする
 if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
@@ -311,19 +308,17 @@ function up( $value )
 
 function _throw( Exception $e, Charcoal_Integer $back = null )
 {
-	if ( ENABLE_INTERNAL_EXCEPTION_TRACE ){
-		list( $file, $line ) = Charcoal_System::caller($back ? ui($back) : 0);
-		$clazz = get_class($e);
-		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
-		$message = $e->getMessage();
+	list( $file, $line ) = Charcoal_System::caller($back ? ui($back) : 0);
+	$clazz = get_class($e);
+	$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
+	$message = $e->getMessage();
 
-		try{
-			log_debug( "system,error,debug", "_throw $clazz ($id) $message @$file($line)", "exception" );
-		}
-		catch( Exception $ex ){
-			echo "exeption while wrting log:" . $e->getMessage() . eol();
-			exit;
-		}
+	try{
+		log_debug( "system,error,debug", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
+	}
+	catch( Exception $ex ){
+		echo "exeption while wrting log:" . $e->getMessage() . eol();
+		exit;
 	}
 
 	throw $e;
@@ -333,19 +328,17 @@ function _throw( Exception $e, Charcoal_Integer $back = null )
 // 例外をキャッチ
 function _catch( Exception $e )
 {
-	if ( ENABLE_INTERNAL_EXCEPTION_TRACE ){
-		list( $file, $line ) = Charcoal_System::caller();
-		$clazz = get_class($e);
-		$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
-		$message = $e->getMessage();
+	list( $file, $line ) = Charcoal_System::caller();
+	$clazz = get_class($e);
+	$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
+	$message = $e->getMessage();
 
-		try{
-			log_debug( "system,error,debug", "_catch $clazz ($id) $message @$file($line)", "exception" );
-		}
-		catch( Exception $ex ){
-			echo "exeption while wrting log:" . $e->getMessage() . eol();
-			exit;
-		}
+	try{
+		log_debug( "system,error,debug", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
+	}
+	catch( Exception $ex ){
+		echo "exeption while wrting log:" . $e->getMessage() . eol();
+		exit;
 	}
 }
 

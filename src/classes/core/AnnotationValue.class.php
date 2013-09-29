@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.core
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -18,8 +18,12 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_String $name, Charcoal_String $value, Charcoal_Vector $params )
+	public function __construct( $name, $value, $params )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $name );
+//		Charcoal_ParamTrait::checkString( 2, $value );
+//		Charcoal_ParamTrait::checkVector( 3, $params );
+
 		$this->name    = $name;
 		$this->value   = $value;
 		$this->params  = $params;

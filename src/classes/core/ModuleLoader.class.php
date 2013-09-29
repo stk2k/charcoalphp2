@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.core
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -36,9 +36,9 @@ class Charcoal_ModuleLoader
 	 */
 	public static function loadModule( $sandbox, $module_path, $task_manager )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-		Charcoal_ParamTrait::checkStringOrObjectPath( 2, $module_path );
-		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::checkStringOrObjectPath( 2, $module_path );
+//		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		try{
 			log_debug( 'debug, event', "loading module: $module_path" );

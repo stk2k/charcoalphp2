@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    data_sources
+* @package    objects.data_sources
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -25,6 +25,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 	private $trans_cnt;
 
+	private $exec_sql_stack;
+
 	/*
 	 *	コンストラクタ
 	 */
@@ -35,6 +37,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->connected 	= false;
 		$this->connection 	= null;
 		$this->command_id 	= 0;
+
+		$this->exec_sql_stack = new Charcoal_Stack();
 	}
 
 	/**
@@ -66,15 +70,37 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		if ( strlen($this->server) === 0 ){
 			_throw( new Charcoal_ComponentConfigException( 'server', 'mandatory' ) );
 		}
-/*
-		log_debug( "data_source", "data_source", "[PearDbDataSource]backend=" . $this->backend );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]user=" . $this->user );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]password=" . $this->password );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]db_name=" . $this->db_name );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]server=" . $this->server );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]charset=" . $this->charset );
-		log_debug( "data_source", "data_source", "[PearDbDataSource]autocommit=" . $this->autocommit );
-*/
+
+		if ( $this->getSandbox()->isDebug() )
+		{
+			log_debug( "data_source", "backend=" . $this->backend, "data_source" );
+			log_debug( "data_source", "user=" . $this->user, "data_source" );
+			log_debug( "data_source", "password=" . $this->password, "data_source" );
+			log_debug( "data_source", "db_name=" . $this->db_name, "data_source" );
+			log_debug( "data_source", "server=" . $this->server, "data_source" );
+			log_debug( "data_source", "charset=" . $this->charset, "data_source" );
+			log_debug( "data_source", "autocommit=" . $this->autocommit, "data_source" );
+		}
+	}
+
+	/**
+	 *	get last exectuted SQL
+	 *	
+	 *	@return Charcoal_ExecutedSQL       executed SQL
+	 */
+	public function popExecutedSQL()
+	{
+		return $this->exec_sql_stack->pop();
+	}
+
+	/**
+	 *	get all exectuted SQLs
+	 *	
+	 *	@return array       executed SQLs
+	 */
+	public function getAllExecutedSQL()
+	{
+		return $this->exec_sql_stack->getAll();
 	}
 
 	/*
@@ -144,7 +170,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			// 接続処理
 			$this->connect();
 
-			$this->connection->setAttribute( PDO::ATTRautocommit, $on );
+			$this->connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $on );
 			
 		}
 		catch ( Exception $e )
@@ -252,7 +278,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		try{
 			$DSN = "$backend:host=$server; dbname=$db_name";
 
-//			log_info( "debug,sql,data_source", "data_source", "connecting database: DSN=[$DSN]" );
+//			log_info( "debug,sql,data_source", "connecting database: DSN=[$DSN]", "data_source" );
 
 			$driver_options = array();
 
@@ -273,12 +299,12 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 */
 
 			$pdo = new PDO( $DSN, $user, $password, $driver_options );
-//			log_info( "debug,sql,data_source", "data_source", "PDO object created. driver_options=" . print_r($driver_options,true) );
+//			log_info( "debug,sql,data_source", "PDO object created. driver_options=" . print_r($driver_options,true), "data_source" );
 
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 			// enable server-side prepare statement
 
-//			log_info( "debug,sql,data_source", "data_source", "connected database: DSN=[$DSN]" );
+//			log_info( "debug,sql,data_source", "connected database: DSN=[$DSN]", "data_source" );
 
 			$this->connection = $pdo;
 			$this->connected = true;
@@ -299,7 +325,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			// 自動コミット
 			$autocommit = $this->autocommit;
 			$this->connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $autocommit );
-//			log_info( "debug,sql,data_source", "data_source", "autocommit: [$autocommit]" );
+//			log_info( "debug,sql,data_source", "autocommit: [$autocommit]", "data_source" );
 
 			$this->trans_cnt = 0;
 		}
@@ -307,7 +333,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		{
 			_catch( $e );
 
-			_throw( new Charcoal_DBConnectException( __METHOD__ . " failed: [db_string]$db_string", $e ) );
+			_throw( new Charcoal_DBConnectException( __METHOD__ . " failed: DSN=[$DSN]", $e ) );
 		}
 
 	}
@@ -337,14 +363,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		Charcoal_ParamTrait::checkString( 1, $sql );
 		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
 
+		$params = uv( $params );
+
 		Charcoal_Benchmark::start();
 
 		$command_id = $this->command_id++;
 
-		$params_disp = $params ? $params->join( ',' , TRUE ) :'';
+		$params_disp = $params ? implode( ',' , $params ) :'';
 
-		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$sql" );
-		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [params]$params_disp" );
+		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", "data_source" );
+		log_info( "data_source,sql,debug", "[ID]$command_id [params]$params_disp", "data_source" );
 /*
 		$log_sql = str_replace( '?', '%s', $sql );
 		$log_params = NULL;
@@ -363,25 +391,27 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$log_sql" );
 */
 
-		$stmt = $this->connection->prepare($sql);
+		$stmt = $this->connection->prepare( $sql );
 
-		$params = $params ? $params->toArray() : array();
+		$params = $params ? $params : array();
 
-		$success = $stmt->execute($params);
+		$success = $stmt->execute( $params );
 
 		if ( !$success ){
 			list( $sqlstate, $err_code, $err_msg ) = $stmt->errorInfo();
 			$msg = "PDO#execute failed. [ID]$command_id [SQL]$sql [params]$params_disp [SQLSTATE]$sqlstate [ERR_CODE]$err_code [ERR_MSG]$err_msg";
-			log_error( "data_source,sql,debug", "data_source", "...FAILED: $msg" );
+			log_error( "data_source,sql,debug", "...FAILED: $msg", "data_source" );
 			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
+
+		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql, $params) );
 		
 		$numRows = $stmt->rowCount();
-		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id ...success(numRows=$numRows)" );
+		log_info( "data_source,sql,debug", "[ID]$command_id ...success(numRows=$numRows)", "data_source" );
 
 		// ログ
 		$elapse = Charcoal_Benchmark::stop();
-		log_debug( 'data_source,sql,debug', "data_source", "[ID]$command_id prepareExecute() end. time=[$elapse]msec.");
+		log_debug( 'data_source,sql,debug', "[ID]$command_id prepareExecute() end. time=[$elapse]msec.", "data_source" );
 
 		return $stmt;
 	}
@@ -395,9 +425,11 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$sql = $sql->getValue();
 
-//		log_info( "sql", "data_source", $sql );
+//		log_info( "sql", $sql, "data_source" );
 
 		$stmt = $this->connection->query( $sql );
+
+		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
 
 		return $stmt;
 	}

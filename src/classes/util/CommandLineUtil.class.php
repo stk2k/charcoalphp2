@@ -1,10 +1,10 @@
 <?php
-/**人
-* コマンドラインに関するユーティリティ
+/**
+* utility class for parsing command line
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.util
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */

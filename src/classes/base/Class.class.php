@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    base
+* @package    classes.base
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -18,7 +18,7 @@ class Charcoal_Class extends Charcoal_Object
 	 */
 	public function __construct( $class_name )
 	{
-		Charcoal_ParamTrait::checkString( 1, $class_name );
+//		Charcoal_ParamTrait::checkString( 1, $class_name );
 
 		parent::__construct();
 

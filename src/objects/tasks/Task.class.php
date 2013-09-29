@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    objects.tasks
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -152,6 +152,16 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	public function setPriority( $priority )
 	{
 		$this->priority = $priority;
+	}
+
+	/*
+	 *  String expression of this object
+	 *
+	 * @return string
+	 */
+	public function toString()
+	{
+		return $this->getObjectName() ? $this->getObjectName() : '(new)';
 	}
 }
 

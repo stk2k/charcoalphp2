@@ -23,9 +23,9 @@ class BlogTableModel extends Charcoal_DefaultTableModel
     public $post_total        = '@field @type:int(11) @insert:value @update:value';
 
 	// returns model's own DTO
-    public function createDTO()
+    public function createDTO( $values = array() )
     {
-        return new BlogTableDTO();
+        return new BlogTableDTO( $values );
     }
 }
 

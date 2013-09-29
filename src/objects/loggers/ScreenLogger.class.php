@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    loggers
+* @package    objects.loggers
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */

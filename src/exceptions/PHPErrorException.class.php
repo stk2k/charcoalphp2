@@ -9,7 +9,7 @@
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_PHPErrorException extends Charcoal_RuntimeException
+class Charcoal_PHPErrorException extends Charcoal_LogicException
 {
 	public $errno;
 	public $errstr;
@@ -18,10 +18,11 @@ class Charcoal_PHPErrorException extends Charcoal_RuntimeException
 
 	public function __construct( $errno, $errstr, $errfile, $errline, $prev = NULL )
 	{
-		parent::__construct( "PHP Runtime Error([$errno]$errstr   @$errfile($errline)", $prev );
+		$errno = Charcoal_System::phpErrorString( $errno );
+		parent::__construct( "PHP Error([$errno]$errstr [file]$errfile [line]$errline", $prev );
 
-		$this->errno = $errno;
-		$this->errstr = $errstr;
+		$this->errno   = $errno;
+		$this->errstr  = $errstr;
 		$this->errfile = $errfile;
 		$this->errline = $errline;
 	}

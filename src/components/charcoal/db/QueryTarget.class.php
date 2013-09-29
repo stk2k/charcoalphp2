@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @packagecomponents.db
+* @package    components.charcoal.db
 * @author CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -46,6 +46,8 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function __construct( $expression )
 	{
+//		Charcoal_ParamTrait::checkString( 1, $expression );
+
 		parent::__construct();
 
 		$tokens = $this->tokenize( $expression );

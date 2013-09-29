@@ -1,6 +1,6 @@
 <?php
 /**
-* リクエストを定義するインタフェース
+* interface of sequence object
 *
 * PHP version 5
 *
@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-interface Charcoal_ISequence extends Charcoal_IProperties
+interface Charcoal_ISequence
 {
 	/**
 	 *  Get a global parameter

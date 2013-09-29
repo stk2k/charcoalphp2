@@ -11,62 +11,84 @@
 
 interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 {
-	/*
-	 *	SQL作成(SELECT)
+	/**
+	 *	Generate RDBMS-specific SQL for SELECT
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param int $options                       options for SQL generation
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
+	 *	@param array $fields                      list of fields which will be returned in query result
+	 *	
+	 *	@return string                            SQL
 	 */
-	public  function buildSelectSQL( 
-					Charcoal_ITableModel $model, 
-					Charcoal_Integer $options, 
-					Charcoal_SQLCriteria $criteria, 
-					Charcoal_String $alias, 
-					Charcoal_Vector $joins, 
-					Charcoal_Vector $fields
-				);
+	public  function buildSelectSQL( $model, $alias, $options, $criteria, $joins, $fields = NULL );
 
-	/*
-	 *	SQL作成(UPDATE)
+	/**
+	 *	Generate RDBMS-specific SQL for UPDATE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param Charcoal_DTO $dto                  DTO object which includes the fields to update
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	@param array $override                    association field set which you want to override
+	 *	
+	 *	@return array                             the first element means SQL, the second element means parameter values
 	 */
-	public  function buildUpdateSQL( Charcoal_ITableModel $model, Charcoal_DTO $dto, Charcoal_SQLCriteria $criteria, Charcoal_Properties $override = NULL );
+	public  function buildUpdateSQL( $model, $alias, $dto, $criteria, $override = NULL );
 
-	/*
-	 *	SQL作成(INSERT)
+	/**
+	 *	Generate RDBMS-specific SQL for INSERT
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param Charcoal_DTO $dto                  DTO object which includes the fields to insert
+	 *	@param array $override                    association field set which you want to override
+	 *	
+	 *	@return array                             the first element means SQL, the second element means parameter values
 	 */
-	public  function buildInsertSQL( Charcoal_ITableModel $model, Charcoal_DTO $dto, Charcoal_Properties $override = NULL );
+	public  function buildInsertSQL( $model, $alias, $dto, $override = NULL );
 
-	/*
-	 *	SQL作成(MIN/MAX/SUM/COUNT/AVG)
+	/**
+	 *	Generate RDBMS-specific SQL for MIN/MAX/SUM/COUNT/AVG
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param int $aggregate_func                specify aggregate function which is defined in Charcoal_EnumSQLAggregateFunc
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
+	 *	@param array $fields                      list of fields which will be returned in query result
+	 *	
+	 *	@return string                            SQL
 	 */
-	public  function buildAggregateSQL( Charcoal_Integer $aggregate_func, Charcoal_ITableModel $model, Charcoal_SQLCriteria $criteria, Charcoal_String $alias, Charcoal_Vector $joins, Charcoal_String $fields );
+	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL );
 
-	/*
-	 *	SQL作成(DELETE)
+	/**
+	 *	Generate RDBMS-specific SQL for DELETE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
+	 *	
+	 *	@return string                            SQL
 	 */
-	public  function buildDeleteSQL( Charcoal_ITableModel $model, Charcoal_SQLCriteria $criteria );
+	public  function buildDeleteSQL( $model, $alias, $criteria );
 
-	/*
-	 *	SQL作成(LAST_INSERT_ID)
+	/**
+	 *	Generate RDBMS-specific SQL for LAST_INSERT_ID
+	 *	
+	 *	@return string                            SQL
 	 */
 	public  function buildLastIdSQL();
 
-	/*
-	 *	SQL作成(CREATE DATABASE)
-	 */
-	public  function buildCreateDatabaseSQL( Charcoal_String $db_name, Charcoal_String $charset = NULL );
-
-	/*
-	 *	SQL作成(CREATE TABLE)
+	/**
+	 *	Generate RDBMS-specific SQL for CREATE TABLE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	
+	 *	@return string                            SQL
 	 */
 	public  function buildCreateTableSQL( Charcoal_ITableModel $model );
-
-	/*
-	 *	ページ情報からLIMIT句で指定する値を生成
-	 */
-	public  function getLimit( Charcoal_DBPageInfo $page_info );
-
-	/*
-	 *	ページ情報からOFFSET句で指定する値を生成
-	 */
-	public  function getOffset( Charcoal_DBPageInfo $page_info );
-
 }
 

@@ -5,34 +5,17 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    components.charcoal.db
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
-require_once( 'EnumQueryOption' . CHARCOAL_CLASS_FILE_SUFFIX );
-
-function qt( $value )
-{
-	if ( $value instanceof Charcoal_QueryTarget ){
-		return $value;
-	}
-	return new Charcoal_QueryTarget( s($value) );
-}
-
 class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
-	private $data_source;
-	private $sql_builder;
-
-	private $data_source_name;
-
 	private $last_sql;
 	private $last_params;
 
-	private $model_cache;
-
-	/*
-	 *	コンストラクタ
+	/**
+	 * Constructor
 	 */
 	public function __construct()
 	{
@@ -48,128 +31,75 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	{
 		parent::configure( $config );
 
-		// create data source
-		$this->data_source_name = $this->getSandbox()->getProfile()->getString( 'DB_DATA_SOURCE' );
+		$data_source = $config->getString( 'data_source' );
+		$sql_builder = $config->getString( 'sql_builder' );
 
-		log_debug( "smart_gateway, data_source", "data_source_name=" . $this->data_source_name );
-	}
+		log_debug( "smart_gateway, data_source", "data_source=" . $data_source );
+		log_debug( "smart_gateway, data_source", "sql_builder=" . $sql_builder );
 
-	/*
-	 *	Close connection and destory component
-	 */
-	public function terminate()
-	{
-		if ( $this->data_source ){
-			$this->data_source->disconnect();
-		}
-	}
+		$ds = $this->getSandbox()->createObject( $data_source, 'data_source', array(), 'Charcoal_IDataSource' );
+		$builder = $this->getSandbox()->createObject( $sql_builder, 'sql_builder', array(), 'Charcoal_ISQLBuilder' );
 
-	/*
-	 * create data source
-	 */
-	public function initDataSource()
-	{
-		if ( !$this->data_source ){
-			$this->data_source = $this->getSandbox()->createObject( $this->data_source_name, 'data_source' );
-
-			log_info( "smart_gateway, data_source", "data source created: " . $this->data_source_name );
-		}
-	}
-
-	/*
-	 * create SQL builder
-	 */
-	public function initSQLBuilder()
-	{
-		if ( !$this->sql_builder ){
-			// create SQL builder
-			$sql_builder_name = $this->data_source->getBackend();
-
-			$this->sql_builder = $this->getSandbox()->createObject( $sql_builder_name, 'sql_builder' );
-			log_info( "smart_gateway, data_source", "SQL builder created: " . $sql_builder_name );
-		}
-	}
-
-	/*
-	 *	データソースを取得
-	 */
-	public function getDataSource()
-	{
-		return $this->data_source;
-	}
-
-	/*
-	 *	データソースを選択
-	 */
-	public function setDataSource( Charcoal_IDataSource $source )
-	{
-		$this->data_source = $source;
-	}
-
-	/*
-	 *	SQLビルダ
-	 */
-	public function getSQLBuilder()
-	{
-		return $this->sql_builder;
-	}
-
-	/*
-	 *	get last executed SQL
-	 */
-	public function getLastSQL()
-	{
-		return $this->last_sql;
-	}
-
-	/*
-	 *	get last executed parameters
-	 */
-	public function getLastParams()
-	{
-		return $this->last_params;
+		$this->impl = new Charcoal_SmartGatewayImpl( $this->getSandbox(), $ds, $builder );
 	}
 
 	/**
-	 *	get table model
-	 *	
-	 *	@param string $model_name       table model name
+	 *	Close connection and destory components
 	 */
-	public function getModel( $model_name )
+	public function terminate()
 	{
-//		Charcoal_ParamTrait::checkString( 1, $model_name );
-
-		$model_name = us($model_name);
-
-		if ( isset($this->model_cache[$model_name]) ){
-			return $this->model_cache[$model_name];
-		}
-
-		// create new instance
-		$model = $this->getSandbox()->createObject( $model_name, 'table_model' );
-
-		$model->setModelID( $model_name );
-
-		// set in cache
-		$this->model_cache[$model_name] = $model;
-
-		return $model;
+		$this->impl->terminate();
 	}
 
-	/*
-	 *    自動コミット機能をON/OFF
+	/**
+	 *	get data source
+	 *	
+	 *	@return Charcoal_IDataSource        currently selected data source
+	 */
+	public function getDataSource()
+	{
+		return $this->impl->getDataSource();
+	}
+
+	/**
+	 *	select data source
+	 *	
+	 *	@param Charcoal_IDataSource $data_source       data source to select
+	 */
+	public function setDataSource( $data_source )
+	{
+		$this->impl->setDataSource( $data_source );
+	}
+
+	/**
+	 *	get last exectuted SQL
+	 *	
+	 *	@return Charcoal_ExecutedSQL       executed SQL
+	 */
+	public function popExecutedSQL()
+	{
+		return $this->impl->popExecutedSQL();
+	}
+
+	/**
+	 *	get all exectuted SQLs
+	 *	
+	 *	@return array       executed SQLs
+	 */
+	public function getAllExecutedSQL()
+	{
+		return $this->impl->getAllExecutedSQL();
+	}
+
+	/**
+	 * Set auto commit flag
+	 * 
+	 * @param bool $on          If TRUE, transaction will be automatically comitted.
 	 */
 	public function autoCommit( $on )
 	{
 		try{
-			$this->initDataSource();
-
-			if ( $onoff ){
-				$this->data_source->autoCommit( $on );
-			}
-			else{
-				$this->data_source->autoCommit();
-			}
+			$this->impl->autoCommit( $on );
 			log_debug( "debug,smart_gateway,sql", "done: autoCommit" );
 		}
 		catch ( Exception $e )
@@ -179,15 +109,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *    トランザクションを開始
+	/**
+	 *	execute transaction command: BEGIN TRANSACTION
 	 */
 	public function beginTrans()
 	{
 		try{
-			$this->initDataSource();
-
-			$this->data_source->beginTrans();
+			$this->impl->beginTrans();
 			log_debug( "debug,smart_gateway,sql", "done: beginTrans" );
 		}
 		catch ( Exception $e )
@@ -197,15 +125,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *    コミットを発行
+	/**
+	 *	execute transaction command: COMMIT
 	 */
 	public function commitTrans()
 	{
 		try{
-			$this->initDataSource();
-
-			$this->data_source->commitTrans();
+			$this->impl->commitTrans();
 			log_debug( "debug,smart_gateway,sql", "done: commitTrans" );
 		}
 		catch ( Exception $e )
@@ -215,15 +141,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *    ロールバックを発行
+	/**
+	 *	execute transaction command: ROLLBACK
 	 */
 	public function rollbackTrans()
 	{
 		try{
-			$this->initDataSource();
-
-			$this->data_source->rollbackTrans();
+			$this->impl->rollbackTrans();
 			log_debug( "debug,smart_gateway,sql", "done: rollbackTrans" );
 		}
 		catch ( Exception $e )
@@ -233,32 +157,19 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	条件を指定して更新（複数データ更新用）
+	/**
+	 *	update all records matched by criteria
+	 *	
+	 *	@param string $model_name
+	 *	@param array $data
+	 *	@param Charcoal_SQLCriteria $criteria
 	 */
 	public  function updateAll( $model_name, $data, $criteria ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_TableDTO', $data );
-		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
-		// テーブルモデル取得
-		$model = $this->getModel( $model_name );
-
 		try{
-			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $data, $criteria );
+			$model = $this->impl->getModel( $model_name );
 
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$this->data_source->prepareExecute( s($sql), v($params) );
-
+			$this->impl->updateField( $model, $data_id, $field, $value );
 		}
 		catch ( Exception $e )
 		{
@@ -267,51 +178,20 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	特定データの項目を更新
+	/**
+	 *	update field by value
+	 *	
+	 *	@param string $model_name
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param int $data_id
+	 *	@param Charcoal_Primitive $value
 	 */
-	public  function updateField( $model_name, $data_id, $field, $value ) 
+	public  function updateField( $model_name, $alias, $data_id, $field, $value ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkInteger( 2, $data_id );
-		Charcoal_ParamTrait::checkString( 3, $field );
-		Charcoal_ParamTrait::checkPrimitive( 4, $value );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
-		// テーブルモデル取得
-		$model = $this->getModel( $model_name );
-
 		try{
+			$model = $this->impl->getModel( $model_name );
 
-			// DTO
-			$dto = $model->createDTO();
-
-			$dto->$field = $value->unbox();
-
-//			log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// 条件
-			$pk = $model->getPrimaryKey();
-			$where = "$pk = ?";
-			$params = array( ui($data_id) );
-			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-
-			// SQLとパラメータ作成
-			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$this->data_source->prepareExecute( s($sql), v($params) );
-
+			$this->impl->updateField( $model, $alias, $data_id, $field, $value );
 		}
 		catch ( Exception $e )
 		{
@@ -320,46 +200,20 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	特定データの項目を現在時刻(NOW)で更新
+	/**
+	 *	update field by current time
+	 *	
+	 *	@param string $model_name
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param int $data_id
+	 *	@param array $data
 	 */
-	public  function updateFieldNow( $model_name, $data_id, $field ) 
+	public  function updateFieldNow( $model_name, $alias, $data_id, $field ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkInteger( 2, $data_id );
-		Charcoal_ParamTrait::checkString( 3, $field );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
-		// テーブルモデル取得
-		$model = $this->getModel( $model_name );
-
 		try{
-			$field = us($field);
+			$model = $this->impl->getModel( $model_name );
 
-			// アノテーションオーバーライド
-			$override[$field]['update'] = new Charcoal_AnnotationValue( s('update'), s('function'), v(array('now')) );
-
-//			log_debug( "debug,smart_gateway,sql", "override:" . print_r($override,true) );
-
-			// 条件
-			$pk = $model->getPrimaryKey();
-			$where = "$pk = ?";
-			$params = array( ui($data_id) );
-			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-
-			// SQLとパラメータ作成
-			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $model->createDTO(), $criteria, p($override) );
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$this->data_source->prepareExecute( s($sql), v($params) );
-
+			$this->impl->updateFieldNow( $model, $alias, $data_id, $field );
 		}
 		catch ( Exception $e )
 		{
@@ -368,50 +222,19 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-
-	/*
-	 *	特定データの複数の項目を更新
+	/**
+	 *	update record with multiple fields
+	 *	
+	 *	@param string $model_name
+	 *	@param int $data_id
+	 *	@param array $data
 	 */
 	public  function updateFields( $model_name, $data_id, $data ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkInteger( 2, $data_id );
-		Charcoal_ParamTrait::checkProperties( 3, $data );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
-		// テーブルモデル取得
-		$model = $this->getModel( $model_name );
-
 		try{
-			// DTO
-			$dto = $model->createDTO();
+			$model = $this->impl->getModel( $model_name );
 
-			$data = up($data);
-			foreach( $data as $field => $value ){
-				$dto->$field = $value;
-			}
-
-//			log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
-
-			// 条件
-			$pk = $model->getPrimaryKey();
-			$where = "$pk = ?";
-			$params = array( ui($data_id) );
-			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-
-			// SQLとパラメータ作成
-			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$this->data_source->prepareExecute( s($sql), v($params) );
-
+			$this->impl->updateFields( $model, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -420,47 +243,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	挿入
+	/**
+	 *	insert DTO into specified table
+	 *	
+	 *	@param string $model_name
+	 *	@param Charcoal_TableDTO $data
 	 */
-	public  function insert( $model_name, $save_data )
+	public  function insert( $model_name, $data )
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_TableDTO', $save_data );
-
-		$dto  = clone $save_data;
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
-		// テーブルモデル取得
-		$model = $this->getModel( $model_name );
-
 		try{
-			// SQLを作成
-			list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $dto );
+			$model = $this->impl->getModel( $model_name );
 
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$this->data_source->prepareExecute( s($sql), v($params) );
-
-			// IDを返す
-			$sql = $this->sql_builder->buildLastIdSQL();
-			
-			// 実行
-			$result = $this->data_source->prepareExecute( s($sql) );
-
-			// フェッチ
-			$row = $this->data_source->fetchArray( $result );
-
-			$new_id = $row[0];
-			log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
-
-			return $new_id;
+			return $this->impl->insert( $model, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -469,73 +263,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	保存
+	/**
+	 *	insert or update DTO into specified table
+	 *	
+	 *	@param string $model_name
+	 *	@param Charcoal_TableDTO $data
 	 */
-	public  function save( $model_name, $save_data )
+	public function save( $model_name, $data )
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_TableDTO', $save_data );
-
-		$dto  = clone $save_data;
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
-		// テーブルモデル取得
-		$model = $this->getModel( $model_name );
-
 		try{
-			// プライマリキー
-			$pk      = $model->getPrimaryKey();
+			$model = $this->impl->getModel( $model_name );
 
-			// SQLを作成
-			$is_new = FALSE;
-			if ( $model->isPrimaryKeyValid($save_data) ){
-				// プライマリキーの値が指定されていればUPDATE
-				$data_id = $dto->$pk;
-
-				$where = "$pk = ?";
-				$params = array( ui($data_id) );
-				$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-				list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
-			}
-			else{
-				// プライマリキーの値が指定されていなければINSERT
-				list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $dto );
-
-				$is_new = TRUE;
-			}
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$this->data_source->prepareExecute( s($sql), v($params) );
-
-			// IDを返す
-			if ( $is_new ){
-				$sql = $this->sql_builder->buildLastIdSQL();
-
-//				log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-					
-				// 実行
-				$result = $this->data_source->prepareExecute( s($sql) );
-
-				// フェッチ
-				$row = $this->data_source->fetchArray( $result );
-
-				$new_id = $row[0];
-			}
-			else{
-				$new_id = $dto->$pk;
-			}
-
-			log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
-
-			return $new_id;
+			return $this->impl->save( $model, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -544,22 +283,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	SQL実行(INSERT/DELETE/UPDATE)
+	/**
+	 *	save table DTO
+	 *	
+	 *	@param string $query_target
+	 *	@param int $options
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
-	public  function execute( $sql, $params = NULL )
+	public function execute( $sql, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
 		try{
-			// 実行
-			$this->data_source->prepareExecute( $sql, $params );
+			$this->impl->execute( $sql, $params );
 		}
 		catch ( Exception $e ) 
 		{
@@ -568,35 +303,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	SQL実行(SELECT)
+	/**
+	 *	execute a query and retrieve single value
+	 *	
+	 *	@param string $query_target
+	 *	@param int $options
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function queryValue( $sql, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
 		try{
-			// DataSourceコンポーネントを取得
-			$ds = $this->data_source;
-
-			// 実行
-			$result = $ds->prepareExecute( $sql, $params );
-
-			// フェッチ
-			while( $row = $ds->fetchAssoc( $result ) ){
-				$value = array_shift($row);
-				log_debug( "debug,smart_gateway,sql", "queryValue:$value" );
-				return $value;
-			}
-			log_warning( "debug,smart_gateway,sql", "smart_gateway", "queryValue: no record" );
-
-			return NULL;
+			return $this->impl->queryValue( $sql, $params );
 		}
 		catch ( Exception $e ) 
 		{
@@ -605,33 +323,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	SQL実行(SELECT)
+	/**
+	 *	execute a query with parameters
+	 *	
+	 *	@param string $query_target
+	 *	@param int $options
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function query( $sql, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-
-		// データソースの準備
-		$this->initDataSource();
-		// SQLビルダの準備
-		$this->initSQLBuilder();
-
 		try{
-			// DataSourceコンポーネントを取得
-			$ds = $this->data_source;
-
-			// 実行
-			$result = $ds->prepareExecute( $sql, $params );
-
-			// フェッチ
-			$a = array();
-			while( $row = $ds->fetchAssoc( $result ) ){
-				$a[] = $row;
-			}
-
-			return $a;
+			return $this->impl->query( $sql, $params );
 		}
 		catch ( Exception $e ) 
 		{
@@ -640,110 +343,22 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	SQL検索
+	/**
+	 *	find records
+	 *	
+	 *	@param string $query_target
+	 *	@param int $options
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
-	public  function find( $query_target, $options, $criteria, $fields = NULL ) 
+	public function find( $query_target, $options, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkInteger( 2, $options );
-			Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 4, $fields, TRUE );
-
-			$ret_val = array();
-
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// DataSourceを取得
-			$ds = $this->data_source;
-
-			$current_model_name  = $query_target->getModelName();
-			$current_model_alias = $query_target->getAlias();
-			$current_model_joins = $query_target->getJoins();
-		
-			// get current model
-			$current_model = $this->getModel( s($current_model_name) );
-
-			$current_table_name  = $current_model->getTableName();
-
-			// make output fields
-			if ( $fields === NULL ){
-				// pickup fields from model
-				$fields = $current_model->getFieldList();
-
-				// add alias or table name as prefix
-				$out_fields = NULL;
-				foreach( $fields as $field ){
-					$out_field = $field;
-					if ( strlen($current_model_alias) > 0 ){
-						$out_field = $current_model_alias . '.' . $out_field;
-					}
-					else if ( $current_model_joins && count($current_model_joins) > 0 ){
-						$out_field = $current_table_name . '.' . $out_field;
-					}
-					$out_fields[] = $out_field;
-				}
-
-				// add join fields
-				if ( $current_model_joins ){
-					foreach( $current_model_joins as $join ){
-						$join_model_name = $join->getModelName();
-						$join_alias = $join->getAlias();
-
-						$join_model = $this->getModel( s($join_model_name) );
-						$join_fields = $join_model->getFieldList();
-						foreach( $join_fields as $field ){
-							$out_field = $field;
-							if ( strlen($join_alias) > 0 ){
-								$out_field = $join_alias . '.' . $out_field;
-							}
-							else{
-								$out_field = $join_model_name . '.' . $out_field;
-							}
-							$out_fields[] = $out_field;
-						}
-					}
-				}
-
-				// make vector fields
-				$fields = new Charcoal_Vector( $out_fields );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			// SQLの作成
-			$sql = $this->sql_builder->buildSelectSQL( $current_model, $options, $criteria, s($current_model_alias), v($current_model_joins), $fields );
-//			log_debug( "debug,smart_gateway,sql", "SQL: $sql" );
-
-			// パラメータ
-			$params = $criteria->getParams();
-//			log_debug( "debug,smart_gateway,sql", "params: $params" );
-
-			// 実行
-			$result = $ds->prepareExecute( s($sql), v($params) );
-
-			$this->last_sql = $sql;
-			$this->last_params = $params;
-
-//			log_debug( "debug,smart_gateway,sql", "executed SQL: $sql" );
-
-			// 実行結果件数取得
-			$num_rows = $ds->numRows( $result );
-
-//			log_debug( "debug,smart_gateway,sql", "num_rows: $num_rows" );
-
-			// fetch by record
-			while( $row = $ds->fetchAssoc( $result ) )
-			{
-//				log_debug( "debug,smart_gateway,sql", "row: " . print_r($row,true) );
-
-				// create table DTO for a record
-				$dto = new Charcoal_TableDTO( $row );
-
-				$ret_val[] = $dto;
-			}
+			return $this->impl->find( $query_target, $options, $criteria, $fields );
 		}
 		catch ( Exception $e ) 
 		{
@@ -754,26 +369,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		return $ret_val;
 	}
 
-	/*
-	 *	最初の１件取得
+	/**
+	 *	Select first record
+	 *	
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function findFirst( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			// LIMIT=1に
-			$criteria->setLimit( i(1) );
-
-			// 検索実行
-			if ( $fields )
-				$result = $this->findAll( $query_target, $criteria, $fields );
-			else
-				$result = $this->findAll( $query_target, $criteria );
-
-			return $result ? array_shift($result) : NULL;
+			return $this->impl->findFirst( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -782,27 +392,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	最初の１件を更新用に取得
+	/**
+	 *	Select first record for updating
+	 *	
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function findFirstForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			// LIMIT=1に
-			$criteria->setLimit( i(1) );
-
-			// 検索実行
-			$options = Charcoal_EnumQueryOption::FOR_UPDATE;
-			if ( $fields )
-				$result = $this->findAllForUpdate( $query_target, $criteria, $fields );
-			else
-				$result = $this->findAllForUpdate( $query_target, $criteria );
-
-			return $result ? array_shift($result) : NULL;
+			return $this->impl->findFirstForUpdate( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -811,28 +415,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	全件取得
+	/**
+	 *	Select all records
+	 *	
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function findAll( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// 検索実行
-			if ( $fields )
-				$result = $this->find( $query_target, i(0), $criteria, $fields );
-			else
-				$result = $this->find( $query_target, i(0), $criteria );
-
-			return $result;
+			return $this->impl->findAll( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -841,29 +438,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	全件取得（更新用）
+	/**
+	 *	Select all records for updating
+	 *	
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function findAllForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// 検索実行
-			$options = Charcoal_EnumQueryOption::FOR_UPDATE;
-			if ( $fields )
-				$result = $this->find( $query_target, i($options), $criteria, $fields );
-			else
-				$result = $this->find( $query_target, i($options), $criteria );
-
-			return $result;
+			return $this->impl->findAllForUpdate( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -872,29 +461,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	全件取得（重複削除）
+	/**
+	 *	Select unique record
+	 *	
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function findDistinct( $query_target, $fields, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// 検索実行
-			$options = Charcoal_EnumQueryOption::DISTINCT;
-			if ( $fields )
-				$result = $this->find( $query_target, i($options), $criteria, $fields );
-			else
-				$result = $this->find( $query_target, i($options), $criteria );
-
-			return $result;
+			return $this->impl->findDistinct( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -903,35 +484,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	１つのフィールドのみで検索
+	/**
+	 *	Select all records by field value
+	 *	
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function findAllBy( $query_target, $field, $value, $fields = NULL )
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			$field = us( $field );
-
-			$criteria = new Charcoal_SQLCriteria();
-
-			$criteria->setWhere( $field . ' = ?' );
-			$criteria->setParams( array( $value ) );
-
-			// 検索実行
-			if ( $fields )
-				$result = $this->findAll( $query_target, $criteria, $fields );
-			else
-				$result = $this->findAll( $query_target, $criteria );
-
-			return $result;
+			return $this->impl->findAllBy( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -940,35 +507,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	IDから検索(１つだけ指定した場合)
+	/**
+	 *	Select a record by primary key
+	 *	
+	 *	@param string $model_name
+	 *	@param array $id
 	 */
-	public  function findByID( $model_name, $id ) 
+	public  function findById( $model_name, $id ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $model_name );
-			Charcoal_ParamTrait::checkInteger( 2, $id );
+			$model = $this->impl->getModel( $model_name );
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			$model = $this->getModel( s($model_name) );
-
-			// プライマリキーフィールド名を取得
-			$pk = $model->getPrimaryKey();
-
-			// １つだけ指定した場合
-			$where_clause = s( $pk . ' = ?');
-			$params = v(array( Charcoal_System::toString($id) ));
-
-			$criteria = new Charcoal_SQLCriteria( $where_clause, $params );
-
-			$result = $this->findAll( qt($model_name), $criteria );
-
-			return $result ? array_shift( $result ) : NULL;
-
+			return $this->impl->findAllBy( $model, $id );
 		}
 		catch ( Exception $e )
 		{
@@ -977,43 +527,19 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	削除（１つだけ指定した場合）
+	/**
+	 *	Remove a record by primary key
+	 *	
+	 *	@param string $model_name
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function destroyById( $model_name, $id ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $model_name );
-			Charcoal_ParamTrait::checkInteger( 2, $id );
+			$model = $this->impl->getModel( $model_name );
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			$id = us( $id );
-
-			// テーブルモデル取得
-			$model = $this->getModel( $model_name );
-
-			// キーフィールド名
-			$pk = us($model->getPrimaryKey());
-
-			// SQLパラメータ
-			$params = array( ui($id) );
-
-			// 条件
-			$criteria = new Charcoal_SQLCriteria();
-			$criteria->setWhere( s($pk . ' = ?') );
-			$criteria->setParams( v($params) );
-
-			// SQLビルダを使いSQLを生成
-			$sql = $this->sql_builder->buildDeleteSQL( $model, $criteria );
-
-///			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			$this->execute( s($sql), v($params) );
+			return $this->impl->destroyById( $model, $id );
 		}
 		catch ( Exception $e )
 		{
@@ -1022,70 +548,19 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	削除（複数を指定した場合）
-	 */
-	public  function destroyAllById( $model_name, $id_array ) 
-	{
-		try{
-			Charcoal_ParamTrait::checkString( 1, $model_name );
-			Charcoal_ParamTrait::checkVector( 2, $id_array );
-
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// テーブルモデル取得
-			$model = $this->getModel( $model_name );
-
-			// テーブル名
-			$table = $model->getTableName();
-
-			// 複数個指定した場合
-			$where = array();
-			$params = array();
-			
-			foreach( $id_array as $id ){
-				$where[] = "?";
-				$params[] = $id;
-			}
-
-			$sql = "delete from $table where id in (" . implode(",",$where) . ")";
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			$this->execute( $sql, $params );
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
-		}
-	}
-
-	/*
-	 *	１つのフィールドに合致するレコードを全削除
+	/**
+	 *	Remove all records by specified field
+	 *	
+	 *	@param string $model_name
+	 *	@param string $field
+	 *	@param Charcoal_Primitive $value
 	 */
 	public  function destroyBy( $model_name, $field, $value )
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $model_name );
-			Charcoal_ParamTrait::checkString( 2, $field );
-			Charcoal_ParamTrait::checkString( 3, $value );
+			$model = $this->impl->getModel( $model_name );
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			$where = us($field) . ' = ?';
-			$params = array( us($value) );
-
-			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-
-			$this->destroyAll( $model_name, $criteria );
+			return $this->impl->destroyBy( $model, $field, $value );
 		}
 		catch ( Exception $e )
 		{
@@ -1094,38 +569,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-
-	/*
-	 *	条件に合致するレコードを全削除
+	/**
+	 *	Remove all records
+	 *	
+	 *	@param string $model_name
+	 *	@param Charcoal_SQLCriteria $criteria
 	 */
 	public  function destroyAll( $model_name, $criteria ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $model_name );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
+			$model = $this->impl->getModel( $model_name );
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// テーブルモデル取得
-			$model = $this->getModel(  $model_name );
-
-			// キーフィールド名
-//			$pk = $model->getPrimaryKey();
-
-			// SQLビルダを使いSQLを生成
-			$sql = $this->sql_builder->buildDeleteSQL( $model, $criteria );
-
-			// パラメータ
-			$params = $criteria ? $criteria->getParams() : NULL;
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQLを実行
-			$this->execute( s($sql), v($params) );
+			return $this->impl->destroyAll( $model, $criteria );
 		}
 		catch ( Exception $e )
 		{
@@ -1134,53 +589,19 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	Count entries in sigle table
+	/**
+	 *	Execute aggregate SQL
+	 *	
+	 *	@param int $aggregate_func
+	 *	@param string $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
 	 */
-	private  function _executeAggregateSQL( $aggregate_func, $query_target, $criteria, $fields ) 
+	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkInteger( 1, $aggregate_func );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_QueryTarget', $query_target );
-			Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkString( 4, $fields );
+			$model = $this->impl->getModel( $model_name );
 
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// default count fields
-			if ( $fields === NULL ){
-				$fields = '*';
-			}
-
-			$current_model_name  = $query_target->getModelName();
-			$current_model_alias = $query_target->getAlias();
-			$current_model_joins = $query_target->getJoins();
-
-			// get current model
-			$model = $this->getModel( s($current_model_name) );
-
-			// SQL
-			$sql = $this->sql_builder->buildAggregateSQL( $aggregate_func, $model, $criteria, s($current_model_alias), v($current_model_joins), $fields );
-
-			// パラメータ
-			$params = $criteria->getParams();
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-			// SQL実行
-			$result = $this->data_source->prepareExecute( s($sql), v($params) );
-
-			// フェッチ
-			$rows = $this->data_source->fetchArray( $result );
-
-			// result
-			$result = $rows[0] ? intval($rows[0]) : 0;
-
-			return $result;
+			return $this->impl->execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -1189,28 +610,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	get count of data in sigle table
+	/**
+	 *	apply COUNT aggregate function to specified table
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
-	public  function count( Charcoal_String $query_target, Charcoal_SQLCriteria $criteria, Charcoal_String $fields = NULL ) 
+	public  function count( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkString( 3, $fields );
-
-			if ( $fields === NULL ){
-				$fields = s('*');
-			}
-
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( $query_target );
-
-			$result = $this->_executeAggregateSQL( Charcoal_EnumSQLAggregateFunc::FUNC_COUNT, $query_target_list, $criteria, $fields );
-
-			log_debug( "debug,sql,smart_gateway", "smart_gateway", "COUNT result: $result" );
-
-			return $result;
+			return $this->impl->count( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -1219,24 +629,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	get max of data in sigle table
+	/**
+	 *	apply MAX aggregate function to specified table
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
-	public  function max( $query_target, $criteria, $fields ) 
+	public  function max( $query_target, $criteria, $fields = NULL  ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkString( 3, $fields );
-
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( $query_target );
-
-			$result = $this->_executeAggregateSQL( Charcoal_EnumSQLAggregateFunc::FUNC_MAX, $query_target_list, $criteria, $fields );
-
-			log_debug( "debug,sql,smart_gateway", "smart_gateway", "MAX result: $result" );
-
-			return $result;
+			return $this->impl->max( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -1245,24 +648,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	get min of data in sigle table
+	/**
+	 *	apply MIN aggregate function to specified table
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function min( $query_target, $criteria, $fields ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkString( 3, $fields );
-
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( $query_target );
-
-			$result = $this->_executeAggregateSQL( Charcoal_EnumSQLAggregateFunc::FUNC_MIN, $query_target_list, $criteria, $fields );
-
-			log_debug( "debug,sql,smart_gateway", "smart_gateway", "MIN result: $result" );
-
-			return $result;
+			return $this->impl->min( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -1271,24 +667,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	get sum of data in sigle table
+	/**
+	 *	apply SUM aggregate function to specified table
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function sum( $query_target, $criteria, $fields ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkString( 3, $fields );
-
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( $query_target );
-
-			$result = $this->_executeAggregateSQL( Charcoal_EnumSQLAggregateFunc::FUNC_SUM, $query_target_list, $criteria, $fields );
-
-			log_debug( "debug,sql,smart_gateway", "smart_gateway", "SUM result: $result" );
-
-			return $result;
+			return $this->impl->sum( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -1297,24 +686,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	get sum of data in sigle table
+	/**
+	 *	apply AVG aggregate function to specified table
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param array $fields
 	 */
 	public  function avg( $query_target, $criteria, $fields ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $query_target );
-			Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-			Charcoal_ParamTrait::checkString( 3, $fields );
-
-			// make query target list
-			$query_target_list = new Charcoal_QueryTarget( $query_target );
-
-			$result = $this->_executeAggregateSQL( Charcoal_EnumSQLAggregateFunc::FUNC_AVG, $query_target_list, $criteria, $fields );
-
-			log_debug( "debug,sql,smart_gateway", "smart_gateway", "AVG result: $result" );
-
-			return $result;
+			return $this->impl->avg( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
 		{
@@ -1323,23 +705,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	ページ情報からLIMIT句で指定する値を生成
+	/**
+	 *	Execute CREATE DATABASE sql
+	 *	
+	 *	@param string $db_name
+	 *	@param string $charset
 	 */
-	public  function getLimit( $page_info ) 
+	public  function createDatabase( $db_name, $charset ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_DBPageInfo', $page_info );
-
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// SQL
-			$limit = $this->sql_builder->getLimit( $page_info );
-
-			log_debug( "debug,smart_gateway,sql", "limit:$limit" );
-
-			return $limit;
+			$this->impl->createDatabase( $db_name, $charset );
 		}
 		catch ( Exception $e )
 		{
@@ -1348,84 +723,15 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
-	 *	ページ情報からOFFSET句で指定する値を生成
-	 */
-	public  function getOffset( $page_info ) 
-	{
-		try{
-			Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_DBPageInfo', $page_info );
-
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// SQL
-			$offset = $this->sql_builder->getOffset( $page_info );
-
-			log_debug( "debug,smart_gateway,sql", "offset:$offset" );
-
-			return $offset;
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
-		}
-	}
-
-
-	/*
-	 *	DBを作成
-	 */
-	public  function createDatabase( Charcoal_String $db_name, Charcoal_String $charset ) 
-	{
-		try{
-			Charcoal_ParamTrait::checkString( 1, $db_name );
-			Charcoal_ParamTrait::checkString( 2, $charset );
-
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// SQLビルダを使いSQLを生成
-			$sql = $this->sql_builder->buildCreateDatabaseSQL( $db_name, $charset );
-
-			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-
-			// SQL実行
-			$this->data_source->execute( s($sql) );
-
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
-		}
-	}
-
-	/*
-	 *	テーブルを作成
+	/**
+	 *	Execute CREATE TABLE sql
+	 *	
+	 *	@param string $model_name
 	 */
 	public  function createTable( $model_name ) 
 	{
 		try{
-			Charcoal_ParamTrait::checkString( 1, $model_name );
-
-			// データソースの準備
-			$this->initDataSource();
-			// SQLビルダの準備
-			$this->initSQLBuilder();
-
-			// テーブルモデル取得
-			$model = $this->getModel( $model_name );
-
-			// SQLビルダを使いSQLを生成
-			$sql = $this->sql_builder->buildCreateTableSQL( $model );
-
-			// SQL実行
-			$this->data_source->execute( s($sql) );
-
+			$this->impl->createTable( $model_name );
 		}
 		catch ( Exception $e )
 		{

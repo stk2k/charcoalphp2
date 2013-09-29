@@ -4,28 +4,13 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    classes.core
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
-class Charcoal_Session extends Charcoal_Object
+class Charcoal_Session extends Charcoal_HashMap
 {
-	private $values;
-
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->values = array();
-
-//		$req_path = Charcoal_Framework::getRequestPath();
-//		log_info( "debug, session", "request_path=" . $req_path );
-	}
-
 	/*
 	 *	セッション名を取得
 	 */
@@ -49,7 +34,7 @@ class Charcoal_Session extends Charcoal_Object
 	{
 		$a = session_get_cookie_params();
 		$key = us( $key );
-		return $a[ $key ];
+		return isset($a[$key]) ? $a[$key] : NULL;
 	}
 
 	/*
@@ -58,16 +43,6 @@ class Charcoal_Session extends Charcoal_Object
 	public function getCookieParameters()
 	{
 		return session_get_cookie_params();
-	}
-
-	/*
-	 *	初期化
-	 */
-	public function clear()
-	{
-		$this->values = array();
-
-//		log_info( "debug, session", "clear()" );
 	}
 
 	/*
@@ -82,55 +57,6 @@ class Charcoal_Session extends Charcoal_Object
 //		$new_id = session_id();
 
 //		log_info( "debug, session", "regenerateID() old=$old_id new=$new_id result=" . ($result ? "TRUE" : "FALSE") );
-	}
-
-	/*
-	 *    キー一覧を取得
-	 */
-	public function getKeys()
-	{
-		return array_keys( $this->values );
-	}
-
-	/*
-	 *    パラメータを取得
-	 */
-	public function get( Charcoal_String $key )
-	{
-		$key = us( $key );
-		$value = isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
-
-//		log_debug( "debug, session", "session", "get($key)=$value" );
-
-		return $value;
-	}
-
-	/*
-	 *    パラメータを設定
-	 */
-	public function set( Charcoal_String $key, $value )
-	{
-		$key = us( $key );
-		$this->values[ $key ] = $value;
-
-//		log_debug( "debug, session", "session", "set($key," . print_r($value,true) . ")" );
-	}
-
-	/*
-	 *    パラメータの設定を解除
-	 */
-	public function remove( Charcoal_String $key )
-	{
-		$key = us( $key );
-		$value = isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
-
-		if ( $value ){
-			unset( $this->values[ $key ] );
-		}
-
-//		log_debug( "debug, session", "session", "remove($key)=$value" );
-
-		return $value;
 	}
 
 	/**
@@ -162,7 +88,6 @@ class Charcoal_Session extends Charcoal_Object
 	 */
 	public function destroy()
 	{
-		$this->clear();
 		session_unset();
 		session_destroy();
 
@@ -188,7 +113,7 @@ class Charcoal_Session extends Charcoal_Object
 		if ( $keys ){
 			foreach( $keys as $key ){
 				$value = unserialize( $_SESSION[$key] );
-				$this->set( s($key), $value );
+				$this->set( $key, $value );
 				log_info( "debug, session", "[$key]=" . print_r($value,true) );
 			}
 		}
@@ -215,8 +140,10 @@ class Charcoal_Session extends Charcoal_Object
 		foreach( $keys as $key ){
 			$value = $this->get( s($key) );
 			$_SESSION[ $key ] = serialize($value);
-//			log_info( "debug, session", "[$key]=" . print_r($value,true) );
+			log_info( "debug, session", "saved [$key]=" . print_r($value,true) );
 		}
+
+		log_info( "debug, session", "_SESSION=" . print_r($_SESSION,true) );
 
 //		log_info( "debug, session", 'save() end' );
 	}

@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    core
+* @package    objects.class_loaders
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
@@ -136,11 +136,12 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_FileUploadNoTmpDirException'			=> 'exceptions',
 				'Charcoal_FileUploadPartialException'			=> 'exceptions',
 				'Charcoal_FileSystemException'					=> 'exceptions',
-				'Charcoal_HttpException'						=> 'exceptions',
+				'Charcoal_HttpStatusException'						=> 'exceptions',
 				'Charcoal_ImageGetSizeException'				=> 'exceptions',
 				'Charcoal_InterfaceNotFoundException'			=> 'exceptions',
 				'Charcoal_InvalidEncodingCodeException'			=> 'exceptions',
 				'Charcoal_InvalidMailAddressException'			=> 'exceptions',
+				'Charcoal_LayoutManagerCreationException'		=> 'exceptions',
 				'Charcoal_LoggerConfigException'				=> 'exceptions',
 				'Charcoal_MakeDirectoryException'				=> 'exceptions',
 				'Charcoal_MakeFileException'					=> 'exceptions',
@@ -245,7 +246,9 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 
 		// component classes(smart gateway)
 				'Charcoal_SmartGateway'						=> 'components/charcoal/db',
+				'Charcoal_SmartGatewayImpl'					=> 'components/charcoal/db',
 				'Charcoal_SQLCriteria'						=> 'components/charcoal/db',
+				'Charcoal_ExecutedSQL'						=> 'components/charcoal/db',
 				'Charcoal_PagedSQLCriteria'					=> 'components/charcoal/db',
 				'Charcoal_QueryJoin'						=> 'components/charcoal/db',
 				'Charcoal_QueryTarget'						=> 'components/charcoal/db',

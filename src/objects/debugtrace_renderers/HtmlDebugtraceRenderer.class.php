@@ -4,13 +4,27 @@
 *
 * PHP version 5
 *
-* @package    debug
+* @package    objects.debugtrace_renderers
 * @author     CharcoalPHP Development Team
 * @copyright  2008 - 2013 CharcoalPHP Development Team
 */
 
 class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 {
+	private $clear_buffer;
+
+	/**
+	 * Initialize instance
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function configure( $config )
+	{
+		parent::configure( $config );
+
+		$this->clear_buffer = $config->getBoolean( 'clear_buffer', TRUE );
+	}
+
 	/**
 	 * Print HTML Header
 	 */
@@ -555,6 +569,10 @@ HTML_HEADER;
 		list( $file, $line ) = Charcoal_System::caller(0);
 
 		$title = 'CharcoalPHP: Exception List';
+
+		if ( $this->clear_buffer->isTrue() ){
+			ob_clean();
+		}
 
 		echo $this->_output( $e, $title, $file, $line );
 
