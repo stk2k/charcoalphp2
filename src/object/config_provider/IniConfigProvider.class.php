@@ -41,10 +41,13 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 
 		$source = $key . '.ini';
 
-		// check if ini file exists
+		$is_debug = $this->debug->isTrue();
+
 		if ( !is_file($source) ){
-			if ( $this->debug->isTrue() )	print "[$source]is not exists!" . eol();	
-//			log_info( "system, debug, config", "config", "ini file[$source] does not exist." );
+			if ( $is_debug ){
+				print "ini file[$source] does not exist." . eol();
+				log_warning( "system, debug, config", "config", "ini file[$source] does not exist." );
+			}
 			return NULL;
 		}
 
@@ -55,10 +58,13 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 			ad( $ini_config );
 		}
 		if ( $ini_config === FALSE ){	
-//			log_warning( "system, debug, config", "config", "failed to read ini file[$source]" );
+			if ( $is_debug ){
+				print "parse_ini_file failed: [$source]" . eol();
+				log_warning( "system, debug, config", "config", "parse_ini_file failed: [$source]" );
+			}
 			return NULL;
 		}
-//		log_info( "system, debug, config", "config", "read ini file[$source]:" . print_r($ini_config,true) );
+		if ( $is_debug ) log_debug( "system, debug, config", "config", "read ini file[$source]:" . print_r($ini_config,true) );
 
 		return $ini_config;
 	}
