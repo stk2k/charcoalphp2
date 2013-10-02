@@ -5,9 +5,9 @@
 
 define( 'PROC_KEYWORD', 'proc' );
 define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
-define( 'CHARCOAPHP_VERSION_MINOR', 21 );
-define( 'CHARCOAPHP_VERSION_REVISION', 3 );
-define( 'CHARCOAPHP_VERSION_BUILD', 156 );
+define( 'CHARCOAPHP_VERSION_MINOR', 22 );
+define( 'CHARCOAPHP_VERSION_REVISION', 0 );
+define( 'CHARCOAPHP_VERSION_BUILD', 157 );
 define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
 define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
  
@@ -56,11 +56,6 @@ function add_include_path( $path )
 			ini_get('include_path') . PATH_SEPARATOR . $path
 		);
 }
-
-/*
-ini_set( 'include_path', CHARCOAL_HOME . '/classes' );
-add_include_path( WEBAPP_DIR . '/' . APPLICATION . '/classes' );
-*/
 
 //==================================================================
 // EOL
@@ -133,40 +128,40 @@ function s( $value )
 	if ( $value instanceof Charcoal_String ){
 		return $value;
 	}
-	return new Charcoal_String($value);
+	return $value !== NULL ? new Charcoal_String( $value ) : NULL;
 }
 
 /**
  *	intをIntegerオブジェクトに変換
  **/
-function i( $value, $default_value = 0 )
+function i( $value )
 {
 	if ( $value instanceof Charcoal_Integer ){
 		return $value;
 	}
-	return new Charcoal_Integer( $value, $default_value );
+	return $value !== NULL ? new Charcoal_Integer( $value ) : NULL;
 }
 
 /**
  *	floatをFloatオブジェクトに変換
  **/
-function f( $value, $default_value = 0 )
+function f( $value )
 {
 	if ( $value instanceof Charcoal_Float ){
 		return $value;
 	}
-	return new Charcoal_Float( $value, $default_value );
+	return $value !== NULL ? new Charcoal_Float( $value ) : NULL;
 }
 
 /**
  *	boolをBooleanオブジェクトに変換
  **/
-function b( $value, $default_value = FALSE )
+function b( $value )
 {
 	if ( $value instanceof Charcoal_Boolean ){
 		return $value;
 	}
-	return new Charcoal_Boolean( $value, $default_value );
+	return $value !== NULL ? new Charcoal_Boolean( $value ) : NULL;
 }
 
 /**
@@ -177,7 +172,7 @@ function d( $value )
 	if ( $value instanceof Charcoal_Date ){
 		return $value;
 	}
-	return Charcoal_Date::parse( s($value) );
+	return $value !== NULL ? Charcoal_Date::parse( $value ) : NULL;
 }
 
 /**
@@ -188,7 +183,7 @@ function dt( $value )
 	if ( $value instanceof Charcoal_DateTime ){
 		return $value;
 	}
-	return Charcoal_DateWithTime::parse( s($value) );
+	return $value !== NULL ? Charcoal_DateWithTime::parse( $value ) : NULL;
 }
 
 /**
@@ -199,7 +194,7 @@ function v( $value )
 	if ( $value instanceof Charcoal_Vector ){
 		return $value;
 	}
-	return new Charcoal_Vector( $value );
+	return $value !== NULL ? new Charcoal_Vector( $value ) : NULL;
 }
 
 /**
@@ -210,7 +205,7 @@ function l( $value )
 	if ( $value instanceof Charcoal_List ){
 		return $value;
 	}
-	return new Charcoal_List( $value );
+	return $value !== NULL ? new Charcoal_List( $value ) : NULL;
 }
 
 /**
@@ -221,7 +216,7 @@ function m( $value )
 	if ( $value instanceof Charcoal_HashMap ){
 		return $value;
 	}
-	return new Charcoal_HashMap( $value );
+	return $value !== NULL ? new Charcoal_HashMap( $value ) : NULL;
 }
 
 /**
@@ -232,7 +227,7 @@ function p( $value )
 	if ( $value instanceof Charcoal_Properties ){
 		return $value;
 	}
-	return new Charcoal_Properties( $value );
+	return $value !== NULL ? new Charcoal_Properties( $value ) : NULL;
 }
 
 //==================================================================
@@ -344,5 +339,5 @@ function _catch( Exception $e )
 
 //==================================================================
 // bootstrap
-require_once( CHARCOAL_HOME . '/src/classes/bootstrap/Bootstrap' . CHARCOAL_CLASS_FILE_SUFFIX );
+require_once( CHARCOAL_HOME . '/src/class/bootstrap/Bootstrap' . CHARCOAL_CLASS_FILE_SUFFIX );
 

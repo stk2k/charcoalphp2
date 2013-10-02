@@ -3,7 +3,7 @@
 cls
 
 set TEST_PROC="@:test"
-set TARGET_MODULE="@:components:charcoal:db"
+set TARGET_MODULE="@:component:charcoal:db"
 
 REM Query Test
 SET ACTIONS="fluent_api"

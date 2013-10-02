@@ -13,7 +13,7 @@ define( 'CHARCOAL_RUNMODE', 'http' );
 // Setup Framework Basic Constants
 define( 'CHARCOAL_BASE_DIR',  dirname(dirname(dirname(__FILE__))) );
 define( 'CHARCOAL_HOME', CHARCOAL_BASE_DIR . '/charcoal' );
-define( 'CHARCOAL_WEBAPP_DIR', CHARCOAL_HOME . "/test/web_app" );
+define( 'CHARCOAL_WEBAPP_DIR', CHARCOAL_HOME . "/web_app" );
 define( 'CHARCOAL_PROJECT', "test" );
 define( 'CHARCOAL_APPLICATION', "test" );
 define( 'CHARCOAL_DEFAULT_PROCPATH', "index" );

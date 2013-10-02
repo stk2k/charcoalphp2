@@ -41,4 +41,3 @@ include( CHARCOAL_HOME . '/charcoal.inc.php');
 
 Charcoal_Bootstrap::run();
 Charcoal_Framework::run();
-
