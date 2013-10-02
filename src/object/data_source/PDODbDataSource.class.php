@@ -488,7 +488,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 			$msg  = 'PearDbDataSource#prepareExecute() failed:';
 			$msg .= ' [SQL]' . $sql;
-			$msg .= ' [params]' . ($params ? $params->join(s(','),b(TRUE)) : '');
+			$msg .= ' [params]' . ($params ? v($params)->join(',',TRUE) : '');
 
 			_throw( new Charcoal_DBDataSourceException( $msg, $e ) );
 		}

@@ -21,7 +21,10 @@ class Charcoal_SmartGatewayImpl
 
 	/**
 	 * Constructor
-	 *	
+	 *
+	 * @param Charcoal_Sandbox $sandbox           sandbox object
+	 * @param Charcoal_IDataSource $data_source   data source object
+	 * @param Charcoal_ISQLBuilder $sql_builder   SQL builder object
 	 */
 	public function __construct( $sandbox, $data_source, $sql_builder )
 	{
@@ -87,7 +90,7 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param string $model_name       table model name
 	 */
-	public function getModel( $model_name )
+	private function getModel( $model_name )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $model_name );
 
@@ -204,7 +207,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::find()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
@@ -277,7 +280,7 @@ class Charcoal_SmartGatewayImpl
 //			log_debug( "debug,smart_gateway,sql", "params: $params" );
 
 		// 実行
-		$result = $this->data_source->prepareExecute( s($sql), v($params) );
+		$result = $this->data_source->prepareExecute( $sql, $params );
 
 //			log_debug( "debug,smart_gateway,sql", "executed SQL: $sql" );
 
@@ -305,7 +308,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findFirst()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
@@ -325,7 +328,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findFirstForUpdate()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
@@ -345,7 +348,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findAll()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
@@ -361,7 +364,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findAllForUpdate()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
@@ -377,7 +380,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findDistinct()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
@@ -393,8 +396,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findDistinct()
 	 *	
-	 *	@param Charcoal_SmartGateway $gw
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
@@ -417,13 +419,15 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::findById()
 	 *	
-	 *	@param Charcoal_ITableModel $model
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int $id
 	 */
-	public function findById( $model, $id ) 
+	public function findById( $query_target, $id ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkInteger( 2, $id );
+
+		$model = $this->getModel( $query_target->getModelName() );
 
 		$pk = $model->getPrimaryKey();
 
@@ -442,13 +446,16 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::destroyById()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param int $id
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param int $data_id                          identify database entity
 	 */
-	public function destroyById( $model, $id ) 
+	public function destroyById( $query_target, $data_id ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkInteger( 2, $id );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
 		$id = us( $id );
 
@@ -459,7 +466,7 @@ class Charcoal_SmartGatewayImpl
 
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
-		$sql = $this->sql_builder->buildDeleteSQL( $model, $criteria );
+		$sql = $this->sql_builder->buildDeleteSQL( $model, $alias, $criteria );
 
 ///			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
 //			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
@@ -470,13 +477,13 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::destroyBy()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param string $field
-	 *	@param Charcoal_Primitive $value
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param string $field                         field name to query
+	 *	@param Charcoal_Primitive $value             field value to query
 	 */
-	public function destroyBy( $model, $field, $value )
+	public function destroyBy( $query_target, $field, $value )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkString( 2, $field );
 		Charcoal_ParamTrait::checkPrimitive( 3, $value );
 
@@ -491,15 +498,18 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::destroyAll()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria         criteria object
 	 */
-	public function destroyAll( $model, $criteria ) 
+	public function destroyAll( $query_target, $criteria ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 
-		$sql = $this->sql_builder->buildDeleteSQL( $model, $criteria );
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
+
+		$sql = $this->sql_builder->buildDeleteSQL( $model, $alias, $criteria );
 
 		$params = $criteria ? $criteria->getParams() : NULL;
 
@@ -512,10 +522,10 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::execAggregateQuery()
 	 *	
-	 *	@param int $aggregate_func
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param string $fields
+	 *	@param int $aggregate_func                   identify aggregate function tpype
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria        criteria object
+	 *	@param string $fields                        fields to be included result set
 	 */
 	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL ) 
 	{
@@ -559,21 +569,19 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::count()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param string $fields
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria        criteria object
+	 *	@param string $fields                        fields to be included result set
 	 */
 	public function count( $query_target, $criteria, $fields = NULL ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $query_target );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		if ( $fields === NULL ){
 			$fields = '*';
 		}
-
-		$query_target = new Charcoal_QueryTarget( $query_target );
 
 		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_COUNT, $query_target, $criteria, $fields );
 
@@ -585,17 +593,15 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::max()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param string $fields
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria        criteria object
+	 *	@param string $fields                        fields to be included result set
 	 */
 	public function max( $query_target, $criteria, $fields = NULL  ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $query_target );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
-
-		$query_target = new Charcoal_QueryTarget( $query_target );
 
 		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_MAX, $query_target, $criteria, $fields );
 
@@ -607,17 +613,15 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::min()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param string $fields
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria        criteria object
+	 *	@param string $fields                        fields to be included result set
 	 */
 	public function min( $query_target, $criteria, $fields ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $query_target );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkString( 3, $fields );
-
-		$query_target = new Charcoal_QueryTarget( $query_target );
 
 		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_MIN, $query_target, $criteria, $fields );
 
@@ -629,17 +633,15 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::sum()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param string $fields
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria        criteria object
+	 *	@param string $fields                        fields to be included result set
 	 */
 	public function sum( $query_target, $criteria, $fields ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $query_target );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkString( 3, $fields );
-
-		$query_target = new Charcoal_QueryTarget( $query_target );
 
 		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_SUM, $query_target, $criteria, $fields );
 
@@ -651,17 +653,15 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::avg()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
+	 *	@param Charcoal_QueryTarget $query_target        description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param string $fields
 	 */
 	public function avg( $query_target, $criteria, $fields ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $query_target );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkString( 3, $fields );
-
-		$query_target = new Charcoal_QueryTarget( $query_target );
 
 		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_AVG, $query_target, $criteria, $fields );
 
@@ -689,15 +689,16 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::save()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param Charcoal_TableDTO $data
+	 *	@param Charcoal_QueryTarget $query_target      description about target model, alias, or joins
+	 *	@param array $data                             associative array or HashMap object to insert
 	 */
-	public function save( $model, $data )
+	public function save( $query_target, $data )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_TableDTO', $data );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::checkHashMap( 2, $data );
 
-		$dto  = clone $data;
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
 		// primary key
 		$pk      = $model->getPrimaryKey();
@@ -706,38 +707,33 @@ class Charcoal_SmartGatewayImpl
 		$is_new = FALSE;
 		if ( $model->isPrimaryKeyValid($data) ){
 			// UPDATE
-			$data_id = $dto->$pk;
+			$data_id = $data[$pk];
 
 			$where = "$pk = ?";
 			$params = array( ui($data_id) );
-			$criteria = new Charcoal_SQLCriteria( s($where), v($params) );
-			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, NULL, $dto, $criteria );
+			$criteria = new Charcoal_SQLCriteria( $where, $params );
+			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $data, $criteria );
 		}
 		else{
 			// INSERT
-			list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, NULL, $dto );
+			list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $alias, $data );
 
 			$is_new = TRUE;
 		}
 
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
-
-		$this->data_source->prepareExecute( s($sql), v($params) );
+		$this->data_source->prepareExecute( $sql, $params );
 
 		if ( $is_new ){
 			$sql = $this->sql_builder->buildLastIdSQL();
 
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-
-			$result = $this->data_source->prepareExecute( s($sql) );
+			$result = $this->data_source->prepareExecute( $sql );
 
 			$row = $this->data_source->fetchArray( $result );
 
 			$new_id = $row[0];
 		}
 		else{
-			$new_id = $dto->$pk;
+			$new_id = $data[$pk];
 		}
 
 		log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
@@ -748,26 +744,24 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::insert()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param Charcoal_TableDTO $data
+	 *	@param Charcoal_QueryTarget $query_target      description about target model, alias, or joins
+	 *	@param array $data                             associative array or HashMap object to insert
 	 */
-	public function insert( $model, $data )
+	public function insert( $query_target, $data )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_TableDTO', $data );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::checkHashMap( 2, $data );
 
-		$dto  = clone $data;
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
-		list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $dto );
-
-//			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+		list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $alias, $data );
 
 		$this->data_source->prepareExecute( $sql, $params );
 
 		$sql = $this->sql_builder->buildLastIdSQL();
 		
-		$result = $this->data_source->prepareExecute( s($sql) );
+		$result = $this->data_source->prepareExecute( $sql );
 
 		$row = $this->data_source->fetchArray( $result );
 
@@ -780,15 +774,18 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::updateFields()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param int $data_id
-	 *	@param array $data
+	 *	@param Charcoal_QueryTarget $query_target description about target model, alias, or joins
+	 *	@param int $data_id                       identify database entity
+	 *	@param array $data                        associative array or HashMap object to update
 	 */
-	public function updateFields( $model, $data_id, $data ) 
+	public function updateFields( $query_target, $data_id, $data ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkInteger( 2, $data_id );
 		Charcoal_ParamTrait::checkHashMap( 3, $data );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
 		$dto = $model->createDTO();
 
@@ -804,7 +801,7 @@ class Charcoal_SmartGatewayImpl
 		$params = array( ui($data_id) );
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
-		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
+		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $dto, $criteria );
 
 //		log_debug( "debug,smart_gateway,sql", "sql:$sql" );
 //		log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
@@ -816,53 +813,53 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::updateFieldNow()
 	 *	
-	 *	@param Charcoal_ITableModel $model        table model object related with th query
-	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param int $data_id
-	 *	@param string $field
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param int $data_id                          identify database entity
+	 *	@param string $field                         field name to update
 	 */
-	public function updateFieldNow( $model, $alias, $data_id, $field ) 
+	public function updateFieldNow( $query_target, $data_id, $field ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkInteger( 3, $data_id );
-		Charcoal_ParamTrait::checkString( 4, $field );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::checkInteger( 2, $data_id );
+		Charcoal_ParamTrait::checkString( 3, $field );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
 		$field = us($field);
 
 		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('now') );
-
-//		log_debug( "debug,smart_gateway,sql", "override:" . print_r($override,true) );
 
 		$pk = $model->getPrimaryKey();
 		$where = "$pk = ?";
 		$params = array( ui($data_id) );
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
-		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $model->createDTO(), $criteria, m($override) );
+		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $model->createDTO(), $criteria, $override );
 
 //		log_debug( "debug,smart_gateway,sql", "sql:$sql" );
 //		log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
 
-		$this->data_source->prepareExecute( s($sql), v($params) );
+		$this->data_source->prepareExecute( $sql, $params );
 	}
 
 	/**
 	 *	real implementation of Charcoal_SmartGateway::updateField()
 	 *	
-	 *	@param Charcoal_ITableModel $model        table model object related with th query
-	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param int $data_id
-	 *	@param string $field
-	 *	@param Charcoal_Primitive $value
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param int $data_id                          identify database entity
+	 *	@param string $field                         field name to update
+	 *	@param Charcoal_Primitive $value             scalar primitive data to update
 	 */
-	public function updateField( $model, $alias, $data_id, $field, $value ) 
+	public function updateField( $query_target, $data_id, $field, $value ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkInteger( 3, $data_id );
-		Charcoal_ParamTrait::checkString( 4, $field );
-		Charcoal_ParamTrait::checkPrimitive( 5, $value );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::checkInteger( 2, $data_id );
+		Charcoal_ParamTrait::checkString( 3, $field );
+		Charcoal_ParamTrait::checkPrimitive( 4, $value );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
 		$dto = $model->createDTO();
 
@@ -883,21 +880,24 @@ class Charcoal_SmartGatewayImpl
 //		log_debug( "debug,smart_gateway,sql", "sql:$sql" );
 //		log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
 
-		$this->data_source->prepareExecute( s($sql), v($params) );
+		$this->data_source->prepareExecute( $sql, $params );
 	}
 
 	/**
 	 *	real implementation of Charcoal_SmartGateway::updateAll()
 	 *	
-	 *	@param Charcoal_ITableModel $model
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $data
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria        criteria object
+	 *	@param array $data                           associative array or HashMap object to update
 	 */
-	public function updateAll( $model, $criteria, $data ) 
+	public function updateAll( $query_target, $criteria, $data ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkHashMap( 3, $data );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
 
 		$dto = $model->createDTO( um($data) );
 
@@ -907,7 +907,7 @@ class Charcoal_SmartGatewayImpl
 //		log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
 
 		// SQL実行
-		$this->data_source->prepareExecute( s($sql), v($params) );
+		$this->data_source->prepareExecute( $sql, $params );
 	}
 
 }

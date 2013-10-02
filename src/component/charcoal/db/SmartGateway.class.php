@@ -167,16 +167,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update all records matched by criteria
 	 *	
-	 *	@param string $model_name
-	 *	@param array $data
-	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param string $query_target              description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria    criteria object
+	 *	@param array $data                       associative array or HashMap object to update
 	 */
-	public  function updateAll( $model_name, $data, $criteria ) 
+	public function updateAll( $query_target, $criteria, $data ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			$this->impl->updateField( $model, $data_id, $field, $value );
+			$this->impl->updateAll( $query_target, $criteria, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -188,17 +190,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update field by value
 	 *	
-	 *	@param string $model_name
-	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param int $data_id
-	 *	@param Charcoal_Primitive $value
+	 *	@param string $query_target        description about target model, alias, or joins
+	 *	@param int $data_id                identify database entity
+	 *	@param Charcoal_Primitive $value   scalar primitive data to update
 	 */
-	public  function updateField( $model_name, $alias, $data_id, $field, $value ) 
+	public function updateField( $query_target, $data_id, $field, $value ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			$this->impl->updateField( $model, $alias, $data_id, $field, $value );
+			$this->impl->updateField( $query_target, $data_id, $field, $value );
 		}
 		catch ( Exception $e )
 		{
@@ -210,17 +213,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update field by current time
 	 *	
-	 *	@param string $model_name
-	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param int $data_id
-	 *	@param array $data
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param int $data_id            identify database entity
+	 *	@param string $field           field name to update
 	 */
-	public  function updateFieldNow( $model_name, $alias, $data_id, $field ) 
+	public function updateFieldNow( $query_target, $data_id, $field ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			$this->impl->updateFieldNow( $model, $alias, $data_id, $field );
+			$this->impl->updateFieldNow( $query_target, $data_id, $field );
 		}
 		catch ( Exception $e )
 		{
@@ -232,16 +236,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update record with multiple fields
 	 *	
-	 *	@param string $model_name
-	 *	@param int $data_id
-	 *	@param array $data
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param int $data_id            identify database entity
+	 *	@param array $data             associative array or HashMap object to update
 	 */
-	public  function updateFields( $model_name, $data_id, $data ) 
+	public function updateFields( $query_target, $data_id, $data ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			$this->impl->updateFields( $model, $data );
+			$this->impl->updateFields( $query_target, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -253,15 +259,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	insert DTO into specified table
 	 *	
-	 *	@param string $model_name
-	 *	@param Charcoal_TableDTO $data
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param array $data             associative array or HashMap object to insert
 	 */
-	public  function insert( $model_name, $data )
+	public function insert( $query_target, $data )
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			return $this->impl->insert( $model, $data );
+			return $this->impl->insert( $query_target, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -273,15 +281,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	insert or update DTO into specified table
 	 *	
-	 *	@param string $model_name
-	 *	@param Charcoal_TableDTO $data
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param array $data             associative array or HashMap object to update
 	 */
-	public function save( $model_name, $data )
+	public function save( $query_target, $data )
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			return $this->impl->save( $model, $data );
+			return $this->impl->save( $query_target, $data );
 		}
 		catch ( Exception $e )
 		{
@@ -291,9 +301,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	}
 
 	/**
-	 *	save table DTO
+	 *	execute command query(INSERT/DELETE/UPDATE)
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
@@ -313,12 +323,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute a query and retrieve single value
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function queryValue( $sql, $params = NULL )
+	public function queryValue( $sql, $params = NULL )
 	{
 		try{
 			return $this->impl->queryValue( $sql, $params );
@@ -333,12 +343,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute a query with parameters
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function query( $sql, $params = NULL )
+	public function query( $sql, $params = NULL )
 	{
 		try{
 			return $this->impl->query( $sql, $params );
@@ -353,7 +363,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	find records
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
@@ -379,11 +389,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select first record
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function findFirst( $query_target, $criteria, $fields = NULL ) 
+	public function findFirst( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -402,11 +412,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select first record for updating
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function findFirstForUpdate( $query_target, $criteria, $fields = NULL ) 
+	public function findFirstForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -425,11 +435,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function findAll( $query_target, $criteria, $fields = NULL ) 
+	public function findAll( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -448,11 +458,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records for updating
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function findAllForUpdate( $query_target, $criteria, $fields = NULL ) 
+	public function findAllForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -471,11 +481,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select unique record
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function findDistinct( $query_target, $fields, $criteria, $fields = NULL ) 
+	public function findDistinct( $query_target, $fields, $criteria, $fields = NULL ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -494,11 +504,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records by field value
 	 *	
-	 *	@param string $query_target
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param array $fields
 	 */
-	public  function findAllBy( $query_target, $field, $value, $fields = NULL )
+	public function findAllBy( $query_target, $field, $value, $fields = NULL )
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -517,15 +527,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select a record by primary key
 	 *	
-	 *	@param string $model_name
+	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param array $id
 	 */
-	public  function findById( $model_name, $id ) 
+	public function findById( $model_name, $id ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			return $this->impl->findAllBy( $model, $id );
+			return $this->impl->findById( $query_target, $id );
 		}
 		catch ( Exception $e )
 		{
@@ -537,16 +549,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove a record by primary key
 	 *	
-	 *	@param string $model_name
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param int $data_id                          identify database entity
 	 */
-	public  function destroyById( $model_name, $id ) 
+	public function destroyById( $query_target, $id ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			return $this->impl->destroyById( $model, $id );
+			return $this->impl->destroyById( $query_target, $id );
 		}
 		catch ( Exception $e )
 		{
@@ -558,16 +571,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove all records by specified field
 	 *	
-	 *	@param string $model_name
-	 *	@param string $field
-	 *	@param Charcoal_Primitive $value
+	 *	@param string $query_target           description about target model, alias, or joins
+	 *	@param string $field                  field name to query
+	 *	@param Charcoal_Primitive $value      field value to query
 	 */
-	public  function destroyBy( $model_name, $field, $value )
+	public function destroyBy( $query_target, $field, $value )
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			return $this->impl->destroyBy( $model, $field, $value );
+			return $this->impl->destroyBy( $query_target, $field, $value );
 		}
 		catch ( Exception $e )
 		{
@@ -579,15 +594,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove all records
 	 *	
-	 *	@param string $model_name
-	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param string $query_target               description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria     criteria object
 	 */
-	public  function destroyAll( $model_name, $criteria ) 
+	public function destroyAll( $model_name, $criteria ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
-			return $this->impl->destroyAll( $model, $criteria );
+			return $this->impl->destroyAll( $query_target, $criteria );
 		}
 		catch ( Exception $e )
 		{
@@ -599,14 +616,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Execute aggregate SQL
 	 *	
-	 *	@param int $aggregate_func
-	 *	@param string $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
+	 *	@param int $aggregate_func              identify aggregate function tpype
+	 *	@param strin $query_target              description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria   criteria object
+	 *	@param string $fields                   fields to be included result set
 	 */
 	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
-			$model = $this->impl->getModel( $model_name );
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
 
 			return $this->impl->execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields );
 		}
@@ -620,13 +640,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply COUNT aggregate function to specified table
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param string $query_target              description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria    criteria object
+	 *	@param string $fields                    fields to be included result set
 	 */
-	public  function count( $query_target, $criteria, $fields = NULL ) 
+	public function count( $query_target, $criteria, $fields = NULL ) 
 	{
 		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
 			return $this->impl->count( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
@@ -639,13 +663,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply MAX aggregate function to specified table
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param string $query_target             description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria   criteria object
+	 *	@param string $fields                   fields to be included result set
 	 */
-	public  function max( $query_target, $criteria, $fields = NULL  ) 
+	public function max( $query_target, $criteria, $fields = NULL  ) 
 	{
 		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
 			return $this->impl->max( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
@@ -658,13 +686,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply MIN aggregate function to specified table
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param string $query_target               description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria     criteria object
+	 *	@param string $fields                     fields to be included result set
 	 */
-	public  function min( $query_target, $criteria, $fields ) 
+	public function min( $query_target, $criteria, $fields ) 
 	{
 		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
 			return $this->impl->min( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
@@ -677,13 +709,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply SUM aggregate function to specified table
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param string $query_target               description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria     criteria object
+	 *	@param string $fields                    fields to be included result set
 	 */
-	public  function sum( $query_target, $criteria, $fields ) 
+	public function sum( $query_target, $criteria, $fields ) 
 	{
 		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+			
 			return $this->impl->sum( $query_target, $criteria, $fields );
 		}
 		catch ( Exception $e )
@@ -696,32 +732,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply AVG aggregate function to specified table
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param string $query_target               description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria     criteria object
+	 *	@param string $fields                    fields to be included result set
 	 */
-	public  function avg( $query_target, $criteria, $fields ) 
+	public function avg( $query_target, $criteria, $fields ) 
 	{
 		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+			
 			return $this->impl->avg( $query_target, $criteria, $fields );
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
-		}
-	}
-
-	/**
-	 *	Execute CREATE DATABASE sql
-	 *	
-	 *	@param string $db_name
-	 *	@param string $charset
-	 */
-	public  function createDatabase( $db_name, $charset ) 
-	{
-		try{
-			$this->impl->createDatabase( $db_name, $charset );
 		}
 		catch ( Exception $e )
 		{
@@ -735,7 +757,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	
 	 *	@param string $model_name
 	 */
-	public  function createTable( $model_name ) 
+	public function createTable( $model_name ) 
 	{
 		try{
 			$this->impl->createTable( $model_name );
@@ -747,14 +769,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 	}
 
-	/*
+	/**
 	 *	[Fluent Interface] create fluent interface
 	 *
 	 * @param string $fields    field list(comma separated string) for SELECT clause
 	 *
 	 * @return Charcoal_SelectContext    select context
 	 */
-	public  function select( $fields ) 
+	public function select( $fields ) 
 	{
 		Charcoal_ParamTrait::checkString( 1, $fields );
 

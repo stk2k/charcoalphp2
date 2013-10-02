@@ -30,25 +30,25 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
 	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param Charcoal_DTO $dto                  DTO object which includes the fields to update
+	 *	@param array $data                        associative array or HashMap object to update
 	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
 	 *	@param array $override                    association field set which you want to override
 	 *	
 	 *	@return array                             the first element means SQL, the second element means parameter values
 	 */
-	public  function buildUpdateSQL( $model, $alias, $dto, $criteria, $override = NULL );
+	public  function buildUpdateSQL( $model, $alias, $data, $criteria, $override = NULL );
 
 	/**
 	 *	Generate RDBMS-specific SQL for INSERT
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
 	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param Charcoal_DTO $dto                  DTO object which includes the fields to insert
+	 *	@param array $data                        associative array or HashMap object to insert
 	 *	@param array $override                    association field set which you want to override
 	 *	
 	 *	@return array                             the first element means SQL, the second element means parameter values
 	 */
-	public  function buildInsertSQL( $model, $alias, $dto, $override = NULL );
+	public  function buildInsertSQL( $model, $alias, $data, $override = NULL );
 
 	/**
 	 *	Generate RDBMS-specific SQL for MIN/MAX/SUM/COUNT/AVG

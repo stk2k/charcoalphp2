@@ -17,10 +17,6 @@ class Charcoal_ShellResponse extends Charcoal_AbstractResponse
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->_vars = array();
 	}
-
-
 }
 
