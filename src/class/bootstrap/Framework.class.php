@@ -129,7 +129,6 @@ class Charcoal_Framework
 	public static function setHookStage( $hook_stage, $data = NULL )
 	{
 //		Charcoal_ParamTrait::checkInteger( 1, $hook_stage );
-//		Charcoal_ParamTrait::checkObject( 2, $data, TRUE );
 
 		self::$hook_stage = $hook_stage;
 
@@ -278,7 +277,6 @@ class Charcoal_Framework
 	public static function setCache( $key, $value, $duration = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkObject( 2, $value );
 //		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
 
 		return self::$cache_drivers->setCache( $key, $value, $duration );

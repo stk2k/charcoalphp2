@@ -415,7 +415,7 @@ class Charcoal_ParamTrait
 	 *	
 	 *	@return string        passed type
 	 */
-	public static function checkObject( $key, $actual, $null_allowed = FALSE )
+	public static function checkRawObject( $key, $actual, $null_allowed = FALSE )
 	{
 		list( $file, $line ) = Charcoal_System::caller(1);
 
@@ -471,11 +471,9 @@ class Charcoal_ParamTrait
 		if ( !$types ){
 			$types = array(
 						// primitive types
-						self::TYPE_P_STRING, self::TYPE_P_INTEGER, self::TYPE_P_FLOAT, self::TYPE_P_BOOL, 
-						self::TYPE_P_ARRAY, 
+						self::TYPE_P_STRING, self::TYPE_P_INTEGER, self::TYPE_P_FLOAT, self::TYPE_P_BOOL,
 						// object types
-						self::TYPE_O_STRING, self::TYPE_O_INTEGER, self::TYPE_O_FLOAT, self::TYPE_O_BOOLEAN, 
-						self::TYPE_O_VECTOR, self::TYPE_O_HASHMAP, self::TYPE_O_PROPERTIES,
+						self::TYPE_O_STRING, self::TYPE_O_INTEGER, self::TYPE_O_FLOAT, self::TYPE_O_BOOLEAN,
 					);
 		}
 		return self::checkTypes( $file, $line, $key, $types, $actual, $null_allowed );

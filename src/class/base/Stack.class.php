@@ -86,8 +86,6 @@ class Charcoal_Stack extends Charcoal_Collection
 	 */
 	public function push( $item )
 	{
-//		Charcoal_ParamTrait::checkObject( 1, $item );
-
 		$this->values[] = $item;
 	}
 

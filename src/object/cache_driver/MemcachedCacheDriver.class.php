@@ -73,7 +73,6 @@ class Charcoal_MemcachedCacheDriver extends Charcoal_AbstractCacheDriver
 	public function set( $key, Charcoal_Object $value, $duration = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkObject( 2, $value );
 //		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
 
 		$duration = $duration ? ui($duration) : ui($this->_default_duration);

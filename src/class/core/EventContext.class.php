@@ -279,7 +279,6 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	public function setCache( $key, $value )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkObject( 2, $value, TRUE );
 
 		try{
 			Charcoal_Cache::set( $key, $value );

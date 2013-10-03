@@ -863,7 +863,7 @@ class Charcoal_SmartGatewayImpl
 
 		$dto = $model->createDTO();
 
-		$dto->$field = $value->unbox();
+		$dto->$field = ($value instanceof Charcoal_Primitive) ? $value->unbox() : $value;
 
 //		log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
 

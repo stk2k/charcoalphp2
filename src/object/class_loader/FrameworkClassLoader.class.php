@@ -105,6 +105,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_UserEvent'							=> 'object/event',
 				'Charcoal_RequestEvent'							=> 'object/event',
 				'Charcoal_TestEvent'							=> 'object/event',
+				'Charcoal_ShellCommandEvent'					=> 'object/event',
 
 		// exception classes
 				'Charcoal_AnnotaionException'					=> 'exception',

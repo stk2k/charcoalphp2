@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class CommandTask extends Charcoal_Task
+class ShellTask extends Charcoal_Task
 {
 	/**
 	 * execute exception handlers
@@ -45,17 +45,18 @@ class CommandTask extends Charcoal_Task
 //		$procedure = $context->getProcedure();
 
 		// get paramter from command line
-		$action       = $request->getString( 'p1' );
+		$target_module       = $request->getString( 'p1' );
 
-		if ( strlen($action) === 0 ){
-			echo 'action is needed.' . PHP_EOL;
+		if ( strlen($target_module) === 0 ){
+			echo 'target_module is needed.' . PHP_EOL;
+			echo 'charcoal [target_module] [param1] [param2]...' . PHP_EOL;
 			return TRUE;
 		}
 
-		$proc = $this->getSandbox()->createObject( $action, 'procedure' );
-		Charcoal_Framework::pushProcedure( $proc );
+		$task_manager = $context->getTaskManager();
+		Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $target_module, $task_manager );
 
-		return TRUE;
+		return 'shell_command';
 	}
 }
 

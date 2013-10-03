@@ -88,7 +88,6 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	public function setCache( $key, $value, $duration = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkObject( 2, $value );
 //		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
 
 		$this->init();
