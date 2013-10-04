@@ -11,7 +11,7 @@
 
 class Charcoal_File extends Charcoal_Object
 {
-	private $_path;
+	private $path;
 
 	/**
 	 *	Construct object
@@ -26,13 +26,13 @@ class Charcoal_File extends Charcoal_Object
 
 		parent::__construct();
 
-		$path = $parent ? $parent->getPath() . '/' . $file_name : $file_name;
+		$path = $parent ? $parent->getPath() . '/' . us($file_name) : us($file_name);
 
 		while( stripos($path,'//') !== FALSE ){
 			$path = str_replace('//','/',$path);
 		}
 
-		$this->_path = $path;
+		$this->path = $path;
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function canRead()
 	{
-		return is_readable( $this->_path );
+		return is_readable( $this->path );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function canWrite()
 	{
-		return is_writeable( $this->_path );
+		return is_writeable( $this->path );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getFileSize()
 	{
-		return filesize( $this->_path );
+		return filesize( $this->path );
 	}
 
 	/**
@@ -84,7 +84,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function delete()
 	{
-		return unlink( $this->_path );
+		return unlink( $this->path );
 	}
 
 	/**
@@ -94,7 +94,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getPath()
 	{
-		return $this->_path;
+		return $this->path;
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function isFile()
 	{
-		return is_file( $this->_path );
+		return is_file( $this->path );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function isDir()
 	{
-		return is_dir( $this->_path );
+		return is_dir( $this->path );
 	}
 
 	/**
@@ -124,7 +124,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function isDirectory()
 	{
-		return is_dir( $this->_path );
+		return is_dir( $this->path );
 	}
 
 	/**
@@ -134,7 +134,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function isReadable()
 	{
-		return is_readable( $this->_path );
+		return is_readable( $this->path );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function isWriteable()
 	{
-		return is_writable( $this->_path );
+		return is_writable( $this->path );
 	}
 
 	/**
@@ -154,7 +154,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getExtension()
 	{
-		return pathinfo( $this->_path, PATHINFO_EXTENSION );
+		return pathinfo( $this->path, PATHINFO_EXTENSION );
 	}
 
 	/**
@@ -164,7 +164,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getLastModified()
 	{
-		return getlastmod( $this->_path );
+		return getlastmod( $this->path );
 	}
 
 	/**
@@ -174,7 +174,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function exists()
 	{
-		return file_exists( $this->_path );
+		return file_exists( $this->path );
 	}
 
 	/**
@@ -184,7 +184,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getAbsolutePath()
 	{
-		return realpath( $this->_path );
+		return realpath( $this->path );
 	}
 
 	/**
@@ -196,7 +196,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getName( $suffix = NULL )
 	{
-		$name = basename( $this->_path, $suffix );
+		$name = basename( $this->path, $suffix );
 
 		return $name;
 	}
@@ -208,7 +208,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getDir()
 	{
-		return new Charcoal_File( dirname($this->_path) );
+		return new Charcoal_File( dirname($this->path) );
 	}
 
 	/**
@@ -218,7 +218,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getDirName()
 	{
-		return s(dirname( $this->_path ));
+		return s(dirname( $this->path ));
 	}
 
 	/**
@@ -228,7 +228,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getChild( $file_or_dir_name )
 	{
-		return new Charcoal_File( $this->_path . DIRECTORY_SEPARATOR . $file_or_dir_name );
+		return new Charcoal_File( $this->path . DIRECTORY_SEPARATOR . $file_or_dir_name );
 	}
 
 	/**
@@ -238,7 +238,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getContents()
 	{
-		return file_get_contents( $this->_path );
+		return file_get_contents( $this->path );
 	}
 
 	/**
@@ -248,7 +248,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function putContents( $contents )
 	{
-		return file_put_contents( $this->_path, $contents );
+		return file_put_contents( $this->path, $contents );
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function rename( $new_file )
 	{
-		$res = rename( $this->_path, $new_file->getPath() );
+		$res = rename( $this->path, $new_file->getPath() );
 		if ( $res === FALSE ){
 			_throw( new Charcoal_FileRenameException( $this->getPath() ,$new_file->getPath() ) );
 		}
@@ -281,7 +281,7 @@ class Charcoal_File extends Charcoal_Object
 
 		$parent_dir->makeDirectory( $mode, $drilldown );
 
-		$path = $this->_path;
+		$path = $this->path;
 
 		$ret = file_put_contents( $path, $contents );
 		if ( $ret === FALSE ){
@@ -302,7 +302,7 @@ class Charcoal_File extends Charcoal_Object
 //		Charcoal_ParamTrait::checkString( 1, $mode );
 //		Charcoal_ParamTrait::checkBool( 2, $drilldown );
 
-		$path = $this->_path;
+		$path = $this->path;
 		$mode = us( $mode );
 		$drilldown = ub( $drilldown );
 
@@ -323,7 +323,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function listFiles( $filter = NULL )
 	{
-		$path = $this->_path;
+		$path = $this->path;
 
 		if ( !file_exists($path) )	return NULL;
 
@@ -356,7 +356,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return $this->_path;
+		return $this->path;
 	}
 }
 

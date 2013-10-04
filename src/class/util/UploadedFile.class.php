@@ -14,7 +14,7 @@ class Charcoal_UploadedFile extends Charcoal_File
 	private $name;
 	private $type;
 	private $size;
-	private $tmpname;
+	private $tmp_name;
 	private $error;
 
 	/*
@@ -22,7 +22,7 @@ class Charcoal_UploadedFile extends Charcoal_File
 	 *
 	 *  @param String userfile $_FILES変数のキー
 	 */
-	public function __construct( Charcoal_String $userfile )
+	public function __construct( $userfile )
 	{
 		$file = $_FILES[ us($userfile) ];
 log_debug( "debug", "debug", "_FILES:" . print_r($_FILES,true) );
@@ -33,17 +33,17 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 		$this->name     = $file['name'];
 		$this->type     = $file['type'];
 		$this->size     = $file['size'];
-		$this->tmpname = $file['tmpname'];
+		$this->tmp_name = $file['tmp_name'];
 		$this->error    = $file['error'];
 
-		parent::__construct( s($file['tmpname']) );
+		parent::__construct( $this->tmp_name );
 	}
 
 	/*
 	 * クライアントマシンの元のファイル名
 	 *
 	 */
-	public function getName()
+	public function getOriginalName()
 	{
 		return $this->name;
 	}
@@ -72,7 +72,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getTmpName()
 	{
-		return $this->tmpname;
+		return $this->tmp_name;
 	}
 
 	/*
@@ -81,7 +81,7 @@ log_debug( "debug", "debug", "file:" . print_r($file,true) );
 	 */
 	public function getTmpFile()
 	{
-		return new Charcoal_File( s($this->tmpname) );
+		return new Charcoal_File( $this->tmp_name );
 	}
 
 	/*

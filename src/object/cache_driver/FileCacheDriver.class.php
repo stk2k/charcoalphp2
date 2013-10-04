@@ -37,8 +37,8 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 
 		$default_cache_root = Charcoal_ResourceLocator::getApplicationPath( s('cache') );
 
-		$this->_cache_root        = $config->getString( s('cache_root'), s($default_cache_root) );
-		$this->_default_duration  = $config->getInteger( s('default_duration'), i(0) );
+		$this->_cache_root        = $config->getString( 'cache_root', $default_cache_root, TRUE );
+		$this->_default_duration  = $config->getInteger( 'default_duration', 0 );
 
 		$this->_cache_root_dir = new Charcoal_File( $this->_cache_root );
 
