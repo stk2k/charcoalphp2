@@ -420,14 +420,14 @@ class Charcoal_Framework
 				foreach( $lib_dirs as $dir ){
 					if ( strlen($dir) === 0 )    continue;
 
-					if ( !file_exists($path) ){
-						_throw( new Charcoal_ProfileConfigException( 'EXTLIB_DIR', "directory [$path] does not exists") );
+					if ( !file_exists($dir) ){
+						_throw( new Charcoal_ProfileConfigException( 'EXTLIB_DIR', "directory [$dir] does not exists") );
 					}
-					if ( !is_dir($path) ){
-						_throw( new Charcoal_ProfileConfigException( 'EXTLIB_DIR', "[$path] is not directory") );
+					if ( !is_dir($dir) ){
+						_throw( new Charcoal_ProfileConfigException( 'EXTLIB_DIR', "[$dir] is not directory") );
 					}
-					ini_set( 'include_path', ini_get('include_path') . '/' . $path );
-					self::setHookStage( Charcoal_EnumCoreHookStage::ADD_EXTLIB_DIR, $path );
+					ini_set( 'include_path', ini_get('include_path') . PATH_SEPARATOR . $dir );
+					self::setHookStage( Charcoal_EnumCoreHookStage::ADD_EXTLIB_DIR, $dir );
 				}
 			}
 		}
