@@ -1,23 +1,20 @@
 <?php
 /**
  * CharcoalPHP ver 2.9.6
- * E-Mail for multibyte charset
  *
- * PHP versions 5 and 6 (PHP5.2 upper)
+ * task-oriented web framework.
  *
- * Copyright 2013, stk2k in japan
+ * PHP version 5.2 
+ *
+ * Copyright 2008 stk2k in japan
  * Technical  :  http://charcoalphp.org/
  * Licensed under The MIT License License
  *
- * @copyright		Copyright 2013, stk2k.
+ * @copyright		2008 stk2k, sazysoft
  * @link			http://charcoalphp.org/
  * @version			2.9.6
  * @lastmodified	2013-04-26
  * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
- * 
- * CharcoalPHP is a task-oriented web framework.
- * 
- * Copyright (C) 2013   stk2k 
  */
 
 /**
@@ -27,7 +24,7 @@
 *
 * @package    class.bootstrap
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 class Charcoal_Framework
 {
@@ -418,13 +415,18 @@ class Charcoal_Framework
 		self::setHookStage( Charcoal_EnumCoreHookStage::BEFORE_REG_EXTLIB_DIR );
 
 		if ( $profile->getBoolean( 'USE_EXTLIB', FALSE ) ){
-			$lib_dirs = $profile->getArray( 'EXTLIB_DIR' );
+			$lib_dirs = $profile->getArray( 'EXTLIB_DIR', array(), TRUE );
 			if ( $lib_dirs ){
 				foreach( $lib_dirs as $dir ){
 					if ( strlen($dir) === 0 )    continue;
 
-					$path = Charcoal_ResourceLocator::processMacro( $dir );
-					add_include_path( $path );
+					if ( !file_exists($path) ){
+						_throw( new Charcoal_ProfileConfigException( 'EXTLIB_DIR', "directory [$path] does not exists") );
+					}
+					if ( !is_dir($path) ){
+						_throw( new Charcoal_ProfileConfigException( 'EXTLIB_DIR', "[$path] is not directory") );
+					}
+					ini_set( 'include_path', ini_get('include_path') . '/' . $path );
 					self::setHookStage( Charcoal_EnumCoreHookStage::ADD_EXTLIB_DIR, $path );
 				}
 			}

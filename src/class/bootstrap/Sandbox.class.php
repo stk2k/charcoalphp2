@@ -10,7 +10,7 @@
 *
 * @package    class.bootstrap
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_Sandbox
@@ -287,12 +287,12 @@ class Charcoal_Sandbox
 			$project_dir = Charcoal_ResourceLocator::getProjectPath();
 
 			// ソースの取り込み
-			$source_path = $project_dir . '/app/' . CHARCOAL_APPLICATION . '/class/class_loader/' . $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
+			$source_path = $project_dir . '/app/' . CHARCOAL_APPLICATION . '/class/class_loader/' . $class_name . '.class.php';
 			if ( is_readable($source_path) ){
 				include( $source_path );
 			}
 			else{
-				$source_path = $project_dir . '/class/class_loader/' . $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
+				$source_path = $project_dir . '/class/class_loader/' . $class_name . '.class.php';
 				if ( is_readable($source_path) ){
 					include( $source_path );
 				}
@@ -333,7 +333,7 @@ class Charcoal_Sandbox
 		}
 
 		// 設定プロバイダクラス名
-		$class_name = $this->profile->getString( 'CONFIG_PROVIDER_CLASS', CHARCOAL_CLASS_PREFIX . 'IniConfigProvider' );
+		$class_name = $this->profile->getString( 'CONFIG_PROVIDER_CLASS', 'Charcoal_IniConfigProvider' );
 
 		// 設定プロバイダオプション
 		$options = $this->profile->getHashMap( 'CONFIG_PROVIDER_OPTIONS' );
@@ -349,7 +349,7 @@ class Charcoal_Sandbox
 		// 生成したインスタンスがIConfigProviderインタフェースを実装しているか確認
 		if ( !($provider instanceof Charcoal_IConfigProvider) ){
 			// Invoke Exception
-			_throw( new Charcoal_InterfaceImplementException( $class_name, CHARCOAL_CLASS_PREFIX . "IConfigProvider" ) );
+			_throw( new Charcoal_InterfaceImplementException( $class_name, 'Charcoal_IniConfigProvider' ) );
 		}
 
 		$this->config_provider = $provider;

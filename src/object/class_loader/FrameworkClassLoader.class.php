@@ -6,7 +6,7 @@
 *
 * @package    objects.class_loaders
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements Charcoal_IClassLoader
@@ -154,6 +154,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_NonStringException'					=> 'exception',
 				'Charcoal_NotSupportedOperationException'		=> 'exception',
 				'Charcoal_ObjectPathFormatException'			=> 'exception',
+				'Charcoal_ProfileConfigException'				=> 'exception',
 				'Charcoal_RoutingRuletConfigException'			=> 'exception',
 				'Charcoal_PhpSourceParserException'				=> 'exception',
 				'Charcoal_ProcedureNotFoundException'			=> 'exception',
@@ -331,10 +332,10 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 		}
 
 		// クラス名からクラスパスを取得
-		$file_name = $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
-		$pos = strpos( $file_name, CHARCOAL_CLASS_PREFIX );
+		$file_name = $class_name . '.class.php';
+		$pos = strpos( $file_name, 'Charcoal_' );
 		if ( $pos !== FALSE ){
-			$file_name = substr( $file_name, $pos + strlen(CHARCOAL_CLASS_PREFIX) );
+			$file_name = substr( $file_name, $pos + 9 /*= strlen('Charcoal_') */ );
 		}
 		$class_path = CHARCOAL_HOME . '/src/' . $class_paths[ $class_name ] . '/' . $file_name;
 //		log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] class_path=[$class_path] class_name=[$class_name]" );

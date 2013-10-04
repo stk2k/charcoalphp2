@@ -6,16 +6,16 @@
 *
 * @package    component.pdf
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
-require_once( 'PDFWriterComponentException' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFOrientation' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFPaperSize' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFTextAlign' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFCellBorder' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFFontStyle' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFFontFamily' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'EnumPDFCellNextPos' . CHARCOAL_CLASS_FILE_SUFFIX );
+require_once( 'PDFWriterComponentException.class.php';
+require_once( 'EnumPDFOrientation.class.php';
+require_once( 'EnumPDFPaperSize.class.php';
+require_once( 'EnumPDFTextAlign.class.php';
+require_once( 'EnumPDFCellBorder.class.php';
+require_once( 'EnumPDFFontStyle.class.php';
+require_once( 'EnumPDFFontFamily.class.php';
+require_once( 'EnumPDFCellNextPos.class.php';
 
 require_once( 'fpdf/mbfpdi.php' );
 

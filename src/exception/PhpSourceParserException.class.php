@@ -6,7 +6,7 @@
 *
 * @package    exceptions
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 * @license    http://www.opensource.org/licenses/mit-license.php MIT License
 */
 

@@ -1,6 +1,6 @@
 <?php
 /**
-* exception caused by configuration of component
+* exception caused by configuration of sandbox profile
 *
 * PHP version 5
 *
@@ -9,9 +9,9 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_ComponentConfigException extends Charcoal_ConfigException
+class Charcoal_ProfileConfigException extends Charcoal_ConfigException
 {
-	public function __construct( $entry, $message = NULL, $prev = NULL )
+	public function __construct( $entry, $message = NULL, Exception $previous = NULL )
 	{
 		parent::__construct( "[entry]$entry [message]$message", $prev );
 	}

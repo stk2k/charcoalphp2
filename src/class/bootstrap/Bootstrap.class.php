@@ -9,7 +9,7 @@
  * Technical  :  http://charcoalphp.org/
  * Licensed under The MIT License License
  *
- * @copyright		Copyright 2013, stk2k.
+ * @copyright		2008 stk2k, sazysoft
  * @link			http://charcoalphp.org/
  * @version			2.9.6
  * @lastmodified	2013-04-26
@@ -29,7 +29,7 @@
 *
 * @package    class.bootstrap
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_Bootstrap
@@ -302,10 +302,10 @@ class Charcoal_Bootstrap
 			return FALSE;
 		}
 
-		$file_name = $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
-		$pos = strpos( $file_name, CHARCOAL_CLASS_PREFIX );
+		$file_name = $class_name . '.class.php';
+		$pos = strpos( $file_name, 'Charcoal_' );
 		if ( $pos !== FALSE ){
-			$file_name = substr( $file_name, $pos + strlen(CHARCOAL_CLASS_PREFIX) );
+			$file_name = substr( $file_name, $pos + 9 /*= strlen('Charcoal_') */ );
 		}
 
 		$class_path = CHARCOAL_HOME . '/src/' . self::$bootstrap_classes[ $class_name ] . '/' . $file_name;

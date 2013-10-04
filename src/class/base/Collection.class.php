@@ -6,7 +6,7 @@
 *
 * @package    class.base
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 abstract class Charcoal_Collection extends Charcoal_Object implements Iterator, Countable, Charcoal_IUnboxable

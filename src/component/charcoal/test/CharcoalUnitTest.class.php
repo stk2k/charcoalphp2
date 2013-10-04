@@ -6,7 +6,7 @@
 *
 * @package    component.charcoal.test
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 require_once "PHPUnit.php";
 
@@ -58,7 +58,7 @@ class Charcoal_CharcoalUnitTest extends Charcoal_CharcoalObject implements Charc
 
 		// テストクラスファイル名
 		if ( $test_class_file === NULL ){
-			$test_class_file = $test_class . CHARCOAL_CLASS_FILE_SUFFIX;
+			$test_class_file = $test_class . '.class.php';
 		}
 
 		// テストクラスファイル読み込み

@@ -6,7 +6,7 @@
 *
 * @package    class.bootstrap
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_System
@@ -77,9 +77,10 @@ class Charcoal_System
 			E_USER_NOTICE          => "E_USER_NOTICE",
 			E_STRICT               => "E_STRICT",
 			E_RECOVERABLE_ERROR    => "E_RECOVERABLE_ERROR",
-			E_DEPRECATED           => "E_DEPRECATED",
-			E_USER_DEPRECATED      => "E_USER_DEPRECATED",
 		);
+
+		$errors[8192] = "E_DEPRECATED";		// PHP 5.3.0
+		$errors[16384] = "E_USER_DEPRECATED";		// PHP 5.3.0
 
 		$errors_desc = array();
 		foreach( $errors as $key => $value ){

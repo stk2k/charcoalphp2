@@ -6,7 +6,7 @@
 *
 * @package    objects.data_sources
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 class Charcoal_DeprecateFlaggOff
 {
@@ -17,10 +17,7 @@ class Charcoal_DeprecateFlaggOff
 	 */
 	public function __construct()
 	{
-		$flags = E_ALL & ~E_STRICT;
-		if ( defined('E_DEPRECATED') ){
-			$flags = $flags & ~E_DEPRECATED;
-		}
+		$flags = E_ALL & ~E_STRICT & ~(8192 /*= E_DEPRECATED */);
 		$this->_error_flags = error_reporting($flags);
 	}
 

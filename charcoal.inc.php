@@ -1,17 +1,6 @@
 <?php
 
 //==================================================================
-// 定数
-
-define( 'PROC_KEYWORD', 'proc' );
-define( 'CHARCOAPHP_VERSION_MAJOR', 2 );
-define( 'CHARCOAPHP_VERSION_MINOR', 22 );
-define( 'CHARCOAPHP_VERSION_REVISION', 4 );
-define( 'CHARCOAPHP_VERSION_BUILD', 161 );
-define( 'CHARCOAL_CLASS_PREFIX', 'Charcoal_' );
-define( 'CHARCOAL_CLASS_FILE_SUFFIX', '.class.php' );
- 
-//==================================================================
 // 初期化処理
 
 // タイムゾーン
@@ -23,38 +12,6 @@ date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );
 // magic_quotes_runtimeをOFFにする
 if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
 	set_magic_quotes_runtime( false );
-}
-
-// バージョンの差異を吸収
-if ( !defined('E_RECOVERABLE_ERROR') ){
-	define( 'E_RECOVERABLE_ERROR', 4096 );
-}
-
-//==================================================================
-// OSによってパス区切り文字を判定
-
-if (!defined('PATH_SEPARATOR')) {
-	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-		define('PATH_SEPARATOR', ';');
-	} else {
-		define('PATH_SEPARATOR', ':');
-	}
-}
-
-//==================================================================
-// インクルードパス設定
-function add_include_path( $path )
-{
-	if ( !file_exists($path) ){
-		print "[warning]$path is not exists<br>";
-	}
-	if ( !is_dir($path) ){
-		print "[warning]$path is not DIR!<br>";
-	}
-	ini_set(
-			'include_path', 
-			ini_get('include_path') . PATH_SEPARATOR . $path
-		);
 }
 
 //==================================================================
@@ -339,5 +296,5 @@ function _catch( Exception $e )
 
 //==================================================================
 // bootstrap
-require_once( CHARCOAL_HOME . '/src/class/bootstrap/Bootstrap' . CHARCOAL_CLASS_FILE_SUFFIX );
+require_once( CHARCOAL_HOME . '/src/class/bootstrap/Bootstrap.class.php' );
 

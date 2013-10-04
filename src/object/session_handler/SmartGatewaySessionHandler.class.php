@@ -6,7 +6,7 @@
 *
 * @package    objects.session_handlers
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_SmartGatewaySessionHandler extends Charcoal_AbstractSessionHandler

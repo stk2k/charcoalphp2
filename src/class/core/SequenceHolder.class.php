@@ -6,7 +6,7 @@
 *
 * @package    class.core
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISequence, ArrayAccess

@@ -6,7 +6,7 @@
 *
 * @package    objects.tasks
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask

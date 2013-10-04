@@ -6,9 +6,9 @@
 *
 * @package    component.charcoal.file
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
-require_once( 'TempFileComponentException' . CHARCOAL_CLASS_FILE_SUFFIX );
+require_once( 'TempFileComponentException.class.php' );
 
 class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {

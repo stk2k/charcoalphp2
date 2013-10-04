@@ -27,7 +27,6 @@ default:
 
 define( 'CHARCOAL_PROJECT', "charcoal" );
 define( 'CHARCOAL_APPLICATION', "frontend_pc" );
-define( 'CHARCOAL_DEFAULT_PROCPATH', "@:hello" );
 define( 'CHARCOAL_DEFAULT_TIMEZONE', "Asia/Tokyo" );
 
 //==================================================================

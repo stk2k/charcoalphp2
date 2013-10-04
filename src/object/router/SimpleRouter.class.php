@@ -6,7 +6,7 @@
 *
 * @package    objects.routers
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 {
@@ -27,6 +27,8 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 
 		log_info( 'debug,router', "routing started. URL=[$url]" );
 
+		$proc_key = $this->getSandbox()->getProfile()->getString( 'PROC_KEY', 'proc' );
+
 		$rule_keys = $rule->getKeys();
 
 		if ( $rule_keys && is_array($rule_keys) )
@@ -46,7 +48,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 					// match
 					if ( $a !== NULL ){
 						$request->setArray( $a );
-						$request->set( s(PROC_KEYWORD), $proc );
+						$request->set( $proc_key, $proc );
 						log_info( 'debug,router', "routing rule matched! pattern=[$pattern] proc_path=[$proc]" );
 						return b(TRUE);
 					}

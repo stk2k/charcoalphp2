@@ -6,7 +6,7 @@
 *
 * @package    class.bootstrap.codebase
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_PlainCodebase extends Charcoal_AbstractCodebase

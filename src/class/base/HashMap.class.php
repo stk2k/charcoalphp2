@@ -8,7 +8,7 @@
 *
 * @package    class.base
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess

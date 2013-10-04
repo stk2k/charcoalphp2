@@ -6,7 +6,7 @@
 *
 * @package    objects.events
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 abstract class Charcoal_SystemEvent extends Charcoal_Event implements Charcoal_IEvent

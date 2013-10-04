@@ -1,40 +1,19 @@
 <?php
 /**
- * CharcoalPHP ver 2.9.6
- * E-Mail for multibyte charset
- *
- * PHP versions 5 and 6 (PHP5.2 upper)
- *
- * Copyright 2013, stk2k in japan
- * Technical  :  http://charcoalphp.org/
- * Licensed under The MIT License License
- *
- * @copyright		Copyright 2013, stk2k.
- * @link			http://charcoalphp.org/
- * @version			2.9.6
- * @lastmodified	2013-04-26
- * @license			http://www.opensource.org/licenses/mit-license.php The MIT License
- * 
- * CharcoalPHP is a task-oriented web framework.
- * 
- * Copyright (C) 2013   stk2k 
- */
-
-/**
 *  Class for Framework Version Information
 *
 * PHP version 5
 *
 * @package    class.bootstrap
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 class Charcoal_FrameworkVersion extends Charcoal_Object
 {
-	const VERSION_MAJOR     = CHARCOAPHP_VERSION_MAJOR;
-	const VERSION_MINOR     = CHARCOAPHP_VERSION_MINOR;
-	const VERSION_REVISION  = CHARCOAPHP_VERSION_REVISION;
-	const VERSION_BUILD     = CHARCOAPHP_VERSION_BUILD;
+	const VERSION_MAJOR     = 2;
+	const VERSION_MINOR     = 22;
+	const VERSION_REVISION  = 5;
+	const VERSION_BUILD     = 162;
 
 	const VERSION_PART_ALL       = 0xFFFF;
 	const VERSION_PART_MAJOR     = 0x0001;

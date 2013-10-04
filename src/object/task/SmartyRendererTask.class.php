@@ -6,7 +6,7 @@
 *
 * @package    objects.tasks
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 require_once( 'Smarty/Smarty.class.php' );
 
@@ -173,11 +173,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				$template = $layout->getAttribute( s('layout') );
 
 				// set smarty error_reporting flags
-				$this->smarty->error_reporting = E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE;
-				if ( defined('E_DEPRECATED') ){
-					// E_DEPRECATED is defined upper PHP5.3
-					$this->smarty->error_reporting &= ~E_DEPRECATED;
-				}
+				$this->smarty->error_reporting = E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~(8192 /*= E_DEPRECATED */);
 
 				// rewrite error handler
 				$error_handler_old = set_error_handler( array($this,"onUnhandledError") );

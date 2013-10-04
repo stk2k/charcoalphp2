@@ -6,15 +6,15 @@
 *
 * @package    component.qdmail
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 require_once( 'qdmail.php' );
 require_once( 'qdsmtp.php' );
 
-require_once( 'QdmailException' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'QdmailSmtpException' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'QdmailAddress' . CHARCOAL_CLASS_FILE_SUFFIX );
+require_once( 'QdmailException.class.php';
+require_once( 'QdmailSmtpException.class.php';
+require_once( 'QdmailAddress.class.php';
 
 class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {

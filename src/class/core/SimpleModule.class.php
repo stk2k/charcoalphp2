@@ -6,7 +6,7 @@
 *
 * @package    class.core
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_IModule
 {
@@ -58,12 +58,12 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 //		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
-		$base_name = basename($path);
+		$base_name = basename( $path );
 
 		// retrieve class name from file name
-		$pos = strpos($base_name,CHARCOAL_CLASS_FILE_SUFFIX);
+		$pos = strpos( $base_name, '.class.php' );
 
-		$class_name = substr($base_name,0,$pos);
+		$class_name = substr( $base_name, 0, $pos );
 
 		// include source file
 		Charcoal_Framework::loadSourceFile( $path );
@@ -108,12 +108,12 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 //		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
-		$base_name = basename($path);
+		$base_name = basename( $path );
 
 		// retrieve class name from file name
-		$pos = strpos($base_name,CHARCOAL_CLASS_FILE_SUFFIX);
+		$pos = strpos( $base_name, '.class.php' );
 
-		$class_name = substr($base_name,0,$pos);
+		$class_name = substr( $base_name, 0, $pos );
 
 		// include source file
 		Charcoal_Framework::loadSourceFile( $path );
@@ -168,7 +168,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$project_path   = Charcoal_ResourceLocator::getProjectPath( 'module' . $real_path );
 		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( 'module' . $real_path );
 
-		$task_class_suffix = 'Task' . CHARCOAL_CLASS_FILE_SUFFIX;
+		$task_class_suffix = 'Task.class.php';
 
 		$task = NULL;
 
@@ -254,7 +254,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$project_path   = Charcoal_ResourceLocator::getProjectPath( 'modules' . $real_path );
 		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( 'modules' . $real_path );
 
-		$event_class_suffix = 'Event' . CHARCOAL_CLASS_FILE_SUFFIX;
+		$event_class_suffix = 'Event.class.php';
 
 		if ( is_dir($webapp_path) && $dh = opendir($webapp_path) )
 		{

@@ -16,7 +16,6 @@ define( 'CHARCOAL_HOME', CHARCOAL_BASE_DIR . '/charcoal' );
 define( 'CHARCOAL_WEBAPP_DIR', CHARCOAL_HOME . "/web_app" );
 define( 'CHARCOAL_PROJECT', "command" );
 define( 'CHARCOAL_APPLICATION', "command" );
-define( 'CHARCOAL_DEFAULT_PROCPATH', "index" );
 define( 'CHARCOAL_DEFAULT_TIMEZONE', "Asia/Tokyo" );
 define( 'CHARCOAL_PROFILE', "localhost" );
 

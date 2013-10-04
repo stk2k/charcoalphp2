@@ -6,7 +6,7 @@
 *
 * @package    class.bootstrap.environment
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 abstract class Charcoal_AbstractEnvironment extends Charcoal_Object implements Charcoal_IEnvironment

@@ -84,7 +84,7 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = " *   PHP version 5";
 		$lines[] = " *   ";
 		$lines[] = " *   @author     CharcoalPHP Development Team";
-		$lines[] = " *   @copyright  2008 - {$date_now_y} CharcoalPHP Development Team";
+		$lines[] = " *   @copyright  2008 stk2k, sazysoft";
 		$lines[] = " */";
 		$lines[] = "class {$table_model_class_name} extends Charcoal_DefaultTableModel";
 		$lines[] = "{";
@@ -142,7 +142,7 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = " *   PHP version 5";
 		$lines[] = " *   ";
 		$lines[] = " *   @author     CharcoalPHP Development Team";
-		$lines[] = " *   @copyright  2008 - {$date_now_y} CharcoalPHP Development Team";
+		$lines[] = " *   @copyright  2008 stk2k, sazysoft";
 		$lines[] = " */";
 		$lines[] = "class {$table_dto_class_name} extends Charcoal_TableDTO";
 		$lines[] = "{";

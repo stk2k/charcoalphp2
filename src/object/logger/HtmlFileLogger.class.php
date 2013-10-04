@@ -6,7 +6,7 @@
 *
 * @package    objects.loggers
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 class Charcoal_HtmlFileLogger extends Charcoal_FileLogger implements Charcoal_ILogger

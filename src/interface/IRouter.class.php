@@ -6,7 +6,7 @@
 *
 * @package    interfaces
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 interface Charcoal_IRouter extends Charcoal_ICharcoalObject
 {

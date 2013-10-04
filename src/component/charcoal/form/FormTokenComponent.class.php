@@ -6,10 +6,10 @@
 *
 * @package    component.charcoal.form
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
-require_once( 'FormTokenComponentException' . CHARCOAL_CLASS_FILE_SUFFIX );
-require_once( 'FormTokenValidationException' . CHARCOAL_CLASS_FILE_SUFFIX );
+require_once( 'FormTokenComponentException.class.php' );
+require_once( 'FormTokenValidationException.class.php' );
 
 class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {

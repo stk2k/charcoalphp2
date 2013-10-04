@@ -7,7 +7,7 @@
 *
 * @package    objects.class_loaders
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implements Charcoal_IClassLoader
 {
@@ -65,12 +65,12 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		if ( $class_path === FALSE || !is_string($class_path) ){
 			return FALSE;
 		}
-		$class_path = trim($class_path,PATH_SEPARATOR);
+		$class_path = trim( $class_path, '/' );
 
-		$file_name = $class_name . CHARCOAL_CLASS_FILE_SUFFIX;
-		$pos = strpos( $file_name, CHARCOAL_CLASS_PREFIX );
+		$file_name = $class_name . '.class.php';
+		$pos = strpos( $file_name, 'Charcoal_' );
 		if ( $pos !== FALSE ){
-			$file_name = substr( $file_name, $pos + strlen(CHARCOAL_CLASS_PREFIX) );
+			$file_name = substr( $file_name, $pos + 9 /*= strlen('Charcoal_') */ );
 		}
 		if ( $is_debug ) log_debug( "system,debug,class_loader", "file_name=$file_name", "class_loader" );
 

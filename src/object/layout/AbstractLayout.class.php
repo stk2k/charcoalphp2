@@ -6,7 +6,7 @@
 *
 * @package    objects.layouts
 * @author     CharcoalPHP Development Team
-* @copyright  2008 - 2013 CharcoalPHP Development Team
+* @copyright  2008 stk2k, sazysoft
 */
 
 abstract class Charcoal_AbstractLayout extends Charcoal_Layout implements Charcoal_IRedirectLayout
