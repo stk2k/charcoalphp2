@@ -45,10 +45,13 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 //		log_info( "system,container", "container", "Finished destroying container.");
 	}
 
-	/*
-	 * コンポーネントをロード
+	/**
+	 * load component
+	 *
+	 * @param string $component_name      component path
+	 * @param Charcoal_Vector $args       constructor arguments
 	 */
-	public function loadComponent( Charcoal_String $component_name )
+	public function loadComponent( $component_name, $args = array() )
 	{
 		$component_name = us( $component_name );
 
@@ -85,7 +88,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 
 				// セッションになければ、インスタンスを生成
 				if ( $component == NULL ){
-					$component = $klass->newInstance();
+					$component = $klass->newInstance( $args );
 				}
 
 			}
@@ -94,7 +97,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 		case self::SCOPE_REQUEST:
 			{
 				// コンポーネントのインスタンス生成
-				$component = $klass->newInstance();
+				$component = $klass->newInstance( $args );
 			}
 			break;
 		default:
@@ -133,11 +136,12 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 	/**
 	 * Get component(generate if not exists)
 	 *
-	 * @param Charcoal_String $key        component path
+	 * @param string $component_name      component path
+	 * @param Charcoal_Vector $args       constructor arguments
 	 *
 	 * @return Charcoal_IComponent        component instance
 	 */
-	public function getComponent( $key )
+	public function getComponent( $component_name, $args = array() )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $key );
 
@@ -146,7 +150,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 		// 登録されていなければロードを試みる
 		if ( !isset($this->components[ $key ]) )
 		{
-			$component = $this->loadComponent( s($key) );
+			$component = $this->loadComponent( $key, $args );
 
 			if ( $component == NULL ){
 				_throw( new Charcoal_ComponentNotRegisteredException( $key ) );

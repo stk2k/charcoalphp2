@@ -30,7 +30,7 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 
 		$this->name_space         = $config->getString( 'name_space', '' );
 		$this->event_filters      = $config->getArray( 'event_filters', array() );
-		$this->post_actions       = $config->getArray( 'post_actions', array('remove_task', 'remove_event') );
+		$this->post_actions       = $config->getArray( 'post_actions', array('remove_event') );
 		$this->priority           = $config->getInteger( 'priority', 0 );
 
 		if ( $this->getSandbox()->isDebug() )

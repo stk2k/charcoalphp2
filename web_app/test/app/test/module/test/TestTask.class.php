@@ -45,18 +45,51 @@ class TestTask extends Charcoal_Task
 //		$procedure = $context->getProcedure();
 
 		// get paramter from command line
-		$target_module       = $request->getString( 'p1' );
+		$scenario       = $request->getString( 'scenario' );
 
-		if ( strlen($target_module) === 0 ){
-			echo 'target_module is needed.' . PHP_EOL;
-			echo 'charcoal [target_module] [test_event]' . PHP_EOL;
+		if ( $scenario === NULL ){
+			echo "actions or scenario parameter must be specified." . eol();
+			return TRUE;
+		}
+
+		$scenario_file = is_file($scenario) ? $scenario : Charcoal_ResourceLocator::getApplicationFile( 'scenario', $scenario . '.scenario.ini' );
+		if ( !is_file($scenario_file) ){
+			echo "scenario file not found: $scenario_file" . eol();
+			return TRUE;
+		}
+		$scenario_data = parse_ini_file( $scenario_file, TRUE );
+
+		if ( empty($scenario_data) ){
+			echo "couldn't read scenario file: $scenario_file" . eol();
 			return TRUE;
 		}
 
 		$task_manager = $context->getTaskManager();
-		Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $target_module, $task_manager );
 
-		return 'test';
+		$events = array();
+		foreach( $scenario_data as $section => $data ){
+
+			$target = isset($data['target']) ? $data['target'] : NULL;
+			$actions = isset($data['actions']) ? $data['actions'] : NULL;
+
+			if ( empty($target) ){
+				echo "'target' is not found at section[$section]" . eol();
+				return TRUE;
+			}
+			if ( empty($actions) ){
+				echo "'actions' is not found at section[$section]" . eol();
+				return TRUE;
+			}
+
+			$target_path = new Charcoal_ObjectPath( $target );
+			$module_path = '@' . $target_path->getVirtualPath();
+			Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $module_path, $task_manager );
+
+			$event_args = array( $section, $target, $actions );
+			$events[] = $context->createEvent( 'test', $event_args );
+		}
+
+		return $events;
 	}
 }
 

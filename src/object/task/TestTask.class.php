@@ -174,13 +174,28 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	 */
 	public function processEvent( $context )
 	{
-		$request   = $context->getRequest();
-		$response  = $context->getResponse();
-		$sequence  = $context->getSequence();
-		$procedure = $context->getProcedure();
+		$event   = $context->getEvent();
+
+		$is_debug = $context->isDebug();
 
 		// パラメータを取得
-		$actions       = $request->getArray( 'actions');
+		$section       = $event->getSection();
+		$target        = $event->getTarget();
+		$actions       = $event->getActions();
+
+		if ( $is_debug ) log_debug( "debug,event", "event section: $section" );
+		if ( $is_debug ) log_debug( "debug,event", "event target: $target" );
+		if ( $is_debug ) log_debug( "debug,event", "event actions: $actions" );
+
+		if ( $is_debug ) log_debug( "debug,event", "this object path: " . $this->getObjectPath() );
+
+		if ( $target != $this->getObjectPath() ){
+			if ( $is_debug ) log_debug( "debug,event", "not target: " . $event );
+			return FALSE;
+		}
+		if ( $is_debug ) log_debug( "debug,event", "target: " . $event );
+
+		$actions = explode( ',', $actions );
 
 		// アクションに対するテストが記述されているか確認する
 		$total_actions = 0;
@@ -192,7 +207,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			}
 		}
 		if ( $total_actions === 0 ){
-			return b(TRUE);
+			return TRUE;
 		}
 
 		// テスト実行
@@ -206,10 +221,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 		print "   Framework Version:" . Charcoal_Framework::getVersion() . eol();
 		print "==========================================" . eol();
 
+		print "Title:" . $section . eol();
 		print "TargetTask:" . $this->getObjectName() . eol();
 		print "Test started(total=$total_actions)." . eol();
 
 		foreach( $actions as $action ){
+			$actions = trim( $action );
 			if ( strlen($action) === 0 )    continue;
 
 			$this->action = $action;
@@ -224,7 +241,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			}
 			catch( Exception $e ){
 				print "Test execution failed while setup:" . $e . eol();
-				return b(true);
+				return TRUE;
 			}
 
 			try{
@@ -249,7 +266,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			}
 			catch( Exception $e ){
 				print "Test execution failed while clean up:" . $e . eol();
-				return b(true);
+				return TRUE;
 			}
 
 		}
@@ -264,7 +281,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			print "No tests were processed." . eol();
 		}
 
-		return b(TRUE);
+		return TRUE;
 	}
 }
 

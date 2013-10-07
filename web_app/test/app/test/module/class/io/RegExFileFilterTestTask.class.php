@@ -46,18 +46,24 @@ class RegExFileFilterTestTask extends Charcoal_TestTask
 	{
 		$action = us($action);
 
-		$test_data_dir = $context->getFile( s('%APPLICATION_DIR%/test_data/class/io') );
+		$test_data_dir = $context->getFile( '%APPLICATION_DIR%/test_data/class/io' );
+
+		if ( !is_dir($test_data_dir) ){
+			_throw( new Charcoal_TestDataNotFoundException('directory: ' . $test_data_dir) );
+		}
 
 		switch( $action ){
 		case "no_regex":
 
-			$filter = new Charcoal_RegExFileFilter( s('/sample_file1\.txt/') );
+			$filter = new Charcoal_RegExFileFilter( '/sample_file1\.txt/' );
 
 			$files = $test_data_dir->listFiles( $filter );
 
 			$files_found = array();
-			foreach( $files as $file ){
-				$files_found[] = $file->getName();
+			if ( is_array($files) ){
+				foreach( $files as $file ){
+					$files_found[] = $file->getName();
+				}
 			}
 
 			$expected = array( 'sample_file1.txt' );

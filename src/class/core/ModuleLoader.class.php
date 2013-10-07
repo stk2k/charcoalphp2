@@ -52,7 +52,7 @@ class Charcoal_ModuleLoader
 
 			// check if module is already loaded
 			if ( isset(self::$loaded_paths[$module_path]) ){
-				log_warning( 'system, warning, debug', "module[$module_path] is already loaded." );
+				log_warning( 'system, event, debug', "module[$module_path] is already loaded." );
 				return;
 			}
 

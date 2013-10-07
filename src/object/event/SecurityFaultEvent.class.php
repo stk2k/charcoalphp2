@@ -11,12 +11,5 @@
 
 class Charcoal_SecurityFaultEvent extends Charcoal_SystemEvent 
 {
-	/**
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
 }
 

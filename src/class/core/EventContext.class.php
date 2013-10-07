@@ -176,18 +176,33 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	}
 
 	/**
+	 *	Get debug mode
+	 *
+	 * @return boolean        TRUE means running in debug mode
+	 */
+	public function isDebug()
+	{
+		return $this->sandbox->isDebug();
+	}
+
+	/**
 	 *	Create and configure an object 
 	 *
-	 * @param Charcoal_IResponse $response   Response object to set
+	 *	@param string $obj_path         object path to create
+	 *	@param string $type_name        type name of the object
+	 *	@param array $args             constructor arguments
+	 *	@param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_ChacoalObject        object instance
 	 */
-	public function getObject( $obj_path, $type_name, $config = NULL )
+	public function createObject( $obj_path, $type_name, $args = array(), $config = NULL )
 	{
 //		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
 //		Charcoal_ParamTrait::checkString( 2, $type_name );
 //		Charcoal_ParamTrait::checkConfig( 3, $config, TRUE );
 
 		try{
-			$object = $this->sandbox->createObject( $obj_path, $type_name );
+			$object = $this->sandbox->createObject( $obj_path, $type_name, $args );
 
 			if ( $config ){
 				$object->configure( $config );
@@ -203,17 +218,48 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	}
 
 	/**
-	 *	Create and configure a component 
+	 *	Create event
 	 *
-	 * @param Charcoal_IResponse $response   Response object to set
+	 *	@param string $obj_path         object path to create
+	 *	@param array $args             constructor arguments
+	 *	@param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_ChacoalObject        object instance
 	 */
-	public function getComponent( $obj_path, $config = NULL )
+	public function createEvent( $obj_path, $args = array(), $config = NULL )
+	{
+		try{
+			$event = $this->sandbox->createEvent( $obj_path, $args );
+
+			if ( $config ){
+				$event->configure( $config );
+			}
+
+			return $event;
+		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+			_throw( new Charcoal_EventContextException( __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 * Create and configure a component 
+	 *
+	 * @param string $obj_path         object path to create
+	 * @param array $args             constructor arguments
+	 * @param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_IComponent        component instance
+	 */
+	public function getComponent( $obj_path, $args = array(), $config = NULL )
 	{
 //		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
 //		Charcoal_ParamTrait::checkConfig( 2, $config, TRUE );
 
 		try{
-			$component = $this->sandbox->getContainer()->getComponent( $obj_path );
+			$component = $this->sandbox->getContainer()->getComponent( $obj_path, $args );
 
 			if ( $config ){
 				$component->configure( $config );

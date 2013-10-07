@@ -167,6 +167,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SQLBuilderException'					=> 'exception',
 				'Charcoal_TableModelException'					=> 'exception',
 				'Charcoal_TableModelFieldException'				=> 'exception',
+				'Charcoal_TestDataNotFoundException'			=> 'exception',
 				'Charcoal_TaskNotFoundException'				=> 'exception',
 				'Charcoal_URLFormatException'					=> 'exception',
 

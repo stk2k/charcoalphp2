@@ -68,7 +68,7 @@ class Charcoal_ResourceLocator
 	 *
 	 * @return string        full path string
 	 */
-	public function getPath( $virtual_path, $filename = NULL )
+	public static function getPath( $virtual_path, $filename = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $virtual_path );
 //		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
@@ -153,7 +153,7 @@ class Charcoal_ResourceLocator
 	 *
 	 * @return Charcoal_File        file object
 	 */
-	public function getFile( $folder, $filename = NULL )
+	public static function getFile( $folder, $filename = NULL )
 	{
 //		Charcoal_ParamTrait::checkString( 1, $virtual_path );
 //		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );

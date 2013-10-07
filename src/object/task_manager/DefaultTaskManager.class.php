@@ -159,7 +159,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 			$loop_id = 0;
 			while( !$queue->isEmpty() )
 			{
-				if ( $debug ) log_debug( 'system,event', "event queue contents: $queue");
+				if ( $debug ) log_debug( 'system,event', "event queue(" . count($queue) . "): $queue");
 
 				// initialize values for this loop
 				$abort_after_this_loop = FALSE;
@@ -304,34 +304,56 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 						}
 					}
 
-					// task timer stop
-					$elapse = Charcoal_Benchmark::stop();
-					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result] time=[$elapse]msec." );
-
 					// result value handling
-					if ( $result )
-					{
-						if ( $result === FALSE || $result === TRUE || ($result instanceof Charcoal_Boolean) ){
-						}
-						else if ( is_string($result) || ($result instanceof Charcoal_String) ){
-							$e = $this->getSandbox()->createEvent( $result );
-							$queue->enqueue( $e );
-							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
-						}
-						else if ( $result instanceof Charcoal_IEvent ){
-							$queue->enqueue( $result );
-							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
-						}
-						else{
-							_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] or [IEvent] value." ) );
+					$result_str = array();
+					$do_post_actions = TRUE;
+					if ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
+						$result_str[] = 'FALSE';
+						$do_post_actions = FALSE;
+					}
+					else if ( $result === TRUE || ($result instanceof Charcoal_Boolean) && $result->isTrue() ){
+						$result_str[] = 'TRUE';
+					}
+					else if ( is_string($result) || ($result instanceof Charcoal_String) ){
+						$e = $this->getSandbox()->createEvent( $result );
+						$queue->enqueue( $e );
+						$result_str[] = "event($result)";
+						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
+					}
+					else if ( $result instanceof Charcoal_IEvent ){
+						$queue->enqueue( $result );
+						$result_str[] = "event($result)";
+						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
+					}
+					else if ( is_array($result) || ($result instanceof Charcoal_Vector) ){
+						foreach( $result as $item ){
+							if ( is_string($item) || ($item instanceof Charcoal_String) ){
+								$e = $this->getSandbox()->createEvent( $item );
+								$queue->enqueue( $e );
+								$result_str[] = "event($item)";
+								if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($item) is enqueued." );
+							}
+							else if ( $item instanceof Charcoal_IEvent ){
+								$queue->enqueue( $item );
+								$result_str[] = "event($item)";
+								if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($item) is enqueued." );
+							}
 						}
 					}
+					else{
+						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] or [IEvent] value." ) );
+					}
+					$result_str = implode( ',', $result_str );
+
+					// task timer stop
+					$elapse = Charcoal_Benchmark::stop();
+					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
 
 					// ポストアクション
 					$post_actions = $task->getPostActions();
 
 					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );	
-					if ( $post_actions )
+					if ( $do_post_actions && $post_actions )
 					{
 						foreach( $post_actions as $key => $action )
 						{
