@@ -126,7 +126,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	private static function getEncodingStringFromCode( $sandbox, $encoding )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 //		Charcoal_ParamTrait::checkString( 2, $encoding );
 
 		$encoding_string = null;

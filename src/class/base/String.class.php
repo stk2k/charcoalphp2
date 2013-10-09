@@ -1,6 +1,6 @@
 <?php
 /**
-*  String primitive class(immutable)
+*  String primitive class
 *
 * PHP version 5
 *
@@ -84,10 +84,11 @@ class Charcoal_String extends Charcoal_Primitive
 	/**
 	 *	split by regular expression
 	 *
-	 * @param Charcoal_String $regex      regular expression string
+	 * @param string $regex      regular expression string
 	 */
 	public function splitRegEx( $regex )
 	{
+		$regex = us($regex);
 		$string = $this->value;
 		$matches = array();
 		$split_word_list = array();
@@ -193,6 +194,45 @@ class Charcoal_String extends Charcoal_Primitive
 	public function trim( $charlist = NULL )
 	{
 		$this->value = $charlist ?  trim( $this->value, us($charlist) ) : trim( $this->value );
+		return $this;
+	}
+
+	/**
+	 *	Strip whitespace (or other characters) from the beginning of a string
+	 *
+	 * @param array $charlist          trim target character set
+	 *
+	 * @return Charcoal_String         this object
+	 */
+	public function ltrim( $charlist = NULL )
+	{
+		$this->value = $charlist ?  ltrim( $this->value, us($charlist) ) : ltrim( $this->value );
+		return $this;
+	}
+
+	/**
+	 *	Strip whitespace (or other characters) from the end of a string
+	 *
+	 * @param array $charlist          trim target character set
+	 *
+	 * @return Charcoal_String         this object
+	 */
+	public function rtrim( $charlist = NULL )
+	{
+		$this->value = $charlist ?  rtrim( $this->value, us($charlist) ) : rtrim( $this->value );
+		return $this;
+	}
+
+	/**
+	 *	Inserts HTML line breaks before all newlines in a string
+	 *
+	 * @param bool $is_xhtml          Whether to use XHTML compatible line breaks or not.
+	 *
+	 * @return Charcoal_String         this object
+	 */
+	public function nl2br( $is_xhtml = true )
+	{
+		$this->value = nl2br( $this->value, ub($is_xhtml) );
 		return $this;
 	}
 

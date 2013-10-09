@@ -5,7 +5,7 @@ cls
 set TEST_PROC="@:test"
 set TARGET_MODULE="@:component:charcoal:db"
 
-REM Query Test
+REM Fluent API Test
 SET ACTIONS="fluent_api"
 REM php shell.php -proc %TEST_PROC% -p1 %TARGET_MODULE% -actions %ACTIONS% > test_smart_gateway.log
 php shell.php -proc %TEST_PROC% -p1 %TARGET_MODULE% -actions %ACTIONS%

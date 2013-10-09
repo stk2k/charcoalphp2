@@ -775,7 +775,9 @@ class Charcoal_System
 	{
 		$ref = new ReflectionObject( $obj );
 		$p = $ref->getProperty( $field );
-		$p->setAccessible( true );
+		if ( version_compare(PHP_VERSION, '5.3.0') >= 0 ){
+			$p->setAccessible( true );			// ReflectionProperty#setAccessible is implemented PHP 5.3.0 or later 
+		}
 		$value = $p->getValue( $obj );
 		return $value;
 	}
@@ -799,7 +801,9 @@ class Charcoal_System
 
 		$props = $class_obj->getProperties();
 		foreach( $props as $p ){
-			$p->setAccessible(true);
+			if ( version_compare(PHP_VERSION, '5.3.0') >= 0 ){
+				$p->setAccessible(true);			// ReflectionProperty#setAccessible is implemented PHP 5.3.0 or later 
+			}
 			$key = $p->getName();
 			$value = $p->getValue($obj);
 

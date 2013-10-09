@@ -143,30 +143,30 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 	 */
 	public function getComponent( $component_name, $args = array() )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::checkString( 1, $component_name );
 
-		$key = us( $key );
+		$component_name = us( $component_name );
 
 		// 登録されていなければロードを試みる
-		if ( !isset($this->components[ $key ]) )
+		if ( !isset($this->components[ $component_name ]) )
 		{
-			$component = $this->loadComponent( $key, $args );
+			$component = $this->loadComponent( $component_name, $args );
 
 			if ( $component == NULL ){
-				_throw( new Charcoal_ComponentNotRegisteredException( $key ) );
+				_throw( new Charcoal_ComponentNotRegisteredException( $component_name ) );
 			}
 		}
 		else{
 			// コンポーネントの取得
-			$component = $this->components[ $key ];
+			$component = $this->components[ $component_name ];
 		}
 
 		// コンポーネント設定を取得
-		$component_config = $this->component_configs[ $key ];
+		$component_config = $this->component_configs[ $component_name ];
 
 		// 登録されていなければ例外
 		if ( $component_config == NULL ){
-			_throw( new Charcoal_ComponentNotRegisteredException( $key ) );
+			_throw( new Charcoal_ComponentNotRegisteredException( $component_name ) );
 		}
 
 		// コンポーネントスコープを取得
@@ -174,7 +174,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 
 		// 登録されていなければ例外
 		if ( $scope == NULL ){
-			_throw( new Charcoal_ComponentConfigException( $key, "scope", "mandatory" ) );
+			_throw( new Charcoal_ComponentConfigException( $component_name, "scope", "mandatory" ) );
 		}
 
 		// コンポーネントを返却
@@ -190,7 +190,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 		}
 
 		// scopeに指定されたワードが不正
-		_throw( new Charcoal_ComponentConfigException( $key, "scope", "invalid key word:$scope" ) );
+		_throw( new Charcoal_ComponentConfigException( $component_name, "scope", "invalid keyword:$scope" ) );
 
 		return NULL;
 	}
