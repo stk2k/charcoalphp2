@@ -1,0 +1,14 @@
+{
+    "name": "stk2k/charcoalphp2",
+    "description": "Task Oriented PHP Web Framework",
+    "keywords": ["charcoalphp", "PHP", "framework"],
+    "type": "charcoalphp-framework",
+    "license": "MIT",
+    "homepage": "http://charcoalphp.org",
+    "authors": [
+      {
+        "name": "Katsuki Shuto",
+        "email": "stk2k@sazysoft.com"
+      }
+    ]
+}
