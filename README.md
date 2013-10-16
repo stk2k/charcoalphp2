@@ -1,3 +1,5 @@
+[![Latest Stable Version](https://poser.pugx.org/stk2k/charcoalphp2/v/stable.png)](https://packagist.org/packages/stk2k/charcoalphp2)
+
 CharcoalPHP
 =======
 
