@@ -224,7 +224,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	{
 		$str  = "[SQLCriteria: ";
 		$str .= "where=" . $this->where;
-		$str .= "params=" . $this->params;
+		$str .= "params=" . Charcoal_System::toString($this->params);
 		$str .= "order_by=" . $this->order_by;
 		$str .= "limit=" . $this->limit;
 		$str .= "offset=" . $this->offset;

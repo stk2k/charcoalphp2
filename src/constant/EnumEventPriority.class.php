@@ -21,7 +21,7 @@ class Charcoal_EnumEventPriority extends Charcoal_Enum
 	// named priority
 	const CRITICAL          = 1000;	// must be processed all other events
 	const SYSTEM            =  800;	// system level priority(such as security fault)
-	const PAGE_CONTROL      =  700;	// priority for page control(such as page redirection)
+	const LAYOUT            =  700;	// priority for page control(such as page redirection)
 	const VIEW_RENDERING    =  200;	// very low priority(such as view rendering)
 }
 

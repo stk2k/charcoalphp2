@@ -25,10 +25,6 @@ class Charcoal_UploadedFile extends Charcoal_File
 	public function __construct( $userfile )
 	{
 		$file = $_FILES[ us($userfile) ];
-log_debug( "debug", "debug", "_FILES:" . print_r($_FILES,true) );
-log_debug( "debug", "debug", "userfile:" . print_r($userfile,true) );
-log_debug( "debug", "debug", "file:" . print_r($file,true) );
-
 
 		$this->name     = $file['name'];
 		$this->type     = $file['type'];

@@ -137,7 +137,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_FileUploadNoTmpDirException'			=> 'exception',
 				'Charcoal_FileUploadPartialException'			=> 'exception',
 				'Charcoal_FileSystemException'					=> 'exception',
-				'Charcoal_HttpStatusException'						=> 'exception',
+				'Charcoal_HttpStatusException'					=> 'exception',
 				'Charcoal_ImageGetSizeException'				=> 'exception',
 				'Charcoal_InterfaceNotFoundException'			=> 'exception',
 				'Charcoal_InvalidEncodingCodeException'			=> 'exception',
@@ -206,27 +206,27 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SQLiteDataSource'					=> 'object/data_source',
 
 		// request classes
-				'Charcoal_AbstractRequest'						=> 'object/request',
+				'Charcoal_AbstractRequest'					=> 'object/request',
 				'Charcoal_ShellRequest'						=> 'object/request',
 				'Charcoal_HttpRequest'						=> 'object/request',
 
 		// response classes
-				'Charcoal_AbstractResponse'						=> 'object/response',
+				'Charcoal_AbstractResponse'					=> 'object/response',
 				'Charcoal_ShellResponse'					=> 'object/response',
 				'Charcoal_HttpResponse'						=> 'object/response',
 
 		// session hanlder classes
-				'Charcoal_AbstractSessionHandler'				=> 'object/session_handler',
+				'Charcoal_AbstractSessionHandler'			=> 'object/session_handler',
 				'Charcoal_DefaultSessionHandler'			=> 'object/session_handler',
 				'Charcoal_SmartGatewaySessionHandler'		=> 'object/session_handler',
 
 		// SQL Builder classes
-				'Charcoal_AbstractSQLBuilder'					=> 'object/sql_builder',
+				'Charcoal_AbstractSQLBuilder'				=> 'object/sql_builder',
 				'Charcoal_MySQL_SQLBuilder'					=> 'object/sql_builder',
 				'Charcoal_PostgreSQL_SQLBuilder'			=> 'object/sql_builder',
 
 		// procedure classes
-				'Charcoal_AbstractProcedure'					=> 'object/procedure',
+				'Charcoal_AbstractProcedure'				=> 'object/procedure',
 				'Charcoal_HttpProcedure'					=> 'object/procedure',
 				'Charcoal_SimpleProcedure'					=> 'object/procedure',
 
@@ -281,7 +281,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ProcedureRedirectLayout'			=> 'object/layout',
 				'Charcoal_URLRedirectLayout'				=> 'object/layout',
 
-		// service classes
+		// response filter classes
 				'Charcoal_AbstractResponseFilter'				=> 'object/response_filter',
 				'Charcoal_HtmlEscapeResponseFilter'			=> 'object/response_filter',
 

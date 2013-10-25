@@ -118,6 +118,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 //		log_info( "session", __CLASS__, __CLASS__.'#write: file=' . $file . ' id=' . $id . ' data=' . print_r($sess_data,true) );
 		$fp = @fopen($file,'w');
 		if ( !$fp ){
+			log_warning( "system,debug,error,session", "fopen failed: $file" );
 			return false;
 		}
 		$write = fwrite($fp, $sess_data);

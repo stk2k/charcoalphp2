@@ -322,12 +322,7 @@ class Charcoal_Framework
 		//==================================================================
 		// load sandbox
 
-		Charcoal_Benchmark::start();
-
 		$profile = $sandbox->load();
-
-		$score = Charcoal_Benchmark::stop();
-		log_debug( 'system, debug', "sandbox profile loading time: [$score] msec" );
 
 		//=======================================
 		// Start bootstrap

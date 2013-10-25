@@ -89,7 +89,7 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 	 */
 	public function getFile( $userfile )
 	{
-		return new Charcoal_UploadedFile( $userfile );
+		return isset($_FILES[us($userfile)]) ? new Charcoal_UploadedFile( $userfile ) : NULL;
 	}
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
-* HTTPプローシージャ
+* Layoutable HTTP procedure
 *
 * PHP version 5
 *

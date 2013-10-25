@@ -1,6 +1,6 @@
 <?php
 /**
-* プロシージャを定義するインタフェース
+* Intarface of basic procedure
 *
 * PHP version 5
 *
@@ -12,18 +12,26 @@
 interface Charcoal_IProcedure extends Charcoal_ICharcoalObject
 {
 
-	/*
-	 * 転送先があるか
+	/**
+	 * Checks if the procedure has forward target procedure
+	 *
+	 * @return boolean      TRUE if the procedure has forward target, FALSE otherwise
 	 */
 	public function hasForwardTarget();
 
-	/*
-	 * 転送先を取得
+	/**
+	 * Retrieve object path of the procedure which is specified as a forward target
+	 *
+	 * @return string      object path of forward target procedure
 	 */
 	public function getForwardTarget();
 
-	/*
-	 * プロシージャを実行する
+	/**
+	 * Execute procedure
+	 *
+	 * @return Charcoal_IRequest $request      request object
+	 * @return Charcoal_IResponse $response    response object
+	 * @return Charcoal_Session $session       session object
 	 */
 	public function execute( $request, $response, $session = NULL );
 }

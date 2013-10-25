@@ -307,7 +307,10 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					// result value handling
 					$result_str = array();
 					$do_post_actions = TRUE;
-					if ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
+					if ( $result === NULL ){
+						$result_str[] = 'NULL';
+					}
+					else if ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
 						$result_str[] = 'FALSE';
 						$do_post_actions = FALSE;
 					}
