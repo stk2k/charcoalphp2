@@ -13,6 +13,16 @@
 class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperties
 {
 	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_Properties        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self();
+	}
+
+	/**
 	 *  check if this object has specified key
 	 *
 	 * @param string $key            Key string to get

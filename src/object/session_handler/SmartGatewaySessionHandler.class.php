@@ -33,7 +33,7 @@ class Charcoal_SmartGatewaySessionHandler extends Charcoal_AbstractSessionHandle
 	{
 		parent::configure( $config );
 
-		$this->target = $config->getString( s('target'), s('session') );
+		$this->target = $config->getString( 'target', 'session' );
 
 		$this->gw = $this->getSandbox()->getComponent( 'smart_gateway@:charcoal:db' );
 	}

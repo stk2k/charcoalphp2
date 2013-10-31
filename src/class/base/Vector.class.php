@@ -14,24 +14,34 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( $value = array() )
+	public function __construct( $values = array() )
 	{
 		parent::__construct();
 
-		if ( $value ){
-			if ( $value instanceof Charcoal_Vector ){
-				$this->values = $value->values;
+		if ( $values ){
+			if ( $values instanceof Charcoal_Vector ){
+				$this->values = $values->values;
 			}
-			else if ( is_array($value) ){
-				$this->values = $value;
+			else if ( is_array($values) ){
+				$this->values = $values;
 			}
 			else{
-				_throw( new Charcoal_NonArrayException( $value ) );
+				_throw( new Charcoal_NonArrayException( $values ) );
 			}
 		}
 		else{
 			$this->values = array();
 		}
+	}
+
+	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_Vector        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self();
 	}
 
 	/**

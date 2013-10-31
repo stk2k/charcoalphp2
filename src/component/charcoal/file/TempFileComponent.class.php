@@ -37,8 +37,8 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 		parent::configure( $config );
 
 		$this->_base_root  = $config->getString( s('base_root'), s(CHARCOAL_BASE_DIR) )->getValue();
-		$this->_mode       = $config->getString( s('mode'), s("777") )->getValue();
-		$this->_overwrite  = $config->getBoolean( s('overwrite'), b(TRUE) )->getValue();
+		$this->_mode       = $config->getString( 'mode', '777' )->getValue();
+		$this->_overwrite  = $config->getBoolean( 'overwrite', TRUE )->getValue();
 		$this->_parent_dir = $config->getString( s('parent_dir') )->getValue();
 	}
 

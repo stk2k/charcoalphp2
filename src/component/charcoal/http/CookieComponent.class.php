@@ -33,8 +33,8 @@ class Charcoal_CookieComponent extends Charcoal_CharcoalComponent implements Cha
 
 		$this->_path      = $config->getString( s('path'), s('/') )->getValue();
 		$this->_domain    = $config->getString( s('domain'), s('') )->getValue();
-		$this->_secure    = $config->getBoolean( s('secure'), b(FALSE) )->getValue();
-		$this->_httponly  = $config->getBoolean( s('httponly'), b(FALSE) )->getValue();
+		$this->_secure    = $config->getBoolean( 'secure', FALSE )->getValue();
+		$this->_httponly  = $config->getBoolean( 'httponly', FALSE )->getValue();
 	}
 
 	/*

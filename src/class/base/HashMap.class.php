@@ -16,11 +16,21 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess
 	/*
 	 *	constructor
 	 */
-	public function __construct( $values = NULL )
+	public function __construct( $values = array() )
 	{
 		parent::__construct();
 
 		$this->values = $values ? um($values) : array();
+	}
+
+	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_HashMap        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self();
 	}
 
 	/**

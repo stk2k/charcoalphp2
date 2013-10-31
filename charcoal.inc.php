@@ -9,9 +9,12 @@ date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );
 // ユーザによる中断を無視する
 //ignore_user_abort( TRUE );
 
-// magic_quotes_runtimeをOFFにする
 if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
+	// magic_quotes_runtimeをOFFにする
 	set_magic_quotes_runtime( false );
+
+	// E_DEPRECATEDを定義
+	define( 'E_DEPRECATED', 8192 );
 }
 
 //==================================================================
@@ -85,7 +88,7 @@ function s( $value )
 	if ( $value instanceof Charcoal_String ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_String( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_String( $value ) : Charcoal_String::defaultValue();
 }
 
 /**
@@ -96,7 +99,7 @@ function i( $value )
 	if ( $value instanceof Charcoal_Integer ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_Integer( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_Integer( $value ) : Charcoal_Integer::defaultValue();
 }
 
 /**
@@ -107,7 +110,7 @@ function f( $value )
 	if ( $value instanceof Charcoal_Float ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_Float( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_Float( $value ) : Charcoal_Float::defaultValue();
 }
 
 /**
@@ -118,29 +121,7 @@ function b( $value )
 	if ( $value instanceof Charcoal_Boolean ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_Boolean( $value ) : NULL;
-}
-
-/**
- *	日付をDateオブジェクトに変換
- **/
-function d( $value )
-{
-	if ( $value instanceof Charcoal_Date ){
-		return $value;
-	}
-	return $value !== NULL ? Charcoal_Date::parse( $value ) : NULL;
-}
-
-/**
- *	日付をDateWithTimeオブジェクトに変換
- **/
-function dt( $value )
-{
-	if ( $value instanceof Charcoal_DateTime ){
-		return $value;
-	}
-	return $value !== NULL ? Charcoal_DateWithTime::parse( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_Boolean( $value ) : Charcoal_Boolean::defaultValue();
 }
 
 /**
@@ -151,7 +132,7 @@ function v( $value )
 	if ( $value instanceof Charcoal_Vector ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_Vector( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_Vector( $value ) : Charcoal_Vector::defaultValue();
 }
 
 /**
@@ -162,7 +143,7 @@ function l( $value )
 	if ( $value instanceof Charcoal_List ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_List( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_List( $value ) : Charcoal_List::defaultValue();
 }
 
 /**
@@ -173,7 +154,7 @@ function m( $value )
 	if ( $value instanceof Charcoal_HashMap ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_HashMap( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_HashMap( $value ) : Charcoal_HashMap::defaultValue();
 }
 
 /**
@@ -184,7 +165,7 @@ function p( $value )
 	if ( $value instanceof Charcoal_Properties ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_Properties( $value ) : NULL;
+	return $value !== NULL ? new Charcoal_Properties( $value ) : Charcoal_Properties::defaultValue();
 }
 
 //==================================================================

@@ -193,7 +193,7 @@ class Charcoal_SmartGatewayImpl
 
 		$result = $this->data_source->prepareExecute( $sql, $params );
 
-		while( $row = $ds->fetchAssoc( $result ) ){
+		while( $row = $this->data_source->fetchAssoc( $result ) ){
 			$value = array_shift($row);
 			log_debug( "debug,smart_gateway,sql", "queryValue:$value" );
 			return $value;

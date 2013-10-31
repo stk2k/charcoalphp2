@@ -43,7 +43,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 		$this->smarty->cache_dir 			= $config->getString( 'cache_dir', '', TRUE )->unbox();
 		$this->smarty->left_delimiter 		= $config->getString( 'left_delimiter', '{', FALSE )->unbox();
 		$this->smarty->right_delimiter 		= $config->getString( 'right_delimiter', '}', FALSE )->unbox();
-//		$this->smarty->default_modifiers 	= $config->getArray( s('default_modifiers'), v(array()) )->unbox();
+//		$this->smarty->default_modifiers 	= $config->getArray( 'default_modifiers', array() )->unbox();
 
 		$plugins_dir = $config->getArray( 'plugins_dir', array(), TRUE )->unbox();
 

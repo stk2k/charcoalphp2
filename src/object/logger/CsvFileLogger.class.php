@@ -46,10 +46,10 @@ class Charcoal_CsvFileLogger extends Charcoal_FileLogger implements Charcoal_ILo
 	{
 		parent::configure($config);
 
-		$this->_field_order    = $config->getArray( s('field_order'), v(array()) );
-		$this->_delimiter      = $config->getInteger( s('delimiter'), i(0) );
-		$this->_double_quoted  = $config->getBoolean( s('double_quoted'), b(FALSE) );
-		$this->_eol_code       = $config->getInteger( s('eol_code'), i(0) );
+		$this->_field_order    = $config->getArray( 'field_order', array() );
+		$this->_delimiter      = $config->getInteger( 'delimiter', 0 );
+		$this->_double_quoted  = $config->getBoolean( 'double_quoted', FALSE );
+		$this->_eol_code       = $config->getInteger( 'eol_code', 0 );
 	}
 
 	/*

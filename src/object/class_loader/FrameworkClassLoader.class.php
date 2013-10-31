@@ -55,6 +55,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SQLUtil'					=> 'class/util',
 				'Charcoal_URLUtil'					=> 'class/util',
 				'Charcoal_XmlUtil'					=> 'class/util',
+				'Charcoal_ErrorReportingSwitcher'	=> 'class/util',
 
 		// interface classes
 				'Charcoal_ICacheDriver'				=> 'interface',
@@ -116,7 +117,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ComponentNotRegisteredException'		=> 'exception',
 				'Charcoal_ConfigException'						=> 'exception',
 				'Charcoal_ConfigFileNotFoundException'			=> 'exception',
-				'Charcoal_DateFormatException'					=> 'exception',
 				'Charcoal_DBAutoCommitException'				=> 'exception',
 				'Charcoal_DBBeginTransactionException'			=> 'exception',
 				'Charcoal_DBCommitTransactionException'			=> 'exception',

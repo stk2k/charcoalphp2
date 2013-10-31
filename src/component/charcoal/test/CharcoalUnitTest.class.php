@@ -34,7 +34,7 @@ class Charcoal_CharcoalUnitTest extends Charcoal_CharcoalObject implements Charc
 	{
 		parent::configure( $config );
 
-		$this->_test_class_dir      = $config->getString( s('test_class_dir'), s('test_classes') );
+		$this->_test_class_dir      = $config->getString( 'test_class_dir', 'test_classes' );
 	}
 
 	/*

@@ -44,6 +44,11 @@ class Charcoal_Bootstrap
 		$flags_handled = error_reporting() ;
 		if ( Charcoal_System::isBitSet( $errno, $flags_handled, Charcoal_System::BITTEST_MODE_ANY ) )
 		{
+			$errno = Charcoal_System::phpErrorString( $errno );
+
+echo "error:$errno, $errstr, $errfile, $errline" . eol();
+exit;
+
 			// create fake exception
 			$e = new Charcoal_PHPErrorException($errno, $errstr, $errfile, $errline);
 
@@ -53,10 +58,10 @@ class Charcoal_Bootstrap
 
 			exit;	// prevent unnecessary errors to add
 		}
-//		if ( (error_reporting() & $errno) === $errno ){
+		if ( (error_reporting() & $errno) === $errno ){
 			$errno = Charcoal_System::phpErrorString( $errno );
 			echo "[errno]$errno [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
-//		}
+		}
 		return TRUE;	// Otherwise, ignore all errors
 	}
 
@@ -79,6 +84,7 @@ class Charcoal_Bootstrap
 	{
 	//	log_info( "system,debug", "shutdown", 'Shutdown handler start' );
 
+/*
 		if ( $error = error_get_last() )
 		{
 			switch( $error['type'] )
@@ -90,11 +96,13 @@ class Charcoal_Bootstrap
 				case E_COMPILE_ERROR:
 				case E_COMPILE_WARNING:
 				case E_USER_ERROR:
+
 					$e = new Charcoal_PHPErrorException($error['type'], $error['message'], $error['file'], $error['line']);
 					Charcoal_FrameworkExceptionStack::push( $e );
 					break;
 			}
 		}
+		*/
 
 		while( $e = Charcoal_FrameworkExceptionStack::pop() )
 		{
@@ -183,8 +191,6 @@ class Charcoal_Bootstrap
 				'Charcoal_Primitive' 					=> 'class/base',
 				'Charcoal_Number' 						=> 'class/base',
 				'Charcoal_Boolean'						=> 'class/base',
-				'Charcoal_Date' 						=> 'class/base',
-				'Charcoal_DateWithTime'					=> 'class/base',
 				'Charcoal_Float' 						=> 'class/base',
 				'Charcoal_Integer' 						=> 'class/base',
 				'Charcoal_String' 						=> 'class/base',

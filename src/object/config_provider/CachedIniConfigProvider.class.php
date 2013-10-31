@@ -53,7 +53,7 @@ class Charcoal_CachedIniConfigProvider extends Charcoal_IniConfigProvider
 	 */
 	public function getCache( Charcoal_String $cache_key, Charcoal_File $source )
 	{
-		$cache_dir = Charcoal_Profile::getString( s('CACHE_DIR') );
+		$cache_dir = $this->getSandbox()->getProfile()->getString( 'CACHE_DIR' );
 		$cache_dir = new Charcoal_File( s($cache_dir) );
 
 		$cache_file = new Charcoal_File( s($cache_key), $cache_dir );
@@ -80,7 +80,7 @@ class Charcoal_CachedIniConfigProvider extends Charcoal_IniConfigProvider
 	 */
 	public function setCache( Charcoal_String $cache_key, array $data )
 	{
-		$cache_dir = Charcoal_Profile::getString( s('CACHE_DIR') );
+		$cache_dir = $this->getSandbox()->getProfile()->getString( 'CACHE_DIR' );
 		$cache_dir = new Charcoal_File( s($cache_dir) );
 
 		$cache_dir_mode = Charcoal_Profile::getString( s('CACHE_DIR_MODE'), s('777') );

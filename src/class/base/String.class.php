@@ -11,12 +11,14 @@
 
 class Charcoal_String extends Charcoal_Primitive
 {
+	const DEFAULT_VALUE = '';
+
 	private $value;
 
 	/**
 	 *	Constructor
 	 */
-	public function __construct( $value = '' )
+	public function __construct( $value = self::DEFAULT_VALUE )
 	{
 		parent::__construct();
 
@@ -38,6 +40,17 @@ class Charcoal_String extends Charcoal_Primitive
 		else{
 			_throw( new Charcoal_NonStringException( $value ) );
 		}
+	}
+
+
+	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_String        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self(self::DEFAULT_VALUE);
 	}
 
 	/**

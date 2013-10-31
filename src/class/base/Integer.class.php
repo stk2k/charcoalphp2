@@ -11,12 +11,24 @@
 
 class Charcoal_Integer extends Charcoal_Number
 {
+	const DEFAULT_VALUE = 0;
+
 	/*
 	 *	constructor
 	 */
-	public function __construct( $value = 0 )
+	public function __construct( $value = self::DEFAULT_VALUE )
 	{
 		parent::__construct( $value, Charcoal_Number::NUMBER_TYPE_INTEGER );
+	}
+
+	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_Integer        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self(self::DEFAULT_VALUE);
 	}
 
 	/*

@@ -8,14 +8,14 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-require_once( 'PDFWriterComponentException.class.php';
-require_once( 'EnumPDFOrientation.class.php';
-require_once( 'EnumPDFPaperSize.class.php';
-require_once( 'EnumPDFTextAlign.class.php';
-require_once( 'EnumPDFCellBorder.class.php';
-require_once( 'EnumPDFFontStyle.class.php';
-require_once( 'EnumPDFFontFamily.class.php';
-require_once( 'EnumPDFCellNextPos.class.php';
+require_once( 'PDFWriterComponentException.class.php' );
+require_once( 'EnumPDFOrientation.class.php' );
+require_once( 'EnumPDFPaperSize.class.php' );
+require_once( 'EnumPDFTextAlign.class.php' );
+require_once( 'EnumPDFCellBorder.class.php' );
+require_once( 'EnumPDFFontStyle.class.php' );
+require_once( 'EnumPDFFontFamily.class.php' );
+require_once( 'EnumPDFCellNextPos.class.php' );
 
 require_once( 'fpdf/mbfpdi.php' );
 
@@ -55,17 +55,17 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	{
 		parent::configure( $config );
 
-		$this->_unit              = $config->getString( s('unit'), s("mm") )->getValue();
-		$this->_creator           = $config->getString( s('creator'), s("CharcoalPHP") )->getValue();
-		$this->_authhor           = $config->getString( s('authhor'), s("CharcoalPHP") )->getValue();
-		$this->_zoom              = $config->getString( s('zoom'), s("real") )->getValue();
-		$this->_layout            = $config->getString( s('layout'), s("continuous") )->getValue();
-		$this->_auto_break        = $config->getBoolean( s('auto_break'), b(TRUE) )->getValue();
-		$this->_auto_break_margin = $config->getInteger( s('auto_break_margin'), i(5) )->getValue();
-		$this->_fill_color        = $config->getArray( s('fill_color'), v(array(255,255,255)) )->getValue();
-		$this->_margin_left       = $config->getInteger( s('margin_left'), i(10.0) )->getValue();
-		$this->_margin_top        = $config->getInteger( s('margin_left'), i(10.0) )->getValue();
-		$this->_margin_right      = $config->getInteger( s('margin_left'), i(10.0) )->getValue();
+		$this->_unit              = $config->getString( 'unit', 'mm' )->getValue();
+		$this->_creator           = $config->getString( 'creator', 'CharcoalPHP' )->getValue();
+		$this->_authhor           = $config->getString( 'authhor', 'CharcoalPHP' )->getValue();
+		$this->_zoom              = $config->getString( 'zoom', 'real' )->getValue();
+		$this->_layout            = $config->getString( 'layout', 'continuous' )->getValue();
+		$this->_auto_break        = $config->getBoolean( 'auto_break', TRUE )->getValue();
+		$this->_auto_break_margin = $config->getInteger( 'auto_break_margin', 5 )->getValue();
+		$this->_fill_color        = $config->getArray( 'fill_color', array(255,255,255) )->getValue();
+		$this->_margin_left       = $config->getInteger( 'margin_left', 10.0 )->getValue();
+		$this->_margin_top        = $config->getInteger( 'margin_left', 10.0 )->getValue();
+		$this->_margin_right      = $config->getInteger( 'margin_left', 10.0 )->getValue();
 
 		log_debug( "debug,pdf", "unit:" . $this->_unit );
 		log_debug( "debug,pdf", "creator:" . $this->_creator );
@@ -86,7 +86,9 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function create( Charcoal_Integer $orientation, Charcoal_Integer $paper_size, Charcoal_String $title )
 	{
-		$php_encoding = Charcoal_Profile::getString( s('PHP_CODE') );
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
+		$php_encoding = $this->getSandbox()->getProfile()->getString( 'PHP_CODE' );
 
 		mb_internal_encoding('EUC-JP');
 
@@ -152,6 +154,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function addPage()
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->AddPage();
 	}
 
@@ -165,6 +169,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setFillColor( Charcoal_Integer $red, Charcoal_Integer $green, Charcoal_Integer $blue )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->SetFillColor( ui($red), ui($green), ui($blue) );
 	}
 
@@ -174,6 +180,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setFont( Charcoal_Integer $font_family, Charcoal_Float $size, Charcoal_Integer $styles = NULL )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$size = uf($size);
 		$styles = ui($styles);
 
@@ -223,6 +231,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 			Charcoal_Boolean $fill = NULL
 		)
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$border = ui($border);
 
 		if ( $fill === NULL ){
@@ -278,6 +288,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 			Charcoal_Boolean $fill = NULL
 		)
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$border = ui($border);
 
 		if ( $fill === NULL ){
@@ -333,6 +345,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setBasePosition( Charcoal_Float $left, Charcoal_Float $top )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_base_pos->setLeft( $left );
 		$this->_base_pos->setTop( $top );
 	}
@@ -343,6 +357,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setBaseLeft( Charcoal_Float $left )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_base_pos->setLeft( $left );
 	}
 
@@ -352,6 +368,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setBaseTop( Charcoal_Float $top )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_base_pos->setTop( $top );
 	}
 
@@ -361,6 +379,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function move( Charcoal_Float $x, Charcoal_Float $y )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$base_x = $this->_base_pos->getLeft();
 		$base_y = $this->_base_pos->getTop();
 
@@ -373,6 +393,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function moveAbsolute( Charcoal_Float $x, Charcoal_Float $y )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->SetXY( uf($x), uf($y) );
 	}
 
@@ -382,6 +404,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function write( Charcoal_Float $size, Charcoal_String $text )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$text = mb_convert_encoding( us($text), "EUC-JP", "UTF-8" );
 		$this->_pdf->Write( ui($size), us($text) );
 	}
@@ -392,6 +416,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setLineWidth( Charcoal_Float $width )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->SetLineWidth( uf($width) );
 	}
 
@@ -401,6 +427,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function getPageNo()
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		return $this->_pdf->PageNo();
 	}
 
@@ -410,6 +438,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function drawRect( Charcoal_RectangleFloat $rect, Charcoal_Boolean $fill = NULL )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		if ( $fill === NULL ){
 			$fill = b(TRUE);
 		}
@@ -428,6 +458,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function drawRectAbsolute( Charcoal_RectangleFloat $rect, Charcoal_Boolean $fill = NULL )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		if ( $fill === NULL ){
 			$fill = b(TRUE);
 		}
@@ -443,6 +475,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function drawLine( Charcoal_Float $x1, Charcoal_Float $y1, Charcoal_Float $x2, Charcoal_Float $y2 )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$base_x = $this->_base_pos->getLeft();
 		$base_y = $this->_base_pos->getTop();
 
@@ -455,6 +489,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function drawLineAbsolute( Charcoal_Float $x1, Charcoal_Float $y1, Charcoal_Float $x2, Charcoal_Float $y2 )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->Line( uf($x1), uf($y1), uf($x2), uf($y2) );
 	}
 
@@ -465,6 +501,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function outputInline( Charcoal_String $name )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->Output( us($name), 'I' );
 	}
 
@@ -474,6 +512,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function outputDownload( Charcoal_String $name )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		$this->_pdf->Output( us($name), 'D' );
 	}
 
@@ -483,6 +523,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function outputString()
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		return $this->_pdf->Output( '', 'S' );
 	}
 
@@ -492,6 +534,8 @@ class Charcoal_PDFWriterComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function outputFile( Charcoal_String $file_name )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		return $this->_pdf->Output( us($file_name), 'F' );
 	}
 }

@@ -11,6 +11,8 @@
 
 class Charcoal_Boolean extends Charcoal_Primitive
 {
+	const DEFAULT_VALUE = FALSE;
+
 	private $value;
 
 	/**
@@ -18,7 +20,7 @@ class Charcoal_Boolean extends Charcoal_Primitive
 	 *
 	 *	@param mixed $value        boolean value to set
 	 */
-	public function __construct( $value = FALSE )
+	public function __construct( $value = self::DEFAULT_VALUE )
 	{
 		parent::__construct();
 
@@ -34,6 +36,16 @@ class Charcoal_Boolean extends Charcoal_Primitive
 		else{
 			_throw( new Charcoal_NonBooleanException( $value ) );
 		}
+	}
+
+	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_Boolean        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self(self::DEFAULT_VALUE);
 	}
 
     /**

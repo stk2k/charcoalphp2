@@ -8,31 +8,6 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-class Charcoal_DeprecateFlaggOff
-{
-	private $_error_flags;
-
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		$flags = E_ALL & ~E_STRICT & ~(8192 /*= E_DEPRECATED */);
-		$this->_error_flags = error_reporting($flags);
-	}
-
-	/*
-	 *	デストラクタ
-	 */
-	public function __destruct()
-	{
-		if ( $this->_error_flags ){
-			error_reporting( $this->_error_flags );
-		}
-	}
-}
-
-
 class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 {
 	private $_connected = false;
@@ -66,21 +41,24 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	{
 		parent::configure( $config );
 
-		$this->_backend    = $config->getString( s('backend'), s('') );
-		$this->_user       = $config->getString( s('user'), s('') );
-		$this->_password   = $config->getString( s('password'), s('') );
-		$this->_db_name    = $config->getString( s('db_name'), s('') );
-		$this->_server     = $config->getString( s('server'), s('') );
-		$this->_charset    = $config->getString( s('charset'), s('') );
-		$this->_autocommit = $config->getBoolean( s('autocommit'), b(FALSE) );
+		$this->_backend    = $config->getString( 'backend', '' );
+		$this->_user       = $config->getString( 'user', '' );
+		$this->_password   = $config->getString( 'password', '' );
+		$this->_db_name    = $config->getString( 'db_name', '' );
+		$this->_server     = $config->getString( 'server', '' );
+		$this->_charset    = $config->getString( 'charset', '' );
+		$this->_autocommit = $config->getBoolean( 'autocommit', FALSE );
 
-		log_debug( "db", "[PearDbDataSource]backend=" . $this->_backend );
-		log_debug( "db", "[PearDbDataSource]user=" . $this->_user );
-		log_debug( "db", "[PearDbDataSource]password=" . $this->_password );
-		log_debug( "db", "[PearDbDataSource]db_name=" . $this->_db_name );
-		log_debug( "db", "[PearDbDataSource]server=" . $this->_server );
-		log_debug( "db", "[PearDbDataSource]charset=" . $this->_charset );
-		log_debug( "db", "[PearDbDataSource]autocommit=" . $this->_autocommit );
+		if ( $this->getSandbox()->isDebug() )
+		{
+			log_debug( "db", "[PearDbDataSource]backend=" . $this->_backend );
+			log_debug( "db", "[PearDbDataSource]user=" . $this->_user );
+			log_debug( "db", "[PearDbDataSource]password=" . $this->_password );
+			log_debug( "db", "[PearDbDataSource]db_name=" . $this->_db_name );
+			log_debug( "db", "[PearDbDataSource]server=" . $this->_server );
+			log_debug( "db", "[PearDbDataSource]charset=" . $this->_charset );
+			log_debug( "db", "[PearDbDataSource]autocommit=" . $this->_autocommit );
+		}
 	}
 
 	/*
@@ -298,7 +276,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function connect( $force = FALSE )
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		// 接続済みなら何もしない
 		if ( $this->_connected && !$force ){
@@ -381,7 +359,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function disconnect()
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		// 接続していないなら何もしない
 		if ( !$this->_connected ){
@@ -412,7 +390,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	{
 		Charcoal_Benchmark::start();
 
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		$sql = $sql->getValue();
 
@@ -473,7 +451,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	private function _query( Charcoal_String $sql )
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		$sql = $sql->getValue();
 
@@ -494,7 +472,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function query( Charcoal_String $sql )
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		// 接続処理
 		$this->connect();
@@ -517,7 +495,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function execute( Charcoal_String $sql )
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		// 接続処理
 		$this->connect();
@@ -538,7 +516,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		$result = null;
 
@@ -574,7 +552,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	{
 		Charcoal_ParamTrait::checkResource( 1, $result );
 
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		if ( !is_object($result) ){
 			_throw( new Charcoal_NonObjectException( $result ) );
@@ -587,7 +565,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function fetchArray( $result )
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		if ( $result === NULL ){
 			_throw( new NullPointerException() );
@@ -603,7 +581,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function getLastInsertId()
 	{
-		$flag = new Charcoal_DeprecateFlaggOff();
+		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
 		$sql  = 'select LAST_INSERT_ID()';
 

@@ -37,7 +37,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 		log_debug( "debug", "config: " . print_r($config,true) );
 
 		$this->_token_key        = $config->getString( s('token_key'), s('charcoal_token_key') )->getValue();
-		$this->_debug_mode       = $config->getBoolean( s('debug_mode'), b(FALSE) )->getValue();
+		$this->_debug_mode       = $config->getBoolean( 'debug_mode', FALSE )->getValue();
 		$this->_token_generator  = $config->getString( s('token_generator'), s('simple') )->getValue();
 
 		log_debug( "debug", "token key: {$this->_token_key}" );

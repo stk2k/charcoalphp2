@@ -16,21 +16,31 @@ class Charcoal_List extends Charcoal_Collection
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( $value = array() )
+	public function __construct( $values = array() )
 	{
 		parent::__construct();
 
-		if ( $value ){
+		if ( $values ){
 			if ( is_array($value) ){
-				$this->values = $value;
+				$this->values = $values;
 			}
 			else{
-				_throw( new NonArrayException($value) );
+				_throw( new NonArrayException($values) );
 			}
 		}
 		else{
 			$this->values = array();
 		}
+	}
+
+	/**
+	 * Retrieve default value
+	 *
+	 * @return Charcoal_List        default value
+	 */
+	public static function defaultValue()
+	{
+		return new self();
 	}
 
 	/**

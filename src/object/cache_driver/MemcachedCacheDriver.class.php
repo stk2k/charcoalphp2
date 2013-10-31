@@ -36,10 +36,10 @@ class Charcoal_MemcachedCacheDriver extends Charcoal_AbstractCacheDriver
 	{
 		parent::configure( $config );
 
-		$this->_host              = $config->getString( s('host'), s('localhost') );
-		$this->_port              = $config->getInteger( s('port'), i(11211) );
-		$this->_weight            = $config->getInteger( s('weight'), i(100) );
-		$this->_default_duration  = $config->getInteger( s('default_duration'), i(0) );
+		$this->_host              = $config->getString( 'host', 'localhost' );
+		$this->_port              = $config->getInteger( 'port', 11211 );
+		$this->_weight            = $config->getInteger( 'weight', 100 );
+		$this->_default_duration  = $config->getInteger( 'default_duration', 0 );
 
 		log_debug( "system, debug, cache", "cache", "host=[{$this->_host}]" );
 		log_debug( "system, debug, cache", "cache", "port=[{$this->_port}]" );

@@ -494,7 +494,7 @@ class Charcoal_Framework
 
 		// register routers
 		$routing_rule = NULL;
-		if ( $routing_rule_name !== NULL ) {
+		if ( !$routing_rule_name->isEmpty() ) {
 			$routing_rule = $sandbox->createObject( $routing_rule_name, 'routing_rule', array(), 'Charcoal_IRoutingRule' );
 		}
 
