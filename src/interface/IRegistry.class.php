@@ -15,7 +15,7 @@ interface Charcoal_IRegistry
 	 * 
 	 * @param string $key      registry data id
 	 *
-	 * @return array           configuration data
+	 * @return mixed           configuration data
 	 */
 	public function get( $key );
 

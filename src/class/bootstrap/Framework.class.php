@@ -58,7 +58,7 @@ class Charcoal_Framework
 
 		include( $path );
 		self::$loaded_files[] = $path;
-//		log_info( "system,debug,loaded_files","loaded source file: [$file]", 'framework' );
+		log_info( "system,debug,include","loaded source file: [$path]", 'framework' );
 	}
 
 	/**

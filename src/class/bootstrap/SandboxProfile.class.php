@@ -57,7 +57,12 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 //			log_debug( "debug,config,profile", "profile", "parsing config file: [$config_file]" );
 			$config_file = $config_file->getAbsolutePath();
 			if ( $debug_mode )	echo "executing parse_ini_file: [$config_file]" . eol();
-			$config = parse_ini_file($config_file,FALSE);
+			$config = @parse_ini_file($config_file,FALSE);
+			if ( $config === FALSE ){
+				if ( $debug_mode )	echo "profile config file format error: [$config_file]" . eol();
+				log_error( "debug,config,profile", "profile config file format error: [$config_file]" );
+				_throw( new Charcoal_ProfileConfigFileFormatException( $config_file ) );
+			}
 			if ( $debug_mode )	echo "executed parse_ini_file: " . ad($config) . eol();
 //			log_debug( "profile", "profile", "parse_ini_file: " . print_r($config,TRUE) );
 

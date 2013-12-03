@@ -3,6 +3,14 @@
 //==================================================================
 // 初期化処理
 
+// 定数定義
+if ( !defined('CHARCOAL_CACHE_DIR') ){
+	define( 'CHARCOAL_CACHE_DIR', CHARCOAL_HOME . '/cache' );
+}
+if ( !defined('CHARCOAL_TMP_DIR') ){
+	define( 'CHARCOAL_TMP_DIR', CHARCOAL_HOME . '/tmp' );
+}
+
 // タイムゾーン
 date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );
 

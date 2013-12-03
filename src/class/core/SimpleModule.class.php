@@ -230,7 +230,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 			}
 		}
 
-//		log_info( "system,debug", "module", "loaded tasks: " . print_r($loaded_tasks,true) );
+//		log_debug( "system,debug,event", "loaded tasks: " . print_r($loaded_tasks,true), "module" );
 
 		return $loaded_tasks;
 	}

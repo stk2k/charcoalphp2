@@ -36,13 +36,13 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 		parent::configure( $config );
 
 		$this->smarty->caching 				= 0;	//$config->getBoolean( 'caching' )->unbox();
-		$this->smarty->compile_check 		= $config->getBoolean( 'compile_check', FALSE )->unbox();
-		$this->smarty->template_dir 		= $config->getString( 'template_dir', '', TRUE )->unbox();
-		$this->smarty->compile_dir 			= $config->getString( 'compile_dir', '', TRUE )->unbox();
-		$this->smarty->config_dir 			= $config->getString( 'config_dir', '', TRUE )->unbox();
-		$this->smarty->cache_dir 			= $config->getString( 'cache_dir', '', TRUE )->unbox();
-		$this->smarty->left_delimiter 		= $config->getString( 'left_delimiter', '{', FALSE )->unbox();
-		$this->smarty->right_delimiter 		= $config->getString( 'right_delimiter', '}', FALSE )->unbox();
+		$this->smarty->compile_check 		= $config->getBoolean( 'compile_check', FALSE );
+		$this->smarty->template_dir 		= $config->getString( 'template_dir', '', TRUE );
+		$this->smarty->compile_dir 			= $config->getString( 'compile_dir', '', TRUE );
+		$this->smarty->config_dir 			= $config->getString( 'config_dir', '', TRUE );
+		$this->smarty->cache_dir 			= $config->getString( 'cache_dir', '', TRUE );
+		$this->smarty->left_delimiter 		= $config->getString( 'left_delimiter', '{', FALSE );
+		$this->smarty->right_delimiter 		= $config->getString( 'right_delimiter', '}', FALSE );
 //		$this->smarty->default_modifiers 	= $config->getArray( 'default_modifiers', array() )->unbox();
 
 		$plugins_dir = $config->getArray( 'plugins_dir', array(), TRUE )->unbox();

@@ -142,6 +142,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_InterfaceNotFoundException'			=> 'exception',
 				'Charcoal_InvalidEncodingCodeException'			=> 'exception',
 				'Charcoal_InvalidMailAddressException'			=> 'exception',
+				'Charcoal_JsonDecodingException'				=> 'exception',
 				'Charcoal_LayoutManagerCreationException'		=> 'exception',
 				'Charcoal_LoggerConfigException'				=> 'exception',
 				'Charcoal_MakeDirectoryException'				=> 'exception',
@@ -169,6 +170,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_TableModelFieldException'				=> 'exception',
 				'Charcoal_TestDataNotFoundException'			=> 'exception',
 				'Charcoal_TaskNotFoundException'				=> 'exception',
+				'Charcoal_UnsupportedImageFormatException'		=> 'exception',
 				'Charcoal_URLFormatException'					=> 'exception',
 
 		// I/O classes
@@ -246,7 +248,9 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_TempDirComponent'					=> 'component/charcoal/file',
 				'Charcoal_TempFileComponent'				=> 'component/charcoal/file',
 				'Charcoal_FormTokenComponent'				=> 'component/charcoal/form',
+				"Charcoal_ThumbnailComponent"				=> 'component/charcoal/thumb',
 				'Charcoal_PDFWriterComponent'				=> 'component/pdf',
+				'Charcoal_SimplePieComponent'				=> 'component/rss/simplepie',
 
 		// component classes(smart gateway)
 				'Charcoal_SmartGateway'						=> 'component/charcoal/db',

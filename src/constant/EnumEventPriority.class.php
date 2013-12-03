@@ -4,7 +4,7 @@
 *
 * PHP version 5
 *
-* @package    constants
+* @package    constant
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */

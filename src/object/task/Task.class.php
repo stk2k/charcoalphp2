@@ -125,6 +125,29 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	}
 
 	/**
+	 * add a post action
+	 * 
+	 * @return array      post action t oadd
+	 */
+	public function addPostAction( $action )
+	{
+		$this->post_actions->add( $action );
+	}
+
+	/**
+	 * remove a post action
+	 * 
+	 * @return array      post action to remove
+	 */
+	public function removePostAction( $action )
+	{
+		$key = array_search( $action, $this->post_actions );
+		if ( $key !== FALSE ){
+			unset( $this->post_actions[$key]);
+		}
+	}
+
+	/**
 	 * set post actions
 	 * 
 	 * @param array $post_actions      post actions of this task

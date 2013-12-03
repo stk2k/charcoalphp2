@@ -133,12 +133,12 @@ class Charcoal_UploadedFile extends Charcoal_File
 		case UPLOAD_ERR_OK:
 			log_info( "system,debug", "UPLOAD_ERR_OK" );
 			break;
-		case UPLOAD_ERR_INIsize:
-			log_info( "system,debug", "UPLOAD_ERR_INIsize" );
+		case UPLOAD_ERR_INI_SIZE:
+			log_info( "system,debug", "UPLOAD_ERR_INI_SIZE" );
 			_throw( new Charcoal_FileUploadIniSizeException($this) );
 			break;
-		case UPLOAD_ERR_FORMsize:
-			log_info( "system,debug", "UPLOAD_ERR_FORMsize" );
+		case UPLOAD_ERR_FORM_SIZE:
+			log_info( "system,debug", "UPLOAD_ERR_FORM_SIZE" );
 			_throw( new Charcoal_FileUploadFormSizeException($this) );
 			break;
 		case UPLOAD_ERR_PARTIAL:

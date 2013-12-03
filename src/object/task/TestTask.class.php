@@ -24,6 +24,9 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	public function configure( $config )
 	{
 		parent::configure( $config );
+		
+		$this->setPostActions( array('remove_event', 'remove_task') );
+
 
 		if ( $this->getSandbox()->isDebug() )
 		{

@@ -3,3 +3,4 @@
 /nbproject/private/
 /test/nbproject/private/
 composer.phar
+/cache/*

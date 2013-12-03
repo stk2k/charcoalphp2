@@ -34,10 +34,21 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	{
 		parent::configure( $config );
 
+
 		$this->log_format   = $config->getString( 'log_format', self::DEFAULT_LOG_FORMAT );
 
 		$this->converter = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'LOG' );
 
+	}
+
+	/**
+	 * Output debug information when configure method called
+	 *
+	 * @param Charcoal_Config $config   configuration data
+	 */
+	public function outputDebugConfig( $config )
+	{
+		ad( $config );
 	}
 
 

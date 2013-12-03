@@ -20,11 +20,25 @@ class Charcoal_ResourceLocator
 	{
 //		Charcoal_ParamTrait::checkString( 1, $value );
 
-		if ( strpos($value,'%') === FALSE ){
-			return s($value);
+		if ( is_array($value) || $value instanceof Iterator ){
+			$new_array = array();
+			foreach( $value as $key => $value ){
+				$key = is_string($key) ? self::processMacro($key) : $key;
+				$value = is_string($value) ? self::processMacro($value) : $value;
+				$new_array[$key] = $value;
+			}
+			return $new_array;
 		}
 
 		$value = us( $value );
+
+		if ( !is_string($value) ){
+			return $value;
+		}
+
+		if ( strpos($value,'%') === FALSE ){
+			return $value;
+		}
 
 		if ( !self::$static_macro_defs ){
 			self::$static_macro_defs = array(
@@ -35,6 +49,8 @@ class Charcoal_ResourceLocator
 				'%PROJECT%'          => CHARCOAL_PROJECT,
 				'%APPLICATION%'      => CHARCOAL_APPLICATION,
 				'%BASE_DIR%'         => CHARCOAL_BASE_DIR,
+				'%CACHE_DIR%'        => CHARCOAL_CACHE_DIR,
+				'%TMP_DIR%'          => CHARCOAL_TMP_DIR,
 			);
 		}
 
@@ -57,7 +73,7 @@ class Charcoal_ResourceLocator
 			}
 		}
 
-		return s($value);
+		return $value;
 	}
 
 	/**

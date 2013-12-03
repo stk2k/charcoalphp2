@@ -52,7 +52,7 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 		}
 
 		// read ini file
-	    $ini_config = parse_ini_file( $source, TRUE );
+	    $ini_config = @parse_ini_file( $source, TRUE );
 		if ( $this->debug->isTrue() ){
 			print "[$source] parse_ini_file($source)=" . eol();
 			ad( $ini_config );
