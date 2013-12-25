@@ -23,7 +23,7 @@ class Charcoal_ErrorReportingSwitcher
 			$new_flags |= $flag_add;
 		}
 		if ( $flag_remove != 0 ){
-			$new_flags &= $flag_remove;
+			$new_flags &= ~$flag_remove;
 		}
 		error_reporting($new_flags);
 	}

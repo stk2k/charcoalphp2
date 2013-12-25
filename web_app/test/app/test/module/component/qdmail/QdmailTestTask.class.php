@@ -36,23 +36,23 @@ class QdmailTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		// Qdmail
-		$qdmail = $context->getComponent( s('qdmail@:qdmail') );
+		$qdmail = $context->getComponent( 'qdmail@:qdmail' );
 
 		$config = new Charcoal_Config();
 
-		$config->set( s('qdsmtp.host'), 'localhost' );
-		$config->set( s('qdsmtp.port'), '25' );
-		$config->set( s('qdsmtp.from'), 'stk2k@sazysoft.com' );
-		$config->set( s('qdsmtp.protocol'), 'SMTP' );
-		$config->set( s('qdsmtp.user'), '' );
-		$config->set( s('qdsmtp.pass'), '' );
+		$config->set( 'qdsmtp.host', 'localhost' );
+		$config->set( 'qdsmtp.port', '25' );
+		$config->set( 'qdsmtp.from', 'stk2k@sazysoft.com' );
+		$config->set( 'qdsmtp.protocol', 'SMTP' );
+		$config->set( 'qdsmtp.user', '' );
+		$config->set( 'qdsmtp.pass', '' );
 
 		$qdmail->configure( $config );
 
 		switch( $action ){
 		// Send mail
 		case "send_mail":
-			$to      = $request->get( s("to") );
+			$to      = $request->get( "to" );
 			$from    = "stk2k@sazysoft.com";
 			$subject = "test";
 			$body    = "test!!!";

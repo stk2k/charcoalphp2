@@ -13,9 +13,9 @@ require_once( 'FormTokenValidationException.class.php' );
 
 class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
-	private $_token_key;
-	private $_debug_mode;
-	private $_token_generator;
+	private $token_key;
+	private $debug_mode;
+	private $token_generator;
 
 	/*
 	 *	Construct object
@@ -36,70 +36,74 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 
 		log_debug( "debug", "config: " . print_r($config,true) );
 
-		$this->_token_key        = $config->getString( s('token_key'), s('charcoal_token_key') )->getValue();
-		$this->_debug_mode       = $config->getBoolean( 'debug_mode', FALSE )->getValue();
-		$this->_token_generator  = $config->getString( s('token_generator'), s('simple') )->getValue();
+		$this->token_key        = $config->getString( 'token_key', 'charcoaltoken_key' );
+		$this->debug_mode       = $config->getBoolean( 'debug_mode', FALSE );
+		$this->token_generator  = $config->getString( 'token_generator', 'simple' );
 
-		log_debug( "debug", "token key: {$this->_token_key}" );
-		log_debug( "debug", "debug mode: {$this->_debug_mode}" );
-		log_debug( "debug", "token generator: {$this->_token_generator}" );
+		log_debug( "debug", "token key: {$this->token_key}" );
+		log_debug( "debug", "debug mode: {$this->debug_mode}" );
+		log_debug( "debug", "token generator: {$this->token_generator}" );
 
-		$this->_token_generator = $this->getSandbox()->createObject( $this->_token_generator, 'token_generator' );
+		$this->token_generator = $this->getSandbox()->createObject( $this->token_generator, 'token_generator' );
 	}
 
 	/*
 	 * Set token generator
 	 *
-	 * @param Charcoal_Config $config   configuration data
+	 * @param Charcoal_ITokenGenerator $token_generator   token generator
 	 */
-	public function setTokenGenerator( Charcoal_ITokenGenerator $token_generator )
+	public function setTokenGenerator( $token_generator )
 	{
-		$this->_token_generator = $token_generator;
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITokenGenerator', $token_generator );
+
+		$this->token_generator = $token_generator;
 	}
 
 	/*
 	 * Get token generator
 	 *
-	 * @param Charcoal_Config $config   configuration data
+	 * @return Charcoal_ITokenGenerator   token generator
 	 */
 	public function getTokenGenerator()
 	{
-		return $this->_token_generator;
+		return $this->token_generator;
 	}
 
 	/*
 	 * generate token
 	 *
-	 * @param Charcoal_ISequence $sequence    Request object
+	 * @param Charcoal_ISequence $sequence    Sequence object
 	 */
-	public function generate( Charcoal_ISequence $sequence )
+	public function generate( $sequence )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ISequence', $sequence );
+
 		try{
-			$token_key = $this->_token_key;
+			$token_key = $this->token_key;
 
 			// get token container from session.
-			$token_list   = $sequence->get( s($token_key) );
+			$token_list   = $sequence->get( $token_key );
 
 			if ( $token_list === NULL || !is_array($token_list) ){
 				$token_list = array();
 			}
 
 			// Generate token
-			$new_token = $this->_token_generator->generateToken();
+			$new_token = $this->token_generator->generateToken();
 
-			if ( $this->_debug_mode ){
+			if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 				ad($new_token,array('title'=>"token generated","type"=>"div"));
 			}
 			log_debug( "debug", "token generated: $new_token" );
 
 			// add new token to token list.
 			$token_list[] = $new_token;
-			if ( $this->_debug_mode ){
+			if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 				ad($token_list,array('title'=>"token list"));
 			}
 
 			// save token list in sequence.
-			$sequence->set( s($token_key), $token_list );
+			$sequence->set( $token_key, $token_list );
 
 			log_debug( "debug", "sequence: " . print_r($sequence,true) );
 
@@ -116,27 +120,34 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 	/*
 	 * validate token in request and sequence
 	 *
-	 * @param Charcoal_ISequence $sequence    Sequence object
-	 * @param Charcoal_String $form_token    Form token
+	 * @param Charcoal_ISequence $sequence          Sequence object
+	 * @param string|Charcoal_String $form_token    Form token
+	 * @param boolean|Charcoal_Boolean $throws      If true, this method throws an exception on failure. Otherwise returns true/false
 	 */
-	public function validate( Charcoal_ISequence $sequence, Charcoal_String $form_token )
+	public function validate( $sequence, $form_token, $throws = TRUE )
 	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ISequence', $sequence );
+		Charcoal_ParamTrait::checkString( 2, $form_token );
+		Charcoal_ParamTrait::checkBoolean( 3, $throws );
+
+		$throws = ub($throws);
+
 		log_debug( "debug", "sequence: " . print_r($sequence,true) );
 		log_debug( "debug", "form_token: " . print_r($form_token,true) );
-		if ( $this->_debug_mode ){
+
+		if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 			ad($sequence,array('title'=>"sequence"));
-			ad($request,array('title'=>"request"));
 		}
 
-		$token_key = $this->_token_key;
+		$token_key = $this->token_key;
 		log_debug( "debug", "token_key: " . print_r($token_key,true) );
-		if ( $this->_debug_mode ){
+		if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 			ad($token_key,array('title'=>"token_key","type"=>"div"));
 		}
 
 		// get token container from session.
 		$token_list   = $sequence->get( s($token_key) );
-		if ( $this->_debug_mode ){
+		if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 			ad($token_list,array('title'=>"token list"));
 		}
 		log_debug( "debug", "token_list: " . print_r($token_list,true) );
@@ -149,7 +160,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 		$token_index = NULL;
 		foreach( $token_list as $idx => $token ){
 			log_info( "debug", "token: $token" );
-			if ( $this->_debug_mode ){
+			if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 				ad($token,array('title'=>"token","type"=>"div"));
 			}
 			if ( $token == $form_token ){
@@ -161,16 +172,19 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 		if ( $token_index === NULL ){
 			// illegal access
 			log_warning( "system, debug", "token not found: $form_token" );
-			if ( $this->_debug_mode ){
+			if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 				ad($form_token,array('title'=>"token not found","type"=>"div"));
 			}
 
-			_throw( new Charcoal_FormTokenValidationException( s('token not found in sequence:'.$form_token) ) );
+			if ( $throws ){
+				_throw( new Charcoal_FormTokenValidationException( 'token not found in sequence:'.$form_token ), FALSE );
+			}
+			return FALSE;
 		}
 		else{
 			// authorized access
 			log_debug( "debug", "token accepted: $form_token" );
-			if ( $this->_debug_mode ){
+			if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
 				ad($form_token,array('title'=>"token accepted","type"=>"div"));
 			}
 
@@ -179,10 +193,10 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 		}
 
 		// update token list in sequence.
-		$sequence->set( s($token_key), $token_list );
+		$sequence->set( $token_key, $token_list );
 
 		// the event was successfully processed.
-		return b(TRUE);
+		return TRUE;
 	}
 
 }

@@ -618,7 +618,7 @@ class Charcoal_System
 				if ( strlen($str) > $max_string_length ){
 					$str = substr( $str, 0, $max_string_length ) . '...(total:' . strlen($str) . 'bytes)';
 				}
-				$str = htmlspecialchars( $str, ENT_QUOTES );
+//				$str = htmlspecialchars( $str, ENT_QUOTES );
 				$lines[] = str_repeat( '.', $depth * 4 ) . "[$key:$type]$str";
 			}
 			break;
@@ -632,7 +632,7 @@ class Charcoal_System
 				if ( strlen($str) > $max_string_length ){
 					$str = substr( $str, 0, $max_string_length ) . '...(total:' . strlen($str) . 'bytes)';
 				}
-				$str = htmlspecialchars( $str, ENT_QUOTES );
+//				$str = htmlspecialchars( $str, ENT_QUOTES );
 				$lines[] = str_repeat( '.', $depth * 4 ) . "[$key:$type]$str";
 			}
 			break;

@@ -55,7 +55,7 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 			$file = $e->getFile();
 			$line = $e->getLine();
 			$message = $e->getMessage();
-			$backtrace = $e->getBackTrace();
+			$backtrace = ($e instanceof Charcoal_CharcoalException) ? $e->getBackTrace() : NULL;
 
 			// print exception info
 			$out .= "[$no]$clazz" . self::LOG_EOL;
@@ -68,6 +68,10 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 			if ( $e ){
 				$out .= self::LOG_EOL;
 			}
+		}
+
+		if ( $backtrace === NULL || !is_array($backtrace) ){
+			return $out;
 		}
 
 		$out .= self::LOG_EOL;

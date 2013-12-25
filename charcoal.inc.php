@@ -247,15 +247,18 @@ function up( $value )
 //==================================================================
 // 例外をスロー
 
-function _throw( Exception $e, Charcoal_Integer $back = null )
+function _throw( Exception $e, $log_error = TRUE )
 {
-	list( $file, $line ) = Charcoal_System::caller($back ? ui($back) : 0);
+	list( $file, $line ) = Charcoal_System::caller();
 	$clazz = get_class($e);
 	$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
 	$message = $e->getMessage();
 
 	try{
-		log_debug( "system,error,debug", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
+		log_debug( "system,debug", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
+		if ( $log_error ){
+			log_debug( "error", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
+		}
 	}
 	catch( Exception $ex ){
 		echo "exeption while wrting log:" . $e->getMessage() . eol();
@@ -267,7 +270,7 @@ function _throw( Exception $e, Charcoal_Integer $back = null )
 
 //==================================================================
 // 例外をキャッチ
-function _catch( Exception $e )
+function _catch( Exception $e, $log_error = TRUE )
 {
 	list( $file, $line ) = Charcoal_System::caller();
 	$clazz = get_class($e);
@@ -275,7 +278,10 @@ function _catch( Exception $e )
 	$message = $e->getMessage();
 
 	try{
-		log_debug( "system,error,debug", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
+		log_debug( "system,debug", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
+		if ( $log_error ){
+			log_debug( "error", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
+		}
 	}
 	catch( Exception $ex ){
 		echo "exeption while wrting log:" . $e->getMessage() . eol();

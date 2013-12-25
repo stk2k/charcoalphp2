@@ -61,8 +61,7 @@ class SimplePieTestTask extends Charcoal_TestTask
 		switch( $action ){
 		// Send mail
 		case "get_feed":
-			//$feed      = $simplepie->getFeed( 'http://charcoalphp.org/test/rss/index.xml' );
-			$feed      = $simplepie->getFeed( 'http://alfalfalfa.com/' );
+			$feed      = $simplepie->getFeed( 'http://charcoalphp.org/test/rss/index.xml' );
 
 			ad( $feed );
 			

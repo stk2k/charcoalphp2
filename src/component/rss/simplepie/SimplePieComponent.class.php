@@ -8,8 +8,8 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-require_once( 'SimplePieRSSItem.class.php' );
-require_once( 'SimplePieRSSChannel.class.php' );
+require_once( 'SimplePieRssItem.class.php' );
+require_once( 'SimplePieRssChannel.class.php' );
 require_once( 'SimplePieComponentException.class.php' );
 
 require_once( 'simplepie/autoloader.php' );
@@ -18,15 +18,14 @@ class Charcoal_SimplePieComponent extends Charcoal_CharcoalComponent implements 
 {
 	private $simple_pie;
 
-	/*
-	 *    コンストラクタ
+	/**
+	 *  Constructor
 	 */
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->simple_pie = new SimplePie();
-
 	}
 
 	/**
@@ -48,11 +47,21 @@ class Charcoal_SimplePieComponent extends Charcoal_CharcoalComponent implements 
 	}
 
 	/**
+	 * get raw RSS data
+	 * 
+	 * @return string    RSS data
+	 */
+	public function getRawData()
+	{
+		return $this->simple_pie->get_raw_data();
+	}
+
+	/**
 	 * retrieve rss
 	 * 
 	 * @param string $url
 	 */
-	public function getFeed( $url )
+	public function getFeed( $url, $date_format = NULL )
 	{
 		$feed = $this->simple_pie;
 
@@ -70,6 +79,7 @@ class Charcoal_SimplePieComponent extends Charcoal_CharcoalComponent implements 
 		foreach ($feed->get_items() as $item)
 		{
 			$items[] = array(
+					'date' =>  $item->get_date($date_format),
 					'link' =>  $item->get_link(),
 					'title' =>  $item->get_title(),
 					'description' =>  $item->get_description(),

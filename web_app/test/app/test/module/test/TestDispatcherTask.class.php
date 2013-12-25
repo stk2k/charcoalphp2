@@ -9,8 +9,10 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class TestTask extends Charcoal_Task
+class TestDispatcherTask extends Charcoal_Task
 {
+	private $scenario_dir;
+
 	/**
 	 * Initialize instance
 	 *
@@ -22,8 +24,12 @@ class TestTask extends Charcoal_Task
 		
 		$this->setPostActions( array('remove_event', 'remove_task') );
 
+		$this->scenario_dir  = $config->getString( 'scenario_dir', Charcoal_ResourceLocator::getApplicationPath('scenario'), TRUE );
 
+		if ( $this->getSandbox()->isDebug() ){
 			log_debug( "debug,event", "Task[$this] post_actions: " . $this->getPostActions(), "post_actions" );
+			log_debug( "debug,event", "scenario_dir: {$this->scenario_dir}" );
+		}
 	}
 
 	/**
@@ -69,7 +75,7 @@ class TestTask extends Charcoal_Task
 			return TRUE;
 		}
 
-		$scenario_file = is_file($scenario) ? $scenario : Charcoal_ResourceLocator::getApplicationFile( 'scenario', $scenario . '.scenario.ini' );
+		$scenario_file = $this->scenario_dir . '/' . $scenario . '.scenario.ini';
 		if ( !is_file($scenario_file) ){
 			echo "scenario file not found: $scenario_file" . eol();
 			log_error( "debug,error,scenario", "scenario file not found: $scenario_file" );

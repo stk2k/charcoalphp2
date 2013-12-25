@@ -12,12 +12,13 @@
 class Charcoal_SimplePieRSSChannel extends Charcoal_Object
 {
 	private $subscribe_url;
+	private $date;
 	private $link;
 	private $title;
 	private $description;
 	private $items;
 
-	/*
+	/**
 	 *  Constructor
 	 *
 	 * @param array $data
@@ -27,6 +28,7 @@ class Charcoal_SimplePieRSSChannel extends Charcoal_Object
 		parent::__construct();
 
 		$this->subscribe_url = isset($data['subscribe_url']) ? $data['subscribe_url'] : '';
+		$this->date = isset($data['date']) ? $data['date'] : '';
 		$this->link = isset($data['link']) ? $data['link'] : '';
 		$this->title = isset($data['title']) ? $data['title'] : '';
 		$this->description = isset($data['description']) ? $data['description'] : '';
@@ -56,6 +58,16 @@ class Charcoal_SimplePieRSSChannel extends Charcoal_Object
 	public function getLink()
 	{
 		return $this->link;
+	}
+
+	/**
+	 * Returns date
+	 *
+	 * @return string 
+	 */
+	public function getDate()
+	{
+		return $this->date;
 	}
 
 	/**

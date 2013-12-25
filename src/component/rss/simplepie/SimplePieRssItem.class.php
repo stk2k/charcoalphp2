@@ -16,7 +16,7 @@ class Charcoal_SimplePieRSSItem extends Charcoal_Object
 	private $description;
 	private $date;
 
-	/*
+	/**
 	 *  Constructor
 	 *
 	 * @param array $data

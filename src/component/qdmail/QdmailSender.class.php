@@ -9,12 +9,9 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-require_once( 'qdmail.php' );
-require_once( 'qdsmtp.php' );
-
-require_once( 'QdmailException.class.php';
-require_once( 'QdmailSmtpException.class.php';
-require_once( 'QdmailAddress.class.php';
+require_once( 'QdmailException.class.php' );
+require_once( 'QdmailSmtpException.class.php' );
+require_once( 'QdmailAddress.class.php' );
 
 class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
@@ -25,6 +22,11 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function __construct()
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
+		require_once( 'qdmail.php' );
+		require_once( 'qdsmtp.php' );
+
 		parent::__construct();
 
 		$this->qdmail = new Qdmail('utf-8' , 'base64');
@@ -44,6 +46,8 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function configure( $config )
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
 		parent::configure( $config );
 
 		if ( is_array($config) || $config === NULL ){
@@ -54,24 +58,29 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 		// QdMail設定
 		// =========================================
 
+		// エラーを画面に出力するか
+		$qdmail_error_display    = $config->getBoolean( 'qdmail.error_display', FALSE );
+
+		$this->qdmail->errorDisplay( ub($qdmail_error_display) );
+
 		// ログ設定
 		$qdmail_log_level    = $config->getInteger( 'qdmail.log_level', 0 );
-		$qdmail_log_path     = $config->getString( 'qdmail.log_path', '' );
-		$qdmail_log_filename = $config->getString( 'qdmail.log_filename', '' );
+		$qdmail_log_path     = $config->getString( 'qdmail.log_path', '', TRUE );
+		$qdmail_log_filename = $config->getString( 'qdmail.log_filename', '', TRUE );
 
-		$this->qdmail->logLevel( $qdmail_log_level );
-		$this->qdmail->logPath( $qdmail_log_path );
+		$this->qdmail->logLevel( ui($qdmail_log_level) );
+		$this->qdmail->logPath( us($qdmail_log_path) );
 		$this->qdmail->logFilename( "/" . $qdmail_log_filename );
 
 		// エラーログ設定
 		$qdmail_error_display      = $config->getBoolean( 'qdmail.error_display', FALSE );
 		$qdmail_error_log_level    = $config->getInteger( 'qdmail.error_log_level', 0 );
-		$qdmail_error_log_path     = $config->getString( 'qdmail.error_log_path', '' );
-		$qdmail_error_log_filename = $config->getString( 'qdmail.error_log_filename', '' );
+		$qdmail_error_log_path     = $config->getString( 'qdmail.error_log_path', '', TRUE );
+		$qdmail_error_log_filename = $config->getString( 'qdmail.error_log_filename', '', TRUE );
 
-		$this->qdmail->errorDisplay( $qdmail_error_display );
-		$this->qdmail->errorlogLevel( $qdmail_error_log_level );
-		$this->qdmail->errorlogPath( $qdmail_error_log_path );
+		$this->qdmail->errorDisplay( ub($qdmail_error_display) );
+		$this->qdmail->errorlogLevel( ui($qdmail_error_log_level) );
+		$this->qdmail->errorlogPath( us($qdmail_error_log_path) );
 		$this->qdmail->errorlogFilename( "/" . $qdmail_error_log_filename );
 
 		// =========================================
@@ -83,17 +92,22 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 			$this->qdmail->smtp(false);
 		}
 		else{
+			// エラーを画面に出力するか
+			$qdsmtp_error_display    = $config->getBoolean( 'qdsmtp.error_display', FALSE );
+
+			$this->qdmail->smtpObject()->error_display = ub($qdsmtp_error_display);
+
 			// ログ設定
 			$qdsmtp_log_level          = $config->getInteger( 'qdsmtp.log_level', 0 );
-			$qdsmtp_log_filename       = $config->getString( 'qdsmtp.log_filename', '' );
+			$qdsmtp_log_filename       = $config->getString( 'qdsmtp.log_filename', '', TRUE );
 			$qdsmtp_error_log_level    = $config->getInteger( 'qdsmtp.error_log_level', 0 );
-			$qdsmtp_error_log_filename = $config->getString( 'qdsmtp.error_log_filename', '' );
+			$qdsmtp_error_log_filename = $config->getString( 'qdsmtp.error_log_filename', '', TRUE );
 			$qdsmtp_error_display      = $config->getBoolean( 'qdsmtp.error_display', FALSE );
 
-			$this->qdmail->smtpObject()->logLevel( $qdsmtp_log_level );
-			$this->qdmail->smtpObject()->logFilename( $qdsmtp_log_filename );
-			$this->qdmail->smtpObject()->errorlogLevel( $qdsmtp_error_log_level );
-			$this->qdmail->smtpObject()->errorlogFilename( $qdsmtp_error_log_filename );
+			$this->qdmail->smtpObject()->logLevel( ui($qdsmtp_log_level) );
+			$this->qdmail->smtpObject()->logFilename( us($qdsmtp_log_filename) );
+			$this->qdmail->smtpObject()->errorlogLevel( ui($qdsmtp_error_log_level) );
+			$this->qdmail->smtpObject()->errorlogFilename( us($qdsmtp_error_log_filename) );
 			$this->qdmail->smtpObject()->error_display = $qdsmtp_error_display;
 
 			// サーバ設定
@@ -105,12 +119,12 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 			$qdsmtp_pass     = $config->getString( 'qdsmtp.pass', '' );
 
 			$options = array(
-					'host' => $qdsmtp_host,
-					'port' => $qdsmtp_port,
-					'from' => $qdsmtp_from,
-					'protocol' => $qdsmtp_protocol,
-					'user' => $qdsmtp_user,
-					'pass' => $qdsmtp_pass,
+					'host' => us($qdsmtp_host),
+					'port' => us($qdsmtp_port),
+					'from' => us($qdsmtp_from),
+					'protocol' => us($qdsmtp_protocol),
+					'user' => us($qdsmtp_user),
+					'pass' => us($qdsmtp_pass),
 				);
 
 			$this->qdmail->smtp(true);
@@ -218,6 +232,8 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function sendMail( $from, $to, $subject, $body, $cc = NULL, $bcc = NULL)
 	{
+		$switcher = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+		
 		log_debug( "debug, qdmail_sender", __CLASS__ . ":" . __METHOD__ . " start." );
 
 		// 送信先

@@ -58,9 +58,7 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 	{
 		$class_path = $this->getClassPath( $class_name );
 
-		$is_debug = $this->getSandbox()->isDebug();
-
-		if ( $is_debug ) log_debug( "system,debug,class_loader", "class_path=$class_path", "class_loader" );
+		log_debug( "system,debug,class_loader", "class_path=$class_path", "class_loader" );
 
 		if ( $class_path === FALSE || !is_string($class_path) ){
 			return FALSE;
@@ -72,30 +70,30 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		if ( $pos !== FALSE ){
 			$file_name = substr( $file_name, $pos + 9 /*= strlen('Charcoal_') */ );
 		}
-		if ( $is_debug ) log_debug( "system,debug,class_loader", "file_name=$file_name", "class_loader" );
+		log_debug( "system,debug,class_loader", "file_name=$file_name", "class_loader" );
 
 		// プロジェクトディレクトリ配下のクラスファイルをロード
 		$file_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/' . $class_path . '/' . $file_name;
 
 		if ( is_file($file_path) ){
 			include( $file_path );
-			if ( $is_debug ) log_debug( "system,debug,include,class_loader", "class file loaded: [$file_path]", "class_loader" );
+			log_debug( "system,debug,include,class_loader", "class file loaded: [$file_path]", "class_loader" );
 			return TRUE;
 		}
 
-		if ( $is_debug ) log_debug( "system,debug,include,class_loader", "file not found: [$file_path]", "class_loader" );
+		log_debug( "system,debug,include,class_loader", "file not found: [$file_path]", "class_loader" );
 
 		// アプリケーションディレクトリ配下のクラスファイルをロード
 		$file_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/app/' . CHARCOAL_APPLICATION . '/' . $class_path . '/' . $file_name;
 
 		if ( is_file($file_path) ){
 			include( $file_path );
-			if ( $is_debug ) log_debug( "system,debug,include,class_loader", "class file loaded: [$file_path]", "class_loader");
+			log_debug( "system,debug,include,class_loader", "class file loaded: [$file_path]", "class_loader");
 			return TRUE;
 		}
 
-		if ( $is_debug ) log_debug( "system,debug,include,class_loader", "file not found: [$file_path]", "class_loader" );
-		if ( $is_debug ) log_debug( "system,debug,class_loader", "class not found: [$class_name]", "class_loader" );
+		log_debug( "system,debug,include,class_loader", "file not found: [$file_path]", "class_loader" );
+		log_debug( "system,debug,class_loader", "class not found: [$class_name]", "class_loader" );
 
 		return FALSE;
 	}

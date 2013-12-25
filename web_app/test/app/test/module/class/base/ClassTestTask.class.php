@@ -22,8 +22,10 @@ class ClassTestTask extends Charcoal_TestTask
 	{
 		switch( $action ){
 		case "new_instance":
+			log_debug( "debug,event", "action is valid: $action" );
 			return TRUE;
 		}
+		log_debug( "debug,event", "action is invalid: $action" );
 		return FALSE;
 	}
 
@@ -48,6 +50,8 @@ class ClassTestTask extends Charcoal_TestTask
 	public function test( $action, $context )
 	{
 		$action = us($action);
+
+		log_debug( "debug,event", "action:$action" );
 
 		switch( $action ){
 		case "new_instance":

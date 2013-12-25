@@ -84,10 +84,10 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 
 		foreach( $rule_dir_array as $rule_dir ){
 			$url_dir = array_shift( $url_dir_array );
-			if ( strpos($rule_dir,':') === 0 ){
+			if ( strpos($rule_dir,':') === 0 && strlen($url_dir) > 0 ){
 				// コロンで始まる階層は変数名
 				$key = substr($rule_dir,1);
-				$a[ $key] = $url_dir;
+				$a[ $key ] = $url_dir;
 			}
 			else if ( $rule_dir !== $url_dir ){
 				// マッチしなかった

@@ -36,11 +36,11 @@ class FormTokenTestTask extends Charcoal_TestTask
 		$sequence  = new Charcoal_SequenceHolder( new Charcoal_Sequence(), new Charcoal_Sequence() );
 
 		// form token component
-		$form_token = $context->getComponent( s('form_token@:charcoal:form') );
+		$form_token = $context->getComponent( 'form_token@:charcoal:form' );
 
 		$config = new Charcoal_Config();
 
-		$config->set( s('token_key'), 'foo' );
+		$config->set( 'token_key', 'foo' );
 
 		$form_token->configure( $config );
 
@@ -53,20 +53,20 @@ class FormTokenTestTask extends Charcoal_TestTask
 			break;
 		case "form_token2":
 			// save my ticket into sequence 
-			$token_list   = $sequence->get( s('token_key') );
+			$token_list   = $sequence->get( 'token_key' );
 			$token_list[] = 'my-ticket';
-			$sequence->set( s('foo'), $token_list );
+			$sequence->set( 'foo', $token_list );
 			// validation token will success
-			$form_token->validate( $sequence, s('my-ticket') );
+			$form_token->validate( $sequence, 'my-ticket' );
 			break;
 		case "form_token3":
 			// save my ticket into sequence 
-			$token_list   = $sequence->get( s('token_key') );
+			$token_list   = $sequence->get( 'token_key' );
 			$token_list[] = 'my-ticket';
-			$sequence->set( s('foo'), $token_list );
+			$sequence->set( 'foo', $token_list );
 			// validation token will fail
-			$this->setExpectedException( s('Charcoal_FormTokenValidationException') );
-			$form_token->validate( $sequence, s('another-ticket') );
+			$this->setExpectedException( 'Charcoal_FormTokenValidationException' );
+			$form_token->validate( $sequence, 'another-ticket' );
 			break;
 		}
 	}

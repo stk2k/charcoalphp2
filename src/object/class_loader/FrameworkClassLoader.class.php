@@ -126,6 +126,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_DBRollbackTransactionException'		=> 'exception',
 				'Charcoal_EventContextException'				=> 'exception',
 				'Charcoal_EventLoopCounterOverflowException'	=> 'exception',
+				'Charcoal_ExtensionNotLoadedException'			=> 'exception',
 				'Charcoal_FileOpenException'					=> 'exception',
 				'Charcoal_FileOutputException'					=> 'exception',
 				'Charcoal_FileRenameException'					=> 'exception',
@@ -251,6 +252,10 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				"Charcoal_ThumbnailComponent"				=> 'component/charcoal/thumb',
 				'Charcoal_PDFWriterComponent'				=> 'component/pdf',
 				'Charcoal_SimplePieComponent'				=> 'component/rss/simplepie',
+				'Charcoal_SimpleHtmlDomComponent'			=> 'component/html/parser/simplehtmldom',
+				'Charcoal_TidyComponent'					=> 'component/html/repair/tidy',
+				'Charcoal_PhpXmlParserComponent'			=> 'component/xml/parser/php',
+				'Charcoal_PhpXmlElementHandler'				=> 'component/xml/parser/php',
 
 		// component classes(smart gateway)
 				'Charcoal_SmartGateway'						=> 'component/charcoal/db',

@@ -278,7 +278,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		try{
 			$DSN = "$backend:host=$server; dbname=$db_name";
 
-//			log_info( "debug,sql,data_source", "connecting database: DSN=[$DSN]", "data_source" );
+			log_info( "debug,sql,data_source", "connecting database: DSN=[$DSN]", "data_source" );
 
 			$driver_options = array();
 
@@ -299,12 +299,12 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 */
 
 			$pdo = new PDO( $DSN, $user, $password, $driver_options );
-//			log_info( "debug,sql,data_source", "PDO object created. driver_options=" . print_r($driver_options,true), "data_source" );
+			log_info( "debug,sql,data_source", "PDO object created. driver_options=" . print_r($driver_options,true), "data_source" );
 
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 			// enable server-side prepare statement
 
-//			log_info( "debug,sql,data_source", "connected database: DSN=[$DSN]", "data_source" );
+			log_info( "debug,sql,data_source", "connected database: DSN=[$DSN]", "data_source" );
 
 			$this->connection = $pdo;
 			$this->connected = true;
@@ -325,7 +325,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			// 自動コミット
 			$autocommit = $this->autocommit;
 			$this->connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $autocommit );
-//			log_info( "debug,sql,data_source", "autocommit: [$autocommit]", "data_source" );
+			log_info( "debug,sql,data_source", "autocommit: [$autocommit]", "data_source" );
 
 			$this->trans_cnt = 0;
 		}

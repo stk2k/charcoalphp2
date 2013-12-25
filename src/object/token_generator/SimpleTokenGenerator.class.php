@@ -10,7 +10,7 @@
 */
 class Charcoal_SimpleTokenGenerator extends Charcoal_AbstractTokenGenerator
 {
-	private $_algorithm;
+	private $algorithm;
 
 	/*
 	 * コンストラクタ
@@ -29,17 +29,17 @@ class Charcoal_SimpleTokenGenerator extends Charcoal_AbstractTokenGenerator
 	{
 		parent::configure( $config );
 
-		$this->_algorithm  = $config->getString( s('algorithm'), s('sha1') )->getValue();
+		$this->algorithm  = $config->getString( 'algorithm', 'sha1' );
 
-		log_debug( "debug", "token algorithm: {$this->_algorithm}" );
+		log_debug( "debug", "token algorithm: {$this->algorithm}" );
 	}
 
 	/**
 	 * generate a token
 	 */
-	public function generateToken( Charcoal_HashMap $options = NULL )
+	public function generateToken()
 	{
-		$algorithm = us($this->_algorithm);
+		$algorithm = us($this->algorithm);
 
 		$token = '';
 		switch( $algorithm )
