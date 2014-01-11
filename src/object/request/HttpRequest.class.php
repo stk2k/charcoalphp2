@@ -92,5 +92,35 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 		return isset($_FILES[us($userfile)]) ? new Charcoal_UploadedFile( $userfile ) : NULL;
 	}
 
+	/**
+	 * Get as json value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param string $default_value   default value
+	 *
+	 * @return string
+	 */
+	public function getJson( $key, $default_value = NULL )
+	{
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
+		$key = us($key);
+		$value = parent::getString( $key, $default_value );
+
+		log_debug( "debug", "caller: " . print_r(Charcoal_System::caller(),true) );
+		log_debug( "debug", "json_decode: $value" );
+
+		$decoded = json_decode( us($value), true );
+
+		log_debug( "debug", "decoded: " . print_r($decoded,true) );
+
+		if ( $decoded === NULL ){
+			_throw( new Charcoal_JsonDecodingException($value) );
+		}
+
+		return $decoded;
+	}
+
 }
 

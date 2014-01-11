@@ -93,7 +93,7 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function get( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
 
 		$meta_file = $this->getCacheMetaFile($key);
 		$data_file = $this->getCacheDataFile($key);
@@ -146,8 +146,8 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function set( $key, $value, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
 
 		$meta_file = $this->getCacheMetaFile($key);
 		$data_file = $this->getCacheDataFile($key);
@@ -262,7 +262,7 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function delete( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
 
 		// apply wildcard file filter
 		$data_filter = new Charcoal_WildcardFileFilter($this->getCacheDataFileName($key));
@@ -280,7 +280,7 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function deleteRegEx( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
 
 		// apply wildcard file filter
 		$data_filter = new Charcoal_RegExFileFilter( $key, s(self::CACHE_FILE_EXT_DATA) );
@@ -297,7 +297,7 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function _delete( $filter )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IFileFilter', $filter );
+		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IFileFilter', $filter );
 
 		// select files and delete them all
 		$files = $this->_cache_root_dir->listFiles( $filter );
@@ -318,8 +318,8 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function touch( $key, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
 
 		$duration = $duration ? ui($duration) : ui($this->_default_duration);
 
@@ -337,8 +337,8 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function touchRegEx( $key, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
 
 		$duration = $duration ? ui($duration) : ui($this->_default_duration);
 
@@ -355,8 +355,8 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function _touch( $filter, $duration )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IFileFilter', $filter );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IFileFilter', $filter );
+		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
 
 		$expire_date = date( 'Y-m-d H:i:s', strtotime("+{$duration} seconds") );
 

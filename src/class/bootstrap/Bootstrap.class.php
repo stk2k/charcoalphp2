@@ -143,7 +143,7 @@ exit;
 
 				// traits
 				'Charcoal_ParamTrait' 							=> 'trait',
-				'Charcoal_PrimitiveTrait' 						=> 'trait',
+				'Charcoal_ScalarTrait' 							=> 'trait',
 				'Charcoal_ArrayTrait' 							=> 'trait',
 
 				// Basic object classes	
@@ -189,7 +189,7 @@ exit;
 				'Charcoal_StringFormatException'				=> 'exception',
 
 				// Primitive classes
-				'Charcoal_Primitive' 					=> 'class/base',
+				'Charcoal_Scalar' 						=> 'class/base',
 				'Charcoal_Number' 						=> 'class/base',
 				'Charcoal_Boolean'						=> 'class/base',
 				'Charcoal_Float' 						=> 'class/base',

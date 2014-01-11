@@ -9,12 +9,25 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class FileTestTask extends Charcoal_TestTask
+class FileSystemTestTask extends Charcoal_TestTask
 {
+	/**
+	 * check if action will be processed
+	 */
+	public function isValidAction( $action )
+	{
+		switch( $action ){
+		case "create_dir":
+		case "create_file":
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	/**
 	 * setup test
 	 */
-	public function setUp()
+	public function setUp( $action, $context )
 	{
 		// remove all headers
 		$headers = headers_list();
@@ -26,7 +39,7 @@ class FileTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp()
+	public function cleanUp( $action, $context )
 	{
 	}
 
@@ -46,17 +59,21 @@ class FileTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		// file system component
-		$fs = $context->getComponent( s('file_system@:charcoal:file') );
+		$fs = $context->getComponent( 'file_system@:charcoal:file' );
 
 		switch( $action ){
 		case "create_dir":
-			$dir = $fs->createDirectory( s("hoge"), s("707") );
+			$dir = $fs->createDirectory( "hoge", "707" );
 			echo "created dir: $dir" . PHP_EOL;
-			break;
+
+			return TRUE;
+
 		case "create_file":
-			$file = $fs->createFile( s("test.txt"), s("707"), s("Hello, File System!") );
+			$file = $fs->createFile( "test.txt", "707", "Hello, File System!" );
 			echo "created file: $file" . PHP_EOL;
-			break;
+
+			return TRUE;
+
 		}
 	}
 

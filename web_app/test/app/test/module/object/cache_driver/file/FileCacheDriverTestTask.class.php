@@ -12,7 +12,9 @@
 
 class FileCacheDriverTestTask extends Charcoal_TestTask
 {
-	var	$cache_root;
+	private	$cache_root;
+
+	private $cache_driver;
 
 	/**
 	 * check if action will be processed
@@ -63,15 +65,15 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 		case "touch_wildcard":
 		case "touch_regex":
 			{
-				$cache_driver = Charcoal_Factory::createObject( s('file'), s('cache_driver'), s('Charcoal_ICacheDriver') );
+				$cache_driver = $context->createObject( 'file', 'cache_driver', 'Charcoal_ICacheDriver' );
 
-				$this->cache_root = Charcoal_ResourceLocator::getPath( s('%APPLICATION_DIR%/cache/') );
+				$this->cache_root = Charcoal_ResourceLocator::getPath( '%CHARCOAL_HOME%/tmp/test/cache/' );
 
 				$config['cache_root'] = $this->cache_root;
 
 				$cache_driver->configure( new Charcoal_Config($config) );
 
-				Charcoal_Cache::register( s('file'), $cache_driver );
+				$this->cache_driver = $cache_driver;
 
 				$cache_files = glob( $this->cache_root . '/*' );
 				if ( $cache_files && is_array($cache_files) ){
@@ -147,9 +149,9 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 		case "get_empty_data":
 
-			Charcoal_Cache::delete( s('foo') );
+			$this->cache_driver->delete( 'foo' );
 
-			$value = Charcoal_Cache::get( s('foo') );
+			$value = $this->cache_driver->get( 'foo' );
 
 			$this->assertEquals( FALSE, $value );
 
@@ -157,19 +159,19 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 		case "get_integer_data":
 
-			Charcoal_Cache::set( s('foo'), i(100) );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', 100 );
+			$value = $this->cache_driver->get( 'foo' );
 
-			$this->assertEquals( i(100), $value );
+			$this->assertEquals( 100, $value );
 
 			return TRUE;
 
 		case "get_string_data":
 
-			Charcoal_Cache::set( s('foo'), s('bar') );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', 'bar' );
+			$value = $this->cache_driver->get( 'foo' );
 
-			$this->assertEquals( s('bar'), $value );
+			$this->assertEquals( 'bar', $value );
 
 			return TRUE;
 
@@ -177,33 +179,33 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 			$data = array( 'foo' => 100, 'bar' => 'baz' );
 
-			Charcoal_Cache::set( s('foo'), v($data) );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', $data );
+			$value = $this->cache_driver->get( 'foo' );
 
-			$this->assertEquals( v($data), $value );
+			$this->assertEquals( $data, $value );
 
 			return TRUE;
 
 		case "get_boolean_data":
 
-			Charcoal_Cache::set( s('foo'), b(TRUE) );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', TRUE );
+			$value = $this->cache_driver->get( 'foo' );
 
-			$this->assertEquals( b(TRUE), $value );
+			$this->assertEquals( TRUE, $value );
 
-			Charcoal_Cache::set( s('foo'), b(FALSE) );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', FALSE );
+			$value = $this->cache_driver->get( s('foo') );
 
-			$this->assertEquals( b(FALSE), $value );
+			$this->assertEquals( FALSE, $value );
 
 			return TRUE;
 
 		case "get_float_data":
 
-			Charcoal_Cache::set( s('foo'), f(3.14) );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', 3.14 );
+			$value = $this->cache_driver->get( 'foo' );
 
-			$this->assertEquals( f(3.14), $value );
+			$this->assertEquals( 3.14, $value );
 
 			return TRUE;
 
@@ -214,8 +216,8 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$data['foo'] = 100;
 			$data['bar'] = 'test';
 
-			Charcoal_Cache::set( s('foo'), $data );
-			$value = Charcoal_Cache::get( s('foo') );
+			$this->cache_driver->set( 'foo', $data );
+			$value = $this->cache_driver->get( 'foo' );
 
 			echo "value:" . print_r($value,true) . eol();
 
@@ -225,7 +227,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 		case "set_duration":
 
-			Charcoal_Cache::set( s('foo'), f(3.14), i(5) );
+			$this->cache_driver->set( 'foo', 3.14, 5 );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -234,25 +236,25 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( 2, count($cache_files) );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/foo.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/foo.data') );
-			$this->assertEquals( f(3.14), Charcoal_Cache::get( s('foo') ) );
+			$this->assertEquals( 3.14, $this->cache_driver->get( 'foo' ) );
 
 			echo "waiting 3 seconds..." . eol();
 			sleep(3);
 
-			$this->assertEquals( f(3.14), Charcoal_Cache::get( s('foo') ) );
+			$this->assertEquals( 3.14, $this->cache_driver->get( 'foo' ) );
 
 			echo "waiting 3 seconds..." . eol();
 			sleep(3);
 
-			$this->assertEquals( NULL, Charcoal_Cache::get( s('foo') ) );
+			$this->assertEquals( NULL, $this->cache_driver->get( 'foo' ) );
 
 			return TRUE;
 
 		case "delete":
 
-			Charcoal_Cache::set( s('foo'), f(3.14) );
-			Charcoal_Cache::set( s('bar'), i(2) );
-			Charcoal_Cache::set( s('baz'), s('hello!') );
+			$this->cache_driver->set( 'foo', 3.14 );
+			$this->cache_driver->set( 'bar', 2 );
+			$this->cache_driver->set( 'baz', 'hello!' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -266,7 +268,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/baz.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/baz.data') );
 
-			Charcoal_Cache::delete( s('bar') );
+			$this->cache_driver->delete( 'bar' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -280,7 +282,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/baz.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/baz.data') );
 
-			Charcoal_Cache::delete( s('baz') );
+			$this->cache_driver->delete( 'baz' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -298,10 +300,10 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 		case "delete_wildcard":
 
-			Charcoal_Cache::set( s('test.foo'), f(3.14) );
-			Charcoal_Cache::set( s('test.bar'), i(2) );
-			Charcoal_Cache::set( s('test.baz'), s('hello!') );
-			Charcoal_Cache::set( s('no_delete'), s(':)') );
+			$this->cache_driver->set( 'test.foo', 3.14 );
+			$this->cache_driver->set( 'test.bar', 2 );
+			$this->cache_driver->set( 'test.baz', 'hello!' );
+			$this->cache_driver->set( 'no_delete', ':)' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -317,7 +319,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.data') );
 
-			Charcoal_Cache::delete( s('test.b*') );
+			$this->cache_driver->delete( 'test.b*' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -333,12 +335,12 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.data') );
 
-			Charcoal_Cache::set( s('test.foo'), f(3.14) );
-			Charcoal_Cache::set( s('test.bar'), i(2) );
-			Charcoal_Cache::set( s('test.baz'), s('hello!') );
-			Charcoal_Cache::set( s('no_delete'), s(':)') );
+			$this->cache_driver->set( 'test.foo', 3.14 );
+			$this->cache_driver->set( 'test.bar', 2 );
+			$this->cache_driver->set( 'test.baz', 'hello!' );
+			$this->cache_driver->set( 'no_delete', ':)' );
 
-			Charcoal_Cache::delete( s('test.*') );
+			$this->cache_driver->delete( 'test.*' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -357,10 +359,10 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 		case "delete_regex":
 
-			Charcoal_Cache::set( s('test.foo'), f(3.14) );
-			Charcoal_Cache::set( s('test.bar'), i(2) );
-			Charcoal_Cache::set( s('test.baz'), s('hello!') );
-			Charcoal_Cache::set( s('no_delete'), s(':)') );
+			$this->cache_driver->set( 'test.foo', 3.14 );
+			$this->cache_driver->set( 'test.bar', 2 );
+			$this->cache_driver->set( 'test.baz', 'hello!' );
+			$this->cache_driver->set( 'no_delete', ':)' );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -376,7 +378,7 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.data') );
 
-			Charcoal_Cache::deleteRegEx( s('/test\\.ba./'), b(TRUE) );
+			$this->cache_driver->deleteRegEx( '/test\\.ba./', TRUE );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 
@@ -392,12 +394,12 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.meta') );
 			$this->assertEquals( TRUE, file_exists($this->cache_root . '/no_delete.data') );
 
-			Charcoal_Cache::set( s('test.foo'), f(3.14) );
-			Charcoal_Cache::set( s('test.bar'), i(2) );
-			Charcoal_Cache::set( s('test.baz'), s('hello!') );
-			Charcoal_Cache::set( s('no_delete'), s(':)') );
+			$this->cache_driver->set( 'test.foo', 3.14 );
+			$this->cache_driver->set( 'test.bar', 2 );
+			$this->cache_driver->set( 'test.baz', 'hello!' );
+			$this->cache_driver->set( 'no_delete', ':)' );
 
-			Charcoal_Cache::deleteRegEx( s('/test\\.[foo|bar|baz]/'), b(TRUE) );
+			$this->cache_driver->deleteRegEx( '/test\\.[foo|bar|baz]/', TRUE );
 
 			$cache_files = glob( $this->cache_root . '/*' );
 echo "files found:" . print_r($cache_files,true) . eol();

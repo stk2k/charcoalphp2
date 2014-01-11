@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_Number extends Charcoal_Primitive
+class Charcoal_Number extends Charcoal_Scalar
 {
 	const NUMBER_TYPE_INTEGER    = 0;
 	const NUMBER_TYPE_FLOAT      = 1;

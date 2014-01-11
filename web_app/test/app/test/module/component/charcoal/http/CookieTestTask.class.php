@@ -12,9 +12,23 @@
 class CookieTestTask extends Charcoal_TestTask
 {
 	/**
+	 * check if action will be processed
+	 */
+	public function isValidAction( $action )
+	{
+		switch( $action ){
+		case "test1":
+		case "test2":
+		case "test3":
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
 	 * setup test
 	 */
-	public function setUp()
+	public function setUp( $action, $context )
 	{
 		// remove all headers
 		$headers = headers_list();
@@ -26,7 +40,7 @@ class CookieTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp()
+	public function cleanUp( $action, $context )
 	{
 	}
 

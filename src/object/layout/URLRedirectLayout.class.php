@@ -11,16 +11,18 @@
 
 class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
 {
-	private $_url;
+	private $url;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_String $url )
+	public function __construct( $url )
 	{
+		Charcoal_ParamTrait::checkString( 1, $url );
+
 		parent::__construct( p(array()) );
 
-		$this->_url = $url;
+		$this->url = $url;
 	}
 
 	/**
@@ -28,7 +30,7 @@ class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
 	 */
 	public function getURL()
 	{
-		return $this->_url;
+		return $this->url;
 	}
 
 	/**
@@ -36,7 +38,7 @@ class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
 	 */
 	public function makeRedirectURL()
 	{
-		return $this->_url;
+		return $this->url;
 	}
 
 	/*

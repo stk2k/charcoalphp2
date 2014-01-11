@@ -67,7 +67,7 @@ class MemcachedCacheDriverTestTask extends Charcoal_TestTask
 	{
 		$action = us($action);
 
-		$cache_driver = Charcoal_Factory::createObject( s('memcached'), s('cache_driver'), s('Charcoal_ICacheDriver') );
+		$cache_driver = $context->createObject( 'memcached', 'cache_driver', 'Charcoal_ICacheDriver' );
 		Charcoal_Cache::register( s('memcached'), $cache_driver );
 
 		switch( $action ){

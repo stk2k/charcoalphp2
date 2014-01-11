@@ -26,14 +26,14 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function create( $src_file, $dest_file, $thumb_max_width, $thumb_max_height, $image_format = IMG_JPG )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_File', $src_file );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_File', $dest_file );
+		Charcoal_ParamTrait::checkString( 1, $src_file );
+		Charcoal_ParamTrait::checkString( 2, $dest_file );
 		Charcoal_ParamTrait::checkInteger( 3, $thumb_max_width );
 		Charcoal_ParamTrait::checkInteger( 4, $thumb_max_height );
 		Charcoal_ParamTrait::checkInteger( 5, $image_format );
 
-		$src_file 			= us($src_file->getPath());
-		$dest_file 			= us($dest_file->getPath());
+		$src_file 			= us($src_file);
+		$dest_file 			= us($dest_file);
 		$thumb_max_width 	= ui($thumb_max_width);
 		$thumb_max_height	= ui($thumb_max_height);
 
@@ -60,9 +60,12 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 				_throw( new ThumbnailComponentException( s("invalid image type:[$mime]") ) );
 		}
 
-		// もとの画像の幅と高さ
+		// 元の画像の幅と高さ
 		$width  = $info[0];
 		$height = $info[1];
+
+		// 元の画像のアスペクト比
+		$aspect = $width / $height;
 
 		// 画像リソースを生成
 		$img = call_user_func("imagecreatefrom{$mime}", $src_file);
@@ -72,14 +75,13 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 
 		// 最大幅・高さを超過していないかチェック・縦横比を維持して新しいサイズを定義
 		$thumb_width  = $width;
-		$thumb_height = $height;
-		$aspect = $thumb_width / $thumb_height;
-
-		if ( $thumb_width > $thumb_max_width ) {
+		if ( $thumb_max_width > 0 && $thumb_width > $thumb_max_width ) {
 			$thumb_width  = $thumb_max_width;
 			$thumb_height = intval($thumb_width / $aspect);
 		}
-		if ( $thumb_height > $thumb_max_height ) {
+
+		$thumb_height = $height;
+		if ( $thumb_max_height > 0 && $thumb_height > $thumb_max_height ) {
 			$thumb_height = $thumb_max_height;
 			$thumb_width  = intval($thumb_height * $aspect); 
 		}

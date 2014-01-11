@@ -27,15 +27,18 @@ class Charcoal_LoggerList extends Charcoal_Object
 		$this->sandbox = $sandbox;
 
 		parent::__construct();
+
 	}
 
 	/**
 	 * initialize exception handler list
 	 */
-	private function init()
+	public function init()
 	{
 		// if this object is already initialized, do nothing
-		if ( $this->init )	return TRUE;
+		if ( $this->init ){
+			return TRUE;
+		}
 
 		// if our sandbox is not loaded, do nothing
 		if ( !$this->sandbox->isLoaded() ){
@@ -208,7 +211,6 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function writeLog( $target, $message, $tag = NULL )
 	{
-
 //		Charcoal_ParamTrait::checkString( 1, $target );
 //		Charcoal_ParamTrait::checkString( 2, $message );
 //		Charcoal_ParamTrait::checkString( 3, $tag, TRUE );
@@ -224,7 +226,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 			$msg = new Charcoal_LogMessage( $level, $message, $tag, $file, $line, $logger_names );
 
 			// get LOG_NO_BUFFER flag
-			if ( $this->init && $this->options['LOG_NO_BUFFER'] === TRUE ){
+			if ( $this->init && ub($this->options['LOG_NO_BUFFER']) === TRUE ){
 				// flush immediately
 				$this->buffer[] = $msg;
 				self::flush();

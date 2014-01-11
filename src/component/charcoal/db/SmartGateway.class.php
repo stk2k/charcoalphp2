@@ -192,7 +192,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	
 	 *	@param string $query_target        description about target model, alias, or joins
 	 *	@param int $data_id                identify database entity
-	 *	@param Charcoal_Primitive $value   scalar primitive data to update
+	 *	@param Charcoal_Scalar $value      scalar primitive data to update
 	 */
 	public function updateField( $query_target, $data_id, $field, $value ) 
 	{
@@ -573,7 +573,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	
 	 *	@param string $query_target           description about target model, alias, or joins
 	 *	@param string $field                  field name to query
-	 *	@param Charcoal_Primitive $value      field value to query
+	 *	@param Charcoal_Scalar $value         field value to query
 	 */
 	public function destroyBy( $query_target, $field, $value )
 	{

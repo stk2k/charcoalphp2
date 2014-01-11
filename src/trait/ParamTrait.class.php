@@ -96,8 +96,8 @@ class Charcoal_ParamTrait
 		case 'int':			return is_numeric( $actual );
 		case 'integer':		return is_numeric( $actual );
 		case 'float':		return is_numeric( $actual );
-		case 'bool':		return Charcoal_PrimitiveTrait::is_bool( $actual, TRUE );
-		case 'boolean':		return Charcoal_PrimitiveTrait::is_bool( $actual, TRUE );
+		case 'bool':		return Charcoal_ScalarTrait::is_bool( $actual, TRUE );
+		case 'boolean':		return Charcoal_ScalarTrait::is_bool( $actual, TRUE );
 		case 'resource':	return is_resource($actual);
 		case 'object':		return is_object($actual);
 		default:

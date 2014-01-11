@@ -12,9 +12,23 @@
 class FormTokenTestTask extends Charcoal_TestTask
 {
 	/**
+	 * check if action will be processed
+	 */
+	public function isValidAction( $action )
+	{
+		switch( $action ){
+		case "form_token1":
+		case "form_token2":
+		case "form_token3":
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	/**
 	 * setup test
 	 */
-	public function setUp()
+	public function setUp( $action, $context )
 	{
 
 	}
@@ -22,7 +36,7 @@ class FormTokenTestTask extends Charcoal_TestTask
 	/**
 	 * clean up test
 	 */
-	public function cleanUp()
+	public function cleanUp( $action, $context )
 	{
 	}
 

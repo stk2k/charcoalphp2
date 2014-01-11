@@ -40,14 +40,20 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 	/*
 	 * create directory
 	 *
+	 * @return Charcoal_String|string $dir_path      directory path to create
+	 * @return Charcoal_Integer|integer $mode        directory creation mode
+	 *
 	 * @return Charcoal_File file object of created directory
 	 */
-	public function createDirectory( Charcoal_String $dir_path, Charcoal_String $mode )
+	public function createDirectory( $dir_path, $mode = 0777 )
 	{
-		try{
-			$obj = new Charcoal_File( s($dir_path), $this->_base_dir_obj );
+		Charcoal_ParamTrait::checkString( 1, $dir_path );
+		Charcoal_ParamTrait::checkInteger( 2, $mode );
 
-			$obj->makeDirectory( $mode, b(TRUE) );
+		try{
+			$obj = new Charcoal_File( $dir_path, $this->_base_dir_obj );
+
+			$obj->makeDirectory( $mode, TRUE );
 
 			return $obj;
 		}
@@ -62,28 +68,34 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 	/*
 	 * create file
 	 *
+	 * @return Charcoal_String|string $file_path      file path to create
+	 * @return Charcoal_Integer|integer $mode         file creation mode
+	 * @return Charcoal_String|string $contents       file contents
+	 * @return Charcoal_Boolean|bool $overwrite       If true, existing file will be overwrited by the new file.
+	 *
 	 * @return Charcoal_File file object of created file
 	 */
-	public function createFile( Charcoal_String $file_path, Charcoal_String $mode, Charcoal_String $contents, Charcoal_Boolean $overwrite = NULL )
+	public function createFile( $file_path, $contents, $overwrite = TRUE, $mode = 0777 )
 	{
-		if ( $overwrite == NULL ){
-			$overwrite = b(TRUE);
-		}
+		Charcoal_ParamTrait::checkString( 1, $file_path );
+		Charcoal_ParamTrait::checkString( 2, $contents );
+		Charcoal_ParamTrait::checkBoolean( 3, $overwrite );
+		Charcoal_ParamTrait::checkInteger( 4, $mode );
 
-		$obj = new Charcoal_File( s($file_path), $this->_base_dir_obj );
+		$obj = new Charcoal_File( $file_path, $this->_base_dir_obj );
 
-		if ( $overwrite->isTrue() ){
+		if ( $overwrite ){
 			if ( $obj->exists() && !$obj->canWrite() ){
-				_throw( new Charcoal_FileSystemComponentException( s('specified file is not writeable.') ) );
+				_throw( new Charcoal_FileSystemComponentException( 'specified file is not writeable.' ) );
 			}
 		}
 		else if ( $obj->exists() ){
-			_throw( new Charcoal_FileSystemComponentException( s('specified file is already exists.') ) );
+			_throw( new Charcoal_FileSystemComponentException( 'specified file is already exists.' ) );
 		}
 
 		try{
 			// create file with parent directory
-			$obj->makeFile( $mode, $contents, b(TRUE) );
+			$obj->makeFile( $mode, $contents, TRUE );
 
 			return $obj;
 		}

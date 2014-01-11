@@ -57,7 +57,7 @@ class Charcoal_ArrayTrait
 
 		// cast to array
 		if ( !is_array( $value ) ){
-			$value = Charcoal_PrimitiveTrait::arrayVal( $value );
+			$value = Charcoal_ScalarTrait::arrayVal( $value );
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -88,7 +88,7 @@ class Charcoal_ArrayTrait
 
 		// cast to array
 		if ( !is_array( $value ) ){
-			$value = Charcoal_PrimitiveTrait::hashmapVal( $value );
+			$value = Charcoal_ScalarTrait::hashmapVal( $value );
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -119,7 +119,7 @@ class Charcoal_ArrayTrait
 
 		// cast to integer
 		if ( !is_int( $value ) ){
-			$value = Charcoal_PrimitiveTrait::intVal( $value );
+			$value = Charcoal_ScalarTrait::intVal( $value );
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -150,7 +150,7 @@ class Charcoal_ArrayTrait
 
 		// cast to float
 		if ( !is_float( $value ) ){
-			$value = Charcoal_PrimitiveTrait::floatVal( $value );
+			$value = Charcoal_ScalarTrait::floatVal( $value );
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -181,7 +181,7 @@ class Charcoal_ArrayTrait
 
 		// cast to float
 		if ( !is_bool( $value ) ){
-			$value = Charcoal_PrimitiveTrait::boolVal( $value );
+			$value = Charcoal_ScalarTrait::boolVal( $value );
 		}
 
 		// throws exception if the element's type is not match for required type

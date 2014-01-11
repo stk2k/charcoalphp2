@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_String extends Charcoal_Primitive
+class Charcoal_String extends Charcoal_Scalar
 {
 	const DEFAULT_VALUE = '';
 

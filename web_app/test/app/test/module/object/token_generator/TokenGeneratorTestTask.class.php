@@ -48,7 +48,7 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
 		$action = us($action);
 
 		// create token generator object
-		$generator = $context->getObject( 'simple', 'token_generator' );
+		$generator = $context->createObject( 'simple', 'token_generator' );
 
 		switch( $action ){
 		case "simple_default":

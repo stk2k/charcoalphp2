@@ -479,7 +479,7 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param string $field                         field name to query
-	 *	@param Charcoal_Primitive $value             field value to query
+	 *	@param Charcoal_Scalar $value                field value to query
 	 */
 	public function destroyBy( $query_target, $field, $value )
 	{
@@ -849,7 +849,7 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int $data_id                          identify database entity
 	 *	@param string $field                         field name to update
-	 *	@param Charcoal_Primitive $value             scalar primitive data to update
+	 *	@param Charcoal_Scalar $value                scalar primitive data to update
 	 */
 	public function updateField( $query_target, $data_id, $field, $value ) 
 	{
@@ -863,7 +863,7 @@ class Charcoal_SmartGatewayImpl
 
 		$dto = $model->createDTO();
 
-		$dto->$field = ($value instanceof Charcoal_Primitive) ? $value->unbox() : $value;
+		$dto->$field = ($value instanceof Charcoal_Scalar) ? $value->unbox() : $value;
 
 //		log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
 

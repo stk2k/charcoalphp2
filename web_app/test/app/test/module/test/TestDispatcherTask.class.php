@@ -67,6 +67,8 @@ class TestDispatcherTask extends Charcoal_Task
 
 		// get paramter from command line
 		$scenario       = $request->getString( 'scenario' );
+
+		$scenario = trim($scenario);
 		log_debug( "debug,scenario", "scenario: $scenario" );
 
 		if ( $scenario === NULL ){

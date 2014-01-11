@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_PrimitiveTrait
+class Charcoal_ScalarTrait
 {
 	/**
 	 * check if the value type seems to be boolean
