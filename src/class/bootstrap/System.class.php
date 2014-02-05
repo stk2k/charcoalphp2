@@ -422,6 +422,8 @@ class Charcoal_System
 		case 'integer':
 		case 'float':
 		case 'boolean':
+			return $type . '(' . $value . ')';;
+			break;
 		case 'NULL':
 		case 'unknown type':
 			return $type;
@@ -430,8 +432,11 @@ class Charcoal_System
 			return $type . '(' . count($value) . ')';
 			break;
 		case 'object':
-			if ( $value instanceof Charcoal_Object ){
-				return get_class( $value ) . '(' . $value->hash() . ')';
+			if ( $value instanceof Countable ){
+				return get_class( $value ) . '(' . count($value) . ')';
+			}
+			else if ( $value instanceof Charcoal_Object ){
+				return get_class( $value ) . '(hash=' . $value->hash() . ')';
 			}
 			return get_class( $value );
 			break;
@@ -575,22 +580,25 @@ class Charcoal_System
 		$recursion = array();
 		self::_dump( '-', $var, 0, $max_string_length, $lines, $max_depth, $recursion );
 
-		switch( CHARCOAL_RUNMODE )
+		switch( CHARCOAL_DEBUG_OUTPUT )
 		{
-		case "shell":
-			$output  = "$title @$file($line)" . PHP_EOL;
-			$output .= implode(PHP_EOL,$lines) . PHP_EOL;
-			break;
-		case "http":
+		case "html":
 			switch( $type ){
-			case 'textarea':
-				$output  = "<h3 style=\"font-size:12px; margin: 2px\"> $title @$file($line)</h3>";
-				$output .= "<textarea rows=14 style=\"width:100%; font-size:{$font_size}px; margin: 2px\">" . implode(PHP_EOL,$lines) . "</textarea>";
-				break;
 			case 'div':
 				$output  = "<div style=\"font-size:12px; margin: 2px\"> $title:" . implode('',$lines) . " @$file($line)</div>";
 				break;
+			case 'textarea':
+			default:
+				$output  = "<h3 style=\"font-size:12px; margin: 2px\"> $title @$file($line)</h3>";
+				$output .= "<textarea rows=14 style=\"width:100%; font-size:{$font_size}px; margin: 2px\">" . implode(PHP_EOL,$lines) . "</textarea>";
+				break;
 			}
+			break;
+		case "shell":
+		default:
+			$output  = "$title @$file($line)" . PHP_EOL;
+			$output .= implode(PHP_EOL,$lines) . PHP_EOL;
+			break;
 		}
 
 

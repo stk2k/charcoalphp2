@@ -11,9 +11,14 @@
 
 class Charcoal_ComponentConfigException extends Charcoal_ConfigException
 {
-	public function __construct( $entry, $message = NULL, $prev = NULL )
+	public function __construct( $component_name, $entry, $message = NULL, $prev = NULL )
 	{
-		parent::__construct( "[entry]$entry [message]$message", $prev );
+		Charcoal_ParamTrait::checkString( 1, $component_name );
+		Charcoal_ParamTrait::checkString( 2, $entry );
+		Charcoal_ParamTrait::checkString( 3, $message );
+		Charcoal_ParamTrait::checkException( 4, $prev, TRUE );
+
+		parent::__construct( "component($component_name) config maybe wrong: [entry]$entry [message]$message", $prev );
 	}
 }
 

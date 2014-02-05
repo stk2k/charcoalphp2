@@ -19,7 +19,7 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 		parent::__construct();
 
 		if ( $values ){
-			if ( $values instanceof Charcoal_Vector ){
+			if ( $values instanceof Charcoal_Collection ){
 				$this->values = $values->values;
 			}
 			else if ( is_array($values) ){

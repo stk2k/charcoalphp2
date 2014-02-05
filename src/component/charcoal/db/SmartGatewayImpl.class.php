@@ -452,17 +452,17 @@ class Charcoal_SmartGatewayImpl
 	public function destroyById( $query_target, $data_id ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::checkInteger( 2, $id );
+		Charcoal_ParamTrait::checkInteger( 2, $data_id );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
 
-		$id = us( $id );
+		$data_id = us( $data_id );
 
 		$pk = us($model->getPrimaryKey());
 
-		$where = us($field) . ' = ?';
-		$params = array( ui($id) );
+		$where = us($pk) . ' = ?';
+		$params = array( ui($data_id) );
 
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
@@ -485,7 +485,7 @@ class Charcoal_SmartGatewayImpl
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkString( 2, $field );
-		Charcoal_ParamTrait::checkPrimitive( 3, $value );
+		Charcoal_ParamTrait::checkScalar( 3, $value );
 
 		$where = us($field) . ' = ?';
 		$params = array( $value->unbox() );
@@ -856,7 +856,7 @@ class Charcoal_SmartGatewayImpl
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkInteger( 2, $data_id );
 		Charcoal_ParamTrait::checkString( 3, $field );
-		Charcoal_ParamTrait::checkPrimitive( 4, $value );
+		Charcoal_ParamTrait::checkScalar( 4, $value );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();

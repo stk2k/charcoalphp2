@@ -78,11 +78,14 @@ class Charcoal_SimplePieComponent extends Charcoal_CharcoalComponent implements 
 		$items = array();
 		foreach ($feed->get_items() as $item)
 		{
+			$desc_tags = ($item->get_item_tags('', 'description'));
+			$description = $desc_tags ? $desc_tags[0]['data'] : '';
+			$description = strip_tags($description);
 			$items[] = array(
 					'date' =>  $item->get_date($date_format),
 					'link' =>  $item->get_link(),
 					'title' =>  $item->get_title(),
-					'description' =>  $item->get_description(),
+					'description' => $description, //$item->get_description(),
 					'date' =>  $item->get_date(),
 				);
 		}

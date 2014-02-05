@@ -17,10 +17,10 @@ class Charcoal_CharcoalException extends Exception
 	 */
 	public function __construct( $message, $prev = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $message );
-//		Charcoal_ParamTrait::checkException( 2, $prev );
+		Charcoal_ParamTrait::checkString( 1, $message );
+		Charcoal_ParamTrait::checkException( 2, $prev, TRUE );
 
-		parent::__construct( $message, 0, $prev );
+		parent::__construct( us($message), 0, $prev );
 
 		$this->backtrace = debug_backtrace();
 	}

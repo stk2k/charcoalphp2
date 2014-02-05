@@ -11,6 +11,8 @@
 
 class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 {
+	const TAG = "default_session_handler";
+
 	private $save_path;
 
 	/**
@@ -54,12 +56,14 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 		session_name("PHPSESSID");
 		//session_regenerate_id( TRUE );
 
-//		log_info( "session", __CLASS__, "session_name:$session_name" );
-//		log_info( "session", __CLASS__, "save_path:$save_path" );
-//		log_info( "session", __CLASS__, "lifetime:$lifetime" );
-//		log_info( "session", __CLASS__, "valid_path:$valid_path" );
-//		log_info( "session", __CLASS__, "valid_domain:$valid_domain" );
-//		log_info( "session", __CLASS__, "ssl_only:$ssl_only" );
+		if ( $this->getSandbox()->isDebug() ){
+			log_debug( "session", "session_name:$session_name", self::TAG );
+			log_debug( "session", "save_path:$save_path", self::TAG );
+			log_debug( "session", "lifetime:$lifetime", self::TAG );
+			log_debug( "session", "valid_path:$valid_path", self::TAG );
+			log_debug( "session", "valid_domain:$valid_domain", self::TAG );
+			log_debug( "session", "ssl_only:$ssl_only", self::TAG );
+		}
 
 		// メンバーに保存
 		$this->save_path = $save_path;
@@ -95,17 +99,22 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 	public function read( $id )
 	{
 		$file = $this->getSessionFile( $id );
-
-		if ( !is_readable($file) ){
-			log_warning( "system,session", __CLASS__, "can't read session file[$file]" );
-			return NULL;
+		if ( $this->getSandbox()->isDebug() ){
+			log_info( "system,session", "reading session file: $file", self::TAG );
 		}
 
-		$session_date = (string)@file_get_contents( $file );
+		if ( !is_readable($file) ){
+			log_warning( "system,session", "can't read session file[$file]", self::TAG );
+			return NULL;
+		}
+		if ( $this->getSandbox()->isDebug() ){
+			$sha1 = sha1_file($file);
+			log_info( "system,session", "sha1: $sha1", self::TAG );
+		}
 
-		log_info( "session", "read", "session_date:$session_date" );
+		$session_data = (string)@file_get_contents( $file );
 
-		return  $session_date;
+		return  $session_data;
 	}
 
 	/**
@@ -114,15 +123,25 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 	public function write( $id, $sess_data )
 	{
 		$file = $this->getSessionFile( $id );
+		if ( $this->getSandbox()->isDebug() ){
+			log_info( "system,session", "writing session file: $file", self::TAG );
+			$sha1 = sha1_file($file);
+			log_info( "system,session", "sha1(before): $sha1", self::TAG );
+		}
 
 //		log_info( "session", __CLASS__, __CLASS__.'#write: file=' . $file . ' id=' . $id . ' data=' . print_r($sess_data,true) );
 		$fp = @fopen($file,'w');
 		if ( !$fp ){
-			log_warning( "system,debug,error,session", "fopen failed: $file" );
+			log_warning( "system,debug,error,session", "fopen failed: $file", self::TAG );
 			return false;
 		}
 		$write = fwrite($fp, $sess_data);
 		fclose($fp);
+
+		if ( $this->getSandbox()->isDebug() ){
+			$sha1 = sha1_file($file);
+			log_info( "system,session", "sha1(after): $sha1", self::TAG );
+		}
 
 		return $write;
 	}

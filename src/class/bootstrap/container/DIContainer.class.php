@@ -53,84 +53,93 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 	 */
 	public function loadComponent( $component_name, $args = array() )
 	{
-		$component_name = us( $component_name );
+		try{
+			$component_name = us( $component_name );
 
-//		log_info( "system,container", "container", "Loading component: [$component_name]");
+	//		log_info( "system,container", "container", "Loading component: [$component_name]");
 
-		// コンポーネント設定ファイルの読み込み
-		$obj_path = new Charcoal_ObjectPath( $component_name );
+			// コンポーネント設定ファイルの読み込み
+			$obj_path = new Charcoal_ObjectPath( $component_name );
 
-		$config = Charcoal_ConfigLoader::loadConfig( $this->sandbox, $obj_path, 'component' );
-		$config = new Charcoal_Config( $config );
+			$config = Charcoal_ConfigLoader::loadConfig( $this->sandbox, $obj_path, 'component' );
+			$config = new Charcoal_Config( $config );
 
-		// キャッシュに保存
-		$this->component_configs[ $component_name ] = $config;
+			// キャッシュに保存
+			$this->component_configs[ $component_name ] = $config;
 
-		// クラス名を取得
-		$class_name = $config->getString( 'class_name' );
-		if ( $class_name === NULL ){
-			_throw( new Charcoal_ComponentConfigException( "class_name", "mandatory" ) );
-		}
+			// クラス名を取得
+			$class_name = $config->getString( 'class_name' );
+			if ( $class_name === NULL ){
+				_throw( new Charcoal_ComponentConfigException( $component_name, "class_name", "mandatory" ) );
+			}
 
-		// create class object
-		$klass = new Charcoal_Class( $class_name );
+			// create class object
+			$klass = new Charcoal_Class( $class_name );
 
-		// コンポーネントスコープを取得
-		$scope = $config->getString( 'scope', self::SCOPE_REQUEST );
+			// コンポーネントスコープを取得
+			$scope = $config->getString( 'scope', self::SCOPE_REQUEST );
 
-		// コンポーネントスコープによって生成方法を変更
-		$component = NULL;
-		switch ( $scope ){
-		case self::SCOPE_SESSION:
-			{
-				// コンポーネントのインスタンスをセッションから復元
-				$component = unserialize( $_SESSION[ $component_name ] );
+			// コンポーネントスコープによって生成方法を変更
+			$component = NULL;
+			switch ( $scope ){
+			case self::SCOPE_SESSION:
+				{
+					// コンポーネントのインスタンスをセッションから復元
+					$component = unserialize( $_SESSION[ $component_name ] );
 
-				// セッションになければ、インスタンスを生成
-				if ( $component == NULL ){
+					// セッションになければ、インスタンスを生成
+					if ( $component == NULL ){
+						$component = $klass->newInstance( $args );
+					}
+
+				}
+				break;
+			case self::SCOPE_TRANSIENT:
+			case self::SCOPE_REQUEST:
+				{
+					// コンポーネントのインスタンス生成
 					$component = $klass->newInstance( $args );
 				}
-
+				break;
+			default:
+				{
+					// scopeに指定されたワードが不正
+					_throw( new Charcoal_ComponentConfigException( $component_name, 'scope', "invalid scope value:$scope" ) );
+				}
+				break;
 			}
-			break;
-		case self::SCOPE_TRANSIENT:
-		case self::SCOPE_REQUEST:
-			{
-				// コンポーネントのインスタンス生成
-				$component = $klass->newInstance( $args );
+
+			// initialize component
+			$component->setComponentName( $component_name );
+			$component->setSandbox( $this->sandbox );
+
+			// 生成したインスタンスがIComponentインタフェースを実装しているか確認
+			if ( !($component instanceof Charcoal_IComponent) ){
+				// 実装例外
+				_throw( new Charcoal_InterfaceImplementException( $class_name, "Charcoal_IComponent" ) );
 			}
-			break;
-		default:
-			{
-				// scopeに指定されたワードが不正
-				_throw( new Charcoal_ComponentConfigException( $component_name, 'scope', "invalid scope value:$scope" ) );
+
+			// コンポーネントを初期化
+	//		log_info( "system,container", "container", "configuring component: [$component_name]");
+			$component->configure( $config );
+
+			// コンポーネントを配列に登録
+			if ( $scope == self::SCOPE_SESSION || $scope == self::SCOPE_REQUEST ){
+				$this->components[ $component_name ] = $component;
 			}
-			break;
+
+	//		log_info( "system,container", "container", "loaded component: [$component_name]");
+
+			// ロードしたコンポーネントを返却
+			return $component;
 		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
 
-		// initialize component
-		$component->setComponentName( $component_name );
-		$component->setSandbox( $this->sandbox );
-
-		// 生成したインスタンスがIComponentインタフェースを実装しているか確認
-		if ( !($component instanceof Charcoal_IComponent) ){
-			// 実装例外
-			_throw( new Charcoal_InterfaceImplementException( $class_name, "Charcoal_IComponent" ) );
+			// rethrow exception
+			_throw( new Charcoal_ComponentLoadingException( $component_name, $ex ) );
 		}
-
-		// コンポーネントを初期化
-//		log_info( "system,container", "container", "configuring component: [$component_name]");
-		$component->configure( $config );
-
-		// コンポーネントを配列に登録
-		if ( $scope == self::SCOPE_SESSION || $scope == self::SCOPE_REQUEST ){
-			$this->components[ $component_name ] = $component;
-		}
-
-//		log_info( "system,container", "container", "loaded component: [$component_name]");
-
-		// ロードしたコンポーネントを返却
-		return $component;
 	}
 
 	/**
@@ -143,8 +152,6 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 	 */
 	public function getComponent( $component_name, $args = array() )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $component_name );
-
 		$component_name = us( $component_name );
 
 		// 登録されていなければロードを試みる

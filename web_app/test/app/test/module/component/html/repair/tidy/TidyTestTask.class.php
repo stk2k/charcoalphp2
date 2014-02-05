@@ -11,7 +11,7 @@
 
 function show_with_children( $node, $level = 0 )
 {
-	echo str_repeat( '  ', $level ) . $node->getName() . PHP_EOL;
+	echo str_repeat( '  ', $level ) . $node->getName() . '=' . $node->getValue() . PHP_EOL;
 	if ( $node->hasChildren() ){
 		foreach( $node->getChildren() as $child ){
 			show_with_children( $child, $level + 1 );
@@ -53,6 +53,8 @@ class TidyTestTask extends Charcoal_TestTask
 	 */
 	public function test( $action, $context )
 	{
+		echo "action:$action" . PHP_EOL;
+
 		$request   = $context->getRequest();
 
 		$action = us($action);

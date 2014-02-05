@@ -52,56 +52,28 @@ class Charcoal_ParamTrait
 	/**
 	 *	test a parameter
 	 *	
-	 *	@param string $types           type name to check
+	 *	@param string $type            type name to check
 	 *	@param mixed $actual           data to check
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
 	 *	
-	 *	@return boolean     TRUE if check is OK, otherwise FALSE
+	 *	@return string     If the test passes, it returns type name. Otherwise, returns FALSE.
 	 */
 	private static function _testType( $type, $actual, $null_allowed = FALSE )
 	{
-		if ( $null_allowed )	return TRUE;
-
-/*
-		static $check_funcs;
-
-		if ( !$check_funcs ){
-			$check_funcs = array(
-					'string' => 'is_string',
-					'array' => 'is_array',
-					'int' => 'is_numeric',
-					'integer' => 'is_numeric',
-					'float' => 'is_numeric',
-					'bool' => 'Charcoal_ParamTrait::_is_bool',
-					'boolean' => 'Charcoal_ParamTrait::_is_bool',
-					'resource' => 'is_resource',
-					'object' => 'is_object',
-				);
-		}
-		if ( isset($check_funcs[$type]) ){
-			$func = $check_funcs[$type];
-			$res = call_user_func_array( $func, array($actual) );
-			if ( $res ){
-				return TRUE;
-			}
-		}
-		else if ( $actual instanceof $type ){
-			return TRUE;
-		}
-*/
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
 
 		switch( $type ){
-		case 'string':		return is_string( $actual );
-		case 'array':		return is_array( $actual );
-		case 'int':			return is_numeric( $actual );
-		case 'integer':		return is_numeric( $actual );
-		case 'float':		return is_numeric( $actual );
-		case 'bool':		return Charcoal_ScalarTrait::is_bool( $actual, TRUE );
-		case 'boolean':		return Charcoal_ScalarTrait::is_bool( $actual, TRUE );
-		case 'resource':	return is_resource($actual);
-		case 'object':		return is_object($actual);
+		case 'string':		return is_string( $actual ) ? 'string' : FALSE;
+		case 'array':		return is_array( $actual ) ? 'array' : FALSE;
+		case 'int':			return is_numeric( $actual ) ? 'integer' : FALSE;
+		case 'integer':		return is_numeric( $actual ) ? 'integer' : FALSE;
+		case 'float':		return is_numeric( $actual ) ? 'float' : FALSE;
+		case 'bool':		return Charcoal_ScalarTrait::is_bool( $actual, TRUE ) ? 'boolean' : FALSE;
+		case 'boolean':		return Charcoal_ScalarTrait::is_bool( $actual, TRUE ) ? 'boolean' : FALSE;
+		case 'resource':	return is_resource($actual) ? 'resource' : FALSE;
+		case 'object':		return is_object($actual) ? 'object' : FALSE;
 		default:
-			return ( $actual instanceof $type );
+			return ( $actual instanceof $type ) ? $type : FALSE;
 		}
 
 		return FALSE;
@@ -463,7 +435,7 @@ class Charcoal_ParamTrait
 	 *	
 	 *	@return string        passed type
 	 */
-	public static function checkPrimitive( $key, $actual, $null_allowed = FALSE )
+	public static function checkScalar( $key, $actual, $null_allowed = FALSE )
 	{
 		list( $file, $line ) = Charcoal_System::caller(1);
 

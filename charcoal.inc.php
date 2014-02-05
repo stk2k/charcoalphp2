@@ -29,7 +29,7 @@ if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
 // EOL
 function eol()
 {
-	return ( CHARCOAL_RUNMODE == 'http' ) ? '<br />' : PHP_EOL;
+	return ( CHARCOAL_DEBUG_OUTPUT == 'html' ) ? '<br />' : PHP_EOL;
 }
 
 //==================================================================

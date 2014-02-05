@@ -19,9 +19,8 @@ class Charcoal_ParameterException extends Charcoal_LogicException
 //		Charcoal_ParamTrait::checkString( 4, $parameter_type );
 
 		$parameter_type = is_array($parameter_type) ? implode("/",$parameter_type) : $parameter_type;
-		$actual = Charcoal_System::toString( $actual );
 		$actual_type = Charcoal_System::getType( $actual );
-		$message = "parameter '$parameter_id' must be instanceof '$parameter_type', but $actual($actual_type) is passed at $file($line).";
+		$message = "parameter '$parameter_id' must be instanceof '$parameter_type', but ($actual_type) is passed at $file($line).";
 
 		parent::__construct( $message );
 	}

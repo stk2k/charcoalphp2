@@ -16,15 +16,18 @@ class Charcoal_ImageFile extends Charcoal_File
 	/*
 	 *    コンストラクタ
 	 */
-	public function __construct( Charcoal_String $path, Charcoal_File $parent = NULL )
+	public function __construct( $path, $parent = NULL )
 	{
-		parent::__construct($path,$parent);
+		Charcoal_ParamTrait::checkString( 1, $path );
+		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_File', $parent, TRUE );
 
-		if ( !is_readable(parent::getPath()) ){
+		parent::__construct( $path, $parent );
+
+		if ( !is_readable(parent::getPath() ) ){
 			_throw( new Charcoal_FileNotFoundException($this) );
 		}
 
-		$this->_data = getimagesize(parent::getPath());
+		$this->_data = getimagesize( parent::getPath() );
 		if ( $this->_data === FALSE ){
 			_throw( new Charcoal_ImageGetSizeException( $this ) );
 		}

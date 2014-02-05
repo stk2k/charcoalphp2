@@ -50,7 +50,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_UploadedFile'				=> 'class/util',
 				'Charcoal_FileSystemUtil'			=> 'class/util',
 				'Charcoal_GraphicsUtil'				=> 'class/util',
-				'Charcoal_JsonUtil'					=> 'class/util',
 				'Charcoal_MailUtil'					=> 'class/util',
 				'Charcoal_SQLUtil'					=> 'class/util',
 				'Charcoal_URLUtil'					=> 'class/util',
@@ -173,6 +172,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_TaskNotFoundException'				=> 'exception',
 				'Charcoal_UnsupportedImageFormatException'		=> 'exception',
 				'Charcoal_URLFormatException'					=> 'exception',
+				'Charcoal_ComponentLoadingException'			=> 'exception',
 
 		// I/O classes
 				'Charcoal_FileWriter'						=> 'class/io',
@@ -252,6 +252,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				"Charcoal_ThumbnailComponent"				=> 'component/charcoal/thumb',
 				'Charcoal_PDFWriterComponent'				=> 'component/pdf',
 				'Charcoal_SimplePieComponent'				=> 'component/rss/simplepie',
+				'Charcoal_FeedCreatorComponent'				=> 'component/rss/feedcreator',
 				'Charcoal_SimpleHtmlDomComponent'			=> 'component/html/parser/simplehtmldom',
 				'Charcoal_TidyComponent'					=> 'component/html/repair/tidy',
 				'Charcoal_PhpXmlParserComponent'			=> 'component/xml/parser/php',

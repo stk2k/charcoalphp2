@@ -47,6 +47,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	{
 		parent::terminate();
 
+		log_debug( "system, debug, response", "terminating response." );
+
 		$this->flushHeaders();
 	}
 
@@ -61,6 +63,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	public function addHeader( $header, $replace = TRUE )
 	{
 		$this->headers[] = new Charcoal_HttpHeader( $header, $replace );
+
+		log_debug( "system, debug, response", "header added : $header(replace=$replace)" );
 	}
 
 	/**
@@ -81,6 +85,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 
 		// erase all headers
 		$this->headers = array();
+
+		log_debug( "system, debug, response", "headers are flushed." );
 	}
 
 	/**
@@ -92,6 +98,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 
 		// erase all headers
 		$this->headers = array();
+
+		log_debug( "system, debug, response", "headers are cleared." );
 	}
 
 	/**
@@ -100,7 +108,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 * @param Charcoal_String $header            header to output
 	 * @param Charcoal_Boolean $flush_now        flushes header immediately
 	 */
-	public function header( $header, $flush_now = FALSE )
+	public function header( $header, $flush_now = TRUE )
 	{
 		$this->addHeader( $header );
 
@@ -115,7 +123,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 * @param Charcoal_URL $url   Redirect URL
 	 * @param Charcoal_Boolean $flush_now   Flushes header immediately
 	 */
-	public function redirect( $url, $flush_now = FALSE )
+	public function redirect( $url, $flush_now = TRUE )
 	{
 //		$this->header( s("HTTP/1.0 302 Found"), $flush_now );
 		$this->clearHeaders();

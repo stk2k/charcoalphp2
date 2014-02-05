@@ -22,7 +22,7 @@ class Charcoal_ExecutedSQL extends Charcoal_Object
 	public function __construct( $sql, $params = NULL )
 	{
 		Charcoal_ParamTrait::checkString( 1, $sql );
-		Charcoal_ParamTrait::checkString( 2, $params, TRUE );
+		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
 
 		parent::__construct();
 

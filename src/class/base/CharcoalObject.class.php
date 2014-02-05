@@ -38,7 +38,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 			$config = new Chacoal_Config( $config );
 		}
 		
-		$this->debug   = $config->getBoolean( 'debug', FALSE );
+		$this->debug   = $config->getBoolean( 'debug', b(FALSE) );
 
 		if ( $this->debug->isTrue() ){
 			$this->outputDebugConfig( $config );

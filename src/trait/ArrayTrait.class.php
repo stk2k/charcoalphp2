@@ -18,7 +18,7 @@ class Charcoal_ArrayTrait
 	 * @param string $key             key string for hash map
 	 * @param string $default_value   default value
 	 * 
-	 * @return Charcoal_String 
+	 * @return Charcoal_String|NULL
 	 */
 	public static function getString( $data, $key, $default_value = NULL )
 	{
@@ -26,7 +26,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return s($default_value);
+			return $default_value;
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -44,7 +44,7 @@ class Charcoal_ArrayTrait
 	 * @param string $key             key string for hash map
 	 * @param array $default_value   default value
 	 * 
-	 * @return Charcoal_Vector 
+	 * @return Charcoal_Vector|NULL
 	 */
 	public static function getArray( $data, $key, $default_value = NULL )
 	{
@@ -52,11 +52,11 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return v($default_value);
+			return $default_value;
 		}
 
-		// cast to array
-		if ( !is_array( $value ) ){
+		// cast to array value
+		if ( is_scalar( $value ) ){
 			$value = Charcoal_ScalarTrait::arrayVal( $value );
 		}
 
@@ -75,7 +75,7 @@ class Charcoal_ArrayTrait
 	 * @param string $key             key string for hash map
 	 * @param array $default_value   default value
 	 * 
-	 * @return Charcoal_Vector 
+	 * @return Charcoal_Vector|NULL
 	 */
 	public static function getHashMap( $data, $key, $default_value = NULL )
 	{
@@ -83,11 +83,11 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return m($default_value);
+			return $default_value;
 		}
 
-		// cast to array
-		if ( !is_array( $value ) ){
+		// cast to hash map value
+		if ( is_scalar( $value ) ){
 			$value = Charcoal_ScalarTrait::hashmapVal( $value );
 		}
 
@@ -106,7 +106,7 @@ class Charcoal_ArrayTrait
 	 * @param string $key             key string for hash map
 	 * @param array $default_value   default value
 	 * 
-	 * @return Charcoal_Integer
+	 * @return Charcoal_Integer|NULL
 	 */
 	public static function getInteger( $data, $key, $default_value = NULL )
 	{
@@ -114,11 +114,11 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return i($default_value);
+			return $default_value;
 		}
 
-		// cast to integer
-		if ( !is_int( $value ) ){
+		// cast to integer value
+		if ( is_scalar( $value ) ){
 			$value = Charcoal_ScalarTrait::intVal( $value );
 		}
 
@@ -137,7 +137,7 @@ class Charcoal_ArrayTrait
 	 * @param string $key             key string for hash map
 	 * @param float $default_value   default value
 	 * 
-	 * @return Charcoal_Float
+	 * @return Charcoal_Float|NULL
 	 */
 	public static function getFloat( $data, $key, $default_value = NULL )
 	{
@@ -145,11 +145,11 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return f($default_value);
+			return $default_value;
 		}
 
-		// cast to float
-		if ( !is_float( $value ) ){
+		// cast to float value
+		if ( is_scalar( $value ) ){
 			$value = Charcoal_ScalarTrait::floatVal( $value );
 		}
 
@@ -168,7 +168,7 @@ class Charcoal_ArrayTrait
 	 * @param string $key             key string for hash map
 	 * @param bool $default_value   default value
 	 * 
-	 * @return Charcoal_Boolean
+	 * @return Charcoal_Boolean|NULL
 	 */
 	public static function getBoolean( $data, $key, $default_value = NULL )
 	{
@@ -176,11 +176,11 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return b($default_value);
+			return $default_value;
 		}
 
-		// cast to float
-		if ( !is_bool( $value ) ){
+		// cast to boolean value
+		if ( is_scalar( $value ) ){
 			$value = Charcoal_ScalarTrait::boolVal( $value );
 		}
 

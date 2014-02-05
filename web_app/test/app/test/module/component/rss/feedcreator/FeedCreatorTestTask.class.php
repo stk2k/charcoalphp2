@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class SimplePieTestTask extends Charcoal_TestTask
+class FeedCreatorTestTask extends Charcoal_TestTask
 {
 	/**
 	 * check if action will be processed
@@ -17,7 +17,7 @@ class SimplePieTestTask extends Charcoal_TestTask
 	public function isValidAction( $action )
 	{
 		switch( $action ){
-		case "get_feed":
+		case "generate_feed":
 			return TRUE;
 		}
 		return FALSE;
@@ -47,25 +47,25 @@ class SimplePieTestTask extends Charcoal_TestTask
 
 		$action = us($action);
 
-		// SimplePie
-		$simplepie = $context->getComponent( 'simplepie@:rss:simplepie' );
+		// FeedCreator
+		$feedcreator = $context->getComponent( 'feedcreator@:rss:feedcreator' );
 
 		$config = new Charcoal_Config();
 
-		$config->set( 'enable_cahche', true );
-		$config->set( 'cache_dir', CHARCOAL_CACHE_DIR . '/simplepie' );
-		$config->set( 'duration', 1800 );
-
-		$simplepie->configure( $config );
+		$feedcreator->configure( $config );
 
 		switch( $action ){
-		// Send mail
-		case "get_feed":
-			//$feed      = $simplepie->getFeed( 'http://charcoalphp.org/test/rss/index.xml' );
-			$feed      = $simplepie->getFeed( 'http://1000mg.jp/feed' );
+		case "generate_feed":
+			$feedcreator
+				->setTitle('foo')
+				->setLink('http://charcoalphp.org')
+				->setDescription('Hello')
+				->addItem(array('link'=>'http://charcoalphp.org/test'))
+				->setTitle('bar')
+				->setLink('http://charcoalphp.org/test2')
+				->setDescription('Chao!')
+				->outputFeed();
 
-			ad( $feed );
-			
 			return TRUE;
 		}
 

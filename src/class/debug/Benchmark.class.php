@@ -39,11 +39,9 @@ class Charcoal_Benchmark
 		$start = array_pop( self::$stack );
 		$stop = microtime(true);
 
-		if ( $start === NULL ){
-			_throw( new Charcoal_StackEmptyException( self::$stack ) );
+		if ( $start !== NULL ){
+			return round( ($stop - $start) * 1000, $precision );
 		}
-
-		return round( ($stop - $start) * 1000, $precision );
 	}
 
 	/**
@@ -58,13 +56,11 @@ class Charcoal_Benchmark
 		$start = array_pop( self::$stack );
 		$stop = microtime(true);
 
-		if ( $start === NULL ){
-			_throw( new Charcoal_StackEmptyException( self::$stack ) );
+		if ( $start !== NULL ){
+			self::$stack[] = $start;
+
+			return round( ($stop - $start) * 1000, $precision );
 		}
-
-		self::$stack[] = $start;
-
-		return round( ($stop - $start) * 1000, $precision );
 	}
 
 }

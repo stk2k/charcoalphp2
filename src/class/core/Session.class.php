@@ -11,6 +11,8 @@
 
 class Charcoal_Session extends Charcoal_HashMap
 {
+	const TAG = "session";
+
 	/*
 	 *	セッション名を取得
 	 */
@@ -106,7 +108,7 @@ class Charcoal_Session extends Charcoal_HashMap
 		// 配列の初期化
 		$this->clear();
 
-		log_info( "debug, session", "_SESSION:" . print_r($_SESSION,true) );
+		log_info( "debug, session", "_SESSION:" . print_r($_SESSION,true), self::TAG );
 
 		// 各配列の値をデシリアライズ
 		$keys = array_keys( $_SESSION );
@@ -114,12 +116,12 @@ class Charcoal_Session extends Charcoal_HashMap
 			foreach( $keys as $key ){
 				$value = unserialize( $_SESSION[$key] );
 				$this->set( $key, $value );
-				log_info( "debug, session", "[$key]=" . print_r($value,true) );
+				log_info( "debug, session", "[$key]=" . print_r($value,true), self::TAG );
 			}
 		}
 
 
-		log_info( "debug, session", "restored :" . print_r($this->values,true) );
+		log_info( "debug, session", "restored :" . print_r($this->values,true), self::TAG );
 //		log_info( "debug, session", "restore() end" );
 	}
 
@@ -140,10 +142,10 @@ class Charcoal_Session extends Charcoal_HashMap
 		foreach( $keys as $key ){
 			$value = $this->get( s($key) );
 			$_SESSION[ $key ] = serialize($value);
-			log_info( "debug, session", "saved [$key]=" . print_r($value,true) );
+			log_info( "debug, session", "saved [$key]=" . print_r($value,true), self::TAG );
 		}
 
-		log_info( "debug, session", "_SESSION=" . print_r($_SESSION,true) );
+		log_info( "debug, session", "_SESSION=" . print_r($_SESSION,true), self::TAG );
 
 //		log_info( "debug, session", 'save() end' );
 	}

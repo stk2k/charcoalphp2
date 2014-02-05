@@ -26,6 +26,10 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 	 */
 	public function configure( $config )
 	{
+			if ( $this->getSandbox()->isDebug() ){
+				echo "procedure: " . $this->getObjectPath() . "<br>";
+			}
+
 		parent::configure( $config );
 
 		$this->task_manager        = $config->getString( 'task_manager', '' );

@@ -340,7 +340,7 @@ class Charcoal_Framework
 		// タイムアウトを指定
 		if ( !ini_get('safe_mode') ){
 			$timeout = $profile->getInteger( 'SCRIPT_TIMEOUT', 600 );
-			set_time_limit( $timeout->unbox() );
+			set_time_limit( ui($timeout) );
 		}
 
 		self::setHookStage( Charcoal_EnumCoreHookStage::AFTER_INIT_FRAMEWORK );
@@ -496,7 +496,7 @@ class Charcoal_Framework
 
 		// register routers
 		$routing_rule = NULL;
-		if ( !$routing_rule_name->isEmpty() ) {
+		if ( $routing_rule_name ) {
 			$routing_rule = $sandbox->createObject( $routing_rule_name, 'routing_rule', array(), 'Charcoal_IRoutingRule' );
 		}
 

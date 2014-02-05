@@ -68,8 +68,8 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 		$aspect = $width / $height;
 
 		// 画像リソースを生成
-		$img = call_user_func("imagecreatefrom{$mime}", $src_file);
-		if (!$img) {
+		$img = @call_user_func("imagecreatefrom{$mime}", $src_file);
+		if ( $img === FALSE || !is_resource($img) ) {
 			_throw( new ThumbnailComponentException( s("failed to imagecreate{$mime}($src_file)") ) );
 		}
 

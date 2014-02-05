@@ -15,8 +15,10 @@ class Charcoal_CommandLineUtil
 	 * 引数を空白で分割（ダブルクウォート、シングルクウォート対応）
 	 *
 	 */
-	public static function splitParams( Charcoal_String $args )
+	public static function splitParams( $args )
 	{
+		Charcoal_ParamTrait::checkString( 1, $args );
+
 		$args = us($args);
 		$pos = 0;
 		$dq = FALSE;

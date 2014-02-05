@@ -67,7 +67,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 			$sql = "SELECT {$fields} FROM " . us($table);
 		}
 	
-		if ( !empty($alias) ){
+		if ( $alias && !empty($alias) ){
 			$sql .= ' AS ' . $alias;
 		}
 
@@ -370,7 +370,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 		$sql = "SELECT $func($fields) FROM " . us($table_name);
 
-		if ( !empty($alias) ){
+		if ( $alias && !empty($alias) ){
 			$sql .= ' AS ' . $alias;
 		}
 
@@ -434,7 +434,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	public  function buildDeleteSQL( $model, $alias, $criteria )
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
 		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
 
 		$table_name = $model->getTableName();
