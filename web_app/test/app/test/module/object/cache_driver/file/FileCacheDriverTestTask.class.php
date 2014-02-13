@@ -71,7 +71,9 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
 
 				$config['cache_root'] = $this->cache_root;
 
-				$cache_driver->configure( new Charcoal_Config($config) );
+				$config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $config );
+
+				$cache_driver->configure( $config );
 
 				$this->cache_driver = $cache_driver;
 

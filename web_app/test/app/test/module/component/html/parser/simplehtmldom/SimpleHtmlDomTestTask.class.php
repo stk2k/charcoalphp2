@@ -51,7 +51,7 @@ class SimpleHtmlDomTestTask extends Charcoal_TestTask
 		// SimpleHtmlDom
 		$simplehtmldom = $context->getComponent( 'simplehtmldom@:html:parser:simplehtmldom' );
 
-		$config = new Charcoal_Config();
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
 		$simplehtmldom->configure( $config );
 

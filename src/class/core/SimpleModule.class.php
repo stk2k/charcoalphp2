@@ -85,7 +85,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// load object config
 		$config = Charcoal_ConfigLoader::loadConfig( $this->getSandbox(), $task_path, 'task' );
-		$config = new Charcoal_Config( $config );
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $config );
 
 		// configure task
 		$task->configure( $config );
@@ -136,7 +136,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// load object config
 		$config = Charcoal_ConfigLoader::loadConfig( $this->getSandbox(), $event_path, 'event' );
-		$config = new Charcoal_Config( $config );
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $config );
 
 		// configure event
 		$event->configure( $config );

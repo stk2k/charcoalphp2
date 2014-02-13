@@ -86,13 +86,23 @@ class Charcoal_Sandbox
 	}
 
 	/**
+	 * returns sandbox name
+	 * 
+	 * @return string         sandbox name
+	 */
+	public function getName()
+	{
+		return $this->sandbox_name;
+	}
+
+	/**
 	 * load
 	 */
 	public function load()
 	{
 //		try{
-			$this->profile->load( 'default', $this->debug );
-			$this->profile->load( $this->sandbox_name, $this->debug );
+			$this->profile->load( $this->debug, 'default' );
+			$this->profile->load( $this->debug, $this->sandbox_name );
 //		}
 //		catch( Exception $e ){
 //			_catch( $e );
@@ -208,10 +218,12 @@ class Charcoal_Sandbox
 		try{
 			// load configure file
 			$config = Charcoal_ConfigLoader::loadConfig( $this, $obj_path, $type_name );
-			$config = new Charcoal_Config( $config );
+
+			$config = new Charcoal_Config( $this->getEnvironment(), $config );
 
 			// get class name from configure file
 			$class_name = $config->getString( 'class_name' );
+
 			if ( $class_name && !$class_name->isEmpty() ){
 				$klass = new Charcoal_Class( $class_name );
 			}
@@ -275,7 +287,7 @@ class Charcoal_Sandbox
 
 			// Configをロード
 			$config = Charcoal_ConfigLoader::loadConfig( $this, $obj_path, 'class_loader' );
-			$config = new Charcoal_Config( $config );
+			$config = new Charcoal_Config( $this->environment, $config );
 
 			// クラス名を取得
 			$class_name = $config->getString( 'class_name' );

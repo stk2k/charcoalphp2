@@ -38,7 +38,7 @@ class QdmailTestTask extends Charcoal_TestTask
 		// Qdmail
 		$qdmail = $context->getComponent( 'qdmail@:qdmail' );
 
-		$config = new Charcoal_Config();
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
 		$config->set( 'qdsmtp.host', 'localhost' );
 		$config->set( 'qdsmtp.port', '25' );

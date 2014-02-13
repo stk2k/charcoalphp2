@@ -50,7 +50,7 @@ class FeedCreatorTestTask extends Charcoal_TestTask
 		// FeedCreator
 		$feedcreator = $context->getComponent( 'feedcreator@:rss:feedcreator' );
 
-		$config = new Charcoal_Config();
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
 		$feedcreator->configure( $config );
 

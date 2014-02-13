@@ -72,7 +72,7 @@ class XmlParserTestTask extends Charcoal_TestTask
 		// PhpXmlParser
 		$parser = $context->getComponent( 'xmlparser@:xml:parser:php' );
 
-		$config = new Charcoal_Config();
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
 		$parser->configure( $config );
 

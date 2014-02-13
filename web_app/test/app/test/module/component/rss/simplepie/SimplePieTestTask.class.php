@@ -50,7 +50,7 @@ class SimplePieTestTask extends Charcoal_TestTask
 		// SimplePie
 		$simplepie = $context->getComponent( 'simplepie@:rss:simplepie' );
 
-		$config = new Charcoal_Config();
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
 		$config->set( 'enable_cahche', true );
 		$config->set( 'cache_dir', CHARCOAL_CACHE_DIR . '/simplepie' );

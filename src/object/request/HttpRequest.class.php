@@ -43,7 +43,7 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 		parent::configure( $config );
 
 		// use cookie
-		$use_cookie  = $this->getSandbox()->getProfile()->getString( 'USE_COOKIE', FALSE );
+		$use_cookie  = $this->getSandbox()->getProfile()->getBoolean( 'USE_COOKIE', FALSE );
 		$this->cookie = $use_cookie ? new Charcoal_CookieReader() : NULL;
 	}
 

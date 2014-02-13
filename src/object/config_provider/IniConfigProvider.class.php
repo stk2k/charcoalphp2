@@ -20,9 +20,10 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	 */
 	public function setOptions( $options )
 	{
-//		Charcoal_ParamTrait::checkProperties( 1, $options );
-		if ( is_array( $options ) ){
-			$options = new Charcoal_Config( $options );
+//		Charcoal_ParamTrait::checkProperties( 1, $options, TRUE );
+
+		if ( is_array( $options ) || $options === NULL ){
+			$options = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $options );
 		}
 
 		$this->debug = $options->getBoolean( 'debug', FALSE );
@@ -41,7 +42,7 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 
 		$source = $key . '.ini';
 
-		$is_debug = $this->debug->isTrue();
+		$is_debug = b($this->debug)->isTrue();
 
 		if ( !is_file($source) ){
 			if ( $is_debug ){
@@ -53,7 +54,7 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 
 		// read ini file
 	    $ini_config = @parse_ini_file( $source, TRUE );
-		if ( $this->debug->isTrue() ){
+		if ( b($this->debug)->isTrue() ){
 			print "[$source] parse_ini_file($source)=" . eol();
 			ad( $ini_config );
 		}

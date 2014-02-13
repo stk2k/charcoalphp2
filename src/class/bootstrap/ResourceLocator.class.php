@@ -16,15 +16,15 @@ class Charcoal_ResourceLocator
 	/*
 	 * マクロ展開
 	 */
-	public static function processMacro( $value )
+	public static function processMacro( $env, $value )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $value );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
 
 		if ( is_array($value) || $value instanceof Iterator ){
 			$new_array = array();
 			foreach( $value as $key => $value ){
-				$key = is_string($key) ? self::processMacro($key) : $key;
-				$value = is_string($value) ? self::processMacro($value) : $value;
+				$key = is_string($key) ? self::processMacro( $env, $key ) : $key;
+				$value = is_string($value) ? self::processMacro( $env, $value ) : $value;
 				$new_array[$key] = $value;
 			}
 			return $new_array;
@@ -62,8 +62,9 @@ class Charcoal_ResourceLocator
 		}
 
 		// set runtime values
+		$request_path = $env->get( '%REQUEST_PATH%' );
 		$runtime_macro_defs = array(
-				'%PROC_PATH_REAL%' => str_replace( ':', '/', substr(Charcoal_Framework::getRequestPath(),2) ),
+				'%PROC_PATH_REAL%' => str_replace( ':', '/', substr($request_path,2) ),
 			);
 
 		// fill runtime values
@@ -79,15 +80,17 @@ class Charcoal_ResourceLocator
 	/**
 	 * Get framework/project/application path
 	 *
+	 * @param Charcoal_IEnvironment $env    framework's environment variables
 	 * @param string $virtual_path          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
 	 * @param string $filename              file name
 	 *
 	 * @return string        full path string
 	 */
-	public static function getPath( $virtual_path, $filename = NULL )
+	public static function getPath( $env, $virtual_path, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
+		Charcoal_ParamTrait::checkString( 2, $virtual_path );
+		Charcoal_ParamTrait::checkString( 3, $filename, TRUE );
 
 		$path = self::processMacro( $virtual_path );
 

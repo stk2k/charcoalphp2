@@ -324,8 +324,6 @@ class Charcoal_Framework
 
 		$profile = $sandbox->load();
 
-		self::$loggers->init();
-
 		//=======================================
 		// Start bootstrap
 
@@ -404,6 +402,9 @@ class Charcoal_Framework
 		}
 
 		$sandbox->getEnvironment()->set( '%REQUEST_PATH%', self::$proc_path );
+
+		self::$loggers->init();
+
 
 		//=======================================
 		// 外部ライブラリの使用

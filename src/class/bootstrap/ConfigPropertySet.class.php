@@ -11,14 +11,27 @@
 
 class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 {
+	private $env;
+
 	/**
 	 *  Constructor
 	 */
-	public function __construct( $values = NULL )
+	public function __construct( $env, $values = NULL )
 	{
-//		Charcoal_ParamTrait::checkRawArray( 1, $values, TRUE );
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
+//		Charcoal_ParamTrait::checkRawArray( 2, $values, TRUE );
+
+		$this->env = $env;
 
 		parent::__construct( $values );
+	}
+
+	/**
+	 *  Get sandvox
+	 */
+	public function getSandbox()
+	{
+		return $this->sandbox;
 	}
 
 	/**
@@ -34,7 +47,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 			_throw( new Charcoal_ConfigSectionNotFoundException( $section ) );
 		}
 
-		return new Charcoal_ConfigPropertySet( $value );
+		return new Charcoal_ConfigPropertySet( $this->env, $value );
 	}
 
 	/**
@@ -48,13 +61,14 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::checkBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );
 
-		return $process_macro ? Charcoal_ResourceLocator::processMacro( $value ) : $value;
+		return $process_macro ? Charcoal_ResourceLocator::processMacro( $this->env, $value ) : $value;
 	}
 
 	/**
@@ -68,8 +82,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getJson( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::checkBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );
@@ -85,7 +100,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 			_throw( new Charcoal_JsonDecodingException($value) );
 		}
 
-		return $process_macro ? Charcoal_ResourceLocator::processMacro( $decoded ) : $decoded;
+		return $process_macro ? Charcoal_ResourceLocator::processMacro( $this->env, $decoded ) : $decoded;
 	}
 
 	/**
@@ -99,7 +114,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::checkBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$items = parent::getArray( $key, $default_value );
@@ -114,7 +131,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 		}
 
 		if ( $process_macro === TRUE ){
-			$items = Charcoal_ResourceLocator::processMacro( $items );
+			$items = Charcoal_ResourceLocator::processMacro( $this->env, $items );
 		}
 
 		return v($items);
@@ -130,7 +147,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getBoolean( $key, $default_value );
@@ -146,7 +164,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getInteger( $key, $default_value );
@@ -162,7 +181,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getFloat( $key, $default_value );

@@ -22,15 +22,15 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 
 		$this->sandbox = $sandbox;
 
-		parent::__construct();
+		parent::__construct( $sandbox->getEnvironment() );
 	}
 
 	/*
 	 * グローバルの設定ファイルを読み込む
 	 */
-	public function load( $sandbox_name, $debug_mode )
+	public function load( $debug_mode, $profile_name )
 	{
-		$config_file = "{$sandbox_name}.profile.ini";
+		$config_file = "{$profile_name}.profile.ini";
 
 		try{
 			// get profile directory path
@@ -58,6 +58,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 			$config_file = $config_file->getAbsolutePath();
 			if ( $debug_mode )	echo "executing parse_ini_file: [$config_file]" . eol();
 			$config = @parse_ini_file($config_file,FALSE);
+
 			if ( $config === FALSE ){
 				if ( $debug_mode )	echo "profile config file format error: [$config_file]" . eol();
 				log_error( "debug,config,profile", "profile config file format error: [$config_file]" );
@@ -76,7 +77,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 //			log_debug( "system,error,debug", "catch $e" );
 			_catch( $ex );
 
-			_throw( new Charcoal_ProfileLoadingException( $config_file, $sandbox_name, $ex ) );
+			_throw( new Charcoal_ProfileLoadingException( $config_file, $profile_name, $ex ) );
 		}
 	}
 

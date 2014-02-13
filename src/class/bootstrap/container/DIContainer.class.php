@@ -62,7 +62,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 			$obj_path = new Charcoal_ObjectPath( $component_name );
 
 			$config = Charcoal_ConfigLoader::loadConfig( $this->sandbox, $obj_path, 'component' );
-			$config = new Charcoal_Config( $config );
+			$config = new Charcoal_Config( $this->sandbox->getEnvironment(), $config );
 
 			// キャッシュに保存
 			$this->component_configs[ $component_name ] = $config;

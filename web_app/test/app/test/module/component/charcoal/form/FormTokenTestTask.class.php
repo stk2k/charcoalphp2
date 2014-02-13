@@ -52,7 +52,7 @@ class FormTokenTestTask extends Charcoal_TestTask
 		// form token component
 		$form_token = $context->getComponent( 'form_token@:charcoal:form' );
 
-		$config = new Charcoal_Config();
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
 		$config->set( 'token_key', 'foo' );
 

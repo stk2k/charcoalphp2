@@ -48,7 +48,9 @@ class SmartGatewaySessionHandlerTestTask extends Charcoal_TestTask
 				'target' => 'session',
 			);
 
-		$this->handler->configure( new Charcoal_Config($data) );
+		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $data );
+
+		$this->handler->configure( $config );
 
 		switch( $action ){
 
