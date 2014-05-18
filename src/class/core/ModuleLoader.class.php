@@ -60,10 +60,15 @@ class Charcoal_ModuleLoader
 			$module = $sandbox->createObject( $module_path, 'module', array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
 
 			// load module tasks
-			$module->loadTasks( $task_manager );
+			$loaded_tasks = $module->loadTasks( $task_manager );
 
 			// load module events
-			$module->loadEvents( $task_manager );
+			$loaded_events = $module->loadEvents( $task_manager );
+
+			// if no tasks or events are loaded, you maybe passed a wrong module path
+			if ( empty($loaded_tasks) && empty($loaded_events) ){
+				_throw( new Charcoal_ModuleLoaderException( $module_path, "no tasks and events are loaded." ) );
+			}
 
 			// load required modules
 			$required_modules = $module->getRequiredModules();
@@ -77,10 +82,13 @@ class Charcoal_ModuleLoader
 			}
 
 			self::$loaded_paths[$module_path] = $module_path;
+
+			log_debug( 'debug, event', "loaded module: $module_path" );
+
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
-			_throw( new Charcoal_ModuleLoaderException( "failed to load  module: [$module_path]", $ex ) );
+			_throw( new Charcoal_ModuleLoaderException( $module_path, "failed to load  module.", $ex ) );
 		}
 	}
 

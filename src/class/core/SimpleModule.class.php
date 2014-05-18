@@ -72,7 +72,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$klass = new Charcoal_Class( $class_name );
 		$task = $klass->newInstance();
 
-//		log_info( "system,debug,task", "created task[$task] in module[$obj_path]");
+		log_info( 'system, event, debug', "created task[$task] in module[$obj_path]");
 
 		// build object path for the task
 		$obj_name = $task->getObjectName();
@@ -89,11 +89,11 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// configure task
 		$task->configure( $config );
-//		log_info( "system,debug,task", "task[$task] configured.");
+//		log_info( 'system, event, debug', "task[$task] configured.");
 
 		// regiser task
 		$task_manager->registerTask( $task_path, $task );
-		log_info( "system,debug,task", "task[$class_name] registered as: [$task_path]");
+		log_info( 'system, event, debug', "task[$class_name] registered as: [$task_path]");
 
 		return $task;
 	}
@@ -122,13 +122,13 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$klass = new Charcoal_Class( $class_name );
 		$event = $klass->newInstance();
 
-//		log_info( "system,debug,event", "module", "created event[$event] in module[$obj_path]");
+		log_info( 'system, event, debug', "module", "created event[$event] in module[$obj_path]");
 
 		// build object path for the event
 		$obj_name = $event->getObjectName();
 		$event_path = $obj_name . '@' . $obj_path->getVirtualPath();
 //		$event_path = new Charcoal_ObjectPath( $event_path );
-//		log_info( "system,debug,event", "module", "event[$event] path: [$event_path]");
+//		log_info( 'system, event, debug', "module", "event[$event] path: [$event_path]");
 
 		// set task property
 		$event->setObjectPath( $event_path );
@@ -140,11 +140,11 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		// configure event
 		$event->configure( $config );
-//		log_info( "system,debug,event", "module", "event[$event] configured.");
+//		log_info( 'system, event, debug', "module", "event[$event] configured.");
 
 		// add event 
 		$task_manager->pushEvent( $event );
-		log_info( "system,debug,event", "module", "event[$event] added to task manager.");
+		log_info( 'system, event, debug', "module", "event[$event] added to task manager.");
 
 		return $event;
 	}
@@ -168,12 +168,17 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 		$project_path   = Charcoal_ResourceLocator::getProjectPath( 'module' . $real_path );
 		$framework_path = Charcoal_ResourceLocator::getFrameworkPath( 'module' . $real_path );
 
+		//log_info( 'system, event, debug', "module", "webapp_path: $webapp_path");
+		//log_info( 'system, event, debug', "module", "project_path: $project_path");
+		//log_info( 'system, event, debug', "module", "framework_path: $framework_path");
+
 		$task_class_suffix = 'Task.class.php';
 
 		$task = NULL;
 
 		if ( is_dir($webapp_path) && $dh = opendir($webapp_path) )
 		{
+			log_info( 'system, event, debug', "module", "webapp_path is existing.");
 			while( ($file = readdir($dh)) !== FALSE )
 			{
 				if ( $file === '.' || $file === '..' )	continue;
@@ -186,6 +191,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		if ( is_dir($project_path) && $dh = opendir($project_path) )
 		{
+			log_info( 'system, event, debug', "module", "project_path is existing.");
 			while( ($file = readdir($dh)) !== FALSE )
 			{
 				if ( $file === '.' || $file === '..' )	continue;
@@ -198,6 +204,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 		if ( is_dir($framework_path) && $dh = opendir($framework_path) )
 		{
+			log_info( 'system, event, debug', "module", "framework_path is existing.");
 			while( ($file = readdir($dh)) !== FALSE )
 			{
 				if ( $file === '.' || $file === '..' )	continue;
@@ -232,7 +239,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 //		log_debug( "system,debug,event", "loaded tasks: " . print_r($loaded_tasks,true), "module" );
 
-		return $loaded_tasks;
+		return count($loaded_tasks);
 	}
 
 	/*
@@ -315,7 +322,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 
 //		log_info( "system,debug", "module", "loaded events: " . print_r($loaded_events,true) );
 
-		return $loaded_events;
+		return count($loaded_events);
 	}
 
 }

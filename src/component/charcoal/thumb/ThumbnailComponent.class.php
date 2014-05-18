@@ -37,10 +37,10 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 		$thumb_max_width 	= ui($thumb_max_width);
 		$thumb_max_height	= ui($thumb_max_height);
 
-		$info = getimagesize($src_file);
+		$info = @getimagesize($src_file);
 
 		if ($info === false) {
-			_throw( new ThumbnailComponentException( s("not image file:[$src_file]") ) );
+			_throw( new ThumbnailComponentException( s("failed to get image info:[$src_file]") ) );
 		}
 
 		// MimeTypeを調べる
@@ -67,6 +67,17 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 		// 元の画像のアスペクト比
 		$aspect = $width / $height;
 
+		// 幅・高さに０が指定された場合は元画像のサイズを使用
+		if ( $thumb_max_width == 0 ){
+			$thumb_max_width = $width;
+		}
+		if ( $thumb_max_height == 0 ){
+			$thumb_max_height = $height;
+		}
+
+		// 変換先サイズのアスペクト比
+		$max_aspect = $thumb_max_width / $thumb_max_height;
+
 		// 画像リソースを生成
 		$img = @call_user_func("imagecreatefrom{$mime}", $src_file);
 		if ( $img === FALSE || !is_resource($img) ) {
@@ -74,14 +85,11 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 		}
 
 		// 最大幅・高さを超過していないかチェック・縦横比を維持して新しいサイズを定義
-		$thumb_width  = $width;
-		if ( $thumb_max_width > 0 && $thumb_width > $thumb_max_width ) {
+		if ( $aspect > $max_aspect ) {
 			$thumb_width  = $thumb_max_width;
 			$thumb_height = intval($thumb_width / $aspect);
 		}
-
-		$thumb_height = $height;
-		if ( $thumb_max_height > 0 && $thumb_height > $thumb_max_height ) {
+		else{
 			$thumb_height = $thumb_max_height;
 			$thumb_width  = intval($thumb_height * $aspect); 
 		}
