@@ -33,14 +33,14 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 	/*
 	 * クラスとパスの対応を表す連想配列を取得
 	 */
-	public abstract function getClassPathAssoc( $class_name );
+	public abstract function getClassPathAssoc();
 
 	/*
 	 * クラス名からクラスパスを取得
 	 */
 	public function getClassPath( $class_name )
 	{
-		$assoc = $this->getClassPathAssoc( $class_name );
+		$assoc = $this->getClassPathAssoc();
 
 		if ( $assoc === NULL || $assoc === FALSE || !is_array($assoc) ){
 			return FALSE;
@@ -48,6 +48,16 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 
 		$class_name = us($class_name);
 		$class_path = isset($assoc[$class_name]) ? $assoc[$class_name] : FALSE;
+		/*
+		if ( !$class_path ){
+			echo '<div style="color:red;">';
+			echo "loader:" . get_class($this) . "<br>";
+			echo "class_path:$class_path<br>";
+			echo "class_name:$class_name<br>";
+			echo "assoc:" . nl2br(print_r($assoc,true)) . "<br>";
+			echo '</div>';
+		}*/
+
 		return $class_path;
 	}
 
@@ -56,7 +66,9 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 	 */
 	public function loadClass( $class_name )
 	{
+		$class_name = us($class_name);
 		$class_path = $this->getClassPath( $class_name );
+		
 
 		log_debug( "system,debug,class_loader", "class_path=$class_path", "class_loader" );
 
@@ -70,6 +82,7 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		if ( $pos !== FALSE ){
 			$file_name = substr( $file_name, $pos + 9 /*= strlen('Charcoal_') */ );
 		}
+
 		log_debug( "system,debug,class_loader", "file_name=$file_name", "class_loader" );
 
 		// プロジェクトディレクトリ配下のクラスファイルをロード

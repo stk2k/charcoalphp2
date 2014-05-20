@@ -55,7 +55,7 @@ abstract class Charcoal_AbstractEnvironment extends Charcoal_Object implements C
 	 *
 	 * @return string           replaced string
 	 */
-	public function replace( $str )
+	public function fill( $str )
 	{
 		$keys = array_keys( $this->values );
 		$values = array_values( $this->values );

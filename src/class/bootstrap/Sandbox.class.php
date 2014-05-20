@@ -211,13 +211,15 @@ class Charcoal_Sandbox
 			$obj_path = new Charcoal_ObjectPath( $obj_path );
 		}
 
-		if ( is_string($interface) || $obj_path instanceof Charcoal_Interface ){
+		if ( is_string($interface) || $interface instanceof Charcoal_String ){
 			$interface = new Charcoal_Interface( $interface );
 		}
 
 		try{
+			$object_path_string = $obj_path->getObjectPathString();
+
 			// load configure file
-			$config = Charcoal_ConfigLoader::loadConfig( $this, $obj_path, $type_name );
+			$config = Charcoal_ConfigLoader::loadConfig( $this, $object_path_string, $type_name );
 
 			$config = new Charcoal_Config( $this->getEnvironment(), $config );
 
@@ -235,7 +237,7 @@ class Charcoal_Sandbox
 					$klass = $default_class;
 				}
 				else{
-					_throw( new Charcoal_ClassNameEmptyException( "$obj_path/$type_name" ) );
+					_throw( new Charcoal_ClassNameEmptyException( "$object_path_string/$type_name" ) );
 				}
 			}
 
@@ -294,6 +296,7 @@ class Charcoal_Sandbox
 			if ( $class_name === NULL ){
 				_throw( new Charcoal_ClassLoaderConfigException( $obj_path, 'class_name', 'mandatory' ) );
 			}
+			$class_name = us($class_name);
 
 			// project directory
 			$project_dir = Charcoal_ResourceLocator::getProjectPath();

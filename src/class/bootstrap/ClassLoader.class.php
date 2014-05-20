@@ -41,6 +41,7 @@ class Charcoal_ClassLoader
 		$ins = self::getInstance();
 
 		$ins->_loaders[] = $loader;
+
 	}
 
 	/**

@@ -78,7 +78,7 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRend
 			$out .= "   $message" . PHP_EOL;
 
 			// move to previous exception
-			$e = $e->getPrevious();
+			$e = $e->getPreviousException();
 			$no ++;
 			if ( $e ){
 				$out .= PHP_EOL;

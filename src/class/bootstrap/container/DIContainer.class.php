@@ -78,6 +78,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 
 			// コンポーネントスコープを取得
 			$scope = $config->getString( 'scope', self::SCOPE_REQUEST );
+			$scope = us($scope);
 
 			// コンポーネントスコープによって生成方法を変更
 			$component = NULL;
@@ -178,6 +179,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 
 		// コンポーネントスコープを取得
 		$scope = $component_config->getString( 'scope' );
+		$scope = us($scope);
 
 		// 登録されていなければ例外
 		if ( $scope == NULL ){
@@ -220,6 +222,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 
 			// コンポーネントスコープを取得
 			$scope = $component_config->getString( 'scope' );
+			$scope = us($scope);
 
 			// コンポーネントスコープによって処理を分岐
 			switch ( $scope ){

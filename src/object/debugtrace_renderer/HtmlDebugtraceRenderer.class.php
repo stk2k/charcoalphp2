@@ -448,7 +448,7 @@ HTML_HEADER;
 			$html .= '  </td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
-			$e = $e->getPrevious();
+			$e = $e->getPreviousException();
 			$no ++;
 		}
 		$html .= '</table>' . PHP_EOL;

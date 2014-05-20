@@ -106,7 +106,7 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 		$out = $this->log_format;
 
 		// replace environment values
-		$out = $this->getSandbox()->getEnvironment()->replace( $out );
+		$out = $this->getSandbox()->getEnvironment()->fill( $out );
 
 		// logging context specific values
 		$log_values = array(
@@ -120,7 +120,7 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 
 		// replace keyword
 		foreach( $log_values as $key => $value ){
-			$out = str_replace( $key, $value, $out );
+			$out = str_replace( $key, $value, us($out) );
 		}
 
 		return $out;
@@ -135,9 +135,9 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 
 		$file_name = us($file_name);
 
-		$file_name = $this->getSandbox()->getEnvironment()->replace( $file_name )->replace( ':', '_' );
+		$file_name = $this->getSandbox()->getEnvironment()->fill( $file_name )->replace( ':', '_' );
 
-		return $file_name;
+		return us($file_name);
 	}
 
 }

@@ -20,6 +20,8 @@ class Charcoal_Class extends Charcoal_Object
 	{
 //		Charcoal_ParamTrait::checkString( 1, $class_name );
 
+		$class_name = us($class_name);
+
 		parent::__construct();
 
 		if ( !class_exists($class_name) ){

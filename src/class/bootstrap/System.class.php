@@ -173,7 +173,11 @@ class Charcoal_System
 			return $res;
 		}
 		else if ( is_array($value) ){
-			return array_map('Charcoal_System::escape', $value);
+			$ret = array();
+			foreach( $value as $item ){
+				$ret[] = self::escape( $item );
+			}
+			return $ret;
 		}
 		else if ( is_object($value) ){
 			$object = $value;

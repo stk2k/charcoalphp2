@@ -11,6 +11,7 @@
 class Charcoal_CharcoalException extends Exception
 {
 	private $backtrace;
+	private $previous;
 
 	/**
 	 *	Construct
@@ -20,9 +21,17 @@ class Charcoal_CharcoalException extends Exception
 		Charcoal_ParamTrait::checkString( 1, $message );
 		Charcoal_ParamTrait::checkException( 2, $prev, TRUE );
 
-		parent::__construct( us($message), 0, $prev );
+		parent::__construct( us($message), 0 );
 
 		$this->backtrace = debug_backtrace();
+		$this->previous = $prev;
+	}
+
+	/*
+	 *	get previous exception
+	 */
+	public function getPreviousException(){
+		return $this->previous;
 	}
 
 	/*

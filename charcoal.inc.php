@@ -245,6 +245,14 @@ function up( $value )
 }
 
 //==================================================================
+// object hash function
+if ( !function_exists('spl_object_hash') ){
+	function spl_object_hash($o){
+		return sha1("$o");
+	}
+}
+
+//==================================================================
 // 例外をスロー
 
 function _throw( Exception $e, $log_error = TRUE )

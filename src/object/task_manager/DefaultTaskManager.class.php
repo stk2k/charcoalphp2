@@ -213,7 +213,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					$event_filters = $task->getEventFilters();
 					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task event filter: " . $event_filters );
 					foreach( $event_filters as $filter ){
-						if ( $event_id == us($filter) ){
+						if ( $event_id->getObjectPathString() == us($filter) ){
 							$process = TRUE;
 							break;
 						}

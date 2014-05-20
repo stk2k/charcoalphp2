@@ -359,6 +359,7 @@ class Charcoal_Framework
 			$class_loaders = $profile->getArray( 'CLASS_LOADERS' );
 			if ( $class_loaders ){
 				foreach( $class_loaders as $loader_name ) {
+
 					if ( strlen($loader_name) === 0 )    continue;
 
 					$loader = $sandbox->createClassLoader( $loader_name );
@@ -494,10 +495,11 @@ class Charcoal_Framework
 
 		// get routers list from profile
 		$routing_rule_name = $profile->getString( 'ROUTING_RULE' );
+		$routing_rule_name = us($routing_rule_name);
 
 		// register routers
 		$routing_rule = NULL;
-		if ( $routing_rule_name ) {
+		if ( !empty($routing_rule_name) ) {
 			$routing_rule = $sandbox->createObject( $routing_rule_name, 'routing_rule', array(), 'Charcoal_IRoutingRule' );
 		}
 

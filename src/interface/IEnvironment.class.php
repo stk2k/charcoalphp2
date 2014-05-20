@@ -34,7 +34,7 @@ interface Charcoal_IEnvironment
 	 *
 	 * @return string           replaced string
 	 */
-	public function replace( $str );
+	public function fill( $str );
 
 }
 
