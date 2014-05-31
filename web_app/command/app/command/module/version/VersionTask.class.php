@@ -18,7 +18,7 @@ class VersionTask extends Charcoal_Task
 	 */
 	public function processEvent( $context )
 	{
-		$version = Charcoal_Framework::getVersion();
+		$version = Charcoal_Framework::getVersion()->toString();
 
 		echo "CharcoalPHP {$version}." . PHP_EOL;
 		echo "Copyright (c)2008-2013 CharcoalPHP team." . PHP_EOL;

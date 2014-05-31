@@ -63,7 +63,7 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 			$out .= "   $message" . self::LOG_EOL;
 
 			// move to previous exception
-			$e = $e->getPreviousException();
+			$e = method_exists( $e, 'getPreviousException' ) ? $e->getPreviousException() : NULL;
 			$no ++;
 			if ( $e ){
 				$out .= self::LOG_EOL;

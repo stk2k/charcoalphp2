@@ -22,8 +22,8 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 
 		// magic_quotes_gpc対策
 		if ( get_magic_quotes_gpc() == 1 ){
-			$get = array_map( 'Charcoal_System::stripSlashes', $_GET); 
-			$post = array_map( 'Charcoal_System::stripSlashes', $_POST); 
+			$get = Charcoal_System::stripSlashes( $_GET ); 
+			$post = Charcoal_System::stripSlashes( $_POST ); 
 		}
 		else{
 			$get = $_GET;

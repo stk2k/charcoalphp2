@@ -99,6 +99,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	}
 
 	/**
+	 *	Get last insert id
+	 */
+	public function getLastInsertId()
+	{
+		return $this->impl->getLastInsertId();
+	}
+
+	/**
 	 * Set auto commit flag
 	 * 
 	 * @param bool $on          If TRUE, transaction will be automatically comitted.

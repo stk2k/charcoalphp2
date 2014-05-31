@@ -87,7 +87,7 @@ class Charcoal_ConfigLoader
 		$request = Charcoal_Framework::getRequest();
 		if ( $request )
 		{
-			$request_path = $request->getProcedurePath();
+			$request_path = us($request->getProcedurePath());
 
 			$pos = strpos( $request_path, '@' );
 			if ( $pos !== FALSE ){

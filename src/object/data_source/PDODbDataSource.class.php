@@ -50,13 +50,13 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	{
 		parent::configure( $config );
 
-		$this->backend   = $config->getString( 'backend' );
-		$this->user      = $config->getString( 'user' );
-		$this->password  = $config->getString( 'password' );
-		$this->db_name   = $config->getString( 'db_name' );
-		$this->server    = $config->getString( 'server' );
-		$this->charset   = $config->getString( 'charset' );
-		$this->autocommit = $config->getBoolean( 'autocommit', FALSE );
+		$this->backend   = us( $config->getString( 'backend' ) );
+		$this->user      = us( $config->getString( 'user' ) );
+		$this->password  = us( $config->getString( 'password' ) );
+		$this->db_name   = us( $config->getString( 'db_name' ) );
+		$this->server    = us( $config->getString( 'server' ) );
+		$this->charset   = us( $config->getString( 'charset' ) );
+		$this->autocommit = ub( $config->getBoolean( 'autocommit', FALSE ) );
 
 		if ( strlen($this->backend) === 0 ){
 			_throw( new Charcoal_ComponentConfigException( 'backend', 'mandatory' ) );

@@ -174,8 +174,8 @@ class Charcoal_System
 		}
 		else if ( is_array($value) ){
 			$ret = array();
-			foreach( $value as $item ){
-				$ret[] = self::escape( $item );
+			foreach( $value as $key => $item ){
+				$ret[$key] = self::escape( $item );
 			}
 			return $ret;
 		}
@@ -255,7 +255,11 @@ class Charcoal_System
 			return stripslashes($value);
 		}
 		else if ( is_array($value) ){
-			return array_map('Charcoal_System::stripSlashes', $value);
+			$array = $value;
+			foreach( $array as $key => $value ){
+				$array[$key] = self::stripSlashes( $value );
+			}
+			return $array;
 		}
 		else if ( is_object($value) ){
 			$object = $value;

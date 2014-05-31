@@ -86,6 +86,14 @@ class Charcoal_SmartGatewayImpl
 	}
 
 	/**
+	 *	Get last insert id
+	 */
+	public function getLastInsertId()
+	{
+		return $this->data_source->getLastInsertId();
+	}
+
+	/**
 	 *	get table model
 	 *	
 	 *	@param string $model_name       table model name

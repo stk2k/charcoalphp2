@@ -394,12 +394,12 @@ class Charcoal_Framework
 		self::$request = $request;
 //		log_debug( "debug,system","request object created: " . print_r($request,true), 'framework' );
 
-		self::$proc_path = $request->getProcedurePath();
+		self::$proc_path = us($request->getProcedurePath());
 //		log_debug( "debug,system","proc_path=" . $proc_path, 'framework' );
 
 		// if procedure path is not specified in url, forward the procedure to DEFAULT_PROCPATH in profile.ini
 		if ( strlen(self::$proc_path) === 0 ){
-			self::$proc_path = $profile->getString( 'DEFAULT_PROCPATH' );
+			self::$proc_path = us($profile->getString( 'DEFAULT_PROCPATH' ));
 		}
 
 		$sandbox->getEnvironment()->set( '%REQUEST_PATH%', self::$proc_path );
