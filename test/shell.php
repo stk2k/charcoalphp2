@@ -18,6 +18,7 @@ define( 'CHARCOAL_PROJECT', "test" );
 define( 'CHARCOAL_APPLICATION', "test" );
 define( 'CHARCOAL_DEFAULT_TIMEZONE', "Asia/Tokyo" );
 define( 'CHARCOAL_PROFILE', "shell" );
+define( 'CHARCOAL_DEBUG_OUTPUT', "shell" );
 
 //==================================================================
 // include framework globals

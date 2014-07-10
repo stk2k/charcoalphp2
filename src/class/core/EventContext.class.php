@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventContext
+class Charcoal_EventContext implements Charcoal_IEventContext
 {
 	private $procedure;
 	private $request;
@@ -24,11 +24,21 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	 */
 	public function __construct( $sandbox )
 	{
-		parent::__construct();
+//		parent::__construct();
 
 //		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
+	}
+
+	/**
+	 *   returns sandbox
+	 *
+	 * @return string           sandbox object
+	 */
+	public function getSandbox()
+	{
+		return $this->sandbox;
 	}
 
 	/**
@@ -173,6 +183,16 @@ class Charcoal_EventContext extends Charcoal_Object implements Charcoal_IEventCo
 	public function getProfile()
 	{
 		return $this->sandbox->getProfile();
+	}
+
+	/**
+	 *	Get sandbox environment
+	 *
+	 * @return Charcoal_IEnvironment         environment object
+	 */
+	public function getEnvironment()
+	{
+		return $this->sandbox->getEnvironment();
 	}
 
 	/**

@@ -14,13 +14,21 @@ class Charcoal_URLUtil
 	/*
 	 *	相対パスを作成
 	 */
-	public static function makeRelativeURL( Charcoal_ObjectPath $obj_path, Charcoal_Properties $params = NULL )
+	public static function makeRelativeURL( $sandbox, $obj_path, $params = NULL )
 	{
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
+		Charcoal_ParamTrait::checkHashMap( 3, $params, TRUE );
+
+		if ( is_string(us($obj_path)) ){
+			$obj_path = new Charcoal_ObjectPath($obj_path);
+		}
+
 		// プロシージャキーを取得
-		$proc_key = Charcoal_Profile::getString( s('PROC_KEY'), s('proc') );
+		$proc_key = $sandbox->getProfile()->getString('PROC_KEY', 'proc');
 
 		// URLを生成
-		$url = '/?' . $proc_key . '=' . $obj_path->getObjectName() . "@" . $obj_path->getVirtualPath();
+		$url = '/?' . us($proc_key) . '=' . $obj_path->getObjectName() . "@" . $obj_path->getVirtualPath();
 
 		// パラメータ部分
 		if ( $params ){
@@ -35,8 +43,12 @@ class Charcoal_URLUtil
 	/*
 	 *	絶対パスを作成
 	 */
-	public static function makeAbsoluteURL( Charcoal_ObjectPath $obj_path, Charcoal_Properties $params = NULL )
+	public static function makeAbsoluteURL( $sandbox, $obj_path, $params = NULL )
 	{
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
+		Charcoal_ParamTrait::checkHashMap( 3, $params, TRUE );
+
 		// サーバ名
 		$url = 'http://' . $_SERVER['SERVER_NAME'];
 
@@ -44,26 +56,10 @@ class Charcoal_URLUtil
 		$url .= dirname($_SERVER['SCRIPT_NAME']);
 
 		// 相対部分を追加
-		$url .= self::makeRelativeURL( $obj_path, $params );
+		$url .= self::makeRelativeURL( $sandbox, $obj_path, $params );
 
 		return $url;
 	}
-
-	/*
-	 *	URLとして正しいか検証
-	 */
-	public static function validateURL( Charcoal_String $url )
-	{
-		if ( preg_match('/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/', us($url)) )
-		{
-			return TRUE;
-		}
-		else{
-			return FALSE;
-		}
-	}
-
-
 }
 
 

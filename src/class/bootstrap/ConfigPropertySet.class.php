@@ -43,10 +43,12 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 		$value = parent::get( $section );
 
+/*
 		if ( !is_array($value) ){
 			_throw( new Charcoal_ConfigSectionNotFoundException( $section ) );
 		}
-
+*/
+		
 		return new Charcoal_ConfigPropertySet( $this->env, $value );
 	}
 

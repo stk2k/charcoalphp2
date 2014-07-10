@@ -14,7 +14,7 @@ interface Charcoal_IRouter extends Charcoal_ICharcoalObject
 	/**
 	 * Lookup routing rules
 	 *
-	 * @return Charcoal_Boolean TRUE if any rule is matched, otherwise FALSE
+	 * @return array returns combined array, FALSE if any pattern is matched.
 	 */
 	public function route( Charcoal_IRequest $request, Charcoal_IRoutingRule $rule );
 }

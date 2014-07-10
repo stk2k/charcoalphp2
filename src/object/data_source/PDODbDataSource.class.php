@@ -311,6 +311,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 			// 文字化け対策
 			$charset = $this->charset;
+			log_info( "debug,sql,data_source", "charset: [$charset]", "data_source" );
 			if ( strlen($charset) > 0 ){
 				switch( strtolower($charset) ){
 				case 'utf8':	$this->_query( s('SET NAMES `utf8`') );		break;
@@ -320,6 +321,9 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 					_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
 				}
 		//		$this->_query( "set character set $charset" );
+			}
+			else{
+				log_info( "debug,sql,data_source", "charset is empty.", "data_source" );
 			}
 
 			// 自動コミット
@@ -425,7 +429,9 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$sql = $sql->getValue();
 
-//		log_info( "sql", $sql, "data_source" );
+		$command_id = $this->command_id++;
+
+		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", "data_source" );
 
 		$stmt = $this->connection->query( $sql );
 

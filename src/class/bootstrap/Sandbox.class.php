@@ -20,6 +20,7 @@ class Charcoal_Sandbox
 	private $codebase;
 	private $container;
 	private $environment;
+	private $registry_access_log;
 
 	private $profile;
 	private $debug;
@@ -46,6 +47,8 @@ class Charcoal_Sandbox
 		$this->environment = isset($config['environment'])? $config['environment'] : $this->getDefaultEnvironment();
 
 		$this->profile = isset($config['profile'])? $config['profile'] : new Charcoal_SandboxProfile( $this );
+
+		$this->registry_access_log = new Charcoal_RegistryAccessLog( $this );
 	}
 
 	/**
@@ -136,7 +139,7 @@ class Charcoal_Sandbox
 	/**
 	 * get code base
 	 * 
-	 * @return Charcoal_ICodebase         codebase object
+	 * @return Charcoal_ICodebase         sandbox codebase object
 	 */
 	public function getCodebase()
 	{
@@ -144,9 +147,9 @@ class Charcoal_Sandbox
 	}
 
 	/**
-	 * get container
+	 * get container object
 	 * 
-	 * @return Charcoal_IContainer         container object
+	 * @return Charcoal_IContainer         sandbox container object
 	 */
 	public function getContainer()
 	{
@@ -154,9 +157,9 @@ class Charcoal_Sandbox
 	}
 
 	/**
-	 * get environment
+	 * get environment object
 	 * 
-	 * @return Charcoal_IEnvironment         environment object
+	 * @return Charcoal_IEnvironment         sandbox environment object
 	 */
 	public function getEnvironment()
 	{
@@ -164,9 +167,9 @@ class Charcoal_Sandbox
 	}
 
 	/**
-	 * get container
+	 * get profile object
 	 * 
-	 * @return Charcoal_IContainer         container object
+	 * @return Charcoal_SandboxProfile         sandbox profile object
 	 */
 	public function getProfile()
 	{
@@ -175,6 +178,16 @@ class Charcoal_Sandbox
 			_throw( new Charcoal_SandboxNotLoadedException( $file, $line ) );
 		}
 		return $this->profile;
+	}
+
+	/**
+	 * get registry access log object
+	 * 
+	 * @return Charcoal_RegistryAccessLog         registry access log object
+	 */
+	public function getRegistryAccessLog()
+	{
+		return $this->registry_access_log;
 	}
 
 	/*

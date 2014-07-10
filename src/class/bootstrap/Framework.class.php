@@ -524,8 +524,9 @@ class Charcoal_Framework
 					$router = $sandbox->createObject( $router_name, 'router', array(), 'Charcoal_IRouter' );
 
 					$res = $router->route( $request, $routing_rule );
-					if ( $res->isTrue() ){
+					if ( is_array($res) ){
 						self::$proc_path = $request->getProcedurePath();
+						$sandbox->getEnvironment()->set( '%REQUEST_PATH%', self::$proc_path );
 						log_debug( "debug,system","routed: proc_path=[" . self::$proc_path . "]", 'framework' );
 						break;
 					}
@@ -690,6 +691,20 @@ class Charcoal_Framework
 			}
 
 			self::$loggers->flush();
+		}
+
+		// output registry access logs to log file
+		$registry_access_log = $sandbox->getRegistryAccessLog();
+		if ( $registry_access_log ){
+			$logs = $registry_access_log->getAllLogs();
+			if ( is_array($logs) ){
+				foreach( $logs as $log ){
+					$message = isset($log['log']) ? $log['log'] : NULL;
+					if ( $message ){
+						log_debug( 'registry', $message, 'registry_access' );
+					}
+				}
+			}
 		}
 
 		// finally process

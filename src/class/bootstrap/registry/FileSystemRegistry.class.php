@@ -40,7 +40,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 		$provider = $this->sandbox->getConfigProvider();
 
 		// 'key' parameter is regarded as file path in this class
-		return $provider->loadConfig( $key );
+		return $provider->loadConfig( $key, $this->sandbox->getRegistryAccessLog() );
 	}
 
 }

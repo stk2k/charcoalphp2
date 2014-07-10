@@ -13,17 +13,19 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 	/**
 	 * Lookup routing rules
 	 *
-	 * @return Charcoal_Boolean TRUE if any rule is matched, otherwise FALSE
+	 * @return array returns combined array, FALSE if any pattern is matched.
 	 */
 	public function route( Charcoal_IRequest $request, Charcoal_IRoutingRule $rule )
 	{
 		// Get path info
-		$request_uri = $_SERVER["REQUEST_URI"];
-		$script_name = $_SERVER["SCRIPT_NAME"];
-		$dir_name    = dirname($script_name);
+		//$request_uri = $_SERVER["REQUEST_URI"];
+		//$script_name = $_SERVER["SCRIPT_NAME"];
+		//$dir_name    = dirname($script_name);
 
-		$pos = strpos( $request_uri, $dir_name );
-		$url = substr( $request_uri, $pos + strlen($dir_name) );
+		//$pos = strpos( $request_uri, $dir_name );
+		//$url = substr( $request_uri, $pos + strlen($dir_name) );
+
+		$url = rtrim($_SERVER["REQUEST_URI"],'/');
 
 		log_info( 'debug,router', "routing started. URL=[$url]" );
 
@@ -42,15 +44,22 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 
 				if ( $proc )
 				{
-					$a = self::_match( $pattern, $url );
-					log_info( 'debug,router', "params:" . print_r($a,true) );
+					$params = self::_match( $pattern, $url );
+					log_info( 'debug,router', "params:" . print_r($params,true) );
 
 					// match
-					if ( $a !== NULL ){
-						$request->setArray( $a );
+					if ( $params !== NULL ){
+						$request->setArray( $params );
 						$request->set( $proc_key, $proc );
 						log_info( 'debug,router', "routing rule matched! pattern=[$pattern] proc_path=[$proc]" );
-						return b(TRUE);
+
+						$result = array(
+							'proc' => $proc,
+							'params' => $params,
+							'pattern' => $pattern,
+							);
+
+						return $result;
 					}
 				}
 			}
@@ -61,7 +70,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 			log_warning( 'system,debug,router', "routing rule are not defined." );
 		}
 
-		return b(FALSE);
+		return FALSE;
 	}
 
 	/**
@@ -70,6 +79,9 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 	private static function _match( $rule, $url )
 	{
 		log_info( 'debug,router', "matching test: rule=[$rule] url=[$url]" );
+
+		// ルール、URLともに最後に/が無ければ付加
+		
 
 		$url_dir_array = explode( '/', $url );
 		$rule_dir_array = explode( '/', $rule );

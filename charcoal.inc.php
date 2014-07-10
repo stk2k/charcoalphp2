@@ -10,6 +10,9 @@ if ( !defined('CHARCOAL_CACHE_DIR') ){
 if ( !defined('CHARCOAL_TMP_DIR') ){
 	define( 'CHARCOAL_TMP_DIR', CHARCOAL_HOME . '/tmp' );
 }
+if ( !defined('CHARCOAL_DEBUG_OUTPUT') ){
+	define( 'CHARCOAL_DEBUG_OUTPUT', 'html' );
+}
 
 // タイムゾーン
 date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );

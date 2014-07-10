@@ -204,6 +204,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 		$total_actions = 0;
 		if ( $actions ){
 			foreach( $actions as $action ){
+				$action = trim($action);
 				if ( strlen($action) === 0 )    continue;
 
 				if ( $this->isValidAction( $action ) )	$total_actions ++;
@@ -229,7 +230,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 		print "Test started(total=$total_actions)." . eol();
 
 		foreach( $actions as $action ){
-			$actions = trim( $action );
+			$action = trim( $action );
 			if ( strlen($action) === 0 )    continue;
 
 			$this->action = $action;

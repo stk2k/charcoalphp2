@@ -14,7 +14,7 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	private $log_format;
 	private $converter;
 
-	const DEFAULT_LOG_FORMAT = '%Y4%-%M2%-%D2% %H2%:%M%:%S% [%REMOTE_ADDR%] [%LEVEL%] [%TAG%] %MESSAGE%       @%FILENAME%(%LINE%)';
+	const DEFAULT_LOG_FORMAT = '%Y4%-%M2%-%D2% %H2%:%M%:%S% [%REQUEST_PATH%] [%REMOTE_ADDR%] [%LEVEL%] [%TAG%] %MESSAGE%       @%FILENAME%(%LINE%)';
 
 	/*
 	 *	Construct object

@@ -4,7 +4,7 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
 	/*
 	 * クラスとパスの対応を表す連想配列を取得
 	 */
-	public function getClassPathAssoc( $class_name )
+	public function getClassPathAssoc()
 	{
 		return array(
 				// constant classes

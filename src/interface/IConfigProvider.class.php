@@ -21,11 +21,12 @@ interface Charcoal_IConfigProvider
 	/**
 	 *  load config
 	 *
-	 * @param  string $key       config key
+	 * @param  string|Charcoal_String $key                  config key
+	 * @param  Charcoal_RegistryAccessLog $access_log       registry access log
 	 *
 	 * @return array   configure data
 	 */
-	public function loadConfig( $key );
+	public function loadConfig( $key, $access_log = NULL );
 
 }
 

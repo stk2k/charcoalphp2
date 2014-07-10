@@ -30,7 +30,7 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	{
 		parent::configure($config);
 
-		$this->is_secure     = $config->getBoolean( 'is_secure', FALSE );
+		$this->is_secure = ub( $config->getBoolean( 'is_secure', FALSE ) );
 
 	}
 
@@ -75,21 +75,19 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 		$sequence = $context->getSequence();
 		$request  = $context->getRequest();
 
-		// ログインチェック
-		if ( $this->is_secure === TRUE && !$this->isAuthorized( $sequence ) === TRUE )
+		if ( $this->is_secure )
 		{
-			// セキュリティ違反イベントを作成
-			return $this->getSandbox()->createEvent( s('security_fault') );
-		}
-
-		// 権限チェック
-		if ( $this->is_secure === TRUE && $this->isAuthorized( $sequence ) === TRUE )
-		{
-			$has_permission = $this->hasPermission( $context );
-			if ( $has_permission === NULL ){
-				$has_permission = FALSE;
+			// ログインチェック
+			$auth = $this->isAuthorized( $sequence );
+			if ( ub($auth) !== TRUE )
+			{
+				// セキュリティ違反イベントを作成
+				return $this->getSandbox()->createEvent( s('security_fault') );
 			}
-			if ( $has_permission !== TRUE )
+
+			// 権限チェック
+			$has_permission = $this->hasPermission( $context );
+			if ( ub($has_permission) !== TRUE )
 			{
 				// パーミッションがない場合の処理
 				$event = $this->permissionDenied( $context );

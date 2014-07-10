@@ -123,6 +123,7 @@ exit;
 
 				// Basic enum classes	
 				'Charcoal_EnumCoreHookStage' 					=> 'constant',
+				'Charcoal_EnumRegistryAccesslogResult'			=> 'constant',
 
 				// Basic interface classes	
 				'Charcoal_ICollection' 							=> 'interface',
@@ -227,6 +228,7 @@ exit;
 				'Charcoal_LoggerList'					=> 'class/bootstrap',
 				'Charcoal_LogMessage' 					=> 'class/bootstrap',
 				'Charcoal_SandboxProfile' 				=> 'class/bootstrap',
+				'Charcoal_RegistryAccessLog' 			=> 'class/bootstrap',
 				'Charcoal_ResourceLocator' 				=> 'class/bootstrap',
 				'Charcoal_System' 						=> 'class/bootstrap',
 				'Charcoal_Sandbox' 						=> 'class/bootstrap',

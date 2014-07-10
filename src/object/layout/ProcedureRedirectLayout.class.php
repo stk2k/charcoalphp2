@@ -11,17 +11,23 @@
 
 class Charcoal_ProcedureRedirectLayout extends Charcoal_AbstractLayout
 {
+	private $_sandbox;
 	private $_obj_path;
 	private $_params;
 
 	/*
 	 *	コンストラクタ
 	 */
-	public function __construct( Charcoal_ObjectPath $obj_path, Charcoal_Properties $params = NULL )
+	public function __construct( $sandbox, $obj_path, $params = NULL )
 	{
+		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
+		Charcoal_ParamTrait::checkHashMap( 2, $params, TRUE );
+
 		parent::__construct( p(array()) );
 
-		$this->_obj_path = $obj_path;
+		$this->_sandbox    = $sandbox;
+		$this->_obj_path = is_string(us($obj_path)) ? new Charcoal_ObjectPath($obj_path) : $obj_path;
 		$this->_params    = $params ? $params : m(array());
 	}
 
@@ -46,7 +52,7 @@ class Charcoal_ProcedureRedirectLayout extends Charcoal_AbstractLayout
 	 */
 	public function makeRedirectURL()
 	{
-		$url = Charcoal_URLUtil::makeAbsoluteURL( $this->_obj_path, $this->_params );
+		$url = Charcoal_URLUtil::makeAbsoluteURL( $this->_sandbox, $this->_obj_path, $this->_params );
 
 		return $url;
 	}

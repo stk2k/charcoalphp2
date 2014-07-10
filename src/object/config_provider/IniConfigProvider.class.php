@@ -32,42 +32,56 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	/**
 	 *  load config
 	 *
-	 * @param  string $key          config key
+	 * @param  string|Charcoal_String $key                  config key
+	 * @param  Charcoal_RegistryAccessLog $access_log       registry access log
 	 *
 	 * @return mixed   configure data
 	 */
-	public function loadConfig( $key )
+	public function loadConfig( $key, $access_log = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_RegistryAccessLog', $access_log, TRUE );
 
 		$source = $key . '.ini';
 
 		$is_debug = b($this->debug)->isTrue();
 
+	    $result = NULL;
 		if ( !is_file($source) ){
 			if ( $is_debug ){
 				print "ini file[$source] does not exist." . eol();
 				log_warning( "system, debug, config", "config", "ini file[$source] does not exist." );
 			}
-			return NULL;
-		}
-
-		// read ini file
-	    $ini_config = @parse_ini_file( $source, TRUE );
-		if ( b($this->debug)->isTrue() ){
-			print "[$source] parse_ini_file($source)=" . eol();
-			ad( $ini_config );
-		}
-		if ( $ini_config === FALSE ){	
-			if ( $is_debug ){
-				print "parse_ini_file failed: [$source]" . eol();
-				log_warning( "system, debug, config", "config", "parse_ini_file failed: [$source]" );
+			if ( $access_log ){
+				$access_log->addLog($source . '[**NOT FOUND**]', Charcoal_EnumRegistryAccesslogResult::E_NOT_FOUND );
 			}
-			return NULL;
 		}
-		if ( $is_debug ) log_debug( "system, debug, config", "config", "read ini file[$source]:" . print_r($ini_config,true) );
+		else{
+			// read ini file
+		    $result = @parse_ini_file( $source, TRUE );
+			if ( $is_debug ){
+				print "[$source] parse_ini_file($source)=" . eol();
+				ad( $result );
 
-		return $ini_config;
+				if ( $result === FALSE ){
+					print "parse_ini_file failed: [$source]" . eol();
+					log_warning( "system, debug, config", "config", "parse_ini_file failed: [$source]" );
+				}
+				else{
+					log_debug( "system, debug, config", "config", "read ini file[$source]:" . print_r($ini_config,true) );
+				}
+			}
+			if ( $access_log ){
+				if ( $result === FALSE ){
+					$access_log->addLog($source . '[**FAILED**]', Charcoal_EnumRegistryAccesslogResult::E_FAILED );
+				}
+				else{
+					$access_log->addLog($source . '[SUCCESS]', Charcoal_EnumRegistryAccesslogResult::SUCCESS );
+				}
+			}
+		}
+
+		return $result;
 	}
 
 }
