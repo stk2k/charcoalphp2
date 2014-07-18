@@ -57,7 +57,7 @@ class Charcoal_RegistryAccessLog extends Charcoal_Object
 	/*
 	 * filter access logs
 	 * 
-	 * @param Charcoal_EnumRegistryAccesslogResult $result      access result mask
+	 * @param Charcoal_EnumRegistryAccessLogResult $result      access result mask
 	 */
 	public function filter( $result_mask )
 	{

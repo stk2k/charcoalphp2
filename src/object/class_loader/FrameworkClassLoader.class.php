@@ -26,6 +26,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 		// enum constant classes
 				'Charcoal_EnumSmtpStatusCode'		=> 'constant',
 				'Charcoal_EnumEventPriority'		=> 'constant',
+				'Charcoal_EnumHttpMethod'			=> 'constant',
 				'Charcoal_EnumSQLJoinType'			=> 'constant',
 				'Charcoal_EnumSQLAggregateFunc'		=> 'constant',
 
@@ -97,6 +98,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ExceptionEvent'						=> 'object/event',
 				'Charcoal_HttpRequestEvent'						=> 'object/event',
 				'Charcoal_PermissionDeniedEvent'				=> 'object/event',
+				'Charcoal_RenderEvent'							=> 'object/event',
 				'Charcoal_RenderLayoutEvent'					=> 'object/event',
 				'Charcoal_SecurityFaultEvent'					=> 'object/event',
 				'Charcoal_SetupEvent'							=> 'object/event',

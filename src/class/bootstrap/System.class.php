@@ -675,9 +675,16 @@ class Charcoal_System
 
 				$lines[] = $line;
 
-				$vars = self::getObjectVars( $value );
-				foreach( $vars as $_key => $_value ){
-					self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth, $recursion );
+				if ( $value instanceof Traversable ){
+					foreach( $value as $_key => $_value ){
+						self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth, $recursion );
+					}
+				}
+				else{
+					$vars = self::getObjectVars( $value );
+					foreach( $vars as $_key => $_value ){
+						self::_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth, $recursion );
+					}
 				}
 			}
 			break;
@@ -772,11 +779,22 @@ class Charcoal_System
 				$clazz = get_class( $value );
 				$id = function_exists('spl_object_hash') ? spl_object_hash($value) : 'unknown';
 				$lines[] = str_repeat( '-', $depth * 4 ) . "[$key:object($clazz)@$id]";
-				$vars = self::getObjectVars( $value );
-				foreach( $vars as $_key => $_value ){
-					$_type = gettype($_value);
-					if ( $_type == 'array' || $_type == 'object' ){
-						self::_tree_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth );
+				
+				if ( $value instanceof Traversable ){
+					foreach( $value as $_key => $_value ){
+						$_type = gettype($_value);
+						if ( $_type == 'array' || $_type == 'object' ){
+							self::_tree_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth );
+						}
+					}
+				}
+				else{
+					$vars = self::getObjectVars( $value );
+					foreach( $vars as $_key => $_value ){
+						$_type = gettype($_value);
+						if ( $_type == 'array' || $_type == 'object' ){
+							self::_tree_dump( $_key, $_value, $depth + 1, $max_string_length, $lines, $max_depth );
+						}
 					}
 				}
 			}
@@ -815,7 +833,11 @@ class Charcoal_System
 	{
 		$vars = array();
 
-		$props = $class_obj->getProperties();
+		$filter = ( version_compare(PHP_VERSION, '5.3.0') >= 0 ) ?
+				ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE : 
+				ReflectionProperty::IS_PUBLIC;
+
+		$props = $class_obj->getProperties($filter);
 		foreach( $props as $p ){
 			if ( version_compare(PHP_VERSION, '5.3.0') >= 0 ){
 				$p->setAccessible(true);			// ReflectionProperty#setAccessible is implemented PHP 5.3.0 or later 

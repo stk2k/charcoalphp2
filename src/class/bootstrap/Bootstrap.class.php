@@ -123,7 +123,7 @@ exit;
 
 				// Basic enum classes	
 				'Charcoal_EnumCoreHookStage' 					=> 'constant',
-				'Charcoal_EnumRegistryAccesslogResult'			=> 'constant',
+				'Charcoal_EnumRegistryAccessLogResult'			=> 'constant',
 
 				// Basic interface classes	
 				'Charcoal_ICollection' 							=> 'interface',

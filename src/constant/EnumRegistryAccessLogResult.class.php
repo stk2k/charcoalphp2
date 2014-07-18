@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_EnumRegistryAccesslogResult extends Charcoal_Enum
+class Charcoal_EnumRegistryAccessLogResult extends Charcoal_Enum
 {
 	const SUCCESS                         = 0x0001;
 	const E_NOT_FOUND                     = 0x0002;

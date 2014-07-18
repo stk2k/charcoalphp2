@@ -12,6 +12,8 @@
 class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 {
 	private $cookie;
+	private $method;
+
 
 	/*
 	 *	コンストラクタ
@@ -28,6 +30,23 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 		else{
 			$get = $_GET;
 			$post = $_POST;
+		}
+
+		// detext HTTP method
+		$method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+		switch( $method ){
+		case 'POST':
+			$this->method = Charcoal_EnumHttpMethod::HTTP_POST;
+			break;
+		case 'GET':
+			$this->method = Charcoal_EnumHttpMethod::HTTP_GET;
+			break;
+		case 'PUT':
+			$this->method = Charcoal_EnumHttpMethod::HTTP_PUT;
+			break;
+		case 'DELETE':
+			$this->method = Charcoal_EnumHttpMethod::HTTP_DELETE;
+			break;
 		}
 
 		$this->values = array_merge( $get, $post );

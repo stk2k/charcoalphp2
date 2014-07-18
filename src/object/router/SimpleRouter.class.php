@@ -44,6 +44,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 
 				if ( $proc )
 				{
+					log_info( 'debug,router', "testing pattern=[$pattern] url=[$url]" );
 					$params = self::_match( $pattern, $url );
 					log_info( 'debug,router', "params:" . print_r($params,true) );
 
@@ -80,40 +81,51 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 	{
 		log_info( 'debug,router', "matching test: rule=[$rule] url=[$url]" );
 
-		// ルール、URLともに最後に/が無ければ付加
-		
+		$parsed_url = parse_url($url);
+
+		$url = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+		$query = isset($parsed_url['query']) ? $parsed_url['query'] : '';
+
+		$params = array();
+		parse_str( $query, $params );
+
+		$url = trim($url,'/');
+		$rule = trim($rule,'/');
 
 		$url_dir_array = explode( '/', $url );
 		$rule_dir_array = explode( '/', $rule );
 
-		if ( count($url_dir_array) !== count($rule_dir_array) ){
+		$cnt_url = count($url_dir_array);
+		$cnt_rule = count($rule_dir_array);
+
+		if ( $cnt_url !== $cnt_rule ){
 			// マッチしなかった
-			log_info( 'debug,router', "[$rule] did not matched to [$url]" );
+			log_info( 'debug,router', "[$rule] did not matched to [$url]: cnt_url=$cnt_url cnt_rule=$cnt_rule" );
+		ad($url);
 			return NULL;
 		}
-
-		$a = array();
 
 		foreach( $rule_dir_array as $rule_dir ){
 			$url_dir = array_shift( $url_dir_array );
 			if ( strpos($rule_dir,':') === 0 && strlen($url_dir) > 0 ){
 				// コロンで始まる階層は変数名
 				$key = substr($rule_dir,1);
-				$a[ $key ] = $url_dir;
+				$params[ $key ] = $url_dir;
 			}
 			else if ( $rule_dir !== $url_dir ){
 				// マッチしなかった
-				log_info( 'debug,router', "[$rule] did not matched to [$url]" );
+		ad($url);
+				log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir" );
 				return NULL;
 			}
 			log_info( 'debug,router', "maches directory: [$rule_dir]" );
 		}
 
 		log_info( 'debug,router', "[$rule] matched to [$url]" );
-		log_info( 'debug,router', "parameters:" . print_r($a,true) );
+		log_info( 'debug,router', "parameters:" . print_r($params,true) );
 		log_info( 'debug,router', "URLマッピングルールにマッチしました。ルール=[$rule]" );
 
-		return $a;
+		return $params;
 	}
 
 }

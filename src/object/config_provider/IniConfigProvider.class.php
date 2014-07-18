@@ -53,7 +53,7 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 				log_warning( "system, debug, config", "config", "ini file[$source] does not exist." );
 			}
 			if ( $access_log ){
-				$access_log->addLog($source . '[**NOT FOUND**]', Charcoal_EnumRegistryAccesslogResult::E_NOT_FOUND );
+				$access_log->addLog($source . '[**NOT FOUND**]', Charcoal_EnumRegistryAccessLogResult::E_NOT_FOUND );
 			}
 		}
 		else{
@@ -68,15 +68,15 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 					log_warning( "system, debug, config", "config", "parse_ini_file failed: [$source]" );
 				}
 				else{
-					log_debug( "system, debug, config", "config", "read ini file[$source]:" . print_r($ini_config,true) );
+					log_debug( "system, debug, config", "config", "read ini file[$source]:" . print_r($result,true) );
 				}
 			}
 			if ( $access_log ){
 				if ( $result === FALSE ){
-					$access_log->addLog($source . '[**FAILED**]', Charcoal_EnumRegistryAccesslogResult::E_FAILED );
+					$access_log->addLog($source . '[**FAILED**]', Charcoal_EnumRegistryAccessLogResult::E_FAILED );
 				}
 				else{
-					$access_log->addLog($source . '[SUCCESS]', Charcoal_EnumRegistryAccesslogResult::SUCCESS );
+					$access_log->addLog($source . '[SUCCESS]', Charcoal_EnumRegistryAccessLogResult::SUCCESS );
 				}
 			}
 		}
