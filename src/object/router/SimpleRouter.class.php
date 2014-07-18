@@ -101,7 +101,6 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 		if ( $cnt_url !== $cnt_rule ){
 			// マッチしなかった
 			log_info( 'debug,router', "[$rule] did not matched to [$url]: cnt_url=$cnt_url cnt_rule=$cnt_rule" );
-		ad($url);
 			return NULL;
 		}
 
@@ -114,7 +113,6 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 			}
 			else if ( $rule_dir !== $url_dir ){
 				// マッチしなかった
-		ad($url);
 				log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir" );
 				return NULL;
 			}
