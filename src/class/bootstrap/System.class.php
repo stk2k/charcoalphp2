@@ -24,6 +24,16 @@ class Charcoal_System
 	const BITTEST_MODE_ANY = 2;
 
 	/**
+	 *  Get all defined constants
+	 *  
+	 */
+	public static function getDefinedConstants()
+	{
+		$all = get_defined_constants(TRUE);
+		return isset($all['user']) ? $all['user'] : array();
+	}
+
+	/**
 	 *  Test if specified bit flag is set
 	 *  
 	 *  @param int $target              target value to test
