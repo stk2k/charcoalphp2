@@ -46,7 +46,9 @@ class Charcoal_QueryTarget extends Charcoal_Object
 	 */
 	public function __construct( $expression )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $expression );
+		Charcoal_ParamTrait::checkString( 1, $expression );
+
+		$expression = us($expression);
 
 		parent::__construct();
 

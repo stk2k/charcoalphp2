@@ -331,6 +331,160 @@ HTML_HEADER;
 		$html .= '<div id="charcoal">' . PHP_EOL;
 		$html .= '<h1><div class="value">' . $title . '</div></h1>' . PHP_EOL;
 
+		// PHP info
+		$phpinfo = array(
+				'PHP_VERSION' => PHP_VERSION,
+
+			);
+
+		$html .= '<h2><div class="value">PHP Info&nbsp;&nbsp;<a href="#" onclick="expand(\'phpinfo\');">(' . count($phpinfo) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="phpinfo" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $phpinfo as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+		// Framework info
+		$frameworkinfo = array(
+				'CharcoalPHP ver.' => Charcoal_Framework::getVersion(),
+
+			);
+
+		$html .= '<h2><div class="value">Framework Info&nbsp;&nbsp;<a href="#" onclick="expand(\'frameworkinfo\');">(' . count($phpinfo) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="frameworkinfo" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $frameworkinfo as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+		// $_SERVER variables
+
+		$html .= '<h2><div class="value">$_SERVER variables&nbsp;&nbsp;<a href="#" onclick="expand(\'servervariables\');">(' . count($_SERVER) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="servervariables" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $_SERVER as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+		// $_COOKIE variables
+
+		$html .= '<h2><div class="value">$_COOKIE variables&nbsp;&nbsp;<a href="#" onclick="expand(\'cookievariables\');">(' . count($_COOKIE) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="cookievariables" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $_COOKIE as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+		// $_ENV variables
+
+		$html .= '<h2><div class="value">$_ENV variables&nbsp;&nbsp;<a href="#" onclick="expand(\'envvariables\');">(' . count($_ENV) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="envvariables" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $_ENV as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+		// output loaded extensions
+		$loaded_extensions = get_loaded_extensions();
+
+		$html .= '<h2><div class="value">Loaded Extensions&nbsp;&nbsp;<a href="#" onclick="expand(\'loaded_extensions\');">(' . count($loaded_extensions) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="loaded_extensions" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $loaded_extensions as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+
+
+		// output defined constants
+		$declared_constants = Charcoal_System::getUserDefinedConstants();
+
+		$html .= '<h2><div class="value">User Declared Constants&nbsp;&nbsp;<a href="#" onclick="expand(\'declared_constants\');">(' . count($declared_constants) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="declared_constants" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $declared_constants as $name => $value )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
 		// output defined interfaces
 		$declared_interfaces = get_declared_interfaces();
 		$interfaces = NULL;

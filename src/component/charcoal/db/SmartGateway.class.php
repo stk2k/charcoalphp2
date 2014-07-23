@@ -605,7 +605,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target               description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria     criteria object
 	 */
-	public function destroyAll( $model_name, $criteria ) 
+	public function destroyAll( $query_target, $criteria ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){

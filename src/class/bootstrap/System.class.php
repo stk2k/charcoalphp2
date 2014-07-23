@@ -27,7 +27,7 @@ class Charcoal_System
 	 *  Get all defined constants
 	 *  
 	 */
-	public static function getDefinedConstants()
+	public static function getUserDefinedConstants()
 	{
 		$all = get_defined_constants(TRUE);
 		return isset($all['user']) ? $all['user'] : array();

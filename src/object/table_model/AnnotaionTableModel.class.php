@@ -44,7 +44,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 			if ( isset($annot_map['pk']) ){
 				if ( $this->_primary_key ){
 					// 2回以上指定はできない
-					_throw( new Charcoal_AnnotaionException( $field, "@pk", "@pk annotation must be one per model" ) );
+					_throw( new Charcoal_AnnotaionException( $class_name, $field, "@pk", "@pk annotation must be one per model" ) );
 				}
 				$this->_primary_key = $field;
 			}
@@ -54,7 +54,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 				$a_value = $annot_map['fk'];
 				$model_name = $a_value->getValue();
 				if ( !$model_name || $model_name->isEmpty() ){
-					_throw( new Charcoal_AnnotaionException( $field, "@fk", "@fk annotation requires model name" ) );
+					_throw( new Charcoal_AnnotaionException( $class_name, $field, "@fk", "@fk annotation requires model name" ) );
 				}
 				$this->_foreign_keys[us($model_name)] = $field;
 			}
@@ -219,7 +219,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 					}
 					else{
 						// アノテーションフォーマット例外
-						_throw( new Charcoal_AnnotaionException( $field, $name, 'illegal format' ) );
+						_throw( new Charcoal_AnnotaionException( $class_name, $field, $name, 'illegal format' ) );
 					}
 				}
 				// アノテーション追加

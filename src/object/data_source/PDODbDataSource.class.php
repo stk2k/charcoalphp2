@@ -86,11 +86,28 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	/**
 	 *	get last exectuted SQL
 	 *	
+	 *	@param bool|Charcoal_Boolean $throw   If TRUE, throws Charcoal_StackEmptyException when executed SQL stack is empty.
+	 *	
 	 *	@return Charcoal_ExecutedSQL       executed SQL
 	 */
-	public function popExecutedSQL()
+	public function popExecutedSQL( $throw = FALSE )
 	{
-		return $this->exec_sql_stack->pop();
+		$throw = b($throw);
+
+		$item = NULL;
+		try{
+			$item = $this->exec_sql_stack->pop();
+		}
+		catch( Charcoal_StackEmptyException $ex ){
+
+			_catch( $ex );
+
+			if ( $throw->isTrue() ){
+				_throw( $ex );
+			}
+
+		}
+		return $item;
 	}
 
 	/**
@@ -399,6 +416,9 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$params = $params ? $params : array();
 
+		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql, $params) );
+		
+
 		$success = $stmt->execute( $params );
 
 		if ( !$success ){
@@ -408,8 +428,6 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
-		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql, $params) );
-		
 		$numRows = $stmt->rowCount();
 		log_info( "data_source,sql,debug", "[ID]$command_id ...success(numRows=$numRows)", "data_source" );
 
@@ -433,9 +451,9 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", "data_source" );
 
-		$stmt = $this->connection->query( $sql );
-
 		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
+
+		$stmt = $this->connection->query( $sql );
 
 		return $stmt;
 	}
@@ -449,6 +467,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		// 接続処理
 		$this->connect();
+
+		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
 
 		// SQLを実行して結果セットを得る
 		$stmt = $this->_query( $sql );
@@ -466,6 +486,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		// 接続処理
 		$this->connect();
+
+		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
 
 		// SQLを実行
 		$this->_query( $sql );
