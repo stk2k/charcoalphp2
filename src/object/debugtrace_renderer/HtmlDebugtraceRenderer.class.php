@@ -84,6 +84,17 @@ class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRendere
     font-size: 12px;
     font-weight: bold;
   }
+  #charcoal td.key {
+    background-color: mistyrose;
+    color: green;
+    font-size: 13px;
+    font-weight: bold;
+  }
+  #charcoal td.value {
+    background-color: seashell;
+    color: royalblue;
+    font-size: 12px;
+  }
   #charcoal td.title, td.message {
     border-right: 1px silver solid;
     border-bottom: 1px silver solid;
@@ -322,6 +333,22 @@ HTML_HEADER;
 	}
 
 	/**
+	 * Get php.ini settings
+	 */
+	private static function _getPhpValue( $key )
+	{
+		$value = ini_get($key);
+
+		switch( $key ){
+		case 'display_errors':
+			//$value = Charcoal_System::phpErrorString()
+			break;
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Print HTML Body
 	 */
 	private static function _makeHtmlBody( $e, $title, $file, $line )
@@ -334,7 +361,7 @@ HTML_HEADER;
 		// PHP info
 		$phpinfo = array(
 				'PHP_VERSION' => PHP_VERSION,
-
+				'date_default_timezone' => date_default_timezone_get(),
 			);
 
 		$html .= '<h2><div class="value">PHP Info&nbsp;&nbsp;<a href="#" onclick="expand(\'phpinfo\');">(' . count($phpinfo) . ')</a></div></h2>' . PHP_EOL;
@@ -346,10 +373,34 @@ HTML_HEADER;
 		{
 			$html .= '<tr>' . PHP_EOL;
 			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
+		// php.ini info
+		$php_ini = ini_get_all();
+
+		$html .= '<h2><div class="value">php.ini&nbsp;&nbsp;<a href="#" onclick="expand(\'php_ini\');">(' . count($php_ini) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="php_ini" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $php_ini as $key => $item )
+		{
+			$local_value = isset($item['local_value']) ? $item['local_value'] : NULL;
+
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $key . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $local_value . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
 			$no ++;
@@ -371,10 +422,10 @@ HTML_HEADER;
 		{
 			$html .= '<tr>' . PHP_EOL;
 			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $value . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
 			$no ++;
@@ -392,10 +443,10 @@ HTML_HEADER;
 		{
 			$html .= '<tr>' . PHP_EOL;
 			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $value . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
 			$no ++;
@@ -413,10 +464,10 @@ HTML_HEADER;
 		{
 			$html .= '<tr>' . PHP_EOL;
 			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $value . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
 			$no ++;
@@ -434,10 +485,10 @@ HTML_HEADER;
 		{
 			$html .= '<tr>' . PHP_EOL;
 			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $value . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
 			$no ++;
@@ -476,9 +527,11 @@ HTML_HEADER;
 		foreach( $declared_constants as $name => $value )
 		{
 			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <th class="no">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $name . '</span></td>' . PHP_EOL;
-			$html .= '  <td class="title"><span class="value">' . $value . '</span></td>' . PHP_EOL;
+			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <td class="value"><span class="value">' . $value . '</span></td>' . PHP_EOL;
 			$html .= '</tr>' . PHP_EOL;
 
 			$no ++;
