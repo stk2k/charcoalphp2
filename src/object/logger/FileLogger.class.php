@@ -11,10 +11,11 @@
 
 class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_ILogger
 {
-	private $_open;
-	private $_fp;
-	private $_file_name;
-	private $_line_end;
+	private $open;
+	private $fp;
+	private $logs_dir;
+	private $file_name;
+	private $line_end;
 
 	const CRLF = "\r\n";
 
@@ -25,9 +26,9 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	{
 		parent::__construct();
 
-		$this->_open         = false;
-		$this->_fp           = null;
-		$this->_file_name    = null;
+		$this->open        = false;
+		$this->fp          = null;
+		$this->logs_dir    = null;
 	}
 
 	/*
@@ -47,30 +48,20 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	{
 		parent::configure( $config );
 
-		$file_name   = $config->getString( 'file_name', 'charcoal.log', TRUE );
-		$logs_dir    = $config->getString( 'logs_dir', '%WEBAPP_DIR%/logs', TRUE );
+		$this->file_name   = $config->getString( 'file_name', '', TRUE );
+		$this->logs_dir    = $config->getString( 'logs_dir', '%APPLICATION_DIR%/logs', TRUE );
+		$this->line_end    = $config->getString( 'line_end', self::CRLF );
 
-		if ( $file_name === NULL ){
+		if ( empty($this->file_name) ){
 			_throw( new Charcoal_ComponentConfigException( 'file_name', 'mandatory' ) );
 		}
-
-		$file_name = parent::formatFileName( $file_name );
-
-		if ( $logs_dir !== NULL ){
-			$this->_file_name = $logs_dir . DIRECTORY_SEPARATOR . $file_name;
-		}
-		else{
-			$this->_file_name = Charcoal_ResourceLocator::getApplicationPath( 'logs', $file_name );
-		}
-
-		$this->_line_end  = $config->getString( 'line_end', self::CRLF );
 	}
 
 	/*
-	 * ファイル名を取得
+	 * get actual log file name
 	 */
-	public function getFileName(){
-		return $this->_file_name;
+	protected function getRealFileName(){
+		return $this->logs_dir . DIRECTORY_SEPARATOR . parent::formatFileName( $this->file_name );
 	}
 
 	/*
@@ -78,7 +69,7 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	 */
 	public function isOpen()
 	{
-		return $this->_open;
+		return $this->open;
 	}
 
 	/*
@@ -87,10 +78,10 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	public function open()
 	{
 		// すでに開いているならなにもしない
-		if ( $this->_open ){
+		if ( $this->open ){
 			return;
 		}
-		$file_name = us($this->_file_name);
+		$file_name = $this->getRealFileName();
 		$dir_path = dirname($file_name);
 		$dir = new Charcoal_File( s($dir_path) );
 
@@ -102,8 +93,8 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 			print "FATAL error occured while output log file:{$this->_file_name} error=$e" . PHP_EOL;
 		}
 
-		$this->_fp = fopen($file_name, "a");
-		$this->_open = ($this->_fp != FALSE);
+		$this->fp = fopen($file_name, "a");
+		$this->open = ($this->fp != FALSE);
 	}
 
 	/*
@@ -111,11 +102,11 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	 */
 	public function close()
 	{
-		if ( $this->_fp != null ){
-			fclose ($this->_fp);
-			$this->_fp = null;
+		if ( $this->fp != null ){
+			fclose ($this->fp);
+			$this->fp = null;
 		}
-		$this->_open = false;
+		$this->open = false;
 	}
 
 	/*
@@ -123,7 +114,7 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	 */
 	protected function write( Charcoal_String $data )
 	{
-		$ret = fwrite( $this->_fp, us($data) );
+		$ret = fwrite( $this->fp, us($data) );
 
 		if ( $ret === FALSE ){
 			print "[Warning]FileLogger fwrite failed. file=" . us($this->_file_name) . "<br>" . PHP_EOL;
@@ -139,7 +130,7 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 		$this->open();
 
 		// フォーマット
-		$out = parent::formatMessage( $message )  . us($this->_line_end);
+		$out = parent::formatMessage( $message )  . us($this->line_end);
 
 		$this->write( s($out) ); 
 

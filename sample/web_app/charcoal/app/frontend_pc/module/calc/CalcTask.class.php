@@ -32,17 +32,22 @@ class CalcTask extends Charcoal_Task
 		$b = $request->getInteger( 'b', 0 );
 		$op = $request->getString( 'op', '+' );
 
+		$a = ui($a);
+		$b = ui($b);
+		$op = us($op);
+
+		$result = NULL;
 		switch( $op ){
-		case '+':
+		case 'add':
 			$result = $a + $b;
 			break;
-		case '-':
+		case 'sub':
 			$result = $a - $b;
 			break;
-		case '*':
+		case 'mul':
 			$result = $a * $b;
 			break;
-		case '/':
+		case 'div':
 			if ( $b == 0 ){
 				throw new DivisionByZeroException();
 			}
@@ -51,7 +56,21 @@ class CalcTask extends Charcoal_Task
 		}
 
 		// show message
-		echo "result:" . $result . eol();
+		if ( $result ){
+			echo "result:" . $result . eol();
+		}
+		else{
+			echo "<pre>USAGE:" . PHP_EOL;
+
+			echo "http://" . $_SERVER['SERVER_NAME'] . "/calc/value1/value2/[add/sub/mul/div]" . PHP_EOL;
+			echo "value1, value2: number" . eol();
+			echo "add: shows result of 'value1 + value2'" . PHP_EOL;
+			echo "sub: shows result of 'value1 - value2'" . PHP_EOL;
+			echo "mul: shows result of 'value1 * value2'" . PHP_EOL;
+			echo "div: shows result of 'value1 / value2'" . PHP_EOL;
+
+			echo "</pre>" . eol();
+		}
 
 		// return TRUE if processing the procedure success.
 		return TRUE;

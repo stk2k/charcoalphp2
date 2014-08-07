@@ -57,7 +57,7 @@ class Charcoal_ExecutedSQL extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return us($this->binded_sql);
+		return us($this->sql);
 	}
 }
 

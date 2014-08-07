@@ -10,14 +10,9 @@
 */
 class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 {
-	private $task_manager;
 	private $use_session;
-	private $forward_target;
 	private $sequence;
-	private $modules;
-	private $events;
 	private $layout_manager;
-	private $response_filters;
 
 	/**
 	 * Initialize instance
@@ -26,43 +21,19 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 	 */
 	public function configure( $config )
 	{
-			if ( $this->getSandbox()->isDebug() ){
-				echo "procedure: " . $this->getObjectPath() . "<br>";
-			}
-
 		parent::configure( $config );
 
-		$this->task_manager        = $config->getString( 'task_manager', '' );
 		$this->use_session         = $config->getBoolean( 'use_session', TRUE );
-		$this->forward_target      = $config->getString( 'forward_target', '' );
 		$this->sequence            = $config->getString( 'sequence', '' );
-		$this->modules             = $config->getArray( 'modules', array() );
-		$this->events              = $config->getArray( 'events', array() );
 		$layout_manager            = $config->getString( 'layout_manager' );
 
 		$this->setLayoutManager( $layout_manager );
 
-		// eventsに記載しているイベントのモジュールも読み込む
-		if ( $this->events ){
-			foreach( $this->events as $event ){
-				$pos = strpos( $event, "@" );
-				if ( $pos !== FALSE ){
-					$module_name = substr( $event, $pos );
-					$this->modules[] = $module_name;
-				}
-			}
-		}
-
 		if ( $this->getSandbox()->isDebug() )
 		{
-			log_info( "system,config", "procedure", "task_manager:" . $this->task_manager );
 			log_info( "system,config", "procedure", "use_session:" . $this->use_session );
-			log_info( "system,config", "procedure", "forward_target:" . $this->forward_target );
 			log_info( "system,config", "procedure", "sequence:" . $this->sequence );
-			log_info( "system,config", "procedure", "modules:" . $this->modules );
-			log_info( "system,config", "procedure", "events:" . $this->events );
 			log_info( "system,config", "procedure", "layout_manager:" . $this->layout_manager );
-			log_info( "system,config", "procedure", "response_filters:" . print_r($this->response_filters,true) );
 		}
 	}
 
@@ -100,22 +71,6 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 				}
 			}
 		}
-	}
-
-	/*
-	 * 転送先があるか
-	 */
-	public function hasForwardTarget()
-	{
-		return strlen($this->forward_target) > 0;
-	}
-
-	/*
-	 * 転送先を取得
-	 */
-	public function getForwardTarget()
-	{
-		return $this->forward_target;
 	}
 
 	/*

@@ -126,24 +126,6 @@ class Charcoal_SimpleEchoCoreHook extends Charcoal_AbstractCoreHook
 		case Charcoal_EnumCoreHookStage::AFTER_PROCEDURE_FORWARD:
 			echo "[core stage:$stage_name] Finished procedure forwarding process.". eol();
 			break;
-/*		case Charcoal_EnumCoreHookStage::BEFORE_CREATE_CONTAINER:
-			echo "[core stage:$stage_name] Starting creating container.");
-			break;
-		case Charcoal_EnumCoreHookStage::AFTER_CREATE_CONTAINER:
-			echo "[core stage:$stage_name] Finished creating container.");
-			break;
-*/
-/*
-		case Charcoal_EnumCoreHookStage::BEFORE_REG_RESPONSE_FILTERS:
-			echo "[core stage:$stage_name] Starting creating response filters.");
-			break;
-		case Charcoal_EnumCoreHookStage::CREATE_RESPONSE_FILTER:
-			echo "[core stage:$stage_name] Created response filter: [$data]");
-			break;
-		case Charcoal_EnumCoreHookStage::AFTER_REG_RESPONSE_FILTERS:
-			echo "[core stage:$stage_name] Finished creating response filters.");
-			break;
-*/
 		case Charcoal_EnumCoreHookStage::END_OF_BOOTSTRAP:
 			$elapse = Charcoal_Benchmark::score();
 			echo "[core stage:$stage_name] Finished framework bootstrap process.". eol();

@@ -10,26 +10,12 @@
 */
 class Charcoal_SimpleProcedure extends Charcoal_AbstractProcedure
 {
-	private $_task_manager;
-	private $_forward_target;
-	private $_modules;
-	private $_events;
-	private $_debug_mode;
-
 	/*
 	 *	コンストラクタ
 	 */
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	/*
-	 *	デバッグモード
-	 */
-	public function isDebugMode()
-	{
-		return $this->_debug_mode && $this->_debug_mode->isTrue() ? TRUE : FALSE;
 	}
 
 	/**
@@ -66,38 +52,6 @@ class Charcoal_SimpleProcedure extends Charcoal_AbstractProcedure
 			log_info( "system,config",  "events：" . $this->_events );
 			log_info( "system,config",  "_debug_mod：" . $this->_debug_mode );
 		}
-	}
-
-	/*
-	 * レイアウトマネージャを取得
-	 */
-	public function getLayoutManager()
-	{
-		return $this->_layout_manager;
-	}
-
-	/*
-	 * レイアウトマネージャを設定
-	 */
-	public function setLayoutManager( $layout_manager )
-	{
-		$this->_layout_manager = $this->getSandbox()->CreateObject( $layout_manager, 'layout_manager' );
-	}
-
-	/*
-	 * 転送先があるか
-	 */
-	public function hasForwardTarget()
-	{
-		return strlen($this->_forward_target) > 0;
-	}
-
-	/*
-	 * 転送先を取得
-	 */
-	public function getForwardTarget()
-	{
-		return new ProcedurePath( $this->_forward_target );
 	}
 
 	/*

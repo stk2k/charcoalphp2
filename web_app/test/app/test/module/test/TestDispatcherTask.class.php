@@ -4,8 +4,8 @@
 *
 * PHP version 5
 *
-* @package    renderers
-* @author     stk2k <stk2k@sazysoft.com>
+* @package	renderers
+* @author	 stk2k <stk2k@sazysoft.com>
 * @copyright  2008 stk2k, sazysoft
 */
 
@@ -35,22 +35,28 @@ class TestDispatcherTask extends Charcoal_Task
 	/**
 	 * execute exception handlers
 	 * 
-	 * @param Exception $e     exception to handle
+	 * @param Exception $e	 exception to handle
 	 * 
-	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
+	 * @return boolean		TRUE means the exception is handled, otherwise FALSE
 	 */
 	public function handleException( $e )
 	{
+		$ret = TRUE;
+
 		if ( $e instanceof Charcoal_CreateObjectException ){
-			$path = $e->getObjectPath();
-			echo 'illegal object path: ' . $path . PHP_EOL;
+			echo 'illegal object path: ' . $e->getObjectPath() . PHP_EOL;
 		}
 		else if ( $e instanceof Charcoal_ObjectPathFormatException ){
-			$path = $e->getObjectPath();
-			echo 'bad object path: ' . $path . PHP_EOL;
+			echo 'bad object path format: ' . $e->getObjectPath() . PHP_EOL;
+		}
+		else if ( $e instanceof Charcoal_ModuleLoaderException ){
+			echo 'module not found: ' . $e->getModulePath() . PHP_EOL;
+		}
+		else{
+			$ret = FALSE;
 		}
 
-		return TRUE;
+		return $ret;
 	}
 
 	/**
@@ -66,7 +72,7 @@ class TestDispatcherTask extends Charcoal_Task
 //		$procedure = $context->getProcedure();
 
 		// get paramter from command line
-		$scenario       = $request->getString( 'scenario' );
+		$scenario	   = $request->getString( 'scenario' );
 
 		$scenario = trim($scenario);
 		log_debug( "debug,scenario", "scenario: $scenario" );

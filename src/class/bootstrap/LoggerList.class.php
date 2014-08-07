@@ -16,6 +16,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	private $sandbox;
 	private $options;
 	private $init;
+	private $enabled;
 
 	/**
 	 *  Constructor
@@ -72,6 +73,22 @@ class Charcoal_LoggerList extends Charcoal_Object
 		$this->init = TRUE;
 
 		return TRUE;
+	}
+
+	/**
+	 * enable logger
+	 */
+	public function enable( $enabled = TRUE )
+	{
+		$this->enabled = $enabled;
+	}
+
+	/**
+	 * get logger is enabled
+	 */
+	public function isEnabled()
+	{
+		return $this->enabled;
 	}
 
 	/**
@@ -214,6 +231,10 @@ class Charcoal_LoggerList extends Charcoal_Object
 //		Charcoal_ParamTrait::checkString( 1, $target );
 //		Charcoal_ParamTrait::checkString( 2, $message );
 //		Charcoal_ParamTrait::checkString( 3, $tag, TRUE );
+
+		if ( !$this->enabled ){
+			return;
+		}
 
 		try{
 			// get caller

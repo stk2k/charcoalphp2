@@ -126,24 +126,6 @@ class Charcoal_SimpleLogCoreHook extends Charcoal_AbstractCoreHook
 		case Charcoal_EnumCoreHookStage::AFTER_PROCEDURE_FORWARD:
 			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished procedure forwarding process.");
 			break;
-/*		case Charcoal_EnumCoreHookStage::BEFORE_CREATE_CONTAINER:
-			log_info( 'system,debug,screen', "[core stage:$stage_name] Starting creating container.");
-			break;
-		case Charcoal_EnumCoreHookStage::AFTER_CREATE_CONTAINER:
-			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished creating container.");
-			break;
-*/
-/*
-		case Charcoal_EnumCoreHookStage::BEFORE_REG_RESPONSE_FILTERS:
-			log_info( 'system,debug,screen', "[core stage:$stage_name] Starting creating response filters.");
-			break;
-		case Charcoal_EnumCoreHookStage::CREATE_RESPONSE_FILTER:
-			log_info( 'system,debug,screen', "[core stage:$stage_name] Created response filter: [$data]");
-			break;
-		case Charcoal_EnumCoreHookStage::AFTER_REG_RESPONSE_FILTERS:
-			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished creating response filters.");
-			break;
-*/
 		case Charcoal_EnumCoreHookStage::END_OF_BOOTSTRAP:
 			$elapse = Charcoal_Benchmark::score();
 			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished framework bootstrap process.");
