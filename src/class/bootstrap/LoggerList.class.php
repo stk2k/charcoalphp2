@@ -11,12 +11,23 @@
 
 class Charcoal_LoggerList extends Charcoal_Object
 {
+	const LOGLEVEL_FATAL    = 100;
+	const LOGLEVEL_ERROR    = 200;
+	const LOGLEVEL_WARNING  = 300;
+	const LOGLEVEL_DEBUG    = 400;
+	const LOGLEVEL_INFO     = 500;
+	const LOGLEVEL_TRACE    = 600;
+
 	private $loggers;
 	private $buffer;
 	private $sandbox;
 	private $options;
 	private $init;
-	private $enabled;
+	private $log_enabled;
+	private $log_level;
+	private $log_no_buffer;
+	private $log_tag_filters;
+	private $log_loggers;
 
 	/**
 	 *  Constructor
@@ -47,17 +58,17 @@ class Charcoal_LoggerList extends Charcoal_Object
 		}
 
 		// read initialization options from sandbox profile
-		$this->options['LOG_ENABLED']      = $this->sandbox->getProfile()->getBoolean( 'LOG_ENABLED', FALSE );
-		$this->options['LOG_LEVEL']        = $this->sandbox->getProfile()->getString( 'LOG_LEVEL', 'W' );
-		$this->options['LOG_NO_BUFFER']    = $this->sandbox->getProfile()->getBoolean( 'LOG_NO_BUFFER', FALSE );
-		$this->options['LOG_TAG_FILTERS']  = $this->sandbox->getProfile()->getArray( 'LOG_TAG_FILTERS', array() );
-		$this->options['LOG_LOGGERS']      = $this->sandbox->getProfile()->getArray( 'LOG_LOGGERS', array() );
+		$this->log_enabled      = ub( $this->sandbox->getProfile()->getBoolean( 'LOG_ENABLED', FALSE ) );
+		$this->log_level        = us( $this->sandbox->getProfile()->getString( 'LOG_LEVEL', 'W' ) );
+		$this->log_no_buffer    = ub( $this->sandbox->getProfile()->getBoolean( 'LOG_NO_BUFFER', FALSE ) );
+		$this->log_tag_filters  = uv( $this->sandbox->getProfile()->getArray( 'LOG_TAG_FILTERS', array() ) );
+		$this->log_loggers      = uv( $this->sandbox->getProfile()->getArray( 'LOG_LOGGERS', array() ) );
 
 		$this->loggers = array();
 
 		// create loggers on demand
-		if ( $this->options['LOG_LOGGERS'] ){
-			foreach( $this->options['LOG_LOGGERS'] as $logger_name ){
+		if ( $this->log_loggers ){
+			foreach( $this->log_loggers as $logger_name ){
 				if ( strlen($logger_name) === 0 )    continue;
 
 				if ( !isset($this->loggers[$logger_name]) ){
@@ -76,19 +87,50 @@ class Charcoal_LoggerList extends Charcoal_Object
 	}
 
 	/**
-	 * enable logger
+	 * override by procedure settings
 	 */
-	public function enable( $enabled = TRUE )
+	public function overrideByProcedure( Charcoal_IProcedure $procedure )
 	{
-		$this->enabled = $enabled;
+		$log_enabled = $procedure->isLoggerEnabled();
+		$log_level = $procedure->getLogLevel();
+		$log_loggers = $procedure->getLoggers();
+
+		if ( $log_enabled !== NULL ){
+			$this->log_enabled = $log_enabled;
+		}
+		if ( $log_level !== NULL ){
+			$this->log_level = $log_level;
+		}
+		if ( $log_loggers !== NULL ){
+			$this->log_loggers = $log_loggers;
+			
+			// create loggers on demand
+			foreach( $this->log_loggers as $logger_name ){
+				if ( strlen($logger_name) === 0 )    continue;
+
+				if ( !isset($this->loggers[$logger_name]) ){
+					$logger = $this->sandbox->createObject( $logger_name, 'logger', array(), 'Charcoal_ILogger' );
+					self::register( $logger_name, $logger );
+				}
+			}
+
+		}
+	} 
+
+	/**
+	 * set log level
+	 */
+	public function setLogLevel( $log_level )
+	{
+		$this->log_level = $log_level;
 	}
 
 	/**
-	 * get logger is enabled
+	 * get log level
 	 */
-	public function isEnabled()
+	public function getLogLevel()
 	{
-		return $this->enabled;
+		return $this->log_level;
 	}
 
 	/**
@@ -121,24 +163,24 @@ class Charcoal_LoggerList extends Charcoal_Object
 			return;
 		}
 
-		if ( $this->options['LOG_ENABLED']->isFalse() ){
+		if ( !$this->log_enabled ){
 			return;
 		}
 
 		// 対象ロガーに対してのみ出力
-		$output_loggers = array_flip( uv($this->options['LOG_LOGGERS']) );
+		$output_loggers = array_flip( $this->log_loggers );
 
 		$level        = $msg->getLevel();
 		$logger_names = $msg->getLoggerNames();
 
 		// プロファイルに設定したレベル以下ならば出力しない
-		$cmp = self::_compareLogLevel($level,$this->options['LOG_LEVEL']);
+		$cmp = self::_compareLogLevel($level,$this->log_level);
 		if ( $cmp > 0 ){
 			return;
 		}
 
 		// タグフィルタが設定されている場合、マッチしないログは無視
-		$log_tag_filters = uv($this->options['LOG_TAG_FILTERS']);
+		$log_tag_filters = $this->log_tag_filters;
 		if ( is_array($log_tag_filters) && !empty($log_tag_filters) ){
 			if ( !in_array( $msg->getTag(), $log_tag_filters ) ){
 				return;
@@ -160,15 +202,6 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function terminate()
 	{
-/*
-		$log_enabled    = Charcoal_Profile::getBoolean( 'LOG_ENABLED' );
-		if ( !$log_enabled || $log_enabled->isFalse() )
-		{
-			$this->loggers = NULL;
-			$this->buffer = NULL;
-			return;
-		}
-*/
 		self::flush();
 
 		if ( $this->loggers )
@@ -232,10 +265,6 @@ class Charcoal_LoggerList extends Charcoal_Object
 //		Charcoal_ParamTrait::checkString( 2, $message );
 //		Charcoal_ParamTrait::checkString( 3, $tag, TRUE );
 
-		if ( !$this->enabled ){
-			return;
-		}
-
 		try{
 			// get caller
 			list( $file, $line ) = Charcoal_System::caller(2);
@@ -247,7 +276,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 			$msg = new Charcoal_LogMessage( $level, $message, $tag, $file, $line, $logger_names );
 
 			// get LOG_NO_BUFFER flag
-			if ( $this->init && ub($this->options['LOG_NO_BUFFER']) === TRUE ){
+			if ( $this->init && $this->log_no_buffer ){
 				// flush immediately
 				$this->buffer[] = $msg;
 				self::flush();
@@ -277,12 +306,12 @@ class Charcoal_LoggerList extends Charcoal_Object
 
 		if ( !$defs ){
 			$defs = array(
-					'F' => 100,
-					'E' => 200,
-					'W' => 300,
-					'D' => 400,
-					'I' => 500,
-					'T' => 600,
+					'F' => self::LOGLEVEL_FATAL,
+					'E' => self::LOGLEVEL_ERROR,
+					'W' => self::LOGLEVEL_WARNING,
+					'D' => self::LOGLEVEL_DEBUG,
+					'I' => self::LOGLEVEL_INFO,
+					'T' => self::LOGLEVEL_TRACE,
 				);
 		}
 

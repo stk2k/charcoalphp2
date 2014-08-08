@@ -34,5 +34,21 @@ interface Charcoal_IProcedure extends Charcoal_ICharcoalObject
 	 * @return Charcoal_Session $session       session object
 	 */
 	public function execute( $request, $response, $session = NULL );
+
+	/*
+	 *	returns TRUE if logger is enabled
+	 */
+	public function isLoggerEnabled();
+
+	/*
+	 *	returns log level
+	 */
+	public function getLogLevel();
+
+	/*
+	 *	returns loggers
+	 */
+	public function getLoggers();
+
 }
 

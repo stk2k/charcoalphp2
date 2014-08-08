@@ -18,6 +18,8 @@ abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalObject implem
 	protected $events;
 	protected $debug_mode;
 	protected $log_enabled;
+	protected $log_level;
+	protected $log_loggers;
 
 	/**
 	 * Initialize instance
@@ -33,7 +35,9 @@ abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalObject implem
 		$this->modules             = uv( $config->getArray( 'modules', array() ) );
 		$this->events              = uv( $config->getArray( 'events', array() ) );
 		$this->debug_mode          = ub( $config->getBoolean( 'debug_mode', FALSE ) );
-		$this->log_enabled         = ub( $config->getBoolean( 'log_enabled', TRUE ) );
+		$this->log_enabled         = ub( $config->getBoolean( 'log_enabled' ) );
+		$this->log_level           = us( $config->getString( 'log_level' ) );
+		$this->log_loggers         = uv( $config->getArray( 'log_loggers' ) );
 
 		// eventsに記載しているイベントのモジュールも読み込む
 		if ( is_array($this->events) ){
@@ -71,6 +75,22 @@ abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalObject implem
 	public function isLoggerEnabled()
 	{
 		return $this->log_enabled;
+	}
+
+	/*
+	 *	returns log level
+	 */
+	public function getLogLevel()
+	{
+		return $this->log_level;
+	}
+
+	/*
+	 *	returns loggers
+	 */
+	public function getLoggers()
+	{
+		return $this->log_loggers;
 	}
 
 	/*

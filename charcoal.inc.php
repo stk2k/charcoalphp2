@@ -291,7 +291,7 @@ function _catch( Exception $e, $log_error = TRUE )
 	try{
 		log_debug( "system,debug", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
 		if ( $log_error ){
-			log_debug( "error", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
+			log_error( "error", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
 		}
 	}
 	catch( Exception $ex ){

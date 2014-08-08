@@ -572,9 +572,8 @@ class Charcoal_Framework
 		}
 		self::setHookStage( Charcoal_EnumCoreHookStage::AFTER_PROCEDURE_FORWARD );
 
-		// enable or diable looger by the procedure's settings
-		$logger_enabled = $procedure->isLoggerEnabled();
-		self::$loggers->enable($logger_enabled);
+		// override logger settings by the procedure's settings
+		self::$loggers->overrideByProcedure( $procedure );
 
 		//=======================================
 		// create response object
