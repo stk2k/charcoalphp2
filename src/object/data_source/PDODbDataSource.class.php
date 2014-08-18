@@ -56,7 +56,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->db_name   = us( $config->getString( 'db_name' ) );
 		$this->server    = us( $config->getString( 'server' ) );
 		$this->charset   = us( $config->getString( 'charset' ) );
-		$this->autocommit = ub( $config->getBoolean( 'autocommit', FALSE ) );
+		$this->autocommit = ub( $config->getBoolean( 'autocommit', TRUE ) );
 
 		if ( strlen($this->backend) === 0 ){
 			_throw( new Charcoal_ComponentConfigException( 'backend', 'mandatory' ) );

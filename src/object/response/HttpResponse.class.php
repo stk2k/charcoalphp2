@@ -94,7 +94,9 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	 */
 	public function clearHeaders()
 	{
-		header_remove();
+		if ( version_compare(PHP_VERSION, '5.3.0') >= 0 ){
+			header_remove();
+		}
 
 		// erase all headers
 		$this->headers = array();
