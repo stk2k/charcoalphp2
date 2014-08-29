@@ -36,6 +36,11 @@ interface Charcoal_IProcedure extends Charcoal_ICharcoalObject
 	public function execute( $request, $response, $session = NULL );
 
 	/*
+	 *	returns TRUE if this procedure is debug mode
+	 */
+	public function isDebugMode();
+
+	/*
 	 *	returns TRUE if logger is enabled
 	 */
 	public function isLoggerEnabled();

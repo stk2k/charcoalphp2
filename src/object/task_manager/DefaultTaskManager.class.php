@@ -138,7 +138,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 	 */
 	public function processEvents( Charcoal_IEventContext $context  )
 	{
-		$debug = $this->getSandbox()->isDebug();
+		$debug = $this->getSandbox()->isDebug() || $context->getProcedure()->isDebugMode();
 
 		if ( $debug ) log_debug( 'system,event', "processEvents start." );
 
