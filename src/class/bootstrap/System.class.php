@@ -607,8 +607,10 @@ class Charcoal_System
 				break;
 			case 'textarea':
 			default:
-				$output  = "<h3 style=\"font-size:12px; margin: 2px\"> $title @$file($line)</h3>";
-				$output .= "<textarea rows=14 style=\"width:100%; font-size:{$font_size}px; margin: 2px\">" . implode(PHP_EOL,$lines) . "</textarea>";
+				$output  = "<h3 style=\"font-size:12px; margin: 0px; color:black; background-color:white; text-align: left\"> $title @$file($line)</h3>";
+				$output .= "<textarea rows=14 style=\"width:100%; font-size:{$font_size}px; margin: 0px; color:black; background-color:white; border: 1px solid silver;\">";
+				$output .= implode(PHP_EOL,$lines);
+				$output .= "</textarea>";
 				break;
 			}
 			break;

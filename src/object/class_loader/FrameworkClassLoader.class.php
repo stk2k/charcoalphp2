@@ -142,6 +142,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_HttpStatusException'					=> 'exception',
 				'Charcoal_ImageGetSizeException'				=> 'exception',
 				'Charcoal_InterfaceNotFoundException'			=> 'exception',
+				'Charcoal_InvalidArgumentException'				=> 'exception',
 				'Charcoal_InvalidEncodingCodeException'			=> 'exception',
 				'Charcoal_InvalidMailAddressException'			=> 'exception',
 				'Charcoal_JsonDecodingException'				=> 'exception',

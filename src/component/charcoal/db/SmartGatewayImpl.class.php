@@ -834,6 +834,10 @@ class Charcoal_SmartGatewayImpl
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
 
+		if ( !$model->fieldExists($field) ){
+			_throw( new Charcoal_InvalidArgumentException("field=[$field]") );
+		}
+
 		$field = us($field);
 
 		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('now') );

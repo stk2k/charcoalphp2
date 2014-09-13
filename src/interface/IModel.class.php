@@ -23,12 +23,12 @@ interface Charcoal_IModel extends Charcoal_ICharcoalObject
 	/**
 	 * フィールドが存在するか
 	 */
-	public function fieldExists( Charcoal_String $field_name );
+	public function fieldExists( $field );
 
 	/*
 	 *   フィールドのデフォルト値を取得
 	 */
-	public function getDefaultValue( Charcoal_String $field );
+	public function getDefaultValue( $field );
 
 	/*
 	 *   モデル固有のDTOを作成

@@ -121,9 +121,11 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	/**
 	 * フィールドが存在するか
 	 */
-	public function fieldExists( Charcoal_String $field_name )
+	public function fieldExists( $field )
 	{
-		return isset($this->_class_vars[$field_name]);
+		Charcoal_ParamTrait::checkString( 1, $field );
+
+		return isset($this->_class_vars[us($field)]);
 	}
 
 	/*
@@ -137,8 +139,12 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	/*
 	 *   フィールドのデフォルト値を取得
 	 */
-	public function getDefaultValue( Charcoal_String $field )
+	public function getDefaultValue( $field )
 	{
+		Charcoal_ParamTrait::checkString( 1, $field );
+
+		$field = s($field);
+
 		$annot = $this->getAnnotation( $field, s('default') );
 
 		if ( !$annot ){
