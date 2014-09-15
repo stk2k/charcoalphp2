@@ -217,7 +217,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 						$value = $value_and_params;
 						$params = array();
 					}
-					else if ( $open > 0 && $close > 0 ){
+					elseif ( $open > 0 && $close > 0 ){
 						// パラメータあり
 						$value = substr($value_and_params,0,$open);
 						$params = substr($value_and_params,$open+1,$close-$open-1);

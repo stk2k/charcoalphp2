@@ -170,7 +170,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 				$out[] = us($data);
 			}
 		}
-		else if ( $data instanceof Charcoal_QdmailAddress ){
+		elseif ( $data instanceof Charcoal_QdmailAddress ){
 			// アドレスは１つのみ、QdmailAddressのインスタンス
 			$address = $data;
 			if ( $address->hasLabel() ){
@@ -180,7 +180,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 				$out[] = us( $address->getAddress() );
 			}
 		}
-		else if ( is_array($data) ){
+		elseif ( is_array($data) ){
 			// 配列の場合
 			foreach( $data as $item )
 			{
@@ -211,7 +211,7 @@ class Charcoal_QdmailSender extends Charcoal_CharcoalComponent implements Charco
 						$out[] = us($item);
 					}
 				}
-				else if ( $item instanceof Charcoal_QdmailAddress ){
+				elseif ( $item instanceof Charcoal_QdmailAddress ){
 					// QdmailAddressのインスタンス
 					$address = $item;
 					if ( $address->hasLabel() ){

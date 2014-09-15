@@ -248,7 +248,7 @@ class Charcoal_SmartGatewayImpl
 				if ( strlen($current_model_alias) > 0 ){
 					$out_field = $current_model_alias . '.' . $out_field;
 				}
-				else if ( $current_model_joins && count($current_model_joins) > 0 ){
+				elseif ( $current_model_joins && count($current_model_joins) > 0 ){
 					$out_field = $current_table_name . '.' . $out_field;
 				}
 				$out_fields[] = $out_field;

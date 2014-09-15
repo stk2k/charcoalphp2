@@ -182,14 +182,14 @@ class Charcoal_System
 //log_debug( "debug", "escape:" . print_r($res,true) );
 			return $res;
 		}
-		else if ( is_array($value) ){
+		elseif ( is_array($value) ){
 			$ret = array();
 			foreach( $value as $key => $item ){
 				$ret[$key] = self::escape( $item );
 			}
 			return $ret;
 		}
-		else if ( is_object($value) ){
+		elseif ( is_object($value) ){
 			$object = $value;
 			$vars = get_object_vars($object);
 			foreach( $vars as $key => $value ){
@@ -212,10 +212,10 @@ class Charcoal_System
 //log_debug( "debug", "decode after:" . print_r($res,true) );
 			return $res;
 		}
-		else if ( is_array($value) ){
+		elseif ( is_array($value) ){
 			return array_map('Charcoal_System::decode', $value);
 		}
-		else if ( is_object($value) ){
+		elseif ( is_object($value) ){
 			$object = $value;
 			$vars = get_object_vars($object);
 			foreach( $vars as $key => $value ){
@@ -237,14 +237,14 @@ class Charcoal_System
 //log_debug( "debug", "stripTags:" . print_r($res,true) );
 			return $res;
 		}
-		else if ( is_array($value) ){
+		elseif ( is_array($value) ){
 			$array = $value;
 			foreach( $array as $key => $value ){
 				$array[$key] = self::stripTags( $value, $allowable_tags );
 			}
 			return $array;
 		}
-		else if ( is_object($value) ){
+		elseif ( is_object($value) ){
 			$object = $value;
 			$vars = get_object_vars($object);
 			foreach( $vars as $key => $value ){
@@ -264,14 +264,14 @@ class Charcoal_System
 		if ( is_string($value) ){
 			return stripslashes($value);
 		}
-		else if ( is_array($value) ){
+		elseif ( is_array($value) ){
 			$array = $value;
 			foreach( $array as $key => $value ){
 				$array[$key] = self::stripSlashes( $value );
 			}
 			return $array;
 		}
-		else if ( is_object($value) ){
+		elseif ( is_object($value) ){
 			$object = $value;
 			$vars = get_object_vars($object);
 			foreach( $vars as $key => $value ){
@@ -453,7 +453,7 @@ class Charcoal_System
 			if ( $value instanceof Countable ){
 				return get_class( $value ) . '(' . count($value) . ')';
 			}
-			else if ( $value instanceof Charcoal_Object ){
+			elseif ( $value instanceof Charcoal_Object ){
 				return get_class( $value ) . '(hash=' . $value->hash() . ')';
 			}
 			return get_class( $value );

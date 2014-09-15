@@ -111,7 +111,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 				$key = substr($rule_dir,1);
 				$params[ $key ] = $url_dir;
 			}
-			else if ( $rule_dir !== $url_dir ){
+			elseif ( $rule_dir !== $url_dir ){
 				// マッチしなかった
 				log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir" );
 				return NULL;

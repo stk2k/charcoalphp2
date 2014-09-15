@@ -22,7 +22,7 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
 			if ( $values instanceof Charcoal_Collection ){
 				$this->values = $values->values;
 			}
-			else if ( is_array($values) ){
+			elseif ( is_array($values) ){
 				$this->values = $values;
 			}
 			else{

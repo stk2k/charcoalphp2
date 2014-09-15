@@ -39,24 +39,24 @@ class Charcoal_CommandLineUtil
 			if ( $escape ){
 				$arg_tmp .= $ch;
 			}
-			else if ( $dq ){
+			elseif ( $dq ){
 				if ( $ch == '\\' ){
 					$escape = TRUE;
 					$escape_now = TRUE;
 				}
-				else if ( $ch == '"' ){
+				elseif ( $ch == '"' ){
 					$dq = FALSE;
 				}
 				else{
 					$arg_tmp .= $ch;
 				}
 			}
-			else if ( $sq ){
+			elseif ( $sq ){
 				if ( $ch == '\\' ){
 					$escape = TRUE;
 					$escape_now = TRUE;
 				}
-				else if ( $ch == "'" ){
+				elseif ( $ch == "'" ){
 					$sq = FALSE;
 				}
 				else{
@@ -68,14 +68,14 @@ class Charcoal_CommandLineUtil
 					$args_array[] = $arg_tmp;
 					$arg_tmp = '';
 				}
-				else if ( $ch == '\\' ){
+				elseif ( $ch == '\\' ){
 					$escape = TRUE;
 					$escape_now = TRUE;
 				}
-				else if ( $ch == '"' ){
+				elseif ( $ch == '"' ){
 					$dq = TRUE;
 				}
-				else if ( $ch == "'" ){
+				elseif ( $ch == "'" ){
 					$sq = TRUE;
 				}
 				else{
@@ -117,7 +117,7 @@ class Charcoal_CommandLineUtil
 				// ハイフンで始まる文字列はパラメータ名
 				$param = substr($arg,1);
 			}
-			else if ( $param ){
+			elseif ( $param ){
 				// パラメータ名の後の文字列は値
 				$p_array[ $param ] = $arg;
 				$param = NULL;

@@ -27,10 +27,10 @@ class Charcoal_Boolean extends Charcoal_Scalar
 		if ( $value === TRUE || $value === FALSE ){
 			$this->value = $value;
 		}
-		else if ( $value instanceof Charcoal_Boolean ){
+		elseif ( $value instanceof Charcoal_Boolean ){
 			$this->value = $value->unbox();
 		}
-		else if ( $value === NULL ){
+		elseif ( $value === NULL ){
 			$value = FALSE;
 		}
 		else{

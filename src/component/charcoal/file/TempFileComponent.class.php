@@ -156,7 +156,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 				_throw( new Charcoal_FileSystemComponentException( s('specified file is not writeable.') ) );
 			}
 		}
-		else if ( $obj->exists() ){
+		elseif ( $obj->exists() ){
 			_throw( new Charcoal_FileSystemComponentException( s('specified file is already exists.') ) );
 		}
 

@@ -25,16 +25,16 @@ class Charcoal_String extends Charcoal_Scalar
 		if ( is_string($value) ){
 			$this->value = $value;
 		}
-		else if ( $value instanceof Charcoal_String ){
+		elseif ( $value instanceof Charcoal_String ){
 			$this->value = $value->unbox();
 		}
-		else if ( $value instanceof Charcoal_Object ){
+		elseif ( $value instanceof Charcoal_Object ){
 			$this->value = $value->toString();
 		}
-		else if ( is_scalar($value) ){
+		elseif ( is_scalar($value) ){
 			$this->value = strval($value);
 		}
-		else if ( $value === NULL ){
+		elseif ( $value === NULL ){
 			$this->value = '';
 		}
 		else{
@@ -136,7 +136,7 @@ class Charcoal_String extends Charcoal_Scalar
 		if ( $obj instanceof Charcoal_String ){
 			$str2 = $obj->value;
 		}
-		else if ( is_string($obj) ){
+		elseif ( is_string($obj) ){
 			$str2 = $obj;
 		}
 		else{

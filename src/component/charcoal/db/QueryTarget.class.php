@@ -68,38 +68,38 @@ class Charcoal_QueryTarget extends Charcoal_Object
 				$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_MODEL), s($token) );
 				$state = "model set";
 			}
-			else if ( in_array( $state, array("model set","join set")) && $token == 'as' ){
+			elseif ( in_array( $state, array("model set","join set")) && $token == 'as' ){
 				$state = "as";
 			}
-			else if ( $state == "as" ){
+			elseif ( $state == "as" ){
 				$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_AS_NAME), s($token) );
 				$state = "as set";
 			}
-			else if ( $state == "model set" || $state == "as set" || $state == "join set" || $state == "on set" ){
+			elseif ( $state == "model set" || $state == "as set" || $state == "join set" || $state == "on set" ){
 				if ( $token == 'on' ){
 					$state = "on";
 				}
-				else if ( $token == '+' ){
+				elseif ( $token == '+' ){
 					$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_INNER_JOIN) );
 					$state = "join";
 				}
-				else if ( $token == '(+' ){
+				elseif ( $token == '(+' ){
 					$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_LEFT_JOIN) );
 					$state = "join";
 				}
-				else if ( $token == '+)' ){
+				elseif ( $token == '+)' ){
 					$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_RIGHT_JOIN) );
 					$state = "join";
 				}
-				else if ( $state == "on set" ){
+				elseif ( $state == "on set" ){
 					$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_ON_CONDITION), s($token) );
 				}
 			}
-			else if ( $state == "join" ){
+			elseif ( $state == "join" ){
 				$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_MODEL), s($token) );
 				$state = "join set";
 			}
-			else if ( $state == "on" ){
+			elseif ( $state == "on" ){
 				$element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_ON_CONDITION), s($token) );
 				$state = "on set";
 			}
@@ -138,7 +138,7 @@ class Charcoal_QueryTarget extends Charcoal_Object
 					break;
 				}
 			}
-			else if ( $state === "joins" ){
+			elseif ( $state === "joins" ){
 				$join = $join_stack->pop();
 
 				switch( $element->getType() )
@@ -249,17 +249,17 @@ class Charcoal_QueryTarget extends Charcoal_Object
 						$buffer .= $c;
 					}
 				}
-				else if ( $c === '\\' ){
+				elseif ( $c === '\\' ){
 					$is_escaped = TRUE;
 				}
 				else{
 					$buffer .= $c;
 				}
 			}
-			else if ( $c === '"' ){
+			elseif ( $c === '"' ){
 				$in_dq = TRUE;
 			}
-			else if ( $c === ' ' ){
+			elseif ( $c === ' ' ){
 				if ( $buffer ){
 					$tokens[] = $buffer;
 					$buffer = NULL;

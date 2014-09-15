@@ -54,7 +54,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 		{
 			$this->layout_manager = $layout_manager;
 		}
-		else if ( is_string($layout_manager) || $layout_manager instanceof Charcoal_String )
+		elseif ( is_string($layout_manager) || $layout_manager instanceof Charcoal_String )
 		{
 			$layout_manager = s($layout_manager);
 			if ( $layout_manager->isEmpty() ){

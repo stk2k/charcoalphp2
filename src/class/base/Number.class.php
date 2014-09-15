@@ -27,10 +27,10 @@ class Charcoal_Number extends Charcoal_Scalar
 		if ( $value instanceof Charcoal_String ){
 			$value = $value->getValue();
 		}
-		else if ( $value instanceof Charcoal_Number ){
+		elseif ( $value instanceof Charcoal_Number ){
 			$value = $value->getValue();
 		}
-		else if ( $value === NULL ){
+		elseif ( $value === NULL ){
 			$value = 0;
 		}
 		

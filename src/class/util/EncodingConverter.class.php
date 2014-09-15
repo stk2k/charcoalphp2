@@ -90,7 +90,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 				}
 			}
 		}
-		else if ( is_string($data) ){
+		elseif ( is_string($data) ){
 			$data = $this->convert( $data );
 		}
 

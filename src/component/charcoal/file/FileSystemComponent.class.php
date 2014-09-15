@@ -89,7 +89,7 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 				_throw( new Charcoal_FileSystemComponentException( 'specified file is not writeable.' ) );
 			}
 		}
-		else if ( $obj->exists() ){
+		elseif ( $obj->exists() ){
 			_throw( new Charcoal_FileSystemComponentException( 'specified file is already exists.' ) );
 		}
 

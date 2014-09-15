@@ -50,7 +50,7 @@ class Charcoal_FormSubmissionChekerTask extends Charcoal_Task implements Charcoa
 			$form_token->setupForm( $sequence, $response );
 			return b(TRUE);
 		}
-		else if ( $event instanceof Charcoal_AuthTokenEvent ){
+		elseif ( $event instanceof Charcoal_AuthTokenEvent ){
 			return $form_token->checkToken( $sequence, $request );
 		}
 

@@ -207,7 +207,7 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 		if ( $offset instanceof Charcoal_String ){
 			$this->set($offset,$value);
 		}
-		else if ( is_string($offset) ){
+		elseif ( is_string($offset) ){
 			$this->set(s($offset),$value);
 		}
 	}

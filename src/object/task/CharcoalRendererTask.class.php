@@ -41,7 +41,7 @@ class Charcoal_CharcoalRendererTask extends Charcoal_Task implements Charcoal_IT
 
 //				log_info( "system,renderer", "renderer", "Redirected to: $url" );
 			}
-			else if ( $event instanceof Charcoal_URLRedirectEvent ){
+			elseif ( $event instanceof Charcoal_URLRedirectEvent ){
 	
 				$url = $event->getURL();
 
