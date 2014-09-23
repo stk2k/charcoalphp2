@@ -133,11 +133,11 @@ class Charcoal_String extends Charcoal_Scalar
 	{
 		$str1 = $this->value;
 
-		if ( $obj instanceof Charcoal_String ){
-			$str2 = $obj->value;
+		if ( $object instanceof Charcoal_String ){
+			$str2 = $object->value;
 		}
-		elseif ( is_string($obj) ){
-			$str2 = $obj;
+		elseif ( is_string($object) ){
+			$str2 = $object;
 		}
 		else{
 			return FALSE;

@@ -497,24 +497,26 @@ HTML_HEADER;
 
 		// $_SESSION variables
 
-		$html .= '<h2><div class="value">$_SESSION variables&nbsp;&nbsp;<a href="#" onclick="expand(\'sessionvariables\');">(' . count($_SESSION) . ')</a></div></h2>' . PHP_EOL;
+		if ( isset($_SESSION) ){
+			$html .= '<h2><div class="value">$_SESSION variables&nbsp;&nbsp;<a href="#" onclick="expand(\'sessionvariables\');">(' . count($_SESSION) . ')</a></div></h2>' . PHP_EOL;
 
-		$html .= '' . PHP_EOL;
-		$html .= '<table cellspacing="0" cellpadding="0" id="sessionvariables" style="display:none">' . PHP_EOL;
-		$no = 1;
-		foreach( $_SESSION as $name => $value )
-		{
-			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
-			$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
-			$html .= '</tr>' . PHP_EOL;
-			$html .= '<tr>' . PHP_EOL;
-			$html .= '  <td class="value"><span class="value"><pre>' . print_r(unserialize($value),true) . '</pre></span></td>' . PHP_EOL;
-			$html .= '</tr>' . PHP_EOL;
+			$html .= '' . PHP_EOL;
+			$html .= '<table cellspacing="0" cellpadding="0" id="sessionvariables" style="display:none">' . PHP_EOL;
+			$no = 1;
+			foreach( $_SESSION as $name => $value )
+			{
+				$html .= '<tr>' . PHP_EOL;
+				$html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
+				$html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;
+				$html .= '</tr>' . PHP_EOL;
+				$html .= '<tr>' . PHP_EOL;
+				$html .= '  <td class="value"><span class="value"><pre>' . print_r(unserialize($value),true) . '</pre></span></td>' . PHP_EOL;
+				$html .= '</tr>' . PHP_EOL;
 
-			$no ++;
+				$no ++;
+			}
+			$html .= '</table>' . PHP_EOL;
 		}
-		$html .= '</table>' . PHP_EOL;
 
 		// output loaded extensions
 		$loaded_extensions = get_loaded_extensions();

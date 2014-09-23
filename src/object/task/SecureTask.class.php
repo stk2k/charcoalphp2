@@ -43,12 +43,16 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	}
 
 	/**
-	 * ログインしているか
+	 * check if the client is authorized.
+	 * 
+	 * @param Charcoal_EventContext $context      event ontext
 	 */
-	public abstract function isAuthorized( $sequence );
+	public abstract function isAuthorized( $context );
 
 	/**
-	 * 権限を持っているか
+	 * check if the client has permission.
+	 * 
+	 * @param Charcoal_EventContext $context      event ontext
 	 */
 	public abstract function hasPermission( $context );
 
@@ -72,13 +76,10 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
 	 */
 	public function processEvent( $context )
 	{
-		$sequence = $context->getSequence();
-		$request  = $context->getRequest();
-
 		if ( $this->is_secure )
 		{
 			// ログインチェック
-			$auth = $this->isAuthorized( $sequence );
+			$auth = $this->isAuthorized( $context );
 			if ( ub($auth) !== TRUE )
 			{
 				// セキュリティ違反イベントを作成

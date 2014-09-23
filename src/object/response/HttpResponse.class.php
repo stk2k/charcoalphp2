@@ -74,7 +74,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	{
 		// add cookie headers
 		if ( $this->cookie ){
-			$this->cookie->writeAll();
+			//$this->cookie->writeAll();
 		}
 
 		// output headers
@@ -128,7 +128,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	public function redirect( $url, $flush_now = TRUE )
 	{
 //		$this->header( s("HTTP/1.0 302 Found"), $flush_now );
-		$this->clearHeaders();
+//		$this->clearHeaders();
 		$this->header( "Location: $url", $flush_now );
 	}
 

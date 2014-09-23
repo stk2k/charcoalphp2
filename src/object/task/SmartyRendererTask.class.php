@@ -111,7 +111,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 //				log_info( "system,renderer", "renderer", "Redirected to: $url" );
 			}
-			else if ( $event instanceof Charcoal_URLRedirectEvent ){
+			elseif ( $event instanceof Charcoal_URLRedirectEvent ){
 	
 				$url = $event->getURL();
 

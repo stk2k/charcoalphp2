@@ -322,7 +322,13 @@ class Charcoal_Framework
 		//==================================================================
 		// load sandbox
 
-		$profile = $sandbox->load();
+		try{
+			$profile = $sandbox->load();
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+			_throw( $ex );
+		}
 
 		//=======================================
 		// Start bootstrap
@@ -677,6 +683,11 @@ class Charcoal_Framework
 					break;
 				}
 			}
+		}
+		catch( Charcoal_ProfileLoadingException $e )
+		{
+			echo 'profile loading failed:' . $e->getMessage();
+			exit;
 		}
 		catch( Exception $e )
 		{

@@ -11,7 +11,7 @@
 
 class Charcoal_CookieReader extends Charcoal_Object
 {
-	private $_values;	// array
+	private $values;	// array
 
 	/*
 	 *	Construct object
@@ -20,14 +20,22 @@ class Charcoal_CookieReader extends Charcoal_Object
 	{
 		parent::__construct();
 
-		$this->_values = array();
+		$this->values = new Charcoal_HashMap();
 
 		// store client cookies
 		if ( $_COOKIE && is_array($_COOKIE) ){
 			foreach( $_COOKIE as $key => $value ){
-				$this->_values[$key] = $value;
+				$this->values[$key] = $value;
 			}
 		}
+	}
+
+	/*
+	 * Get all cookie values
+	 */
+	public function getAll()
+	{
+		return $this->values;
 	}
 
 	/*
@@ -35,7 +43,7 @@ class Charcoal_CookieReader extends Charcoal_Object
 	 */
 	public function getKeys()
 	{
-		return $this->_value->getKeys();
+		return $this->values->getKeys();
 	}
 
 	/*
@@ -43,8 +51,7 @@ class Charcoal_CookieReader extends Charcoal_Object
 	 */
 	public function getValue( $name )
 	{
-		$name = us($name);
-		return isset($this->_values[$name]) ? $this->_values[$name] : NULL;
+		return $this->values->get( $name );
 	}
 
 }

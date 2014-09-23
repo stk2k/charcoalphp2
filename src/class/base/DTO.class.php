@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
+class Charcoal_DTO extends Charcoal_Object implements IteratorAggregate, ArrayAccess
 {
 	/**
 	 *	constructor
@@ -26,18 +26,11 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 	}
 
 	/**
-	 *	Iterator interface: current() implementation
+	 *	IteratorAggregate interface : getIterator() implementation
 	 */
-	public function current() {
-		$key = key($this->values);
-		if ( property_exists($this,$key) ){
-			$var = $this->$key;
-		}
-		else{
-			$var = current($this->values);
-		}
-		return $var;
-	}
+	public function getIterator() {
+        return new ArrayIterator(get_object_vars($this));
+    }
 
 	/**
 	 *	ArrayAccess interface : offsetGet() implementation
@@ -50,7 +43,7 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 		if ( property_exists($this,$offset) ){
 			return $this->$offset;
 		}
-		return isset($this->values[ $offset ]) ? $this->values[ $offset ] : NULL;
+		return NULL;
 	}
 
 	/**
@@ -61,7 +54,6 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 		if ( is_object($offset) ){
 			$offset = $offset->__toString();
 		}
-		$this->values[ $offset ] = $value;
 		if ( property_exists($this,$offset) ){
 			$this->$offset = $value;
 		}
@@ -75,7 +67,7 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 		if ( property_exists($this,$offset) ){
 			return TRUE;
 		}
-		return isset($this->values[$offset]);
+		return FALSE;
 	}
 
 	/**
@@ -83,7 +75,6 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 	 */
 	public function offsetUnset($offset)
 	{
-		unset($this->values[$offset]);
 		if ( property_exists($this,$offset) ){
 			$this->$offset = NULL;
 		}
@@ -97,8 +88,6 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 	public function setArray( $array )
 	{
 //		Charcoal_ParamTrait::checkRawArray( 1, $array );
-
-		parent::setArray( $array );
 
 		foreach ( $array as $key => $value ) {
 			if ( property_exists($this, $key) ){
@@ -115,8 +104,6 @@ class Charcoal_DTO extends Charcoal_HashMap implements Iterator, ArrayAccess
 	public function setHashMap( $map )
 	{
 //		Charcoal_ParamTrait::checkHashMap( 1, $map );
-
-		parent::setHashMap( $map );
 
 		foreach ( $map as $key => $value ) {
 			if ( property_exists($this, $key) ){

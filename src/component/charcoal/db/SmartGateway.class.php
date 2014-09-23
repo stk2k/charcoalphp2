@@ -242,6 +242,52 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	}
 
 	/**
+	 *	increment field value
+	 *	
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param int $data_id            identify database entity
+	 *	@param string $field           field name to increment
+	 */
+	public function incrementField( $query_target, $data_id, $field ) 
+	{
+		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
+			$this->impl->incrementField( $query_target, $data_id, $field );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
+	 *	decrement field value
+	 *	
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param int $data_id            identify database entity
+	 *	@param string $field           field name to decrement
+	 */
+	public function decrementField( $query_target, $data_id, $field ) 
+	{
+		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
+			$this->impl->decrementField( $query_target, $data_id, $field );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
 	 *	update record with multiple fields
 	 *	
 	 *	@param string $query_target    description about target model, alias, or joins

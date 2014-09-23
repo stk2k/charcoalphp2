@@ -26,7 +26,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return $default_value;
+			return s($default_value);
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -52,7 +52,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return $default_value;
+			return v($default_value);
 		}
 
 		// cast to array value
@@ -83,7 +83,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return $default_value;
+			return m($default_value);
 		}
 
 		// cast to hash map value
@@ -114,7 +114,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return $default_value;
+			return i($default_value);
 		}
 
 		// cast to integer value
@@ -145,7 +145,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return $default_value;
+			return f($default_value);
 		}
 
 		// cast to float value
@@ -176,7 +176,7 @@ class Charcoal_ArrayTrait
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return $default_value;
+			return b($default_value);
 		}
 
 		// cast to boolean value

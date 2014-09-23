@@ -73,19 +73,21 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 		foreach( $joins as $join ){
 			$join_type  = $join->getJoinType();
-			$join_model = $join->getModelName();
+			$join_model_name = $join->getModelName();
 			$join_alias = $join->getAlias();
 			$join_cond  = $join->getCondition();
 
+			$join_model = $this->getSandbox()->createObject( $join_model_name, 'table_model' );
+
 			switch( $join_type ){
 			case Charcoal_EnumSQLJoinType::INNER_JOIN:
-				$sql .= ' INNER JOIN ' . $join_model;
+				$sql .= ' INNER JOIN ' . $join_model->getTableName();
 				break;
 			case Charcoal_EnumSQLJoinType::LEFT_JOIN:
-				$sql .= ' LEFT JOIN ' . $join_model;
+				$sql .= ' LEFT JOIN ' . $join_model->getTableName();
 				break;
 			case Charcoal_EnumSQLJoinType::RIGHT_JOIN:
-				$sql .= ' RIGHT JOIN ' . $join_model;
+				$sql .= ' RIGHT JOIN ' . $join_model->getTableName();
 				break;
 			}
 
@@ -197,8 +199,10 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 					$params = uv( $update->getParameters() );
 					if ( count($params) == 1 ){
 						switch( $params[0] ){
-						case 'now':		$function = 'NOW()';	break;
-						default:        $function = 'NULL';		break;
+						case 'now':			$function = 'NOW()';	break;
+						case 'increment':	$function = $field . ' + 1';	break;
+						case 'decrement':	$function = $field . ' - 1';	break;
+						default:        	$function = 'NULL';		break;
 						}
 					}
 					// 関数で更新
@@ -376,19 +380,21 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 		foreach( $joins as $join ){
 			$join_type  = $join->getJoinType();
-			$join_model = $join->getModelName();
+			$join_model_name = $join->getModelName();
 			$join_alias = $join->getAlias();
 			$join_cond  = $join->getCondition();
 
+			$join_model = $this->getSandbox()->createObject( $join_model_name, 'table_model' );
+
 			switch( $join_type ){
 			case Charcoal_EnumSQLJoinType::INNER_JOIN:
-				$sql .= ' INNER JOIN ' . $join_model;
+				$sql .= ' INNER JOIN ' . $join_model->getTableName();
 				break;
 			case Charcoal_EnumSQLJoinType::LEFT_JOIN:
-				$sql .= ' LEFT JOIN ' . $join_model;
+				$sql .= ' LEFT JOIN ' . $join_model->getTableName();
 				break;
 			case Charcoal_EnumSQLJoinType::RIGHT_JOIN:
-				$sql .= ' RIGHT JOIN ' . $join_model;
+				$sql .= ' RIGHT JOIN ' . $join_model->getTableName();
 				break;
 			}
 

@@ -73,7 +73,7 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 	 */
 	public function getCookies()
 	{
-		return $this->cookie->toArray();
+		return $this->cookie->getAll();
 	}
 
 	/*
