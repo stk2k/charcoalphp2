@@ -11,6 +11,8 @@
 
 class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 {
+	const TAG = 'http_response';
+
 	private $status;
 	private $cookie;
 
@@ -47,7 +49,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	{
 		parent::terminate();
 
-		log_debug( "system, debug, response", "terminating response." );
+		log_debug( 'system, debug, response', "terminating response.", self::TAG );
 
 		$this->flushHeaders();
 	}
@@ -64,7 +66,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 	{
 		$this->headers[] = new Charcoal_HttpHeader( $header, $replace );
 
-		log_debug( "system, debug, response", "header added : $header(replace=$replace)" );
+		log_debug( 'system, debug, response', "header added : $header(replace=$replace)", self::TAG );
 	}
 
 	/**
@@ -80,13 +82,13 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 		// output headers
 		foreach( $this->headers as $h ){
 			header( $h->getHeader(), $h->getReplace() );
-			log_debug( "system, debug, response", "header flushed: $h" );
+			log_debug( 'system, debug, response', "header flushed: $h", self::TAG );
 		}
 
 		// erase all headers
 		$this->headers = array();
 
-		log_debug( "system, debug, response", "headers are flushed." );
+		log_debug( 'system, debug, response', "headers are flushed.", self::TAG );
 	}
 
 	/**
@@ -101,7 +103,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 		// erase all headers
 		$this->headers = array();
 
-		log_debug( "system, debug, response", "headers are cleared." );
+		log_debug( 'system, debug, response', "headers are cleared.", self::TAG );
 	}
 
 	/**
@@ -130,6 +132,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 //		$this->header( s("HTTP/1.0 302 Found"), $flush_now );
 //		$this->clearHeaders();
 		$this->header( "Location: $url", $flush_now );
+		log_debug( 'system, debug, response', "Location: $url", self::TAG );
 	}
 
 	/**

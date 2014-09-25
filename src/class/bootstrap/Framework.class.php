@@ -190,7 +190,7 @@ class Charcoal_Framework
 		// ヘッダ出力
 		header( "HTTP/1.0 $status_code $header_msg", true, $status_code );
 
-//		log_error( 'system,error', 'framework',"HTTP/1.0 $status_code $header_msg");
+		log_error( 'system,debug,error', "HTTP/1.0 $status_code $header_msg", 'framework');
 	}
 
 	/**

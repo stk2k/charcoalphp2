@@ -695,12 +695,12 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::save()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target      description about target model, alias, or joins
-	 *	@param array $data                             associative array or HashMap object to insert
+	 *	@param array $data                             associative array/HashMap/DTO object to insert
 	 */
 	public function save( $query_target, $data )
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::checkHashMap( 2, $data );
+		Charcoal_ParamTrait::checkHashMapOrDTO( 2, $data );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
@@ -750,12 +750,12 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::insert()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target      description about target model, alias, or joins
-	 *	@param array $data                             associative array or HashMap object to insert
+	 *	@param array $data                             associative array/HashMap/DTO object to insert
 	 */
 	public function insert( $query_target, $data )
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::checkHashMap( 2, $data );
+		Charcoal_ParamTrait::checkHashMapOrDTO( 2, $data );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();

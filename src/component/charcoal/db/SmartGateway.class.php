@@ -314,7 +314,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	insert DTO into specified table
 	 *	
 	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param array $data             associative array or HashMap object to insert
+	 *	@param array $data             associative array/HashMap/DTO object to insert
 	 */
 	public function insert( $query_target, $data )
 	{
@@ -336,7 +336,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	insert or update DTO into specified table
 	 *	
 	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param array $data             associative array or HashMap object to update
+	 *	@param array $data             associative array/HashMap/DTO object to update
 	 */
 	public function save( $query_target, $data )
 	{

@@ -89,7 +89,7 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 			return $this->_local->getString( $key );
 		}
 
-		return $default_value ? $default_value : s('');
+		return $default_value;
 	}
 
 	/**

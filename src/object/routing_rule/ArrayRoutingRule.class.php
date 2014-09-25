@@ -31,14 +31,14 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
 	{
 		parent::configure( $config );
 
-		$rules_section = $config->getSection( s('routing rules') );
+		$rules_section = $config->getSection( 'routing rules' );
 
 		$patterns = $rules_section->getKeys();
 
 		foreach( $patterns as $pattern ){
-			$proc_path = $rules_section->getString( s($pattern) );
+			$proc_path = $rules_section->getString( $pattern );
 			if ( $proc_path === NULL ){
-				_throw( new Charcoal_RoutingRuleConfigException( $this, s($pattern), ('can not be NULL') ) );
+				_throw( new Charcoal_RoutingRuleConfigException( $pattern, 'can not be NULL' ) );
 			}
 			$this->proc_paths[$pattern] = us($proc_path);
 		}

@@ -33,6 +33,7 @@ class Charcoal_ParamTrait
 	const TYPE_O_EXCEPTION   = 'Exception';
 	const TYPE_O_OBJECT      = 'Charcoal_Object';
 	const TYPE_O_FILE        = 'Charcoal_File';
+	const TYPE_O_DTO         = 'Charcoal_DTO';
 
 	// fraework types
 	const TYPE_F_SANDBOX     = 'Charcoal_Sandbox';
@@ -296,6 +297,22 @@ class Charcoal_ParamTrait
 		list( $file, $line ) = Charcoal_System::caller(1);
 
 		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP ), $actual, $null_allowed );
+	}
+
+	/**
+	 *	check a parameter if its type is array or HashMap or DTO
+	 *	
+	 *	@param int $key                parameter id
+	 *	@param mixed $actual           data to check
+	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
+	 *	
+	 *	@return string        passed type
+	 */
+	public static function checkHashMapOrDTO( $key, $actual, $null_allowed = FALSE )
+	{
+		list( $file, $line ) = Charcoal_System::caller(1);
+
+		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP, self::TYPE_O_DTO ), $actual, $null_allowed );
 	}
 
 	/**

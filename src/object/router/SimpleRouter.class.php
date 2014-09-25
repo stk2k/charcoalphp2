@@ -108,8 +108,82 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 			$url_dir = array_shift( $url_dir_array );
 			if ( strpos($rule_dir,':') === 0 && strlen($url_dir) > 0 ){
 				// コロンで始まる階層は変数名
-				$key = substr($rule_dir,1);
-				$params[ $key ] = $url_dir;
+				$key = substr( $rule_dir, 1 );
+
+				$pos_at = strpos( $key, '@' );
+				if ( $pos_at === FALSE ){
+					// 型指定子(@)がないので無条件でパス名を変数にセット
+					$params[ $key ] = $url_dir;
+				}
+				else{
+					// 型指定子(@)がある場合は型チェック
+					$type = substr( $key, $pos_at + 1 );
+					$key = substr( $key,0, $pos_at );
+					switch( $type ){
+					case 'int':
+					case 'integer':
+						if ( preg_match('/^[0-9\-]*$/',$url_dir) ){
+							// 整数なのでOK
+							$params[ $key ] = intval($url_dir);
+						}
+						else{
+							// マッチしなかった
+							log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir type=integer" );
+							return NULL;
+						}
+						break;
+					case 'float':
+					case 'double':
+						if ( preg_match('/^[0-9\-\.]*$/',$url_dir) ){
+							// 少数なのでOK
+							$params[ $key ] = floatval($url_dir);
+						}
+						else{
+							// マッチしなかった
+							log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir type=float" );
+							return NULL;
+						}
+						break;
+					case 'alphabet':
+						if ( preg_match('/^[a-zA-Z]*$/',$url_dir) ){
+							// アルファベットなのでOK
+							$params[ $key ] = $url_dir;
+						}
+						else{
+							// マッチしなかった
+							log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir type=alphabet" );
+							return NULL;
+						}
+						break;
+					case 'alphanum':
+					case 'alphanumeric':
+						if ( preg_match('/^[0-9a-zA-Z]*$/',$url_dir) ){
+							// アルファベット＋数字なのでOK
+							$params[ $key ] = $url_dir;
+						}
+						else{
+							// マッチしなかった
+							log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir type=alphanumeric" );
+							return NULL;
+						}
+						break;
+					case 'string':
+						if ( preg_match('/^[0-9a-zA-Z_\-\.\:\=]*$/',$url_dir) ){
+							// 文字列なのでOK
+							$params[ $key ] = $url_dir;
+						}
+						else{
+							// マッチしなかった
+							log_info( 'debug,router', "[$rule] did not matched to [$url]: rule_dir=$rule_dir url_dir=$url_dir type=string" );
+							return NULL;
+						}
+						break;
+					default:
+						// 型指定子(@)の後が不正
+						_throw( new Charcoal_RoutingRuleSyntaxErrorException($rule,'invalid parameter type identifier:' . $type) );
+						break;
+					}
+				}
 			}
 			elseif ( $rule_dir !== $url_dir ){
 				// マッチしなかった

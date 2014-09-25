@@ -160,6 +160,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ObjectPathFormatException'			=> 'exception',
 				'Charcoal_ProfileConfigException'				=> 'exception',
 				'Charcoal_RoutingRuletConfigException'			=> 'exception',
+				'Charcoal_RoutingRuleSyntaxErrorException'		=> 'exception',
 				'Charcoal_PhpSourceParserException'				=> 'exception',
 				'Charcoal_ProcedureNotFoundException'			=> 'exception',
 				'Charcoal_ProcessEventAtTaskException'			=> 'exception',
