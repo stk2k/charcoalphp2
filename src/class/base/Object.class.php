@@ -11,22 +11,22 @@
 
 class Charcoal_Object
 {
-	private $_object_hash;
-	private static $id_master;
+//	private $_object_hash;
+//	private static $id_master;
 
 	/**
 	 *	Constructor
 	 */
 	public function __construct()
 	{
-		$class_name = get_class($this);
+//		$class_name = get_class($this);
 
 //		static $id_master = 0;
 //		$this->_object_hash = ++$id_master;
 
-		$cnt = isset(self::$id_master[$class_name]) ? self::$id_master[$class_name] : 0;
-		$this->_object_hash = ++$cnt;
-		self::$id_master[$class_name] = $cnt;
+//		$cnt = isset(self::$id_master[$class_name]) ? self::$id_master[$class_name] : 0;
+//		$this->_object_hash = ++$cnt;
+//		self::$id_master[$class_name] = $cnt;
 	}
 
 	/**
@@ -46,7 +46,8 @@ class Charcoal_Object
 	 */
 	public function hash()
 	{
-		return $this->_object_hash;
+		return spl_object_hash($this);
+//		return $this->_object_hash;
 	}
 
 	/**
@@ -107,7 +108,7 @@ class Charcoal_Object
 	 */
 	public function toString()
 	{
-		return '[class=' . get_class($this) . ' hash=' . $this->_object_hash . ']';
+		return '[class=' . get_class($this) . ' hash=' . $this->hash() . ']';
 	}
 }
 

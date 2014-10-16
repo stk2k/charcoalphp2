@@ -120,6 +120,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 					$type = substr( $key, $pos_at + 1 );
 					$key = substr( $key,0, $pos_at );
 					switch( $type ){
+					case 'i':
 					case 'int':
 					case 'integer':
 						if ( preg_match('/^[0-9\-]*$/',$url_dir) ){
@@ -132,6 +133,8 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 							return NULL;
 						}
 						break;
+					case 'f':
+					case 'd':
 					case 'float':
 					case 'double':
 						if ( preg_match('/^[0-9\-\.]*$/',$url_dir) ){
@@ -144,6 +147,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 							return NULL;
 						}
 						break;
+					case 'a':
 					case 'alphabet':
 						if ( preg_match('/^[a-zA-Z]*$/',$url_dir) ){
 							// アルファベットなのでOK
@@ -155,6 +159,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 							return NULL;
 						}
 						break;
+					case 'an':
 					case 'alphanum':
 					case 'alphanumeric':
 						if ( preg_match('/^[0-9a-zA-Z]*$/',$url_dir) ){
@@ -167,6 +172,7 @@ class Charcoal_SimpleRouter extends Charcoal_AbstractRouter
 							return NULL;
 						}
 						break;
+					case 's':
 					case 'string':
 						if ( preg_match('/^[0-9a-zA-Z_\-\.\:\=]*$/',$url_dir) ){
 							// 文字列なのでOK

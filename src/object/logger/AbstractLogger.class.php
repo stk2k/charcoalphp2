@@ -41,17 +41,6 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 
 	}
 
-	/**
-	 * Output debug information when configure method called
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function outputDebugConfig( $config )
-	{
-		ad( $config );
-	}
-
-
 	/*
 	 * write header message
 	 */

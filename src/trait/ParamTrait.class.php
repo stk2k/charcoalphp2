@@ -38,6 +38,18 @@ class Charcoal_ParamTrait
 	// fraework types
 	const TYPE_F_SANDBOX     = 'Charcoal_Sandbox';
 
+	// enable flag
+	private static $enabled;
+
+	/**
+	 * enable check methods
+	 *
+	 */
+	public static function enable()
+	{
+		self::$enabled = TRUE;
+	}
+
 	/**
 	 * check if the value type seems to be boolean
 	 *
@@ -55,14 +67,11 @@ class Charcoal_ParamTrait
 	 *	
 	 *	@param string $type            type name to check
 	 *	@param mixed $actual           data to check
-	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
 	 *	
 	 *	@return string     If the test passes, it returns type name. Otherwise, returns FALSE.
 	 */
-	private static function _testType( $type, $actual, $null_allowed = FALSE )
+	private static function _testType( $type, $actual )
 	{
-		if ( $null_allowed && $actual === NULL )	return 'NULL';
-
 		switch( $type ){
 		case 'string':		return is_string( $actual ) ? 'string' : FALSE;
 		case 'array':		return is_array( $actual ) ? 'array' : FALSE;
@@ -90,12 +99,17 @@ class Charcoal_ParamTrait
 	 *	
 	 *	@return string        passed type
 	 */
-	public static function checkType( $file, $line, $key, $type, $actual, $null_allowed = FALSE )
+	public static function checkType( $key, $type, $actual, $null_allowed = FALSE )
 	{
-		$ret = self::_testType( $type, $actual, $null_allowed);
+		if ( !self::$enabled )	return '';
+
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		$ret = self::_testType( $type, $actual );
 		if ( $ret ){
 			return $ret;
 		}
+		list( $file, $line ) = Charcoal_System::caller(2);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $type, $actual ) );
 	}
 
@@ -103,23 +117,25 @@ class Charcoal_ParamTrait
 	 *	check a parameter
 	 *	
 	 *	@param int $key                parameter id
-	 *	@param mixed $types           type list to check
+	 *	@param mixed $types            type list to check
 	 *	@param mixed $actual           data to check
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
 	 *	
 	 *	@return string        passed type
 	 */
-	public static function checkTypes( $file, $line, $key, $types, $actual, $null_allowed = FALSE )
+	public static function checkTypes( $key, $types, $actual, $null_allowed = FALSE )
 	{
+		if ( !self::$enabled )	return '';
+
 		if ( $null_allowed && $actual === NULL )	return 'NULL';
 
 		foreach( $types as $type ){
-			$ret = self::_testType( $type, $actual, $null_allowed );
+			$ret = self::_testType( $type, $actual );
 			if ( $ret ){
 				return $ret;
 			}
 		}
-
+		list( $file, $line ) = Charcoal_System::caller(2);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $types, $actual ) );
 	}
 
@@ -134,9 +150,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkString( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING ), $actual, $null_allowed );
 	}
 
 	/**
@@ -150,9 +164,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkInteger( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_INTEGER, self::TYPE_O_INTEGER ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_INTEGER, self::TYPE_O_INTEGER ), $actual, $null_allowed );
 	}
 
 	/**
@@ -166,9 +178,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkFloat( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_FLOAT, self::TYPE_O_FLOAT ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_FLOAT, self::TYPE_O_FLOAT ), $actual, $null_allowed );
 	}
 
 	/**
@@ -182,9 +192,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkBoolean( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_BOOL, self::TYPE_O_BOOLEAN ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_BOOL, self::TYPE_O_BOOLEAN ), $actual, $null_allowed );
 	}
 
 	/**
@@ -198,9 +206,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkRawString( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_STRING, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_STRING, $actual, $null_allowed );
 	}
 
 	/**
@@ -214,9 +220,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkRawInteger( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_INTEGER, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_INTEGER, $actual, $null_allowed );
 	}
 
 	/**
@@ -230,9 +234,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkRawFloat( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_FLOAT, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_FLOAT, $actual, $null_allowed );
 	}
 
 	/**
@@ -246,9 +248,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkRawBool( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_BOOL, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_BOOL, $actual, $null_allowed );
 	}
 
 	/**
@@ -262,9 +262,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkRawArray( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_ARRAY, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_ARRAY, $actual, $null_allowed );
 	}
 
 	/**
@@ -278,9 +276,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkVector( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_ARRAY, self::TYPE_O_VECTOR ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_VECTOR ), $actual, $null_allowed );
 	}
 
 	/**
@@ -294,9 +290,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkHashMap( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP ), $actual, $null_allowed );
 	}
 
 	/**
@@ -310,9 +304,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkHashMapOrDTO( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP, self::TYPE_O_DTO ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP, self::TYPE_O_DTO ), $actual, $null_allowed );
 	}
 
 	/**
@@ -326,9 +318,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkProperties( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_ARRAY, self::TYPE_O_PROPERTIES ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_PROPERTIES ), $actual, $null_allowed );
 	}
 
 	/**
@@ -342,9 +332,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkObjectPath( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_O_OBJECTPATH, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_O_OBJECTPATH, $actual, $null_allowed );
 	}
 
 	/**
@@ -358,9 +346,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkConfig( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_O_CONFIG, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_O_CONFIG, $actual, $null_allowed );
 	}
 
 	/**
@@ -374,9 +360,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkException( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_O_EXCEPTION, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_O_EXCEPTION, $actual, $null_allowed );
 	}
 
 	/**
@@ -390,9 +374,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkResource( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_RESOURCE, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_RESOURCE, $actual, $null_allowed );
 	}
 
 	/**
@@ -406,9 +388,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkRawObject( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_P_OBJECT, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_P_OBJECT, $actual, $null_allowed );
 	}
 
 	/**
@@ -422,9 +402,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkCharcoalObject( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_O_OBJECT, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_O_OBJECT, $actual, $null_allowed );
 	}
 
 	/**
@@ -438,9 +416,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkFile( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_O_FILE, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_O_FILE, $actual, $null_allowed );
 	}
 
 	/**
@@ -454,8 +430,6 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkScalar( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
 		static $types;
 		if ( !$types ){
 			$types = array(
@@ -465,7 +439,7 @@ class Charcoal_ParamTrait
 						self::TYPE_O_STRING, self::TYPE_O_INTEGER, self::TYPE_O_FLOAT, self::TYPE_O_BOOLEAN,
 					);
 		}
-		return self::checkTypes( $file, $line, $key, $types, $actual, $null_allowed );
+		return self::checkTypes( $key, $types, $actual, $null_allowed );
 	}
 
 	/**
@@ -480,9 +454,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkStringOrObject( $key, $type, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, $type ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, $type ), $actual, $null_allowed );
 	}
 
 	/**
@@ -497,9 +469,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkStringOrObjectPath( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkTypes( $file, $line, $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, self::TYPE_O_OBJECTPATH ), $actual, $null_allowed );
+		return self::checkTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, self::TYPE_O_OBJECTPATH ), $actual, $null_allowed );
 	}
 
 	/**
@@ -513,9 +483,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkSandbox( $key, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
-		return self::checkType( $file, $line, $key, self::TYPE_F_SANDBOX, $actual, $null_allowed );
+		return self::checkType( $key, self::TYPE_F_SANDBOX, $actual, $null_allowed );
 	}
 
 	/**
@@ -530,13 +498,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkIsA( $key, $class_name, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
 		if ( $null_allowed && $actual === NULL )	return 'NULL';
 
 		if ( $actual instanceof $class_name ){
 			return TRUE;
 		}
+		list( $file, $line ) = Charcoal_System::caller(1);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $class_name, $actual ) );
 	}
 
@@ -552,13 +519,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function checkImplements( $key, $interface_name, $actual, $null_allowed = FALSE )
 	{
-		list( $file, $line ) = Charcoal_System::caller(1);
-
 		if ( $null_allowed && $actual === NULL )	return 'NULL';
 
 		if ( $actual instanceof $interface_name ){
 			return TRUE;
 		}
+		list( $file, $line ) = Charcoal_System::caller(1);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $interface_name, $actual ) );
 	}
 
@@ -572,10 +538,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isString( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_STRING, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_STRING, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_STRING, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_STRING, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -591,10 +559,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isInteger( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_INTEGER, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_INTEGER, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_INTEGER, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_INTEGER, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -610,10 +580,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isFloat( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_FLOAT, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_FLOAT, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_FLOAT, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_FLOAT, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -629,10 +601,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isBoolean( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_BOOL, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_BOOL, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_BOOL, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_BOOL, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -648,7 +622,9 @@ class Charcoal_ParamTrait
 	 */
 	public static function isArray( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_ARRAY, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_ARRAY, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -664,10 +640,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isVector( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_ARRAY, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_ARRAY, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_VECTOR, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_VECTOR, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -683,10 +661,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isHashMap( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_ARRAY, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_ARRAY, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_HASHMAP, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_HASHMAP, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;
@@ -702,10 +682,12 @@ class Charcoal_ParamTrait
 	 */
 	public static function isProperties( $actual, $null_allowed = FALSE )
 	{
-		if ( self::_testType( self::TYPE_P_ARRAY, $actual, $null_allowed ) ){
+		if ( $null_allowed && $actual === NULL )	return 'NULL';
+
+		if ( self::_testType( self::TYPE_P_ARRAY, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_PROPERTIES, $actual, $null_allowed ) ){
+		if ( self::_testType( self::TYPE_O_PROPERTIES, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;

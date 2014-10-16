@@ -33,26 +33,6 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	public function configure( $config )
 	{
 //		Charcoal_ParamTrait::checkConfig( 1, $config );
-
-		if ( is_array($config) || $config === NULL ){
-			$config = new Chacoal_Config( $config );
-		}
-		
-		$this->debug   = $config->getBoolean( 'debug', b(FALSE) );
-
-		if ( $this->debug->isTrue() ){
-			$this->outputDebugConfig( $config );
-		}
-	}
-
-	/**
-	 * Output debug information when configure method called
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function outputDebugConfig( $config )
-	{
-		log_debug( "system, debug", "config:" . print_r($config,true), 'config' );
 	}
 
 	/**

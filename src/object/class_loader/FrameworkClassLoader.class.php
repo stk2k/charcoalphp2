@@ -238,13 +238,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SimpleProcedure'					=> 'object/procedure',
 
 		// component classes
-				'Charcoal_Linker'							=> 'component/charcoal',
-				'Charcoal_BreadcrumbList'					=> 'component/charcoal',
-				'Charcoal_Calendar'							=> 'component/charcoal',
-				'Charcoal_Pager'							=> 'component/charcoal',
-				'Charcoal_JapanesePrefectureList'			=> 'component/charcoal/list',
-				'Charcoal_CharcoalUnitTest'					=> 'component/charcoal/test',
-				'Charcoal_CharcoalMail'						=> 'component/charcoal/mail',
 				'Charcoal_QdmailSender'						=> 'component/qdmail',
 				'Charcoal_QdmailAddress'					=> 'component/qdmail',
 				'Charcoal_SmartyRenderer'					=> 'component/smarty',
@@ -261,6 +254,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_TidyComponent'					=> 'component/html/repair/tidy',
 				'Charcoal_PhpXmlParserComponent'			=> 'component/xml/parser/php',
 				'Charcoal_PhpXmlElementHandler'				=> 'component/xml/parser/php',
+				'Charcoal_PearPagerComponent'				=> 'component/pear/pager',
 
 		// component classes(smart gateway)
 				'Charcoal_SmartGateway'						=> 'component/charcoal/db',
@@ -287,32 +281,33 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_QueryContext'						=> 'component/charcoal/db/context',
 
 		// transformer classes
-				'Charcoal_AbstractTransformer'					=> 'object/transformer',
+				'Charcoal_AbstractTransformer'				=> 'object/transformer',
 				'Charcoal_SimpleTransformer'				=> 'object/transformer',
 
 		// layout classes
-				'Charcoal_AbstractLayout'						=> 'object/layout',
+				'Charcoal_AbstractLayout'					=> 'object/layout',
 				'Charcoal_ProcedureRedirectLayout'			=> 'object/layout',
 				'Charcoal_URLRedirectLayout'				=> 'object/layout',
 
 		// response filter classes
-				'Charcoal_AbstractResponseFilter'				=> 'object/response_filter',
+				'Charcoal_AbstractResponseFilter'			=> 'object/response_filter',
 				'Charcoal_HtmlEscapeResponseFilter'			=> 'object/response_filter',
+				'Charcoal_StripTagsResponseFilter'			=> 'object/response_filter',
 
 		// Router classes
-				'Charcoal_AbstractRouter'						=> 'object/router',
+				'Charcoal_AbstractRouter'					=> 'object/router',
 				'Charcoal_SimpleRouter'						=> 'object/router',
 
 		// Routing rules classes
-				'Charcoal_AbstractRoutingRule'					=> 'object/routing_rule',
+				'Charcoal_AbstractRoutingRule'				=> 'object/routing_rule',
 				'Charcoal_ArrayRoutingRule'					=> 'object/routing_rule',
 
 		// Token genertor classes
-				'Charcoal_AbstractTokenGenerator'				=> 'object/token_generator',
+				'Charcoal_AbstractTokenGenerator'			=> 'object/token_generator',
 				'Charcoal_SimpleTokenGenerator'				=> 'object/token_generator',
 
 		// Cache Driver classes
-				'Charcoal_AbstractCacheDriver'					=> 'object/cache_driver',
+				'Charcoal_AbstractCacheDriver'				=> 'object/cache_driver',
 				'Charcoal_MemcachedCacheDriver'				=> 'object/cache_driver',
 				'Charcoal_MemcacheCacheDriver'				=> 'object/cache_driver',
 				'Charcoal_FileCacheDriver'					=> 'object/cache_driver',

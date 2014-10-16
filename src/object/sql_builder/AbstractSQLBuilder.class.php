@@ -109,6 +109,9 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		if ( !empty($where_clause) ){
 			$sql .= ' WHERE ' . $where_clause;
 		}
+		if ( !empty($group_by) ){
+			$sql .= ' GROUP BY ' . $group_by;
+		}
 		if ( !empty($order_by) ){
 			$sql .= ' ORDER BY ' . $order_by;
 		}
@@ -117,9 +120,6 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		}
 		if ( !empty($offset) ){
 			$sql .= ' OFFSET ' . $offset;
-		}
-		if ( !empty($group_by) ){
-			$sql .= ' GROUP BY ' . $group_by;
 		}
 
 		if ( Charcoal_System::isBitSet( $options, Charcoal_EnumQueryOption::FOR_UPDATE ) ){

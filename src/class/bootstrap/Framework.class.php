@@ -655,6 +655,10 @@ class Charcoal_Framework
 	{
 		Charcoal_Benchmark::start();
 
+		if ( $debug ){
+			Charcoal_ParamTrait::enable();
+		}
+
 //		Charcoal_ParamTrait::checkBoolean( 1, $debug, TRUE );
 //		Charcoal_ParamTrait::checkSandbox( 2, $sandbox, TRUE );
 
