@@ -119,7 +119,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 //				log_info( "system,renderer", "renderer", "Redirected to: $url" );
 			}
-			else{
+			elseif ( $event instanceof Charcoal_RenderLayoutEvent ){
 
 				// Page information
 				$page_info = $layout->getAttribute( s('page_info') );
@@ -160,10 +160,13 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				// Assign all
 				$smarty->assign( 'charcoal', $charcoal );
 
-				// Assign all response values
-				$keys = $response->getKeys();
-				foreach( $keys as $key ){
-					$value = $response->get( s($key) );
+				// Assign all layout values
+				$layout_values = $event->getValues();
+				if ( !$layout_values ){
+					// If layout values are not set, response values will be used instead.
+					$layout_values = $response->getAll();
+				}
+				foreach( $layout_values as $key => $value ){
 					$smarty->assign( $key, $value );
 				}
 
@@ -183,7 +186,14 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				$html = $smarty->fetch( $template );
 				log_info( "smarty","html=$html" );
 
-				echo $html;
+				// output to rendering target
+				$render_target = $event->getRenderTarget();
+				if ( $render_target ){
+					$render_target->render( $html );
+				}
+				else{
+					echo $html;
+				}
 			}
 		}
 		catch ( Exception $ex )

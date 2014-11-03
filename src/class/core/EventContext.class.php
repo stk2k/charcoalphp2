@@ -16,7 +16,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	private $event;
 	private $sequence;
 	private $response;
-	private $task_manager;
+	private $event_queue;
 	private $sandbox;
 
 	/**
@@ -154,27 +154,27 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	}
 
 	/**
-	 *	Get current task manager
-	 *
-	 * @return Charcoal_Response
+	 *	Get event queue object
+     *
+     * @return Charcoal_IEventQueue      event queue object
 	 */
-	public function getTaskManager()
+	public function getEventQueue()
 	{
-		return $this->task_manager;
+		return $this->event_queue;
 	}
 
 	/**
-	 *	Set current task manager
+	 *	Set event queue object
 	 *
-	 * @param Charcoal_IResponse $response   Response object to set
+	 * @param Charcoal_IEventQueue $event_queue   event queue object
 	 */
-	public function setTaskManager( $task_manager )
+	public function setEventQueue( $event_queue )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IEventQueue', $event_queue );
 
-		$this->task_manager = $task_manager;
+		$this->event_queue = $event_queue;
 	}
-
+	
 	/**
 	 *	Get sandbox profile
 	 *

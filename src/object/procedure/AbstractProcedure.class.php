@@ -54,10 +54,12 @@ abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalObject implem
 		{
 			log_info( "system, debug, config",  "task_manager：" . $this->task_manager, self::TAG );
 			log_info( "system, debug, config",  "forward_target：" . $this->forward_target, self::TAG );
-			log_info( "system, debug, config",  "modules：" . $this->modules, self::TAG );
-			log_info( "system, debug, config",  "events：" . $this->events, self::TAG );
+			log_info( "system, debug, config",  "modules：" . print_r($this->modules,true), self::TAG );
+			log_info( "system, debug, config",  "events：" . print_r($this->events,true), self::TAG );
 			log_info( "system, debug, config",  "debug_mode" . $this->debug_mode, self::TAG );
 			log_info( "system, debug, config",  "log_enabled" . $this->log_enabled, self::TAG );
+			log_info( "system, debug, config",  "log_level" . $this->log_level, self::TAG );
+			log_info( "system, debug, config",  "log_loggers" . print_r($this->log_loggers,true), self::TAG );
 		}
 	}
 

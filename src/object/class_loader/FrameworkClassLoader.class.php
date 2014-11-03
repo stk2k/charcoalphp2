@@ -65,6 +65,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_IDataSource'				=> 'interface',
 				'Charcoal_IEvent'					=> 'interface',
 				'Charcoal_IEventContext'			=> 'interface',
+				'Charcoal_IEventQueue'				=> 'interface',
 				'Charcoal_IExceptionHandler'		=> 'interface',
 				'Charcoal_IFileFilter'				=> 'interface',
 				'Charcoal_IHashable'				=> 'interface',
@@ -74,7 +75,9 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_IModule'					=> 'interface',
 				'Charcoal_IProcedure'				=> 'interface',
 				'Charcoal_IProperties'				=> 'interface',
+				'Charcoal_IQueue'					=> 'interface',
 				'Charcoal_IRedirectLayout'			=> 'interface',
+				'Charcoal_IRenderTarget'			=> 'interface',
 				'Charcoal_IRequest'					=> 'interface',
 				'Charcoal_IResponse'				=> 'interface',
 				'Charcoal_IResponseFilter'			=> 'interface',
@@ -98,7 +101,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ExceptionEvent'						=> 'object/event',
 				'Charcoal_HttpRequestEvent'						=> 'object/event',
 				'Charcoal_PermissionDeniedEvent'				=> 'object/event',
-				'Charcoal_RenderEvent'							=> 'object/event',
 				'Charcoal_RenderLayoutEvent'					=> 'object/event',
 				'Charcoal_SecurityFaultEvent'					=> 'object/event',
 				'Charcoal_SetupEvent'							=> 'object/event',
@@ -159,6 +161,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_NotSupportedOperationException'		=> 'exception',
 				'Charcoal_ObjectPathFormatException'			=> 'exception',
 				'Charcoal_ProfileConfigException'				=> 'exception',
+				'Charcoal_RenderTargetException'				=> 'exception',
 				'Charcoal_RoutingRuletConfigException'			=> 'exception',
 				'Charcoal_RoutingRuleSyntaxErrorException'		=> 'exception',
 				'Charcoal_PhpSourceParserException'				=> 'exception',
@@ -311,6 +314,11 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_MemcachedCacheDriver'				=> 'object/cache_driver',
 				'Charcoal_MemcacheCacheDriver'				=> 'object/cache_driver',
 				'Charcoal_FileCacheDriver'					=> 'object/cache_driver',
+
+		// Render target classes
+				'Charcoal_AbstractRenderTarget'				=> 'object/render_target',
+				'Charcoal_SimpleRenderTarget'				=> 'object/render_target',
+				'Charcoal_TextFileRenderTarget'				=> 'object/render_target',
 
 		);
 

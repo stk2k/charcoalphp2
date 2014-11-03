@@ -218,14 +218,14 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields
 	 */
 	public function find( $query_target, $options, $criteria, $fields = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkInteger( 2, $options );
 		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 4, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 4, $fields, TRUE );
 
 		$current_model_name  = $query_target->getModelName();
 		$current_model_alias = $query_target->getAlias();
@@ -237,7 +237,10 @@ class Charcoal_SmartGatewayImpl
 		$current_table_name  = $current_model->getTableName();
 
 		// make output fields
-		if ( $fields === NULL ){
+		if ( $fields !== NULL ){
+			$fields = explode( ',', $fields );
+		}
+		else{
 			// pickup fields from model
 			$fields = $current_model->getFieldList();
 
@@ -315,13 +318,13 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function findFirst( $query_target, $criteria, $fields = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		$criteria->setLimit( 1 );
 
@@ -335,13 +338,13 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function findFirstForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		$criteria->setLimit( 1 );
 
@@ -355,13 +358,13 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function findAll( $query_target, $criteria, $fields = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		return $this->find( $query_target, 0, $criteria, $fields );
 	}
@@ -371,13 +374,13 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function findAllForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		return $this->find( $query_target, Charcoal_EnumQueryOption::FOR_UPDATE, $criteria, $fields );
 	}
@@ -387,13 +390,13 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function findDistinct( $query_target, $fields, $criteria, $fields = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		return $this->find( $query_target, Charcoal_EnumQueryOption::DISTINCT, $criteria, $fields );
 	}
@@ -403,13 +406,13 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function findAllBy( $query_target, $field, $value, $fields = NULL )
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 3, $fields, TRUE );
+		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
 
 		$field = us( $field );
 
@@ -530,7 +533,7 @@ class Charcoal_SmartGatewayImpl
 	 *	@param int $aggregate_func                   identify aggregate function tpype
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param string $fields                        fields to be included result set
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL ) 
 	{
@@ -576,7 +579,7 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param string $fields                        fields to be included result set
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function count( $query_target, $criteria, $fields = NULL ) 
 	{
@@ -600,7 +603,7 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param string $fields                        fields to be included result set
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function max( $query_target, $criteria, $fields = NULL  ) 
 	{
@@ -620,7 +623,7 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param string $fields                        fields to be included result set
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function min( $query_target, $criteria, $fields ) 
 	{
@@ -639,8 +642,8 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::sum()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param string $fields                        fields to be included result set
+	 *	@param Charcoal_SQLCriteria $criteria         criteria object
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 */
 	public function sum( $query_target, $criteria, $fields ) 
 	{

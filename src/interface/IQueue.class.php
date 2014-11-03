@@ -1,34 +1,28 @@
 <?php
 /**
-* キュークラス
+* Event Context Interface
 *
 * PHP version 5
 *
-* @package    class.core
+* @package    interfaces
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-
-class Charcoal_Queue extends Charcoal_Vector implements Charcoal_IQueue
+interface Charcoal_IQueue
 {
 	/*
 	 * Take item from the queue
 	 *
 	 * @return mixed      item
 	 */
-	public function dequeue()
-	{
-		return $this->shift();
-	}
+	public function dequeue();
 
 	/*
 	 * Add item to the queue
 	 *
      * @param mixed $item       item to add
 	 */
-	public function enqueue( $item )
-	{
-		$this->add( $item );
-	}
+	public function enqueue( $item );
+	
 }
 

@@ -83,18 +83,18 @@ interface Charcoal_IEventContext
 	public function setResponse( $response );
 
 	/**
-	 *	Get current task manager
+	 *	Get event queue object
      *
-     * @return Charcoal_Response
+     * @return Charcoal_IEventQueue      event queue object
 	 */
-	public function getTaskManager();
+	public function getEventQueue();
 
 	/**
-	 *	Set current task manager
+	 *	Set event queue object
 	 *
-	 * @param Charcoal_IResponse $response   Response object to set
+	 * @param Charcoal_IEventQueue $event_queue   event queue object
 	 */
-	public function setTaskManager( $task_manager );
+	public function setEventQueue( $event_queue );
 
 }
 

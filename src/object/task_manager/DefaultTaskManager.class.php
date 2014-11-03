@@ -82,6 +82,16 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 		throw new Charcoal_TaskNotFoundException( $task_name );
 	}
 
+	/*
+	 * Get event queue
+	 *
+	 * @return Charcoal_IEventQueue       event queue object
+	 */
+	public function getEventQueue()
+	{
+		return $this->queue;
+	}
+
 	/**
 	 *   ステートフルタスクの保存を行う
 	 *

@@ -9,25 +9,8 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_EventQueue extends Charcoal_Queue
+class Charcoal_EventQueue extends Charcoal_Queue implements Charcoal_IEventQueue
 {
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/*
-	 * イベントをキューに追加する
-	 *
-	 */
-	public function enqueueEvent( Charcoal_IEvent $event )
-	{
-		parent::enqueue( $event );
-	}
-
 	/*
 	 * イベントのキューを優先度でソートする
 	 *

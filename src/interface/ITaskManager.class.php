@@ -26,6 +26,13 @@ interface Charcoal_ITaskManager extends Charcoal_ICharcoalObject
 	 */
 	public function getTask( Charcoal_String $task_name );
 
+	/*
+	 * Get event queue
+	 *
+	 * @return Charcoal_IEventQueue       event queue object
+	 */
+	public function getEventQueue();
+
 	/**
 	 *  add an event to task manager
 	 *
