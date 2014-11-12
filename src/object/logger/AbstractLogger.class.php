@@ -94,11 +94,21 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 		// set log format string as initial value
 		$out = $this->log_format;
 
-		// replace environment values
-		$out = $this->getSandbox()->getEnvironment()->fill( $out );
-
 		// logging context specific values
+		$now_time = time();
 		$log_values = array(
+				'%Y4%' => date("Y",$now_time),
+				'%Y2%' => date("y",$now_time),
+				'%M2%' => date("m",$now_time),
+				'%M1%' => date("n",$now_time),
+				'%D2%' => date("d",$now_time),
+				'%D1%' => date("j",$now_time),
+				'%H2%' => date("H",$now_time),
+				'%H1%' => date("G",$now_time),
+				'%h2%' => date("h",$now_time),
+				'%h1%' => date("g",$now_time),
+				'%M%'  => date("i",$now_time),
+				'%S%'  => date("s",$now_time),
 				'%LEVEL%' => $level,
 				'%TAG%' => $tag,
 				'%MESSAGE%' => $message,
@@ -111,6 +121,9 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 		foreach( $log_values as $key => $value ){
 			$out = str_replace( $key, $value, us($out) );
 		}
+
+		// replace environment values
+		$out = $this->getSandbox()->getEnvironment()->fill( $out );
 
 		return $out;
 	}

@@ -31,7 +31,7 @@ class Charcoal_ModuleLoader
 	 * load module files
 	 * 
 	 * @param Charcoal_Sandbox $sandbox                  sandbox object
-	 * @param CharcCharcoal_ObjectPath $module_path      module path to create
+	 * @param CharcCharcoal_ObjectPath $module_path      module path to load
 	 * @param Charcoal_ITaskManager $task_manager        task manager
 	 */
 	public static function loadModule( $sandbox, $module_path, $task_manager )

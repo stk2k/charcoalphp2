@@ -49,7 +49,7 @@ class Charcoal_TextFileRenderTarget extends Charcoal_AbstractRenderTarget implem
 			if ( !$dir->exists() ){
 				$dir->makeDirectory( $this->dir_mode );
 			}
-			if ( !$dir->isWritable() ){
+			if ( !$dir->isWriteable() ){
 				_throw( new Charcoal_RenderTargetException("directory not writable: $dir") );
 			}
 

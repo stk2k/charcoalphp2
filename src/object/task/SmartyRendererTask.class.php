@@ -84,7 +84,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 		$sequence = $context->getSequence();
 
 		// output response headers
-		$response->flushHeaders();
+//		$response->flushHeaders();
 
 		// retrieve layout
 		$layout = $event->getLayout();
@@ -134,10 +134,12 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				}
 
 				// Cookie information
-				$cookies = $response->getCookies();
-				if ( $cookies && is_array($cookies) ){
-					foreach( $cookies as $key => $value ){
-						$charcoal['cookie'][$key] = $value;
+				if ( $response instanceof Charcoal_HttpResponse ){
+					$cookies = $response->getCookies();
+					if ( $cookies && is_array($cookies) ){
+						foreach( $cookies as $key => $value ){
+							$charcoal['cookie'][$key] = $value;
+						}
 					}
 				}
 

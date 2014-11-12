@@ -292,18 +292,18 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Create empty directory
 	 *
-	 * @param string $mode File mode
-	 * @param bool $drilldown If TRUE, all of parent directory may be created automatically.
+	 * @param string $mode                  File mode.If this parameter is set NULL, 0777 will be applied.
+	 * @param bool $drilldown               If TRUE, all of parent directory may be created automatically.
 	 *
 	 * @return void
 	 */
-	public function makeDirectory( $mode, $drilldown = TRUE )
+	public function makeDirectory( $drilldown = TRUE, $mode = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $mode );
-//		Charcoal_ParamTrait::checkBool( 2, $drilldown );
+//		Charcoal_ParamTrait::checkBoolean( 1, $drilldown );
+//		Charcoal_ParamTrait::checkInteger( 2, $mode, TRUE );
 
 		$path = $this->path;
-		$mode = us( $mode );
+		$mode = $mode ? ui( $mode ) : 0777;
 		$drilldown = ub( $drilldown );
 
 		if ( file_exists($path) )	return;

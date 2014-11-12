@@ -151,6 +151,7 @@ class Charcoal_SimpleProcedure extends Charcoal_AbstractProcedure
 		$context->setRequest( $request );
 		$context->setResponse( $response );
 		$context->setEventQueue( $task_manager->getEventQueue() );
+		$context->setTaskManager( $task_manager );
 
 		$exit_code = $task_manager->processEvents( $context );
 		if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){

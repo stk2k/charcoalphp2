@@ -18,6 +18,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	private $response;
 	private $event_queue;
 	private $sandbox;
+	private $task_manager;
 
 	/**
 	 *	Construct
@@ -173,6 +174,18 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 //		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IEventQueue', $event_queue );
 
 		$this->event_queue = $event_queue;
+	}
+	
+	/**
+	 *	Set task manager object
+	 *
+	 * @param Charcoal_ITaskManager $event_queue   event queue object
+	 */
+	public function setTaskManager( $task_manager )
+	{
+//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ITaskManager', $task_manager );
+
+		$this->task_manager = $task_manager;
 	}
 	
 	/**
@@ -418,6 +431,18 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 			return Charcoal_ResourceLocator::getFile( $virtual_path, $filename );
 		else
 			return Charcoal_ResourceLocator::getFile( $virtual_path );
+	}
+
+	/**
+	 * load another module
+	 *
+	 * @param CharcCharcoal_ObjectPath $module_path      module path to load
+	 */
+	public function loadModule( $module_path )
+	{
+//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $module_path );
+
+		Charcoal_ModuleLoader::loadModule( $this->sandbox, $module_path, $this->task_manager );
 	}
 }
 
