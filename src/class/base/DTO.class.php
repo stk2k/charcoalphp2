@@ -26,6 +26,13 @@ class Charcoal_DTO extends Charcoal_Object implements IteratorAggregate, ArrayAc
 	}
 
 	/**
+	 *	get all properties
+	 */
+	public function getAll() {
+		return get_object_vars( $this );
+	}
+
+	/**
 	 *	IteratorAggregate interface : getIterator() implementation
 	 */
 	public function getIterator() {

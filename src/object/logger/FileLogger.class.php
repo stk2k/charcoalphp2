@@ -87,10 +87,10 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 
 		// ディレクトリを作成
 		try{
-			$dir->makeDirectory( s('0777'), b(TRUE) );
+			$dir->makeDirectory();
 		}
 		catch( Exception $e ){
-			print "FATAL error occured while output log file:{$this->_file_name} error=$e" . PHP_EOL;
+			print "FATAL error occured while output log file:{$this->file_name} error=$e" . PHP_EOL;
 		}
 
 		$this->fp = fopen($file_name, "a");
@@ -117,7 +117,7 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 		$ret = fwrite( $this->fp, us($data) );
 
 		if ( $ret === FALSE ){
-			print "[Warning]FileLogger fwrite failed. file=" . us($this->_file_name) . "<br>" . PHP_EOL;
+			print "[Warning]FileLogger fwrite failed. file=" . us($this->file_name) . "<br>" . PHP_EOL;
 		}
 	}
 
