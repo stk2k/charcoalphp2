@@ -52,16 +52,15 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 		$this->logs_dir    = $config->getString( 'logs_dir', '%APPLICATION_DIR%/logs', TRUE );
 		$this->line_end    = $config->getString( 'line_end', self::CRLF );
 
+		// replace logs_dir with macro value
+		$this->logs_dir = $this->fillMacroValue( $this->logs_dir, true );
+
+		// replace file_name with macro value
+		$this->file_name = $this->fillMacroValue( $this->file_name, true );
+
 		if ( empty($this->file_name) ){
 			_throw( new Charcoal_ComponentConfigException( 'file_name', 'mandatory' ) );
 		}
-	}
-
-	/*
-	 * get actual log file name
-	 */
-	protected function getRealFileName(){
-		return $this->logs_dir . DIRECTORY_SEPARATOR . parent::formatFileName( $this->file_name );
 	}
 
 	/*
@@ -81,9 +80,8 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 		if ( $this->open ){
 			return;
 		}
-		$file_name = $this->getRealFileName();
-		$dir_path = dirname($file_name);
-		$dir = new Charcoal_File( s($dir_path) );
+		$file_name = rtrim($this->logs_dir, ' /') . '/' . ltrim($this->file_name, ' /');
+		$dir = new Charcoal_File( dirname($file_name) );
 
 		// ディレクトリを作成
 		try{

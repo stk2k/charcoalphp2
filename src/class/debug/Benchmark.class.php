@@ -17,10 +17,6 @@ class Charcoal_Benchmark
 
 	/**
 	 *  start timer
-	 *  
-	 *  @param string $timer_id    key of timer to start
-	 *  
-	 *  @return string      now time
 	 */
 	public static function start()
 	{
@@ -30,37 +26,41 @@ class Charcoal_Benchmark
 	/**
 	 *    stop timer
 	 *  
-	 *  @param string $timer_id    key of timer to stop
+	 *  @param integer $precision     precision of timer value
 	 *  
-	 *  @return string      now score
+	 *  @return integer      now score
 	 */
 	public static function stop( $precision = self::DEFAULT_PRECISION )
 	{
 		$start = array_pop( self::$stack );
 		$stop = microtime(true);
 
-		if ( $start !== NULL ){
-			return round( ($stop - $start) * 1000, $precision );
+		if ( $start === NULL ){
+			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
+
+		return round( ($stop - $start) * 1000, $precision );
 	}
 
 	/**
 	 *    score
 	 *  
-	 *  @param string $timer_id    key of timer to stop
+	 *  @param integer $precision     precision of timer value
 	 *  
-	 *  @return string      now score
+	 *  @return integer      now score
 	 */
 	public static function score( $precision = self::DEFAULT_PRECISION )
 	{
 		$start = array_pop( self::$stack );
 		$stop = microtime(true);
 
-		if ( $start !== NULL ){
-			self::$stack[] = $start;
-
-			return round( ($stop - $start) * 1000, $precision );
+		if ( $start === NULL ){
+			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
+
+		self::$stack[] = $start;
+
+		return round( ($stop - $start) * 1000, $precision );
 	}
 
 }

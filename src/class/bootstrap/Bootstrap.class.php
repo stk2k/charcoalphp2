@@ -123,6 +123,7 @@ exit;
 
 				// Basic enum classes	
 				'Charcoal_EnumCoreHookStage' 					=> 'constant',
+				'Charcoal_EnumMemoryUnit' 						=> 'constant',
 				'Charcoal_EnumRegistryAccessLogResult'			=> 'constant',
 
 				// Basic interface classes	
@@ -188,6 +189,7 @@ exit;
 				'Charcoal_RuntimeException' 					=> 'exception',
 				'Charcoal_SandboxNotLoadedException'			=> 'exception',
 				'Charcoal_StringFormatException'				=> 'exception',
+				'Charcoal_UnsupportedMemoryUnitException'		=> 'exception',
 
 				// Primitive classes
 				'Charcoal_Scalar' 						=> 'class/base',
@@ -253,6 +255,7 @@ exit;
 				'Charcoal_Benchmark'				=> 'class/debug',
 				'Charcoal_CallHistory'				=> 'class/debug',
 				'Charcoal_DebugProfiler'			=> 'class/debug',
+				'Charcoal_MemoryBenchmark'			=> 'class/debug',
 				'Charcoal_MethodSpec'				=> 'class/debug',
 				'Charcoal_FunctionSpec'				=> 'class/debug',
 				'Charcoal_PhpSourceElement'			=> 'class/debug',
@@ -292,6 +295,7 @@ exit;
 
 				// utility classes
 				'Charcoal_EncodingConverter'					=> 'class/util',
+				'Charcoal_MemoryUtil'							=> 'class/util',
 
 				// core hook classes
 				'Charcoal_AbstractCoreHook'						=> 'object/core_hook',

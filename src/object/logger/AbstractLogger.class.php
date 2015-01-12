@@ -129,17 +129,46 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	}
 
 	/*
-	 * Format log file name
+	 * Fill macro value
 	 */
-	public function formatFileName( $file_name )
+	public function fillMacroValue( $value, $verifyFileName )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $file_name );
+		// environment object
+		$env = $this->getSandbox()->getEnvironment();
 
-		$file_name = us($file_name);
-
-		$file_name = $this->getSandbox()->getEnvironment()->fill( $file_name )->replace( ':', '_' );
-
-		return us($file_name);
+		$parts = explode("/", $value);
+		$ret = array();
+		if ( is_array($parts) ){
+			foreach( $parts as $item ){
+				if ( strpos($item,'%') !== FALSE ){
+					// maybe $part includes macro value
+					$item = $env->fill( $item );
+					if ( $verifyFileName ){
+						switch(PHP_OS){
+						case 'WIN32':
+						case 'WINNT':
+						case 'Windows':
+							$item = str_replace('\\','_',$item);
+							$item = str_replace(':','_',$item);
+							$item = str_replace(',','_',$item);
+							$item = str_replace(';','_',$item);
+							$item = str_replace('*','_',$item);
+							$item = str_replace('?','_',$item);
+							$item = str_replace('"','_',$item);
+							$item = str_replace('<','_',$item);
+							$item = str_replace('>','_',$item);
+							$item = str_replace('|','_',$item);
+						default:
+							$item = str_replace('/','_',$item);
+							$item = str_replace("\0",'_',$item);
+							break;
+						}
+					}
+				}
+				$ret[] = $item;
+			}
+		}
+		return implode('/', $ret);
 	}
 
 }
