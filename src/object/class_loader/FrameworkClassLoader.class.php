@@ -269,7 +269,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_QueryTarget'						=> 'component/charcoal/db',
 				'Charcoal_QueryTargetElement'				=> 'component/charcoal/db',
 
-				'Charcoal_AbstractWrapperContext'				=> 'component/charcoal/db/context',
+				'Charcoal_AbstractWrapperContext'			=> 'component/charcoal/db/context',
 				'Charcoal_SelectContext'					=> 'component/charcoal/db/context',
 				'Charcoal_FromContext'						=> 'component/charcoal/db/context',
 				'Charcoal_JoinContext'						=> 'component/charcoal/db/context',
@@ -282,6 +282,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_BindedContext'					=> 'component/charcoal/db/context',
 				'Charcoal_ResultContext'					=> 'component/charcoal/db/context',
 				'Charcoal_QueryContext'						=> 'component/charcoal/db/context',
+				'Charcoal_TableContext'						=> 'component/charcoal/db/context',
 
 		// transformer classes
 				'Charcoal_AbstractTransformer'				=> 'object/transformer',

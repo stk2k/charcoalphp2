@@ -51,6 +51,18 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	public  function buildInsertSQL( $model, $alias, $data, $override = NULL );
 
 	/**
+	 *	Generate RDBMS-specific SQL for bulk insert
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param array $data_set                    array of array or HashMap of objects
+	 *	@param array $override                    association field set which you want to override
+	 *	
+	 *	@return array                             the first element means SQL, the second element means parameter values
+	 */
+	public  function buildBulkInsertSQL( $model, $alias, $data_set, $override = NULL );
+
+	/**
 	 *	Generate RDBMS-specific SQL for MIN/MAX/SUM/COUNT/AVG
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
@@ -86,9 +98,29 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	Generate RDBMS-specific SQL for CREATE TABLE
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildCreateTableSQL( Charcoal_ITableModel $model );
+	public  function buildCreateTableSQL( Charcoal_ITableModel $model, $if_not_exists = false );
+
+	/**
+	 *	Generate RDBMS-specific SQL for DROP TABLE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth "DROP TABLE"
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function buildDropTableSQL( Charcoal_ITableModel $model, $if_exists = false );
+
+	/**
+	 *	Generate RDBMS-specific SQL for TRUNCATE TABLE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function buildTruncateTableSQL( Charcoal_ITableModel $model );
 }
 

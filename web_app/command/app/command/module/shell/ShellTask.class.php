@@ -28,6 +28,10 @@ class ShellTask extends Charcoal_Task
 			$path = $e->getObjectPath();
 			echo 'bad object path: ' . $path . PHP_EOL;
 		}
+		else if ( $e instanceof Charcoal_ModuleLoaderException ){
+			$path = $e->getModulePath();
+			echo 'bad module path: ' . $path . PHP_EOL;
+		}
 
 		return TRUE;
 	}
@@ -53,8 +57,7 @@ class ShellTask extends Charcoal_Task
 			return TRUE;
 		}
 
-		$task_manager = $context->getTaskManager();
-		Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $target_module, $task_manager );
+		$context->loadModule( $target_module );
 
 		return 'shell_command';
 	}

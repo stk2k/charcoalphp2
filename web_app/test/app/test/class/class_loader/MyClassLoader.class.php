@@ -16,7 +16,21 @@ class MyClassLoader extends Charcoal_UserClassLoader implements Charcoal_IClassL
 				// domain object classes
 				// domain model classes
 				// DTO classes
+
+				'BlogCategoryTableDTO'					=> 'class/dto',
+				'BlogTableDTO'							=> 'class/dto',
+				'CommentTableDTO'						=> 'class/dto',
+				'PostTableDTO'							=> 'class/dto',
+				'TestTableDTO'							=> 'class/dto',
+
 				// table model classes
+
+				'BlogCategoryTableModel'				=> 'class/table_model',
+				'BlogTableModel'						=> 'class/table_model',
+				'CommentTableModel'						=> 'class/table_model',
+				'PostTableModel'						=> 'class/table_model',
+				'TestTableModel'						=> 'class/table_model',
+
 				// exception classes
 				// exception handler classes
 			);

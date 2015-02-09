@@ -12,12 +12,12 @@ require_once( 'TempFileComponentException.class.php' );
 
 class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
-	private $_base_root;
-	private $_mode;
-	private $_overwrite;
-	private $_contents;
-	private $_parent_dir;
-	private $_file_name;
+	private $base_root;
+	private $mode;
+	private $overwrite;
+	private $contents;
+	private $parent_dir;
+	private $file_name;
 
 	/**
 	 *	Construct object
@@ -36,20 +36,22 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	{
 		parent::configure( $config );
 
-		$this->_base_root  = $config->getString( s('base_root'), s(CHARCOAL_BASE_DIR) )->getValue();
-		$this->_mode       = $config->getString( 'mode', '777' )->getValue();
-		$this->_overwrite  = $config->getBoolean( 'overwrite', TRUE )->getValue();
-		$this->_parent_dir = $config->getString( s('parent_dir') )->getValue();
+		$this->base_root  = us( $config->getString( 'base_root', CHARCOAL_BASE_DIR, TRUE ) );
+		$this->mode       = us( $config->getString( 'mode', '777' ) );
+		$this->overwrite  = ub( $config->getBoolean( 'overwrite', TRUE ) );
+		$this->parent_dir = us( $config->getString( 'parent_dir' ) );
 	}
 
 	/**
 	 * Set temporary file contents
 	 *
-	 * @param Charcoal_String $contents file contents
+	 * @param string|Charcoal_String $contents file contents
 	 */
-	public function setContents( Charcoal_String $contents )
+	public function setContents( $contents )
 	{
-		$this->_contents = us($contents);
+		Charcoal_ParamTrait::checkString( 1, $contents );
+
+		$this->contents = us($contents);
 	}
 
 	/**
@@ -59,17 +61,19 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function getContents()
 	{
-		return $this->_contents;
+		return $this->contents;
 	}
 
 	/**
 	 * Set temporary file mode
 	 *
-	 * @param Charcoal_String $mode file mode
+	 * @param string|Charcoal_String $mode file mode
 	 */
-	public function setMode( Charcoal_String $mode )
+	public function setMode( $mode )
 	{
-		$this->_mode = us($mode);
+		Charcoal_ParamTrait::checkString( 1, $mode );
+
+		$this->mode = us($mode);
 	}
 
 	/**
@@ -79,17 +83,19 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function getMode()
 	{
-		return $this->_mode;
+		return $this->mode;
 	}
 
 	/**
 	 * Set parent directory path
 	 *
-	 * @param Charcoal_String $path parent directory path
+	 * @param string|Charcoal_String $path parent directory path
 	 */
-	public function setParentDir( Charcoal_String $parent_dir )
+	public function setParentDir( $parent_dir )
 	{
-		$this->_parent_dir = us($parent_dir);
+		Charcoal_ParamTrait::checkString( 1, $parent_dir );
+
+		$this->parent_dir = us($parent_dir);
 	}
 
 	/**
@@ -99,17 +105,19 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function getParentDir()
 	{
-		return $this->_parent_dir;
+		return $this->parent_dir;
 	}
 
 	/**
 	 * Set file name
 	 *
-	 * @param Charcoal_String $file_name file name
+	 * @param string|Charcoal_String $file_name file name
 	 */
-	public function setFileName( Charcoal_String $file_name )
+	public function setFileName( $file_name )
 	{
-		$this->_file_name = us($file_name);
+		Charcoal_ParamTrait::checkString( 1, $file_name );
+
+		$this->file_name = us($file_name);
 	}
 
 	/**
@@ -119,17 +127,19 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function getFileName()
 	{
-		return $this->_file_name;
+		return $this->file_name;
 	}
 
 	/**
 	 * Set overwrite mode
 	 *
-	 * @param Charcoal_Boolean $overwrite TRUE if the temporary file should be overwritten, FALSE otherwise.
+	 * @param bool|Charcoal_Boolean $overwrite TRUE if the temporary file should be overwritten, FALSE otherwise.
 	 */
-	public function setOverwrite( Charcoal_Boolean $overwrite )
+	public function setOverwrite( $overwrite )
 	{
-		$this->_overwrite = ub($overwrite);
+		Charcoal_ParamTrait::checkBoolean( 1, $file_name );
+
+		$this->overwrite = ub($overwrite);
 	}
 
 	/**
@@ -139,7 +149,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function isOverwrite()
 	{
-		return $this->_overwrite;
+		return $this->overwrite;
 	}
 
 	/**
@@ -149,7 +159,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function create()
 	{
-		$obj = Charcoal_File::create( s($this->_base_root) )->getChild( s($this->_parent_dir) )->getChild( s($this->_file_name) );
+		$obj = Charcoal_File::create( s($this->base_root) )->getChild( s($this->parent_dir) )->getChild( s($this->file_name) );
 
 		if ( $this->isOverwrite() ){
 			if ( $obj->exists() && !$obj->canWrite() ){
@@ -162,7 +172,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 
 		try{
 			// create file with parent directory
-			$obj->makeFile( $mode, s($this->_contents), b(TRUE) );
+			$obj->makeFile( $this->mode, $this->contents, TRUE );
 
 			return $obj;
 		}

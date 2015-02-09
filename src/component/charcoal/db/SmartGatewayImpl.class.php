@@ -495,12 +495,14 @@ class Charcoal_SmartGatewayImpl
 		Charcoal_ParamTrait::checkString( 2, $field );
 		Charcoal_ParamTrait::checkScalar( 3, $value );
 
+		$value = ($value instanceof Charcoal_Scalar) ? $value->unbox() : $value;
+
 		$where = us($field) . ' = ?';
-		$params = array( $value->unbox() );
+		$params = array( $value );
 
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
-		$this->destroyAll( $model_name, $criteria );
+		$this->destroyAll( $query_target, $criteria );
 	}
 
 	/**
@@ -682,14 +684,50 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::createTable()
 	 *	
 	 *	@param string $model_name
+	 *	@param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
 	 */
-	public function createTable( $model_name ) 
+	public function createTable( $model_name, $if_not_exists = false ) 
+	{
+		Charcoal_ParamTrait::checkString( 1, $model_name );
+		Charcoal_ParamTrait::checkBoolean( 2, $if_not_exists );
+
+		$model = $this->getModel( $model_name );
+
+		$sql = $this->sql_builder->buildCreateTableSQL( $model, $if_not_exists );
+
+		$this->data_source->execute( $sql );
+	}
+
+	/**
+	 *	real implementation of Charcoal_SmartGateway::dropTable()
+	 *	
+	 *	@param string $model_name
+	 *	@param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth "DROP TABLE"
+	 */
+	public function dropTable( $model_name, $if_exists = false ) 
+	{
+		Charcoal_ParamTrait::checkString( 1, $model_name );
+		Charcoal_ParamTrait::checkBoolean( 2, $if_exists );
+
+		$model = $this->getModel( $model_name );
+
+		$sql = $this->sql_builder->buildDropTableSQL( $model, $if_exists );
+
+		$this->data_source->execute( $sql );
+	}
+
+	/**
+	 *	real implementation of Charcoal_SmartGateway::truncateTable()
+	 *	
+	 *	@param string $model_name
+	 */
+	public function truncateTable( $model_name ) 
 	{
 		Charcoal_ParamTrait::checkString( 1, $model_name );
 
 		$model = $this->getModel( $model_name );
 
-		$sql = $this->sql_builder->buildCreateTableSQL( $model );
+		$sql = $this->sql_builder->buildTruncateTableSQL( $model );
 
 		$this->data_source->execute( $sql );
 	}
@@ -752,7 +790,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::insert()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target      description about target model, alias, or joins
+	 *	@param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
 	 *	@param array $data                             associative array/HashMap/DTO object to insert
 	 */
 	public function insert( $query_target, $data )
@@ -764,6 +802,36 @@ class Charcoal_SmartGatewayImpl
 		$alias = $query_target->getAlias();
 
 		list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $alias, $data );
+
+		$this->data_source->prepareExecute( $sql, $params );
+
+		$sql = $this->sql_builder->buildLastIdSQL();
+		
+		$result = $this->data_source->prepareExecute( $sql );
+
+		$row = $this->data_source->fetchArray( $result );
+
+		$new_id = $row[0];
+		log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
+
+		return $new_id;
+	}
+
+	/**
+	 *	real implementation of Charcoal_SmartGateway::bulkInsert()
+	 *	
+	 *	@param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
+	 *	@param array|CharcoalVector $data_set                 array of array or DTO value to insert
+	 */
+	public function bulkInsert( $query_target, $data_set )
+	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::checkVector( 2, $data_set );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
+
+		list( $sql, $params ) = $this->sql_builder->buildBulkInsertSQL( $model, $alias, $data_set );
 
 		$this->data_source->prepareExecute( $sql, $params );
 

@@ -98,8 +98,6 @@ class TestDispatcherTask extends Charcoal_Task
 			return TRUE;
 		}
 
-		$task_manager = $context->getTaskManager();
-
 		$events = array();
 		foreach( $scenario_data as $section => $data ){
 
@@ -122,7 +120,7 @@ class TestDispatcherTask extends Charcoal_Task
 
 			$target_path = new Charcoal_ObjectPath( $target );
 			$module_path = '@' . $target_path->getVirtualPath();
-			Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $module_path, $task_manager );
+			$context->loadModule( $module_path );
 			log_info( "debug,scenario", "loaded module: $module_path" );
 
 			$event_args = array( $section, $target, $actions );

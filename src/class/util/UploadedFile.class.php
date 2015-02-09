@@ -107,7 +107,7 @@ class Charcoal_UploadedFile extends Charcoal_File
 	 */
 	public function toFile()
 	{
-		return new Charcoal_File( s($this->tmpname) );
+		return new Charcoal_File( s($this->tmp_name) );
 	}
 
 	/*

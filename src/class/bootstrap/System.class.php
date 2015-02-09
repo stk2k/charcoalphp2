@@ -345,7 +345,9 @@ class Charcoal_System
 	 */
 	public static function caller( $back = 0 )
 	{
-		$bt = debug_backtrace();
+		$bt =  (version_compare(PHP_VERSION,'5.4.0') >= 0 ) ? 
+			debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,5) : debug_backtrace();
+
 		$trace = $bt[1 + $back];
 
 		$file = isset($trace['file']) ? $trace['file'] : "";

@@ -313,7 +313,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	insert DTO into specified table
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
 	 *	@param array $data             associative array/HashMap/DTO object to insert
 	 */
 	public function insert( $query_target, $data )
@@ -324,6 +324,28 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			}
 
 			return $this->impl->insert( $query_target, $data );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
+	 *	bulk insert
+	 *	
+	 *	@param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
+	 *	@param array|CharcoalVector $data_set          array of array or DTO value to insert
+	 */
+	public function bulkInsert( $query_target, $data_set )
+	{
+		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
+			return $this->impl->bulkInsert( $query_target, $data_set );
 		}
 		catch ( Exception $e )
 		{
@@ -810,11 +832,53 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	Execute CREATE TABLE sql
 	 *	
 	 *	@param string $model_name
+	 *	@param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
 	 */
-	public function createTable( $model_name ) 
+	public function createTable( $model_name, $if_not_exists = false ) 
 	{
 		try{
-			$this->impl->createTable( $model_name );
+			$this->impl->createTable( $model_name, $if_not_exists );
+
+			return new Charcoal_TableContext( $this, $model_name );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
+	 *	Execute DROP TABLE sql
+	 *	
+	 *	@param string $model_name
+	 *	@param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth "DROP TABLE"
+	 */
+	public function dropTable( $model_name, $if_exists = false ) 
+	{
+		try{
+			$this->impl->dropTable( $model_name, $if_exists );
+
+			return new Charcoal_TableContext( $this, $model_name );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
+	 *	Execute TRUNCATE TABLE sql
+	 *	
+	 *	@param string $model_name
+	 */
+	public function truncateTable( $model_name ) 
+	{
+		try{
+			$this->impl->truncateTable( $model_name );
+
+			return new Charcoal_TableContext( $this, $model_name );
 		}
 		catch ( Exception $e )
 		{
@@ -843,5 +907,6 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 		return new Charcoal_SelectContext( $context );
 	}
+
 }
 

@@ -144,25 +144,10 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 					// maybe $part includes macro value
 					$item = $env->fill( $item );
 					if ( $verifyFileName ){
-						switch(PHP_OS){
-						case 'WIN32':
-						case 'WINNT':
-						case 'Windows':
-							$item = str_replace('\\','_',$item);
-							$item = str_replace(':','_',$item);
-							$item = str_replace(',','_',$item);
-							$item = str_replace(';','_',$item);
-							$item = str_replace('*','_',$item);
-							$item = str_replace('?','_',$item);
-							$item = str_replace('"','_',$item);
-							$item = str_replace('<','_',$item);
-							$item = str_replace('>','_',$item);
-							$item = str_replace('|','_',$item);
-						default:
-							$item = str_replace('/','_',$item);
-							$item = str_replace("\0",'_',$item);
-							break;
-						}
+						static $invalid_chars = array(
+							'\\', ':', ',', ';', '*', '?', '"', "'", '<', '>', '|', '/', "\0"
+							);
+						$item = str_replace($invalid_chars,'_',$item);
 					}
 				}
 				$ret[] = $item;

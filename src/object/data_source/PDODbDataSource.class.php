@@ -445,7 +445,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	{
 		Charcoal_ParamTrait::checkString( 1, $sql );
 
-		$sql = $sql->getValue();
+		$sql = us( $sql );
 
 		$command_id = $this->command_id++;
 

@@ -278,7 +278,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 				$insert = $model->getAnnotationValue( s($field), s('insert') );
 
 				if ( $override && isset($override[$field]) ){
-					$insert = isset($override[$name]['insert']) ? $override[$field]['insert'] : $insert;
+					$insert = isset($override[$field]['insert']) ? $override[$field]['insert'] : $insert;
 				}
 
 				if ( !$insert ){
@@ -326,6 +326,127 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 			$table = $model->getTableName();
 
 			$sql = "insert into " . us($table) . "(" . us($SQL_field_list) . ") values(" . us($SQL_value_list) . ")";
+
+			return array( $sql, $SQL_params );
+		}
+		catch ( Exception $e )
+		{
+			_throw( new Charcoal_SQLBuilderException( "DefaultSQLBuilder#buildInsertSQL failed" ) );
+		}
+	}
+
+	/**
+	 *	Generate RDBMS-specific SQL for bulk insert
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param string $alias                      table model alias which is specified by $model
+	 *	@param array $data_set                    array of array or HashMap of objects
+	 *	@param array $override                    association field set which you want to override
+	 *	
+	 *	@return array                             the first element means SQL, the second element means parameter values
+	 */
+	public  function buildBulkInsertSQL( $model, $alias, $data_set, $override = NULL )
+	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::checkVector( 3, $data_set );
+		Charcoal_ParamTrait::checkHashMap( 4, $override, TRUE );
+
+		try{
+			$SQL_field_list   = NULL;
+			$SQL_value_list   = NULL;
+			$SQL_params       = array();
+
+			$override = up($override);
+
+			$field_list = $model->getFieldList();
+
+			// determin field list
+			foreach( $field_list as $field ) 
+			{
+				$insert = $model->getAnnotationValue( s($field), s('insert') );
+
+				if ( $override && isset($override[$field]) ){
+					$insert = isset($override[$field]['insert']) ? $override[$field]['insert'] : $insert;
+				}
+
+				if ( !$insert ){
+					// 無指定の場合エラー
+					_throw( new Charcoal_TableModelFieldException( $model, $field, '[@insert] annotation is required' ) );
+				}
+
+				// @insertアノテーションの値によって分岐
+				$insert_anno = us($insert->getValue());
+				switch ( $insert_anno ){
+				case 'value':
+				case 'function':
+					$SQL_field_list[] = $field;
+					break;
+				case 'no':
+					break;
+				default:
+					_throw( new Charcoal_TableModelFieldException( $model, $field, '[@insert] value is invalid' ) );
+				}
+			}
+
+			// determin value list
+			foreach( $data_set as $dto )
+			{
+				$SQL_value_list_line = array();
+				foreach( $SQL_field_list as $field ) 
+				{
+					$insert = $model->getAnnotationValue( s($field), s('insert') );
+
+					if ( $override && isset($override[$field]) ){
+						$insert = isset($override[$field]['insert']) ? $override[$field]['insert'] : $insert;
+					}
+
+					if ( !$insert ){
+						// 無指定の場合エラー
+						_throw( new Charcoal_TableModelFieldException( $model, $field, '[@insert] annotation is required' ) );
+					}
+
+					// @insertアノテーションの値によって分岐
+					$insert_anno = us($insert->getValue());
+					switch ( $insert_anno ){
+					case 'value':
+						// 値で更新
+						$SQL_value_list_line[] = '?';
+						$SQL_params[] = $dto->$field;
+						break;
+					case 'function':
+						// 関数を決定
+						$params = uv( $insert->getParameters() );
+						if ( count($params) == 1 ){
+							switch( $params[0] ){
+							case 'now':		$function = 'NOW()';	break;
+							default:        $function = 'NULL';		break;
+							}
+						}
+						// 関数で更新
+						$SQL_value_list_line[] = $function;
+						break;
+					case 'no':
+						// 更新しない
+						break;
+					default:
+						_throw( new Charcoal_TableModelFieldException( $model, $field, '[@insert] value is invalid' ) );
+					}
+				}
+				$SQL_value_list[] = $SQL_value_list_line;
+			}
+
+			$SQL_field_list = implode( ',', $SQL_field_list );
+
+			$table = $model->getTableName();
+
+			$sql = "insert into " . us($table) . "(" . us($SQL_field_list) . ") values";
+			$values = array();
+			foreach( $SQL_value_list as $line ){
+				$SQL_value_list = implode( ',', $line );
+				$values[] = "(" . us($SQL_value_list) . ")";
+			}
+			$sql .= implode( ',', $values );
 
 			return array( $sql, $SQL_params );
 		}
@@ -468,5 +589,44 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		return $sql;
 	}
 
+	/**
+	 *	Generate RDBMS-specific SQL for DROP TABLE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth "DROP TABLE"
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function buildDropTableSQL( Charcoal_ITableModel $model, $if_exists = false )
+	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkBoolean( 2, $if_exists );
+
+		$table_name = $model->getTableName();
+
+		$if_exists = ub($if_exists) ? 'IF EXISTS' : '';
+
+		$sql = "DROP TABLE $if_exists `$table_name`";
+
+		return $sql;
+	}
+
+	/**
+	 *	Generate RDBMS-specific SQL for TRUNCATE TABLE
+	 *	
+	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function buildTruncateTableSQL( Charcoal_ITableModel $model )
+	{
+		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+
+		$table_name = $model->getTableName();
+
+		$sql = "TRUNCATE TABLE `$table_name`";
+
+		return $sql;
+	}
 }
 

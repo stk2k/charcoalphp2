@@ -19,9 +19,9 @@ class Charcoal_DTO extends Charcoal_Object implements IteratorAggregate, ArrayAc
 		parent::__construct( $values );
 
 		foreach( $values as $key => $value ){
-			if ( property_exists($this, $key) ){
+//			if ( property_exists($this, $key) ){
 				$this->$key = $value;
-			}
+//			}
 		}
 	}
 

@@ -15,12 +15,14 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 	 *	Generate RDBMS-specific SQL for CREATE TABLE
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
+	 *	@param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildCreateTableSQL( Charcoal_ITableModel $model )
+	public  function buildCreateTableSQL( Charcoal_ITableModel $model, $if_not_exists = false )
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::checkBoolean( 2, $if_not_exists );
 
 		try{
 			$field_list = $model->getFieldList();
@@ -77,7 +79,8 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 			$SQL_pk_list    = implode( ',', $SQL_pk_list );
 
 			$table_name = $model->getTableName();
-			$sql = "CREATE TABLE $table_name (\n $SQL_field_list \n ,PRIMARY KEY( $SQL_pk_list ) )";
+			$if_not_exists = ub($if_not_exists) ? 'IF NOT EXISTS' : '';
+			$sql = "CREATE TABLE $if_not_exists `$table_name` (\n $SQL_field_list \n ,PRIMARY KEY( $SQL_pk_list ) )";
 
 			return $sql;
 		}

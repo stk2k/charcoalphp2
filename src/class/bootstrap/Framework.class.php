@@ -732,7 +732,7 @@ class Charcoal_Framework
 
 		// memory usage
 		$memory_score = Charcoal_MemoryBenchmark::stop();
-		log_debug( 'system, debug', sprintf("total framework peak memory: [%0.4f] bytes",$memory_score) );
+		log_debug( 'system, debug', sprintf("total framework peak memory: [%d] bytes",$memory_score) );
 
 //Charcoal_Object::dump();
 

@@ -248,7 +248,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function putContents( $contents )
 	{
-		return file_put_contents( $this->path, $contents );
+		return file_put_contents( $this->path, $contents, LOCK_EX );
 	}
 
 	/**
@@ -348,6 +348,21 @@ class Charcoal_File extends Charcoal_Object
 		return $files;
 	}
 
+
+	/**
+	 *  Update last modified date of the file
+	 *
+	 * @param integer|Charcoal_Integer $time      time value to set
+	 *
+	 * @return boolean   TRUE if success, FALSE if failed
+	 */
+	public function touch( $time = NULL )
+	{
+		if ( $time === NULL ){
+			return touch( $this->path );
+		}
+		return touch( $this->path, ui($time) );
+	}
 
 	/**
 	 *  String expression of this object
