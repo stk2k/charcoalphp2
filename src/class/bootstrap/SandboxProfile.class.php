@@ -81,5 +81,148 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 		}
 	}
 
+	/**
+	 * Get as string value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param string $default_value   default value
+	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 *
+	 * @return string
+	 */
+	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
+	{
+		try{
+			return parent::getString( $key, $default_value, $process_macro );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 * Get as json value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param string $default_value   default value
+	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 *
+	 * @return string
+	 */
+	public function getJson( $key, $default_value = NULL, $process_macro = FALSE )
+	{
+		try{
+			return parent::getJson( $key, $default_value, $process_macro );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 * Get as array value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param array $default_value   default value
+	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 *
+	 * @return array
+	 */
+	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
+	{
+		try{
+			return parent::getArray( $key, $default_value, $process_macro );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 * Get as boolean value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param bool $default_value   default value
+	 *
+	 * @return bool
+	 */
+	public function getBoolean( $key, $default_value = NULL )
+	{
+		try{
+			return parent::getBoolean( $key, $default_value );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 * Get as integer value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param int $default_value   default value
+	 *
+	 * @return int
+	 */
+	public function getInteger( $key, $default_value = NULL )
+	{
+		try{
+			return parent::getInteger( $key, $default_value );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 *  Get element value as float
+	 *
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
+	 *
+	 * @return float
+	 */
+	public function getFloat( $key, $default_value = NULL )
+	{
+		try{
+			return parent::getFloat( $key, $default_value );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
+	 *  Get element value as file size
+	 *
+	 * @param string $key            Key string to get
+	 * @param float $default_value   default value
+	 *
+	 * @return integer
+	 */
+	public function getSize( $key, $default_value = NULL )
+	{
+		try{
+			return parent::getSize( $key, $default_value );
+		}
+		catch( Exception $ex ){
+			_catch( $ex );
+
+			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
 }
 

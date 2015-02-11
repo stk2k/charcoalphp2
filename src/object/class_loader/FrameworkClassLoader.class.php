@@ -52,6 +52,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_FileSystemUtil'			=> 'class/util',
 				'Charcoal_GraphicsUtil'				=> 'class/util',
 				'Charcoal_MailUtil'					=> 'class/util',
+				'Charcoal_StringUtil'				=> 'class/util',
 				'Charcoal_SQLUtil'					=> 'class/util',
 				'Charcoal_URLUtil'					=> 'class/util',
 				'Charcoal_XmlUtil'					=> 'class/util',

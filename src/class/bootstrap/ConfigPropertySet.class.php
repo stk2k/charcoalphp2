@@ -190,5 +190,24 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 		return parent::getFloat( $key, $default_value );
 	}
 
+	/**
+	 *  Get element value as file size
+	 *
+	 * @param string $key            Key string to get
+	 * @param string $default_value   default value
+	 *
+	 * @return integer
+	 */
+	public function getSize( $key, $default_value = NULL )
+	{
+		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+
+		$key = us($key);
+		$value = parent::getString( $key, $default_value );
+
+		return Charcoal_MemoryUtil::getByteSizeFromString( $value );
+	}
+
 }
 

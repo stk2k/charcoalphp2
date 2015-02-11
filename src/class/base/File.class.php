@@ -242,6 +242,16 @@ class Charcoal_File extends Charcoal_Object
 	}
 
 	/**
+	 *  get contents of the file as array
+	 *
+	 * @return array           file contents
+	 */
+	public function getContentsAsArray()
+	{
+		return file( $this->path );
+	}
+
+	/**
 	 *  Save string data as a file
 	 *
 	 * @return Charcoal_File
@@ -335,7 +345,10 @@ class Charcoal_File extends Charcoal_Object
 
 		$dh = opendir($path);
 		while( ($file_name = readdir($dh)) !== FALSE ){
-			$file = new Charcoal_File( s($file_name) );
+			if ( $file_name === '.' || $file_name === '..' ){
+				continue;
+			}
+			$file = new Charcoal_File( $file_name, $this );
 			if ( $filter ){
 				if ( $filter->accept($file) ){
 					$files[] = $file;
