@@ -19,6 +19,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	private $password;
 	private $db_name;
 	private $server;
+	private $port;
 	private $charset;
 	private $autocommit;
 	private $command_id;
@@ -55,6 +56,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->password  = us( $config->getString( 'password' ) );
 		$this->db_name   = us( $config->getString( 'db_name' ) );
 		$this->server    = us( $config->getString( 'server' ) );
+		$this->port      = ui( $config->getInteger( 'port' ) );
 		$this->charset   = us( $config->getString( 'charset' ) );
 		$this->autocommit = ub( $config->getBoolean( 'autocommit', TRUE ) );
 
@@ -78,6 +80,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			log_debug( "data_source", "password=" . $this->password, "data_source" );
 			log_debug( "data_source", "db_name=" . $this->db_name, "data_source" );
 			log_debug( "data_source", "server=" . $this->server, "data_source" );
+			log_debug( "data_source", "port=" . $this->port, "data_source" );
 			log_debug( "data_source", "charset=" . $this->charset, "data_source" );
 			log_debug( "data_source", "autocommit=" . $this->autocommit, "data_source" );
 		}
@@ -143,6 +146,15 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	{
 		return $this->server;
 	}
+
+	/*
+	 *    database server port no
+	 */
+	public function getPort()
+	{
+		return $this->port;
+	}
+
 
 	/*
 	 *    接続ユーザ名を取得
@@ -267,15 +279,6 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	}
 
 	/*
-	 *    デフォルトの接続先に接続
-	 */
-	public function connectDefault( $db_name_enabled = TRUE, $force = FALSE )
-	{
-		$db_name = $db_name_enabled ? $this->db_name : NULL;
-		$this->connect( $this->backend, $this->user, $this->password, $this->server, s($db_name), $force );
-	}
-
-	/*
 	 *    接続
 	 */
 	public function connect( $force = FALSE )
@@ -289,11 +292,13 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$user      = $this->user;
 		$password  = $this->password;
 		$db_name   = $this->db_name;
+		$port      = $this->port;
 		$server    = $this->server;
 		$charset   = $this->charset;
 
 		try{
-			$DSN = "$backend:host=$server; dbname=$db_name";
+			$port = !empty($port) ? "port:$$port;" : '';
+			$DSN = "$backend:host=$server;{$port}dbname=$db_name";
 
 			log_info( "debug,sql,data_source", "connecting database: DSN=[$DSN]", "data_source" );
 

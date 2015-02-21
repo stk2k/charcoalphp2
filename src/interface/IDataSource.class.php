@@ -72,11 +72,6 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	public function connect( $force = FALSE );
 
 	/*
-	 *    デフォルトの接続先に接続
-	 */
-	public function connectDefault( $db_name_enabled = TRUE );
-
-	/*
 	 *    接続を閉じる
 	 */
 	public function disconnect();

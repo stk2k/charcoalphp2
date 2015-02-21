@@ -22,11 +22,11 @@ class Charcoal_QdmailSmtpException extends Charcoal_RuntimeException
 		$this->stack = $qdsmtp->errorStatment();
 
 		foreach( $this->stack as $item ){
-			if ( strpos( $item, "Error :status555" ) !== NULL ){
+			if ( strpos( $item, "Error :status555" ) !== FALSE ){
 				$this->status_code = Charcoal_EnumSmtpStatusCode::SYNTAX_ERROR;	// 555
 				break;
 			}
-			elseif ( strpos( $item, "Error :status503" ) !== NULL ){
+			elseif ( strpos( $item, "Error :status503" ) !== FALSE ){
 				$this->status_code = Charcoal_EnumSmtpStatusCode::BAD_SEQUENCE_OF_COMMANDS;	// 503
 				break;
 			}

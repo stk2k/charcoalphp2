@@ -263,15 +263,6 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	}
 
 	/*
-	 *    デフォルトの接続先に接続
-	 */
-	public function connectDefault( $db_name_enabled = TRUE, $force = FALSE )
-	{
-		$db_name = $db_name_enabled ? $this->_db_name : NULL;
-		$this->connect( $this->_backend, $this->_user, $this->_password, $this->_server, s($db_name), $force );
-	}
-
-	/*
 	 *    接続
 	 */
 	public function connect( $force = FALSE )

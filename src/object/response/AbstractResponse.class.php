@@ -20,6 +20,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	public function __construct()
 	{
 		parent::__construct();
+		$this->values = array();
 	}
 
 	/**
