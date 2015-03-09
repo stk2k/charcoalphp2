@@ -251,6 +251,18 @@ class Charcoal_Framework
 	}
 
 	/**
+	 * set log level
+	 * 
+	 * @param string|Charcoal_String  $log_level     new log level
+	 * 
+	 * @return returns old log level
+	 */
+	public static function setLogLevel( $log_level )
+	{
+		return self::$loggers ? self::$loggers->setLogLevel( $log_level ) : FALSE;
+	}
+
+	/**
 	 * Get non-typed data which is associated with a string key
 	 *
 	 * @param Charcoal_String $key         The key of the item to retrieve.

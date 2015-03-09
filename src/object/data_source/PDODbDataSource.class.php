@@ -59,6 +59,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->port      = ui( $config->getInteger( 'port' ) );
 		$this->charset   = us( $config->getString( 'charset' ) );
 		$this->autocommit = ub( $config->getBoolean( 'autocommit', TRUE ) );
+		$this->set_names  = ub( $config->getBoolean( 'set_names', FALSE ) );
 
 		if ( strlen($this->backend) === 0 ){
 			_throw( new Charcoal_ComponentConfigException( 'backend', 'mandatory' ) );
@@ -75,14 +76,15 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		if ( $this->getSandbox()->isDebug() )
 		{
-			log_debug( "data_source", "backend=" . $this->backend, "data_source" );
-			log_debug( "data_source", "user=" . $this->user, "data_source" );
-			log_debug( "data_source", "password=" . $this->password, "data_source" );
-			log_debug( "data_source", "db_name=" . $this->db_name, "data_source" );
-			log_debug( "data_source", "server=" . $this->server, "data_source" );
-			log_debug( "data_source", "port=" . $this->port, "data_source" );
-			log_debug( "data_source", "charset=" . $this->charset, "data_source" );
-			log_debug( "data_source", "autocommit=" . $this->autocommit, "data_source" );
+			log_debug( 'data_source', "backend=" . $this->backend, 'data_source' );
+			log_debug( 'data_source', "user=" . $this->user, 'data_source' );
+			log_debug( 'data_source', "password=" . $this->password, 'data_source' );
+			log_debug( 'data_source', "db_name=" . $this->db_name, 'data_source' );
+			log_debug( 'data_source', "server=" . $this->server, 'data_source' );
+			log_debug( 'data_source', "port=" . $this->port, 'data_source' );
+			log_debug( 'data_source', "charset=" . $this->charset, 'data_source' );
+			log_debug( 'data_source', "autocommit=" . $this->autocommit, 'data_source' );
+			log_debug( 'data_source', "set_names=" . $this->set_names, 'data_source' );
 		}
 	}
 
@@ -220,8 +222,6 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			$this->connect();
 
 			$this->connection->beginTransaction();
-
-			$this->trans_cnt ++;
 		}
 		catch ( Exception $e )
 		{
@@ -240,12 +240,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			// 接続処理
 			$this->connect();
 
-			if ( $this->trans_cnt > 0 )
-			{
-				$this->connection->commit();
-
-				$this->trans_cnt --;
-			}
+			$this->connection->commit();
 		}
 		catch ( Exception $e )
 		{
@@ -264,12 +259,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			// 接続処理
 			$this->connect();
 
-			if ( $this->trans_cnt > 0 )
-			{
-				$this->connection->rollback();
-
-				$this->trans_cnt --;
-			}
+			$this->connection->rollback();
 		}
 		catch ( Exception $e )
 		{
@@ -297,63 +287,44 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$charset   = $this->charset;
 
 		try{
-			$port = !empty($port) ? "port:$$port;" : '';
-			$DSN = "$backend:host=$server;{$port}dbname=$db_name";
-
-			log_info( "debug,sql,data_source", "connecting database: DSN=[$DSN]", "data_source" );
-
-			$driver_options = array();
-
-			// 文字化け対策
-/*
-			$charset = $this->charset;
-
-			if ( !$charset->isEmpty() ){
-				$charset = $charset->getValue();
-				switch( strtolower($charset) ){
-				case 'utf8':	$driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET CHARACTER SET `utf8`";		break;
-				case 'ujis':	$driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET CHARACTER SET `ujis`";		break;
-				case 'sjis':	$driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET CHARACTER SET `sjis`";		break;
-				default:
-					_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
-				}
+			$charset_db = NULL;
+			if ( !$this->set_names && !empty($this->charset) ){
+				$db_charset_map = array(
+						'utf8' => 'utf8',
+						'ujis' => 'ujis',
+						'sjis' => 'sjis',
+					);
+				$charset_db = isset($db_charset_map[$this->charset]) ? $db_charset_map[$this->charset] : NULL;
 			}
-*/
+			$port = !empty($port) ? "port={$port};" : '';
+			$charset = $charset_db ? "charset={$charset_db};" : '';
+			$DSN = "$backend:host=$server;{$port}dbname=$db_name;{$charset}";
 
-			$pdo = new PDO( $DSN, $user, $password, $driver_options );
-			log_info( "debug,sql,data_source", "PDO object created. driver_options=" . print_r($driver_options,true), "data_source" );
+			log_info( 'debug, sql, data_source', "DSN=[$DSN]", 'data_source' );
 
-			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); 			// enable server-side prepare statement
+			$options = array(
+					PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+					PDO::ATTR_EMULATE_PREPARES => false,
+					PDO::ATTR_AUTOCOMMIT => $this->autocommit,
+				);
+			log_info( 'debug, sql, data_source', 'driver options:' . print_r($options, true), 'data_source' );
 
-			log_info( "debug,sql,data_source", "connected database: DSN=[$DSN]", "data_source" );
+			$pdo = new PDO( $DSN, $user, $password, $options );
 
 			$this->connection = $pdo;
 			$this->connected = true;
 
-			// 文字化け対策
-			$charset = $this->charset;
-			log_info( "debug,sql,data_source", "charset: [$charset]", "data_source" );
-			if ( strlen($charset) > 0 ){
-				switch( strtolower($charset) ){
-				case 'utf8':	$this->_query( s('SET NAMES `utf8`') );		break;
-				case 'ujis':	$this->_query( s('SET NAMES `ujis`') );		break;
-				case 'sjis':	$this->_query( s('SET NAMES `sjis`') );		break;
-				default:
-					_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
+			log_info( 'debug, sql, data_source', "connected database: DSN=[$DSN]", 'data_source' );
+
+			if ( $this->set_names ){
+				switch( strtolower($this->charset) ){
+					case 'utf8':	$this->_query( s('SET NAMES `utf8`') );		break;
+					case 'ujis':	$this->_query( s('SET NAMES `ujis`') );		break;
+					case 'sjis':	$this->_query( s('SET NAMES `sjis`') );		break;
+					default:
+						_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
 				}
-		//		$this->_query( "set character set $charset" );
 			}
-			else{
-				log_info( "debug,sql,data_source", "charset is empty.", "data_source" );
-			}
-
-			// 自動コミット
-			$autocommit = $this->autocommit;
-			$this->connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $autocommit );
-			log_info( "debug,sql,data_source", "autocommit: [$autocommit]", "data_source" );
-
-			$this->trans_cnt = 0;
 		}
 		catch ( Exception $e )
 		{
@@ -397,8 +368,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$params_disp = $params ? implode( ',' , $params ) :'';
 
-		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", "data_source" );
-		log_info( "data_source,sql,debug", "[ID]$command_id [params]$params_disp", "data_source" );
+		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", 'data_source' );
+		log_info( "data_source,sql,debug", "[ID]$command_id [params]$params_disp", 'data_source' );
 /*
 		$log_sql = str_replace( '?', '%s', $sql );
 		$log_params = NULL;
@@ -414,7 +385,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			}
 		}
 		$log_sql = $log_params ? vsprintf( $log_sql, uv($log_params) ) : $log_sql;
-		log_info( "data_source,sql,debug", "data_source", "[ID]$command_id [SQL]$log_sql" );
+		log_info( "data_source,sql,debug", 'data_source', "[ID]$command_id [SQL]$log_sql" );
 */
 
 		$stmt = $this->connection->prepare( $sql );
@@ -429,16 +400,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		if ( !$success ){
 			list( $sqlstate, $err_code, $err_msg ) = $stmt->errorInfo();
 			$msg = "PDO#execute failed. [ID]$command_id [SQL]$sql [params]$params_disp [SQLSTATE]$sqlstate [ERR_CODE]$err_code [ERR_MSG]$err_msg";
-			log_error( "data_source,sql,debug", "...FAILED: $msg", "data_source" );
+			log_error( "data_source,sql,debug", "...FAILED: $msg", 'data_source' );
 			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
 		$numRows = $stmt->rowCount();
-		log_info( "data_source,sql,debug", "[ID]$command_id ...success(numRows=$numRows)", "data_source" );
+		log_info( "data_source,sql,debug", "[ID]$command_id ...success(numRows=$numRows)", 'data_source' );
 
 		// ログ
 		$elapse = Charcoal_Benchmark::stop();
-		log_debug( 'data_source,sql,debug', "[ID]$command_id prepareExecute() end. time=[$elapse]msec.", "data_source" );
+		log_debug( 'data_source,sql,debug', "[ID]$command_id prepareExecute() end. time=[$elapse]msec.", 'data_source' );
 
 		return $stmt;
 	}
@@ -454,7 +425,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$command_id = $this->command_id++;
 
-		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", "data_source" );
+		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", 'data_source' );
 
 		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
 

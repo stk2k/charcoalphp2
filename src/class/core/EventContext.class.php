@@ -444,6 +444,18 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 
 		Charcoal_ModuleLoader::loadModule( $this->sandbox, $module_path, $this->task_manager );
 	}
+
+	/**
+	 * set log level
+	 * 
+	 * @param string|Charcoal_String  $log_level     new log level
+	 * 
+	 * @return returns old log level
+	 */
+	public static function setLogLevel( $log_level )
+	{
+		return Charcoal_Framework::setLogLevel( $log_level );
+	}
 }
 
 

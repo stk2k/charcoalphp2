@@ -122,7 +122,9 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function setLogLevel( $log_level )
 	{
+		$old_level = $this->log_level;
 		$this->log_level = $log_level;
+		return $old_level;
 	}
 
 	/**
