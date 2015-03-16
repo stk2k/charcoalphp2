@@ -119,6 +119,14 @@ class Charcoal_SmartGatewayImpl
 		return $model;
 	}
 
+	/*
+	 *   create recordset factory
+	 */
+	public function createRecordsetFactory()
+	{
+		return $this->data_source->createRecordsetFactory();
+	}
+
 	/**
 	 *	real implementation of Charcoal_SmartGateway::autoCommit()
 	 * 
@@ -172,20 +180,28 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param string $sql
 	 *	@param array $params
+	 *	@param Charcoal_IRecordsetFactory $recordsetFactory
 	 */
-	public function query( $sql, $params = NULL )
+	public function query( $sql, $params = NULL, $recordsetFactory = NULL )
 	{
 		Charcoal_ParamTrait::checkString( 1, $sql );
 		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
+		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
 
 		$result = $this->data_source->prepareExecute( $sql, $params );
 
-		$a = array();
-		while( $row = $this->data_source->fetchAssoc( $result ) ){
-			$a[] = $row;
+		if ( $recordsetFactory )
+		{
+			return $recordsetFactory->createRecordset( $result );
 		}
+		else{
+			$a = array();
+			while( $row = $this->data_source->fetchAssoc( $result ) ){
+				$a[] = $row;
+			}
 
-		return $a;
+			return $a;
+		}
 	}
 
 	/**
@@ -219,13 +235,15 @@ class Charcoal_SmartGatewayImpl
 	 *	@param int $options
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param Charcoal_String|string $fields
+	 *	@param Charcoal_IRecordsetFactory $recordsetFactory
 	 */
-	public function find( $query_target, $options, $criteria, $fields = NULL ) 
+	public function find( $query_target, $options, $criteria, $fields = NULL, $recordsetFactory = NULL ) 
 	{
 		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::checkInteger( 2, $options );
 		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::checkString( 4, $fields, TRUE );
+		Charcoal_ParamTrait::checkIsA( 5, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
 
 		$current_model_name  = $query_target->getModelName();
 		$current_model_alias = $query_target->getAlias();
@@ -300,16 +318,19 @@ class Charcoal_SmartGatewayImpl
 
 //			log_debug( "debug,smart_gateway,sql", "num_rows: $num_rows" );
 
-		// fetch by record
-		$rows = array();
-		while( $row = $this->data_source->fetchAssoc( $result ) )
+		if ( $recordsetFactory )
 		{
-//				log_debug( "debug,smart_gateway,sql", "row: " . print_r($row,true) );
-
-			$rows[] = new Charcoal_HashMap( $row );
+			return $recordsetFactory->createRecordset( $result );
 		}
+		else{
+			$rows = array();
+			while( $row = $this->data_source->fetchAssoc( $result ) )
+			{
+				$rows[] = new Charcoal_HashMap( $row );
+			}
 
-		return $rows;
+			return $rows;
+		}
 	}
 
 
@@ -359,14 +380,11 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_IRecordsetFactory $recordsetFactory
 	 */
-	public function findAll( $query_target, $criteria, $fields = NULL ) 
+	public function findAll( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
-
-		return $this->find( $query_target, 0, $criteria, $fields );
+		return $this->find( $query_target, 0, $criteria, $fields, $recordsetFactory );
 	}
 
 	/**
@@ -378,10 +396,6 @@ class Charcoal_SmartGatewayImpl
 	 */
 	public function findAllForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
-
 		return $this->find( $query_target, Charcoal_EnumQueryOption::FOR_UPDATE, $criteria, $fields );
 	}
 
@@ -394,10 +408,6 @@ class Charcoal_SmartGatewayImpl
 	 */
 	public function findDistinct( $query_target, $fields, $criteria, $fields = NULL ) 
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkString( 3, $fields, TRUE );
-
 		return $this->find( $query_target, Charcoal_EnumQueryOption::DISTINCT, $criteria, $fields );
 	}
 

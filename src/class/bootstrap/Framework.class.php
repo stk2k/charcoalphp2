@@ -665,7 +665,7 @@ class Charcoal_Framework
 	 */
 	public static function run( $debug = NULL, $sandbox = NULL )
 	{
-		Charcoal_Benchmark::start();
+		$th_run = Charcoal_Benchmark::start();
 		Charcoal_MemoryBenchmark::start();
 
 		if ( $debug ){
@@ -739,7 +739,7 @@ class Charcoal_Framework
 		}
 
 		// finally process
-		$timer_score = Charcoal_Benchmark::stop();
+		$timer_score = Charcoal_Benchmark::stop( $th_run );
 		log_debug( 'system, debug', sprintf("total framework process time: [%0.4f] msec",$timer_score) );
 
 		// memory usage

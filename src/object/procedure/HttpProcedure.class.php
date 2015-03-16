@@ -78,7 +78,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 	 */
 	public function execute( $request, $response, $session = NULL )
 	{
-		Charcoal_Benchmark::start();
+		$timer_handle = Charcoal_Benchmark::start();
 
 //		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IRequest', $request );
 //		Charcoal_ParamTrait::checkImplements( 2, 'Charcoal_IResponse', $response );
@@ -271,7 +271,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 			$task_manager->saveStatefulTasks( $session );
 		}
 
-		$score = Charcoal_Benchmark::stop();
+		$score = Charcoal_Benchmark::stop( $timer_handle );
 		log_debug( 'system, debug', "procedure execute method end: [$score] msec" );
 
 //		log_info( "system", "procedure", "プロシージャ[$proc_name]を実行しました。" );

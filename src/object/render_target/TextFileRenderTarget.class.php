@@ -18,16 +18,14 @@ class Charcoal_TextFileRenderTarget extends Charcoal_AbstractRenderTarget implem
 	/**
 	 *	constructor
 	 */
-	public function __construct( $file_path, $flags = 0, $dir_mode = '0777' )
+	public function __construct( $file_path, $dir_mode = '0777' )
 	{
-		Charcoal_ParamTrait::checkString( 1, $file_path );
-		Charcoal_ParamTrait::checkInteger( 2, $flags );
-		Charcoal_ParamTrait::checkString( 3, $dir_mode );
+//		Charcoal_ParamTrait::checkString( 1, $file_path );
+//		Charcoal_ParamTrait::checkString( 2, $dir_mode );
 
 		parent::__construct();
 
 		$this->file_path = us($file_path);
-		$this->flags = ui($flags) & (FILE_USE_INCLUDE_PATH|FILE_APPEND|LOCK_EX);
 		$this->dir_mode = us($dir_mode);
 	}
 
@@ -53,7 +51,7 @@ class Charcoal_TextFileRenderTarget extends Charcoal_AbstractRenderTarget implem
 				_throw( new Charcoal_RenderTargetException("directory not writable: $dir") );
 			}
 
-			$result = @file_put_contents($this->file_path, $buffer, $this->flags);
+			$result = @file_put_contents($this->file_path, $buffer, LOCK_EX);
 
 			if ( $result === FALSE ){
 				$last_error = print_r(error_get_last(),true);

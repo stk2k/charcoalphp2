@@ -97,6 +97,11 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	function numRows( $result );
 
 	/*
+	 *    create recordset object
+	 */
+	public function createRecordset( $result );
+
+	/*
 	 *    フェッチ処理（連想配列で返却）
 	 */
 	public function fetchAssoc( $result );
@@ -111,5 +116,9 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	 */
 	public function getLastInsertId();
 
+	/*
+	 *   create recordset factory
+	 */
+	public function createRecordsetFactory();
 }
 

@@ -12,6 +12,8 @@ require_once( 'Smarty/Smarty.class.php' );
 
 class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITask
 {
+	const TAG = 'smarty_renderer_task';
+
 	private $template_files;
 	private $smarty;
 
@@ -192,9 +194,11 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 				$render_target = $event->getRenderTarget();
 				if ( $render_target ){
 					$render_target->render( $html );
+					log_debug( "system,renderer", "Rendered by render target: " . get_class($render_target), self::TAG );
 				}
 				else{
 					echo $html;
+					log_debug( "system,renderer", "Output by echo.", self::TAG );
 				}
 			}
 		}

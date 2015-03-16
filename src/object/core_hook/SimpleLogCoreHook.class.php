@@ -19,8 +19,6 @@ class Charcoal_SimpleLogCoreHook extends Charcoal_AbstractCoreHook
 		$stage_name = parent::getCoreHookStageName( $stage );
 
 		switch( $stage ){
-		case Charcoal_EnumCoreHookStage::START_OF_BOOTSTRAP:
-			Charcoal_Benchmark::start();
 			// starting message
 			log_info( 'system,debug,screen', "[core stage:$stage_name] Starting framework bootstrap process." );
 			log_info( 'system,debug,screen', "[core stage:$stage_name] ===============================================" );
@@ -127,7 +125,6 @@ class Charcoal_SimpleLogCoreHook extends Charcoal_AbstractCoreHook
 			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished procedure forwarding process.");
 			break;
 		case Charcoal_EnumCoreHookStage::END_OF_BOOTSTRAP:
-			$elapse = Charcoal_Benchmark::score();
 			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished framework bootstrap process.");
 			log_info( 'system,debug,screen', "[core stage:$stage_name] bootstrap processing time: [$elapse] msec");
 			break;
@@ -169,10 +166,6 @@ class Charcoal_SimpleLogCoreHook extends Charcoal_AbstractCoreHook
 			log_info( 'system,debug,screen', "[core stage:$stage_name] Finished framework shutdown process.");
 
 			if ( $this->getSandbox()->isDebug() ){
-				// whole ellapse time
-				$elapse = Charcoal_Benchmark::stop();
-				log_info( 'system,debug,screen', "[core stage:$stage_name] total processing time: [$elapse] msec");
-
 				$peak_usage = memory_get_peak_usage(FALSE);
 				$real_usage = memory_get_peak_usage(TRUE);
 

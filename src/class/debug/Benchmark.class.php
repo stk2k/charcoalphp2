@@ -13,54 +13,64 @@ class Charcoal_Benchmark
 {
 	const DEFAULT_PRECISION    = 4;
 
-	static private $stack = array();
+	static private $start_times;
 
 	/**
 	 *  start timer
+	 *  
+	 *  @return integer    handle of timer
 	 */
 	public static function start()
 	{
-		self::$stack[] = microtime(true);
+		static $handle = 0;
+
+		$start_time = microtime(true);
+
+		self::$start_times[$handle] = $start_time;
+
+		return $handle++;
 	}
 
 	/**
 	 *    stop timer
 	 *  
+	 *  @param integer $handle        handle of timer
 	 *  @param integer $precision     precision of timer value
 	 *  
 	 *  @return integer      now score
 	 */
-	public static function stop( $precision = self::DEFAULT_PRECISION )
+	public static function stop( $handle, $precision = self::DEFAULT_PRECISION )
 	{
-		$start = array_pop( self::$stack );
-		$stop = microtime(true);
+		$start_time = isset(self::$start_times[$handle]) ? self::$start_times[$handle] : NULL;
+		$stop_time = microtime(true);
 
-		if ( $start === NULL ){
+		if ( $start_time === NULL ){
 			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
 
-		return round( ($stop - $start) * 1000, $precision );
+		self::$start_times[$handle] = $stop_time;
+
+		return round( ($stop_time - $start_time) * 1000, $precision );
 	}
 
 	/**
 	 *    score
 	 *  
+	 *  @param integer $handle        handle of timer
 	 *  @param integer $precision     precision of timer value
 	 *  
 	 *  @return integer      now score
 	 */
-	public static function score( $precision = self::DEFAULT_PRECISION )
+	public static function score( $handle, $precision = self::DEFAULT_PRECISION )
 	{
-		$start = array_pop( self::$stack );
-		$stop = microtime(true);
+		$start_time = isset(self::$start_times[$handle]) ? self::$start_times[$handle] : NULL;
+		$stop_time = microtime(true);
 
-		if ( $start === NULL ){
+		if ( $start_time === NULL ){
 			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
 
-		self::$stack[] = $start;
-
-		return round( ($stop - $start) * 1000, $precision );
+		return round( ($stop_time - $start_time) * 1000, $precision );
 	}
 
 }

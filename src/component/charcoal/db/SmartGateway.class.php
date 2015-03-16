@@ -106,6 +106,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		return $this->impl->getLastInsertId();
 	}
 
+	/*
+	 *   create recordset factory
+	 */
+	public function createRecordsetFactory()
+	{
+		return $this->impl->createRecordsetFactory();
+	}
+
 	/**
 	 * Set auto commit flag
 	 * 

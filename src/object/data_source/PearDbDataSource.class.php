@@ -274,7 +274,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 			return;
 		}
 
-		Charcoal_Benchmark::start();
+		$timer_handle = Charcoal_Benchmark::start();
 
 		$backend   = $this->_backend;
 		$user      = $this->_user;
@@ -341,7 +341,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 		}
 
 		// ログ
-		$elapse = Charcoal_Benchmark::stop();
+		$elapse = Charcoal_Benchmark::stop( $timer_handle );
 		log_debug( "debug,sql,data_source", "data_source", "connect() end. time=[$elapse]sec.");
 	}
 
@@ -379,7 +379,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	private function _prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
 	{
-		Charcoal_Benchmark::start();
+		$timer_handle = Charcoal_Benchmark::start();
 
 		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
@@ -431,7 +431,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 		}
 
 		// ログ
-		$elapse = Charcoal_Benchmark::stop();
+		$elapse = Charcoal_Benchmark::stop( $timer_handle );
 		log_debug( 'sql,debug', "prepareExecute() end. time=[$elapse]sec.");
 
 		return $result;
@@ -468,13 +468,13 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 		// 接続処理
 		$this->connect();
 
-		Charcoal_Benchmark::start();
+		$timer_handle = Charcoal_Benchmark::start();
 
 		// SQLを実行して結果セットを得る
 		$resultset = $this->_query( $sql );
 
 		// ログ
-		$elapse = Charcoal_Benchmark::stop();
+		$elapse = Charcoal_Benchmark::stop( $timer_handle );
 		log_debug( 'sql', "query() end. time=[$elapse]sec.");
 
 		// 結果セットを返却

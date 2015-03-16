@@ -164,7 +164,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 		try{
 			$queue = $this->queue;
 
-			Charcoal_Benchmark::start();
+			$timer_all = Charcoal_Benchmark::start();
 
 			$loop_id = 0;
 			while( !$queue->isEmpty() )
@@ -282,7 +282,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 */
 
 					// task timer start
-					Charcoal_Benchmark::start();
+					$timer_task = Charcoal_Benchmark::start();
 
 					$result = NULL;
 					try{
@@ -357,7 +357,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					$result_str = implode( ',', $result_str );
 
 					// task timer stop
-					$elapse = Charcoal_Benchmark::stop();
+					$elapse = Charcoal_Benchmark::stop( $timer_task );
 					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
 
 					// ポストアクション
@@ -468,7 +468,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 			}
 
 			// ログ
-			$elapse = Charcoal_Benchmark::stop();
+			$elapse = Charcoal_Benchmark::stop( $timer_all );
 			if ( $debug ) log_debug( 'system,event', "event loop end. time=[$elapse]msec.");
 		}
 		catch( Charcoal_RuntimeException $e ){

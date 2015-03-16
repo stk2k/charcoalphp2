@@ -362,7 +362,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$params = uv( $params );
 
-		Charcoal_Benchmark::start();
+		$timer_handle = Charcoal_Benchmark::start();
 
 		$command_id = $this->command_id++;
 
@@ -408,7 +408,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		log_info( "data_source,sql,debug", "[ID]$command_id ...success(numRows=$numRows)", 'data_source' );
 
 		// ログ
-		$elapse = Charcoal_Benchmark::stop();
+		$elapse = Charcoal_Benchmark::stop( $timer_handle );
 		log_debug( 'data_source,sql,debug', "[ID]$command_id prepareExecute() end. time=[$elapse]msec.", 'data_source' );
 
 		return $stmt;
@@ -509,6 +509,14 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	}
 
 	/*
+	 *    create recordset object
+	 */
+	public function createRecordset( $result )
+	{
+		
+	}
+
+	/*
 	 *    フェッチ処理（連想配列で返却）
 	 */
 	public function fetchAssoc( $stmt )
@@ -540,6 +548,14 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		}
 
 		return -1;
+	}
+
+	/*
+	 *   create recordset factory
+	 */
+	public function createRecordsetFactory()
+	{
+		return new Charcoal_PDORecordsetFactory();
 	}
 
 }

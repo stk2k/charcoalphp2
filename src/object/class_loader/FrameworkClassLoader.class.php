@@ -77,6 +77,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_IProcedure'				=> 'interface',
 				'Charcoal_IProperties'				=> 'interface',
 				'Charcoal_IQueue'					=> 'interface',
+				'Charcoal_IRecordset'				=> 'interface',
+				'Charcoal_IRecordsetFactory'		=> 'interface',
 				'Charcoal_IRedirectLayout'			=> 'interface',
 				'Charcoal_IRenderTarget'			=> 'interface',
 				'Charcoal_IRequest'					=> 'interface',
@@ -214,6 +216,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_AbstractDataSource'				=> 'object/data_source',
 				'Charcoal_PearDbDataSource'					=> 'object/data_source',
 				'Charcoal_PDODbDataSource'					=> 'object/data_source',
+				'Charcoal_PDORecordset'						=> 'object/data_source',
+				'Charcoal_PDORecordsetFactory'				=> 'object/data_source',
 				'Charcoal_SQLiteDataSource'					=> 'object/data_source',
 
 		// request classes

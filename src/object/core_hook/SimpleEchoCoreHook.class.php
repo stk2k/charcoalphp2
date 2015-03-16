@@ -20,7 +20,6 @@ class Charcoal_SimpleEchoCoreHook extends Charcoal_AbstractCoreHook
 
 		switch( $stage ){
 		case Charcoal_EnumCoreHookStage::START_OF_BOOTSTRAP:
-			Charcoal_Benchmark::start();
 			// starting message
 			echo "[core stage:$stage_name] Starting framework bootstrap process.". eol();
 			echo "[core stage:$stage_name] ===============================================". eol();
@@ -169,10 +168,6 @@ class Charcoal_SimpleEchoCoreHook extends Charcoal_AbstractCoreHook
 			echo "[core stage:$stage_name] Finished framework shutdown process.". eol();
 
 			if ( $this->getSandbox()->isDebug() ){
-				// whole ellapse time
-				$elapse = Charcoal_Benchmark::stop();
-				echo "[core stage:$stage_name] total processing time: [$elapse] msec". eol();
-
 				$peak_usage = memory_get_peak_usage(FALSE);
 				$real_usage = memory_get_peak_usage(TRUE);
 

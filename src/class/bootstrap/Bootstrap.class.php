@@ -44,23 +44,13 @@ class Charcoal_Bootstrap
 		$flags_handled = error_reporting() ;
 		if ( Charcoal_System::isBitSet( $errno, $flags_handled, Charcoal_System::BITTEST_MODE_ANY ) )
 		{
-			$errno = Charcoal_System::phpErrorString( $errno );
-
-echo "error:$errno, $errstr, $errfile, $errline" . eol();
-exit;
-
 			// create fake exception
 			$e = new Charcoal_PHPErrorException($errno, $errstr, $errfile, $errline);
 
+			// output error message to STDERR
+			fputs(STDERR, $e);
+
 			_throw( $e );
-
-//			Charcoal_FrameworkExceptionStack::push( $e );
-
-			exit;	// prevent unnecessary errors to add
-		}
-		if ( (error_reporting() & $errno) === $errno ){
-			$errno = Charcoal_System::phpErrorString( $errno );
-			echo "[errno]$errno [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
 		}
 		return TRUE;	// Otherwise, ignore all errors
 	}
@@ -334,7 +324,7 @@ exit;
 	 *	run bootstrap
 	 *
 	 */
-	public function run( $debug = FALSE )
+	public static function run( $debug = FALSE )
 	{
 		self::$debug = $debug;
 
@@ -349,7 +339,6 @@ exit;
 		register_shutdown_function( 'Charcoal_Bootstrap::onShutdown' );
 		set_error_handler( "Charcoal_Bootstrap::onUnhandledError" );
 		set_exception_handler( "Charcoal_Bootstrap::onUnhandledException" );
-
 	}
 
 }
