@@ -12,24 +12,6 @@
 class Charcoal_Stack extends Charcoal_Collection
 {
 	/*
-	 *	コンストラクタ
-	 */
-	public function __construct( $values = array() )
-	{
-		parent::__construct();
-
-		$this->values = $values;
-	}
-
-	/**
-	 *	unbox primitive value
-	 */
-	public function unbox()
-	{
-		return $this->values;
-	}
-
-	/*
 	 *	先頭の要素を取得
 	 */
 	public function getHead()
@@ -66,22 +48,6 @@ class Charcoal_Stack extends Charcoal_Collection
 	}
 
 	/*
-	 *	要素数を取得
-	 */
-	public function count()
-	{
-		return count( $this->values );
-	}
-
-	/*
-	 *	全ての要素を削除
-	 */
-	public function clear()
-	{
-		$this->values = array();
-	}
-
-	/*
 	 *	要素を追加
 	 */
 	public function push( $item )
@@ -100,55 +66,6 @@ class Charcoal_Stack extends Charcoal_Collection
 		}
 
 		return $tail;
-	}
-
-	/**
-	 *	Get all values with keys
-	 *
-	 * @return array
-	 */
-	public function getAll()
-	{
-		return $this->values;
-	}
-
-	/*
-	 *	Iteratorインタフェース:rewidの実装
-	 */
-	public function rewind() {
-		reset($this->values);
-	}
-
-	/*
-	 *	Iteratorインタフェース:currentの実装
-	 */
-	public function current() {
-		$var = current($this->values);
-		return $var;
-	}
-
-	/*
-	 *	Iteratorインタフェース:keyの実装
-	 */
-	public function key() {
-		$var = key($this->values);
-		return $var;
-	}
-
-	/*
-	 *	Iteratorインタフェース:nextの実装
-	 */
-	public function next() {
-		$var = next($this->values);
-		return $var;
-	}
-
-	/*
-	 *	Iteratorインタフェース:validの実装
-	 */
-	public function valid() {
-		$var = $this->current() !== false;
-		return $var;
 	}
 
 	/**

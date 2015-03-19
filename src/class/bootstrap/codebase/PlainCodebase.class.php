@@ -18,7 +18,7 @@ class Charcoal_PlainCodebase extends Charcoal_AbstractCodebase
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 

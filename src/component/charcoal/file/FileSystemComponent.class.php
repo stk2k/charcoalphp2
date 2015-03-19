@@ -47,8 +47,8 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 	 */
 	public function createDirectory( $dir_path, $mode = 0777 )
 	{
-		Charcoal_ParamTrait::checkString( 1, $dir_path );
-		Charcoal_ParamTrait::checkInteger( 2, $mode );
+		Charcoal_ParamTrait::validateString( 1, $dir_path );
+		Charcoal_ParamTrait::validateInteger( 2, $mode );
 
 		try{
 			$obj = new Charcoal_File( $dir_path, $this->_base_dir_obj );
@@ -77,10 +77,10 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 	 */
 	public function createFile( $file_path, $contents, $overwrite = TRUE, $mode = 0777 )
 	{
-		Charcoal_ParamTrait::checkString( 1, $file_path );
-		Charcoal_ParamTrait::checkString( 2, $contents );
-		Charcoal_ParamTrait::checkBoolean( 3, $overwrite );
-		Charcoal_ParamTrait::checkInteger( 4, $mode );
+		Charcoal_ParamTrait::validateString( 1, $file_path );
+		Charcoal_ParamTrait::validateString( 2, $contents );
+		Charcoal_ParamTrait::validateBoolean( 3, $overwrite );
+		Charcoal_ParamTrait::validateInteger( 4, $mode );
 
 		$obj = new Charcoal_File( $file_path, $this->_base_dir_obj );
 

@@ -19,7 +19,7 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -33,7 +33,7 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
 	 */
 	public function add( $handler )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IExceptionHandler', $handler );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IExceptionHandler', $handler );
 
 		$this->handlers[] = $handler;
 	}
@@ -70,7 +70,7 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
 	 */
 	public function handleException( $e )
 	{
-//		Charcoal_ParamTrait::checkException( 1, $e );
+//		Charcoal_ParamTrait::validateException( 1, $e );
 
 		$this->init();
 

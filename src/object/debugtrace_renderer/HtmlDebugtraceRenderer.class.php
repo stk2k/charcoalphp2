@@ -794,7 +794,7 @@ HTML_HEADER;
 	 */
 	public function render( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		list( $file, $line ) = Charcoal_System::caller(0);
 
@@ -815,7 +815,7 @@ HTML_HEADER;
 	 */
 	public function output( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		list( $file, $line ) = Charcoal_System::caller(0);
 

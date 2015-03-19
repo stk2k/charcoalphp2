@@ -45,7 +45,7 @@ class Charcoal_Framework
 	 */
 	public static function loadSourceFile( $path )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $path );
+//		Charcoal_ParamTrait::validateString( 1, $path );
 /*
 		if ( !is_file($path) ){
 			_throw( new Charcoal_FileNotFoundException( $path ) );
@@ -82,7 +82,7 @@ class Charcoal_Framework
 	 */
 	public static function pushProcedure( $procedure )
 	{
-//		Charcoal_ParamTrait::checkStringOrObject( 1, 'Charcoal_IProcedure', $procedure );
+//		Charcoal_ParamTrait::validateStringOrObject( 1, 'Charcoal_IProcedure', $procedure );
 
 		if ( is_string($procedure) || $procedure instanceof Charcoal_String ){
 			try{
@@ -125,7 +125,7 @@ class Charcoal_Framework
 	 */
 	public static function setHookStage( $hook_stage, $data = NULL )
 	{
-//		Charcoal_ParamTrait::checkInteger( 1, $hook_stage );
+//		Charcoal_ParamTrait::validateInteger( 1, $hook_stage );
 
 		self::$hook_stage = $hook_stage;
 
@@ -145,7 +145,7 @@ class Charcoal_Framework
 	 */
 	public static function showHttpErrorDocument( $status_code )
 	{
-//		Charcoal_ParamTrait::checkInteger( 1, $status_code );
+//		Charcoal_ParamTrait::validateInteger( 1, $status_code );
 
 		$status_code = ui($status_code);
 
@@ -228,7 +228,7 @@ class Charcoal_Framework
 	 */
 	public static function handleException( $e )
 	{
-//		Charcoal_ParamTrait::checkException( 1, $e );
+//		Charcoal_ParamTrait::validateException( 1, $e );
 
 		return self::$exception_handlers->handleException( $e );
 	}
@@ -238,9 +238,9 @@ class Charcoal_Framework
 	 */
 	public static function writeLog( $target, $message,  $tag = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $target );
-//		Charcoal_ParamTrait::checkString( 2, $message );
-//		Charcoal_ParamTrait::checkString( 3, $tag, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $target );
+//		Charcoal_ParamTrait::validateString( 2, $message );
+//		Charcoal_ParamTrait::validateString( 3, $tag, TRUE );
 
 		if ( self::$loggers ){
 			self::$loggers->writeLog( $target, $message,  $tag );
@@ -271,7 +271,7 @@ class Charcoal_Framework
 	 */
 	public static function getCache( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		return self::$cache_drivers->getCache( $key );
 	}
@@ -285,8 +285,8 @@ class Charcoal_Framework
 	 */
 	public static function setCache( $key, $value, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 3, $duration, TRUE );
 
 		return self::$cache_drivers->setCache( $key, $value, $duration );
 	}
@@ -299,7 +299,7 @@ class Charcoal_Framework
 	 */
 	public static function deleteCache( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		self::$cache_drivers->deleteCache( $key );
 	}
@@ -309,7 +309,7 @@ class Charcoal_Framework
 	 */
 	private static function _run( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		//==================================================================
 		// create exception handler list
@@ -668,12 +668,8 @@ class Charcoal_Framework
 		$th_run = Charcoal_Benchmark::start();
 		Charcoal_MemoryBenchmark::start();
 
-		if ( $debug ){
-			Charcoal_ParamTrait::enable();
-		}
-
-//		Charcoal_ParamTrait::checkBoolean( 1, $debug, TRUE );
-//		Charcoal_ParamTrait::checkSandbox( 2, $sandbox, TRUE );
+//		Charcoal_ParamTrait::validateBoolean( 1, $debug, TRUE );
+//		Charcoal_ParamTrait::validateSandbox( 2, $sandbox, TRUE );
 
 		if ( $sandbox === NULL ){
 			$sandbox = new Charcoal_Sandbox( CHARCOAL_PROFILE, $debug );

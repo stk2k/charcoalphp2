@@ -48,7 +48,7 @@ abstract class Charcoal_Event extends Charcoal_CharcoalObject implements Charcoa
 	 */
 	public function setPriority( $priority )
 	{
-//		Charcoal_ParamTrait::checkInteger( 1, $priority );
+//		Charcoal_ParamTrait::validateInteger( 1, $priority );
 
 		$this->_priority = ui($priority);
 	}

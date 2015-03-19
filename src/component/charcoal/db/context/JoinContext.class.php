@@ -25,7 +25,7 @@ class Charcoal_JoinContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  INNER/LEFT/RIGHT JOIN
 	 */
-	public function on( Charcoal_String $condition )
+	public function on( $condition )
 	{
 		$this->_join->setCondition( $condition );
 

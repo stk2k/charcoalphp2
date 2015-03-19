@@ -26,13 +26,23 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	}
 
 	/**
+	 * Get configurations
+	 *
+	 * @return array   configuration data
+	 */
+	public function getConfig()
+	{
+		return get_object_vars( $this );
+	}
+
+	/**
 	 * Initialize instance
 	 *
 	 * @param Charcoal_Config $config   configuration data
 	 */
 	public function configure( $config )
 	{
-//		Charcoal_ParamTrait::checkConfig( 1, $config );
+//		Charcoal_ParamTrait::validateConfig( 1, $config );
 	}
 
 	/**
@@ -59,7 +69,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 */
 	public function setObjectName( $obj_name )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $obj_name );
+//		Charcoal_ParamTrait::validateString( 1, $obj_name );
 
 		$this->obj_name = $obj_name;
 	}
@@ -81,7 +91,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 */
 	public function setObjectPath( $obj_path )
 	{
-//		Charcoal_ParamTrait::checkObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateObjectPath( 1, $obj_path );
 
 		$this->obj_path = $obj_path;
 	}
@@ -103,7 +113,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 */
 	public function setTypeName( $type_name )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $type_name );
+//		Charcoal_ParamTrait::validateString( 1, $type_name );
 
 		$this->type_name = $type_name;
 	}
@@ -125,7 +135,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	 */
 	public function setSandbox( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 	}

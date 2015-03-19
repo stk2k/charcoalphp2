@@ -20,9 +20,9 @@ class Charcoal_ProcedureRedirectLayout extends Charcoal_AbstractLayout
 	 */
 	public function __construct( $sandbox, $obj_path, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
-		Charcoal_ParamTrait::checkHashMap( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
+		Charcoal_ParamTrait::validateHashMap( 2, $params, TRUE );
 
 		parent::__construct( p(array()) );
 

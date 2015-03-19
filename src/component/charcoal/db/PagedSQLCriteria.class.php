@@ -17,11 +17,11 @@ class Charcoal_PagedSQLCriteria extends Charcoal_SQLCriteria
 	 */
 	public function __construct( $page_info, $where = NULL, $params = NULL, $order_by = NULL, $group_by = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_DBPageInfo', $page_info );
-		Charcoal_ParamTrait::checkString( 2, $where, TRUE );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-		Charcoal_ParamTrait::checkString( 3, $order_by, TRUE );
-		Charcoal_ParamTrait::checkString( 4, $group_by, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_DBPageInfo', $page_info );
+		Charcoal_ParamTrait::validateString( 2, $where, TRUE );
+		Charcoal_ParamTrait::validateVector( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateString( 3, $order_by, TRUE );
+		Charcoal_ParamTrait::validateString( 4, $group_by, TRUE );
 
 		$this->page_info = $page_info;
 

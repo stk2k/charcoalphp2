@@ -75,7 +75,7 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
 	 */
 	public function formatMessage( Charcoal_LogMessage $msg )
 	{
-//		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_LogMessage', $msg );
+//		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_LogMessage', $msg );
 
 		$level   = $msg->getLevel();
 		$tag     = $msg->getTag();

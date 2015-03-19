@@ -26,6 +26,13 @@ class Charcoal_DTO extends Charcoal_Object implements IteratorAggregate, ArrayAc
 	}
 
 	/**
+	 *	get key list
+	 */
+	public function getKeys() {
+		return array_keys( get_object_vars($this) );
+	}
+
+	/**
 	 *	get all properties
 	 */
 	public function getAll() {
@@ -94,7 +101,7 @@ class Charcoal_DTO extends Charcoal_Object implements IteratorAggregate, ArrayAc
 	 */
 	public function setArray( $array )
 	{
-//		Charcoal_ParamTrait::checkRawArray( 1, $array );
+//		Charcoal_ParamTrait::validatRawArray( 1, $array );
 
 		foreach ( $array as $key => $value ) {
 			if ( property_exists($this, $key) ){
@@ -110,10 +117,50 @@ class Charcoal_DTO extends Charcoal_Object implements IteratorAggregate, ArrayAc
 	 */
 	public function setHashMap( $map )
 	{
-//		Charcoal_ParamTrait::checkHashMap( 1, $map );
+//		Charcoal_ParamTrait::validateHashMap( 1, $map );
 
 		foreach ( $map as $key => $value ) {
 			if ( property_exists($this, $key) ){
+				$this->offsetSet( $key, $value );
+			}
+		}
+	}
+
+	/**
+	 *	Merge with array
+	 *	
+	 *	@param array $array            array data to merge
+	 *	@param boolean $overwrite      TRUE means overwrite if the original element exists
+	 */
+	public function mergeArray( $array, $overwrite = TRUE )
+	{
+//		Charcoal_ParamTrait::validatRawArray( 1, $array );
+//		Charcoal_ParamTrait::validateBoolean( 2, $overwrite );
+
+		$overwrite = ub($overwrite);
+
+		if ( $overwrite ){
+			foreach( $array as $key => $value ){
+				$this->offsetSet( $key, $value );
+			}
+		}
+	}
+
+	/**
+	 *	Merge with hashmap
+	 *	
+	 *	@param array $array            hash map data to merge
+	 *	@param boolean $overwrite      TRUE means overwrite if the original element exists
+	 */
+	public function mergeHashMap( $map, $overwrite  = TRUE )
+	{
+//		Charcoal_ParamTrait::validateHashMap( 1, $map );
+//		Charcoal_ParamTrait::validateBoolean( 2, $overwrite );
+
+		$overwrite = ub($overwrite);
+
+		if ( $overwrite ){
+			foreach( $map as $key => $value ){
 				$this->offsetSet( $key, $value );
 			}
 		}

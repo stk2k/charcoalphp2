@@ -85,7 +85,7 @@ class Charcoal_PhpXmlParserComponent extends Charcoal_CharcoalComponent implemen
 	 */
 	public function create( $encoding = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $selector, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $selector, TRUE );
 
 		$this->free();
 
@@ -99,7 +99,7 @@ class Charcoal_PhpXmlParserComponent extends Charcoal_CharcoalComponent implemen
 	 */
 	public function getRawOption( $option )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $option );
+		Charcoal_ParamTrait::validateInteger( 1, $option );
 
 		if ( !$this->parser ){
 			_throw( new PhpXmlParserComponentException('parser object is not created') );
@@ -116,7 +116,7 @@ class Charcoal_PhpXmlParserComponent extends Charcoal_CharcoalComponent implemen
 	 */
 	public function setRawOption( $option, $value )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $option );
+		Charcoal_ParamTrait::validateInteger( 1, $option );
 
 		if ( !$this->parser ){
 			_throw( new PhpXmlParserComponentException('parser object is not created') );
@@ -219,8 +219,8 @@ class Charcoal_PhpXmlParserComponent extends Charcoal_CharcoalComponent implemen
 	 */
 	public function parse( $data, $is_final = false )
 	{
-		Charcoal_ParamTrait::checkString( 1, $data );
-		Charcoal_ParamTrait::checkBoolean( 2, $is_final );
+		Charcoal_ParamTrait::validateString( 1, $data );
+		Charcoal_ParamTrait::validateBoolean( 2, $is_final );
 
 		if ( !$this->parser ){
 			_throw( new PhpXmlParserComponentException('parser object is not created') );

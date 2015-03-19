@@ -34,7 +34,7 @@ class Charcoal_HttpErrorDocumentExceptionHandler extends Charcoal_AbstractExcept
 	 */
 	public function handleException( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		if ( $e instanceof Charcoal_HttpStatusException )
 		{

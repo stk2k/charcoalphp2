@@ -19,7 +19,7 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 	 */
 	public function render( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		$message = $this->output( $e );
 
@@ -34,7 +34,7 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 	 */
 	public function output( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		$out = '';
 		$version = Charcoal_Framework::getVersion();

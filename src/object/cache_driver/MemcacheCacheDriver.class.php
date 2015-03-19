@@ -60,7 +60,7 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function get( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 
@@ -79,8 +79,8 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function set( $key, $value, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 3, $duration, TRUE );
 
 		$key = us($key);
 		$duration = $duration ? ui($duration) : ui($this->_default_duration);
@@ -97,7 +97,7 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function delete( Charcoal_String $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 	}
 
@@ -108,7 +108,7 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function deleteRegEx( Charcoal_String $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 	}
 
@@ -120,8 +120,8 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function touch( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $duration, TRUE );
 
 	}
 
@@ -133,8 +133,8 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
 	 */
 	public function touchRegEx( Charcoal_String $key, Charcoal_Integer $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $duration, TRUE );
 
 	}
 

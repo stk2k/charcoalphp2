@@ -16,9 +16,9 @@ class Charcoal_URLUtil
 	 */
 	public static function makeRelativeURL( $sandbox, $obj_path, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
-		Charcoal_ParamTrait::checkHashMap( 3, $params, TRUE );
+		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::validateStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
+		Charcoal_ParamTrait::validateHashMap( 3, $params, TRUE );
 
 		if ( is_string(us($obj_path)) ){
 			$obj_path = new Charcoal_ObjectPath($obj_path);
@@ -45,9 +45,9 @@ class Charcoal_URLUtil
 	 */
 	public static function makeAbsoluteURL( $sandbox, $obj_path, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
-		Charcoal_ParamTrait::checkHashMap( 3, $params, TRUE );
+		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+		Charcoal_ParamTrait::validateStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
+		Charcoal_ParamTrait::validateHashMap( 3, $params, TRUE );
 
 		// サーバ名
 		$url = 'http://' . $_SERVER['SERVER_NAME'];

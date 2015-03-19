@@ -53,9 +53,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	private function loadTask( $obj_path, $path, $task_manager )
 	{
-//		Charcoal_ParamTrait::checkObjectPath( 1, $obj_path );
-//		Charcoal_ParamTrait::checkString( 2, $path );
-//		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::validateObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateString( 2, $path );
+//		Charcoal_ParamTrait::validateImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
 		$base_name = basename( $path );
@@ -103,9 +103,9 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalObject implements Charcoal_
 	 */
 	private function loadEvent( $obj_path, $path, $task_manager )
 	{
-//		Charcoal_ParamTrait::checkObjectPath( 1, $obj_path );
-//		Charcoal_ParamTrait::checkString( 2, $path );
-//		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::validateObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateString( 2, $path );
+//		Charcoal_ParamTrait::validateImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		// file base name
 		$base_name = basename( $path );

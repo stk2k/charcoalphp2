@@ -11,28 +11,6 @@
 
 class Charcoal_List extends Charcoal_Collection
 {
-	private $values;
-
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct( $values = array() )
-	{
-		parent::__construct();
-
-		if ( $values ){
-			if ( is_array($value) ){
-				$this->values = $values;
-			}
-			else{
-				_throw( new NonArrayException($values) );
-			}
-		}
-		else{
-			$this->values = array();
-		}
-	}
-
 	/**
 	 * Retrieve default value
 	 *
@@ -41,53 +19,6 @@ class Charcoal_List extends Charcoal_Collection
 	public static function defaultValue()
 	{
 		return new self();
-	}
-
-	/**
-	 *	unbox primitive value
-	 */
-	public function unbox()
-	{
-		return $this->values;
-	}
-
-	/*
-	 *	Iteratorインタフェース:rewidの実装
-	 */
-	public function rewind() {
-		reset($this->values);
-	}
-
-	/*
-	 *	Iteratorインタフェース:currentの実装
-	 */
-	public function current() {
-		$var = current($this->values);
-		return $var;
-	}
-
-	/*
-	 *	Iteratorインタフェース:keyの実装
-	 */
-	public function key() {
-		$var = key($this->values);
-		return $var;
-	}
-
-	/*
-	 *	Iteratorインタフェース:nextの実装
-	 */
-	public function next() {
-		$var = next($this->values);
-		return $var;
-	}
-
-	/*
-	 *	Iteratorインタフェース:validの実装
-	 */
-	public function valid() {
-		$var = $this->current() !== false;
-		return $var;
 	}
 
 	/*
@@ -230,7 +161,7 @@ class Charcoal_List extends Charcoal_Collection
 	 */
 	public function addAll( $items )
 	{
-//		Charcoal_ParamTrait::checkVector( 1, $items );
+//		Charcoal_ParamTrait::validateVector( 1, $items );
 
 		foreach( $items as $item ){
 			array_push( $this->values, $item );
@@ -251,22 +182,6 @@ class Charcoal_List extends Charcoal_Collection
 	protected function setValue( array $value )
 	{
 		$this->values = $value;
-	}
-
-	/*
-	 *	要素数を取得
-	 */
-	public function count()
-	{
-		return count( $this->values );
-	}
-
-	/*
-	 *	要素数を取得
-	 */
-	public function size()
-	{
-		return count( $this->values );
 	}
 
 	/*

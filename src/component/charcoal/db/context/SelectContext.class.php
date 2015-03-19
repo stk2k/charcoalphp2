@@ -28,8 +28,8 @@ class Charcoal_SelectContext extends Charcoal_AbstractWrapperContext
 	 */
 	public function from( $model_name, $alias = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $model_name );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $model_name );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
 
 		$query_target = new Charcoal_QueryTarget( $model_name );
 

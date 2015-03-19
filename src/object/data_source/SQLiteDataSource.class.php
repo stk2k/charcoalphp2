@@ -130,7 +130,7 @@ class Charcoal_SQLiteDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function query( $sql )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
+		Charcoal_ParamTrait::validateString( 1, $sql );
 
 		// 接続処理
 		$this->connect();
@@ -151,7 +151,7 @@ class Charcoal_SQLiteDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function execute( $sql )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
+		Charcoal_ParamTrait::validateString( 1, $sql );
 
 		// 接続処理
 		$this->connect();

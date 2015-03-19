@@ -123,7 +123,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	 */
 	public function fieldExists( $field )
 	{
-		Charcoal_ParamTrait::checkString( 1, $field );
+		Charcoal_ParamTrait::validateString( 1, $field );
 
 		return isset($this->_class_vars[us($field)]);
 	}
@@ -141,7 +141,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	 */
 	public function getDefaultValue( $field )
 	{
-		Charcoal_ParamTrait::checkString( 1, $field );
+		Charcoal_ParamTrait::validateString( 1, $field );
 
 		$field = s($field);
 

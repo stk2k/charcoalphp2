@@ -18,7 +18,7 @@ class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
 	 */
 	public function __construct( $url )
 	{
-		Charcoal_ParamTrait::checkString( 1, $url );
+		Charcoal_ParamTrait::validateString( 1, $url );
 
 		parent::__construct( p(array()) );
 

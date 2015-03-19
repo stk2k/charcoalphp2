@@ -20,9 +20,9 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function __construct( $name, $value, $params )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $name );
-//		Charcoal_ParamTrait::checkString( 2, $value );
-//		Charcoal_ParamTrait::checkVector( 3, $params );
+//		Charcoal_ParamTrait::validateString( 1, $name );
+//		Charcoal_ParamTrait::validateString( 2, $value );
+//		Charcoal_ParamTrait::validateVector( 3, $params );
 
 		$this->name    = $name;
 		$this->value   = $value;

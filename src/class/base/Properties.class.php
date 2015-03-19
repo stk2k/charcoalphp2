@@ -31,7 +31,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function keyExists( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::keyExists( $key );
@@ -42,7 +42,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function offsetGet( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us( $key );
 		return parent::offsetGet( $key );
@@ -53,7 +53,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function offsetSet( $key, $value )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us( $key );
 		parent::offsetSet( $key, $value );
@@ -64,7 +64,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function offsetExists( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us( $key );
 		return parent::offsetExists( $key );
@@ -75,7 +75,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function offsetUnset( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us( $key );
 		parent::offsetUnset( $key );
@@ -91,7 +91,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function get( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::get( $key );
@@ -107,7 +107,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function getString( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::getString( $key, $default_value );
@@ -123,7 +123,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function getArray( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::getArray( $key, $default_value );
@@ -139,7 +139,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::getBoolean( $key, $default_value );
@@ -155,7 +155,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::getInteger( $key, $default_value );
@@ -171,7 +171,7 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return parent::getFloat( $key, $default_value );

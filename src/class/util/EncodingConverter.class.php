@@ -19,8 +19,8 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function __construct( $from, $to )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $from );
-//		Charcoal_ParamTrait::checkString( 2, $to );
+//		Charcoal_ParamTrait::validateString( 1, $from );
+//		Charcoal_ParamTrait::validateString( 2, $to );
 
 		$this->from = $from;
 		$this->to = $to;
@@ -31,9 +31,9 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public static function fromString( $sandbox, $from, $to )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-//		Charcoal_ParamTrait::checkString( 2, $from );
-//		Charcoal_ParamTrait::checkString( 3, $to );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateString( 2, $from );
+//		Charcoal_ParamTrait::validateString( 3, $to );
 
 		$from = self::getEncodingStringFromCode( $sandbox, $from );
 		$to = self::getEncodingStringFromCode( $sandbox, $to );
@@ -46,7 +46,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function convert( $str )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $str );
+//		Charcoal_ParamTrait::validateString( 1, $str );
 
 		$str  = us($str);
 		$from = us($this->from);
@@ -60,7 +60,7 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	public function convertArray( $ary )
 	{
-//		Charcoal_ParamTrait::checkVector( 1, $ary );
+//		Charcoal_ParamTrait::validateVector( 1, $ary );
 
 		$from = us($this->from);
 		$to   = us($this->to);
@@ -126,8 +126,8 @@ class Charcoal_EncodingConverter extends Charcoal_Object
 	 */
 	private static function getEncodingStringFromCode( $sandbox, $encoding )
 	{
-		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-//		Charcoal_ParamTrait::checkString( 2, $encoding );
+		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateString( 2, $encoding );
 
 		$encoding_string = null;
 

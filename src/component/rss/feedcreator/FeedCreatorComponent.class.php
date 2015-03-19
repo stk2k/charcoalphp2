@@ -46,7 +46,7 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function addItem( $data = array() )
 	{
-		Charcoal_ParamTrait::checkHashMap( 1, $data );
+		Charcoal_ParamTrait::validateHashMap( 1, $data );
 
 		$item = new Charcoal_FeedCreatorFeedItem( $this, $data );
 
@@ -62,7 +62,7 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function setTitle( $title )
 	{
-		Charcoal_ParamTrait::checkString( 1, $title, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $title, TRUE );
 
 		$this->creator->title = us($title);
 
@@ -76,7 +76,7 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function setLink( $link )
 	{
-		Charcoal_ParamTrait::checkString( 1, $link, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $link, TRUE );
 
 		$this->creator->link = us($link);
 
@@ -90,7 +90,7 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function setDescription( $description )
 	{
-		Charcoal_ParamTrait::checkString( 1, $description, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $description, TRUE );
 
 		$this->creator->description = us($description);
 
@@ -104,7 +104,7 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function setSyndicationURL( $syndicationURL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $syndicationURL, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $syndicationURL, TRUE );
 
 		$this->creator->syndicationURL = us($syndicationURL);
 
@@ -119,8 +119,8 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function saveFeed( $filename, $format = self::DEFAULT_FORMAT )
 	{
-		Charcoal_ParamTrait::checkString( 1, $filename );
-		Charcoal_ParamTrait::checkString( 2, $format );
+		Charcoal_ParamTrait::validateString( 1, $filename );
+		Charcoal_ParamTrait::validateString( 2, $format );
 
 		$this->creator->saveFeed( us($format), us($filename), false );
 	}
@@ -132,7 +132,7 @@ class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implement
 	 */
 	public function outputFeed( $format = self::DEFAULT_FORMAT )
 	{
-		Charcoal_ParamTrait::checkString( 1, $format );
+		Charcoal_ParamTrait::validateString( 1, $format );
 
 		echo 'outputFeed' . PHP_EOL;
 

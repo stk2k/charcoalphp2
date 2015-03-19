@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_Sequence extends Charcoal_HashMap implements Charcoal_IProperties, Iterator, ArrayAccess, Countable
+class Charcoal_Sequence extends Charcoal_HashMap implements Charcoal_IProperties, ArrayAccess, Countable
 {
 }
 

@@ -121,8 +121,8 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 	 */
 	public function getJson( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );

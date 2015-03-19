@@ -25,7 +25,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
 	{
 		parent::__construct();
 
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 		$this->components = array();

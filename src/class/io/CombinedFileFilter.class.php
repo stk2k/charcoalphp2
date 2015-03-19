@@ -20,7 +20,7 @@ class Charcoal_CombinedFileFilter extends Charcoal_AbstractFileFilter
 	 */
 	public function __construct( $filters )
 	{
-//		Charcoal_ParamTrait::checkVector( 1, $filters );
+//		Charcoal_ParamTrait::validateVector( 1, $filters );
 
 		$this->filters = $filters;
 	}

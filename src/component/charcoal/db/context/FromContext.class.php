@@ -21,13 +21,13 @@ class Charcoal_FromContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  INNER/LEFT/RIGHT JOIN
 	 */
-	public function join( Charcoal_String $model_name, Charcoal_String $alias = NULL, Charcoal_Integer $join_type = NULL )
+	public function join( $model_name, $alias = NULL, $join_type = NULL )
 	{
 		if ( $join_type === NULL ){
 			$join_type = Charcoal_EnumSQLJoinType::INNER_JOIN;
 		}
 
-		$join = new Charcoal_QueryJoin( i($join_type) );
+		$join = new Charcoal_QueryJoin( $join_type );
 		$join->setModelName( $model_name );
 		if ( $alias && !$alias->isEmpty() ){
 			$join->setAlias( $alias );
@@ -40,34 +40,34 @@ class Charcoal_FromContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  INNER JOIN
 	 */
-	public function innerJoin( Charcoal_String $model_name, Charcoal_String $alias = NULL )
+	public function innerJoin( $model_name, $alias = NULL )
 	{
 		if ( $alias ){
-			return $this->join( $model_name, $alias, i(Charcoal_EnumSQLJoinType::INNER_JOIN) );
+			return $this->join( $model_name, $alias, Charcoal_EnumSQLJoinType::INNER_JOIN );
 		}
-		return $this->join( $model_name, s(''), i(Charcoal_EnumSQLJoinType::INNER_JOIN) );
+		return $this->join( $model_name, '', Charcoal_EnumSQLJoinType::INNER_JOIN );
 	}
 
 	/**
 	 *  LEFT JOIN
 	 */
-	public function leftJoin( Charcoal_String $model_name, Charcoal_String $alias = NULL )
+	public function leftJoin( $model_name, $alias = NULL )
 	{
 		if ( $alias ){
-			return $this->join( $model_name, $alias, i(Charcoal_EnumSQLJoinType::LEFT_JOIN) );
+			return $this->join( $model_name, $alias, Charcoal_EnumSQLJoinType::LEFT_JOIN );
 		}
-		return $this->join( $model_name, s(''), i(Charcoal_EnumSQLJoinType::LEFT_JOIN) );
+		return $this->join( $model_name, '', Charcoal_EnumSQLJoinType::LEFT_JOIN );
 	}
 
 	/**
 	 *  RIGHT JOIN
 	 */
-	public function rightJoin( Charcoal_String $model_name, Charcoal_String $alias = NULL )
+	public function rightJoin( $model_name, $alias = NULL )
 	{
 		if ( $alias ){
-			return $this->join( $model_name, $alias, i(Charcoal_EnumSQLJoinType::RIGHT_JOIN) );
+			return $this->join( $model_name, $alias, Charcoal_EnumSQLJoinType::RIGHT_JOIN );
 		}
-		return $this->join( $model_name, s(''), i(Charcoal_EnumSQLJoinType::RIGHT_JOIN) );
+		return $this->join( $model_name, '', Charcoal_EnumSQLJoinType::RIGHT_JOIN );
 	}
 
 

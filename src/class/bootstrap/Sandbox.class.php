@@ -34,9 +34,9 @@ class Charcoal_Sandbox
 	 */
 	public function __construct( $sandbox_name, $debug = NULL, $config = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $sandbox_name );
-//		Charcoal_ParamTrait::checkBoolean( 2, $debug, TRUE );
-//		Charcoal_ParamTrait::checkRawArray( 3, $config, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $sandbox_name );
+//		Charcoal_ParamTrait::validateBoolean( 2, $debug, TRUE );
+//		Charcoal_ParamTrait::validatRawArray( 3, $config, TRUE );
 
 		$this->sandbox_name = $sandbox_name;
 		$this->debug = $debug ? ub($debug) : FALSE;
@@ -214,11 +214,11 @@ class Charcoal_Sandbox
 	 */
 	public function createObject( $obj_path, $type_name, $args = NULL, $interface = NULL, $default_class = NULL )
 	{
-//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
-//		Charcoal_ParamTrait::checkString( 2, $type_name );
-//		Charcoal_ParamTrait::checkVector( 3, $args, TRUE );
-//		Charcoal_ParamTrait::checkStringOrObject( 4, 'Charcoal_Interface', $interface, TRUE );
-//		Charcoal_ParamTrait::checkStringOrObject( 5, 'Charcoal_Class', $default_class, TRUE );
+//		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateString( 2, $type_name );
+//		Charcoal_ParamTrait::validateVector( 3, $args, TRUE );
+//		Charcoal_ParamTrait::validateStringOrObject( 4, 'Charcoal_Interface', $interface, TRUE );
+//		Charcoal_ParamTrait::validateStringOrObject( 5, 'Charcoal_Class', $default_class, TRUE );
 
 		if ( is_string($obj_path) || $obj_path instanceof Charcoal_String ){
 			$obj_path = new Charcoal_ObjectPath( $obj_path );
@@ -262,7 +262,7 @@ class Charcoal_Sandbox
 
 			// confirm implementation of the instance
 			if ( $interface ){
-				$interface->checkImplements( $object );
+				$interface->validateImplements( $object );
 			}
 
 			// set properties
@@ -295,7 +295,7 @@ class Charcoal_Sandbox
 	 */
 	public function createClassLoader( $obj_path )
 	{
-//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
 
 		try{
 			$obj_path = is_string($obj_path) ? new Charcoal_ObjectPath( $obj_path ) : $obj_path;
@@ -334,7 +334,7 @@ class Charcoal_Sandbox
 
 			// インタフェース確認
 			$interface = new Charcoal_Interface( 'Charcoal_IClassLoader' );
-			$interface->checkImplements( $class_loader );
+			$interface->validateImplements( $class_loader );
 
 	//		log_info( 'system', "factory", "クラスローダ[" . us($object_path) . "]を作成しました。" );
 			

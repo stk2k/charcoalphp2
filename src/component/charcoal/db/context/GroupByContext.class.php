@@ -21,7 +21,7 @@ class Charcoal_GroupByContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  switch to prepared context 
 	 */
-	public function prepare()
+	public function prepareExecute()
 	{
 		return new Charcoal_PreparedContext( $this->getContext() );
 	}

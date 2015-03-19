@@ -20,8 +20,8 @@ class Charcoal_TextFileRenderTarget extends Charcoal_AbstractRenderTarget implem
 	 */
 	public function __construct( $file_path, $dir_mode = '0777' )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $file_path );
-//		Charcoal_ParamTrait::checkString( 2, $dir_mode );
+//		Charcoal_ParamTrait::validateString( 1, $file_path );
+//		Charcoal_ParamTrait::validateString( 2, $dir_mode );
 
 		parent::__construct();
 
@@ -36,7 +36,7 @@ class Charcoal_TextFileRenderTarget extends Charcoal_AbstractRenderTarget implem
 	 */
 	public function render( $buffer )
 	{
-		Charcoal_ParamTrait::checkString( 1, $buffer );
+		Charcoal_ParamTrait::validateString( 1, $buffer );
 
 		$buffer = us( $buffer );
 

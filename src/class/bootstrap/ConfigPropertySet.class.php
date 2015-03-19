@@ -18,8 +18,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function __construct( $env, $values = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
-//		Charcoal_ParamTrait::checkRawArray( 2, $values, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
+//		Charcoal_ParamTrait::validatRawArray( 2, $values, TRUE );
 
 		$this->env = $env;
 
@@ -39,7 +39,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getSection( $section )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $section );
+//		Charcoal_ParamTrait::validateString( 1, $section );
 
 		$value = parent::get( $section );
 
@@ -63,9 +63,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
-		Charcoal_ParamTrait::checkBoolean( 3, $process_macro );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );
@@ -84,9 +84,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getJson( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
-		Charcoal_ParamTrait::checkBoolean( 3, $process_macro );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );
@@ -116,9 +116,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
-		Charcoal_ParamTrait::checkBoolean( 3, $process_macro );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateVector( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$items = parent::getArray( $key, $default_value );
@@ -149,8 +149,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateBoolean( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getBoolean( $key, $default_value );
@@ -166,8 +166,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateInteger( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getInteger( $key, $default_value );
@@ -183,8 +183,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validatFloat( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getFloat( $key, $default_value );
@@ -200,8 +200,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getSize( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );

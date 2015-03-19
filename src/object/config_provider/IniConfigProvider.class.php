@@ -20,7 +20,7 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	 */
 	public function setOptions( $options )
 	{
-//		Charcoal_ParamTrait::checkProperties( 1, $options, TRUE );
+//		Charcoal_ParamTrait::validateProperties( 1, $options, TRUE );
 
 		if ( is_array( $options ) || $options === NULL ){
 			$options = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $options );
@@ -39,8 +39,8 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	 */
 	public function loadConfig( $key, $access_log = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_RegistryAccessLog', $access_log, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_RegistryAccessLog', $access_log, TRUE );
 
 		$source = $key . '.ini';
 

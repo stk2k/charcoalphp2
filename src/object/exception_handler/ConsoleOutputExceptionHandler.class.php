@@ -20,7 +20,7 @@ class Charcoal_ConsoleOutputExceptionHandler extends Charcoal_AbstractExceptionH
 	 */
 	public function handleException( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		log_info( "system, debug", "exception", "handled a framework exception!" );
 

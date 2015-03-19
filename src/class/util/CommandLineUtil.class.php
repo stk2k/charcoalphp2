@@ -17,7 +17,7 @@ class Charcoal_CommandLineUtil
 	 */
 	public static function splitParams( $args )
 	{
-		Charcoal_ParamTrait::checkString( 1, $args );
+		Charcoal_ParamTrait::validateString( 1, $args );
 
 		$args = us($args);
 		$pos = 0;

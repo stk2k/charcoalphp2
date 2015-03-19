@@ -54,7 +54,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function setTokenGenerator( $token_generator )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITokenGenerator', $token_generator );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITokenGenerator', $token_generator );
 
 		$this->token_generator = $token_generator;
 	}
@@ -76,7 +76,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function generate( $sequence )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ISequence', $sequence );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ISequence', $sequence );
 
 		try{
 			$token_key = $this->token_key;
@@ -126,9 +126,9 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function validate( $sequence, $form_token, $throws = TRUE )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ISequence', $sequence );
-		Charcoal_ParamTrait::checkString( 2, $form_token );
-		Charcoal_ParamTrait::checkBoolean( 3, $throws );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ISequence', $sequence );
+		Charcoal_ParamTrait::validateString( 2, $form_token );
+		Charcoal_ParamTrait::validateBoolean( 3, $throws );
 
 		$throws = ub($throws);
 

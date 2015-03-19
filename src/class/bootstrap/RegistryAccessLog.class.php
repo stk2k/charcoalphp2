@@ -19,7 +19,7 @@ class Charcoal_RegistryAccessLog extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 		$this->logs = NULL;
@@ -35,8 +35,8 @@ class Charcoal_RegistryAccessLog extends Charcoal_Object
 	 */
 	public function addLog( $log, $result )
 	{
-		Charcoal_ParamTrait::checkString( 1, $log );
-		Charcoal_ParamTrait::checkInteger( 2, $result );
+		Charcoal_ParamTrait::validateString( 1, $log );
+		Charcoal_ParamTrait::validateInteger( 2, $result );
 
 		if ( $this->sandbox->isDebug() ){
 			$this->logs[] = array(
@@ -61,7 +61,7 @@ class Charcoal_RegistryAccessLog extends Charcoal_Object
 	 */
 	public function filter( $result_mask )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $result_mask );
+		Charcoal_ParamTrait::validateInteger( 1, $result_mask );
 
 		$ret = array();
 		foreach( $this->logs as $log ){

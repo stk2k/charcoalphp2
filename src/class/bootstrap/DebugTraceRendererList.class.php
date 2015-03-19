@@ -19,7 +19,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -33,7 +33,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 */
 	public function add( $renderer )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IDebugtraceRenderer', $renderer );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IDebugtraceRenderer', $renderer );
 
 		$this->renderers[] = $renderer;
 	}
@@ -45,7 +45,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 */
 	public function render( Exception $e )
 	{
-//		Charcoal_ParamTrait::checkException( 1, $e );
+//		Charcoal_ParamTrait::validateException( 1, $e );
 
 		if ( !$this->renderers ){
 			$this->renderers = array();

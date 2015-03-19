@@ -18,7 +18,7 @@ class Charcoal_SimpleRenderTarget extends Charcoal_AbstractRenderTarget implemen
 	 */
 	public function render( $buffer )
 	{
-		Charcoal_ParamTrait::checkString( 1, $buffer );
+		Charcoal_ParamTrait::validateString( 1, $buffer );
 
 		$buffer = us( $buffer );
 

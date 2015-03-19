@@ -34,7 +34,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -159,7 +159,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function flushMessage( $msg )
 	{
-//		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_LogMessage', $msg );
+//		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_LogMessage', $msg );
 
 		if ( !$this->init() ){
 			return;
@@ -228,7 +228,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function isRegistered( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us( $key );
 		return isset($this->loggers[$key]);
@@ -242,8 +242,8 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function register( $key, $logger )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ILogger', $logger );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_ILogger', $logger );
 //
 		$key = us( $key );
 
@@ -263,9 +263,9 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	public function writeLog( $target, $message, $tag = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $target );
-//		Charcoal_ParamTrait::checkString( 2, $message );
-//		Charcoal_ParamTrait::checkString( 3, $tag, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $target );
+//		Charcoal_ParamTrait::validateString( 2, $message );
+//		Charcoal_ParamTrait::validateString( 3, $tag, TRUE );
 
 		try{
 			// get caller
@@ -336,7 +336,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	 */
 	private static function _getLevelAndTargetList( $target )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $target );
+//		Charcoal_ParamTrait::validateString( 1, $target );
 
 		// コロンで分割
 		list($level,$logger_names) = explode( ':' , $target );

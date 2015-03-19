@@ -36,9 +36,9 @@ class Charcoal_ModuleLoader
 	 */
 	public static function loadModule( $sandbox, $module_path, $task_manager )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-//		Charcoal_ParamTrait::checkStringOrObjectPath( 2, $module_path );
-//		Charcoal_ParamTrait::checkImplements( 3, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateStringOrObjectPath( 2, $module_path );
+//		Charcoal_ParamTrait::validateImplements( 3, 'Charcoal_ITaskManager', $task_manager );
 
 		try{
 			log_debug( 'debug, event', "loading module: $module_path" );

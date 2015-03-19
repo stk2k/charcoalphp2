@@ -159,7 +159,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetGet($key)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
@@ -170,7 +170,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetSet($key, $value)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		$this->values[ $key ] = $value;
@@ -181,7 +181,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetExists($key)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return isset($this->values[$key]);
@@ -192,7 +192,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetUnset($key)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		unset($this->values[$key]);
@@ -213,7 +213,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function setArray( $data )
 	{
-//		Charcoal_ParamTrait::checkRawArray( 1, $data );
+//		Charcoal_ParamTrait::validatRawArray( 1, $data );
 
 		$this->values = $this->values ? array_merge( $this->values, $data ) : $data;
 	}
@@ -225,7 +225,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function setHashMap( $data )
 	{
-//		Charcoal_ParamTrait::checkHashMap( 1, $data );
+//		Charcoal_ParamTrait::validateHashMap( 1, $data );
 
 		$this->values = $this->values ? array_merge( $this->values, $map->getAll() ) : $data;
 	}
@@ -268,8 +268,8 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function getString( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return Charcoal_ArrayTrait::getString( $this->values, $key, $default_value );
@@ -285,8 +285,8 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function getArray( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateVector( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return Charcoal_ArrayTrait::getArray( $this->values, $key, $default_value );
@@ -302,8 +302,8 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function getHashMap( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkHashMap( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateHashMap( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return Charcoal_ArrayTrait::getHashMap( $this->values, $key, $default_value );
@@ -319,8 +319,8 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateBoolean( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return Charcoal_ArrayTrait::getBoolean( $this->values, $key, $default_value );
@@ -336,8 +336,8 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return Charcoal_ArrayTrait::getInteger( $this->values, $key, $default_value );
@@ -353,8 +353,8 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validatFloat( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return Charcoal_ArrayTrait::getFloat( $this->values, $key, $default_value );

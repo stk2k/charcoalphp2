@@ -22,7 +22,7 @@ class Charcoal_ObjectPath extends Charcoal_Object
 	 */
 	public function __construct( $object_path_string )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $object_path_string );
+//		Charcoal_ParamTrait::validateString( 1, $object_path_string );
 
 		parent::__construct();
 

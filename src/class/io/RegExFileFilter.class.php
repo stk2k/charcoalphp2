@@ -22,8 +22,8 @@ class Charcoal_RegExFileFilter extends Charcoal_AbstractFileFilter
 	 */
 	public function __construct($pattern, $extension = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $pattern );
-//		Charcoal_ParamTrait::checkString( 2, $extension, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $pattern );
+//		Charcoal_ParamTrait::validateString( 2, $extension, TRUE );
 
 		$this->pattern        = $pattern;
 		$this->extension      = $extension;

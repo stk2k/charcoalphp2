@@ -42,9 +42,9 @@ class Charcoal_System
 	 */
 	public static function isBitSet( $target, $flag, $mode = self::BITTEST_MODE_ALL )
 	{
-//		Charcoal_ParamTrait::checkInteger( 1, $target );
-//		Charcoal_ParamTrait::checkInteger( 2, $flag );
-//		Charcoal_ParamTrait::checkInteger( 3, $mode );
+//		Charcoal_ParamTrait::validateInteger( 1, $target );
+//		Charcoal_ParamTrait::validateInteger( 2, $flag );
+//		Charcoal_ParamTrait::validateInteger( 3, $mode );
 
 		switch( ui($mode) ){
 		case self::BITTEST_MODE_ALL:
@@ -60,7 +60,7 @@ class Charcoal_System
 	 */
 	public static function phpErrorString( $errno )
 	{
-//		Charcoal_ParamTrait::checkInteger( 1, $errno );
+//		Charcoal_ParamTrait::validateInteger( 1, $errno );
 		
 		$errors = array(
 			E_ERROR                => "E_ERROR",

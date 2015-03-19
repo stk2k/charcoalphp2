@@ -18,8 +18,8 @@ class Charcoal_ImageFile extends Charcoal_File
 	 */
 	public function __construct( $path, $parent = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $path );
-		Charcoal_ParamTrait::checkIsA( 2, 'Charcoal_File', $parent, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $path );
+		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_File', $parent, TRUE );
 
 		parent::__construct( $path, $parent );
 

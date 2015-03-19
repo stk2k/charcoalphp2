@@ -40,7 +40,7 @@ class Charcoal_PearPagerComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function create( $params )
 	{
-		Charcoal_ParamTrait::checkHashMap( 1, $params );
+		Charcoal_ParamTrait::validateHashMap( 1, $params );
 
 		$this->pager = @Pager::factory( $params );
 	}

@@ -23,7 +23,7 @@ class Charcoal_PreparedContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_BindedContext    binded context
 	 */
-	public function bind( Charcoal_Vector $params )
+	public function bind( $params )
 	{
 		$this->getContext()->getCriteria()->addParams( $params );
 

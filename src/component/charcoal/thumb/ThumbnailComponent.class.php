@@ -26,11 +26,11 @@ class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements 
 	 */
 	public function create( $src_file, $dest_file, $thumb_max_width, $thumb_max_height, $image_format = IMG_JPG )
 	{
-		Charcoal_ParamTrait::checkString( 1, $src_file );
-		Charcoal_ParamTrait::checkString( 2, $dest_file );
-		Charcoal_ParamTrait::checkInteger( 3, $thumb_max_width );
-		Charcoal_ParamTrait::checkInteger( 4, $thumb_max_height );
-		Charcoal_ParamTrait::checkInteger( 5, $image_format );
+		Charcoal_ParamTrait::validateString( 1, $src_file );
+		Charcoal_ParamTrait::validateString( 2, $dest_file );
+		Charcoal_ParamTrait::validateInteger( 3, $thumb_max_width );
+		Charcoal_ParamTrait::validateInteger( 4, $thumb_max_height );
+		Charcoal_ParamTrait::validateInteger( 5, $image_format );
 
 		$src_file 			= us($src_file);
 		$dest_file 			= us($dest_file);

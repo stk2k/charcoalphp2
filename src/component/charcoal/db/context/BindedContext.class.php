@@ -21,7 +21,7 @@ class Charcoal_BindedContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  bind a param
 	 */
-	public function add( Charcoal_String $field, Charcoal_Scalar $value )
+	public function add( $field, $value )
 	{
 		$params = array( us($field) => $value->unbox() );
 		$this->getContext()->addParams( v($params) );
@@ -31,7 +31,7 @@ class Charcoal_BindedContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  bind params
 	 */
-	public function addAll( Charcoal_Vector $params )
+	public function addAll( $params )
 	{
 		$this->getContext()->addParams( $params );
 		return $this;

@@ -108,10 +108,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 
 	/*
 	 *   create recordset factory
+	 *
+	 * @param integer $fetch_mode    fetch mode(defined at Charcoal_IRecordset::FETCHMODE_XXX)
+	 * @param array $options         fetch mode options
 	 */
-	public function createRecordsetFactory()
+	public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL )
 	{
-		return $this->impl->createRecordsetFactory();
+		return $this->impl->createRecordsetFactory( $fetch_mode, $options );
 	}
 
 	/**
@@ -387,15 +390,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute command query(INSERT/DELETE/UPDATE)
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param int $options
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function execute( $sql, $params = NULL )
+	public function execute( $sql, $params = NULL, $driver_options = NULL )
 	{
+		Charcoal_ParamTrait::validateString( 1, $sql );
+		Charcoal_ParamTrait::validateHashMap( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 3, $driver_options, TRUE );
+
 		try{
-			$this->impl->execute( $sql, $params );
+			$this->impl->execute( $sql, $params, $driver_options );
 		}
 		catch ( Exception $e ) 
 		{
@@ -407,15 +413,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute a query and retrieve single value
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param int $options
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function queryValue( $sql, $params = NULL )
+	public function queryValue( $sql, $params = NULL, $driver_options = NULL )
 	{
+		Charcoal_ParamTrait::validateString( 1, $sql );
+		Charcoal_ParamTrait::validateHashMap( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 3, $driver_options, TRUE );
+
 		try{
-			return $this->impl->queryValue( $sql, $params );
+			return $this->impl->queryValue( $sql, $params, $driver_options );
 		}
 		catch ( Exception $e ) 
 		{
@@ -427,15 +436,20 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute a query with parameters
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param int $options
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param Charcoal_IRecordsetFactory $recordsetFactory
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function query( $sql, $params = NULL )
+	public function query( $sql, $params = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
+		Charcoal_ParamTrait::validateString( 1, $sql );
+		Charcoal_ParamTrait::validateHashMap( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 4, $driver_options, TRUE );
+
 		try{
-			return $this->impl->query( $sql, $params );
+			return $this->impl->query( $sql, $params, $recordsetFactory, $driver_options );
 		}
 		catch ( Exception $e ) 
 		{
@@ -447,19 +461,29 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	find records
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param int $options
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 * @param int $options
+	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
+	 * @param string|Charcoal_String $fields          comma separated field list to output
+	 * @param Charcoal_IRecordsetFactory $recordsetFactory
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function find( $query_target, $options, $criteria, $fields = NULL ) 
+	/*
+	public function find( $query_target, $options, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::validateInteger( 2, $options );
+		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
+		Charcoal_ParamTrait::validateIsA( 5, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 6, $driver_options, TRUE );
+
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->find( $query_target, $options, $criteria, $fields );
+			return $this->impl->find( $query_target, $options, $criteria, $fields, $recordsetFactory, $driver_options );
 		}
 		catch ( Exception $e ) 
 		{
@@ -468,17 +492,21 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		}
 
 		return $ret_val;
-	}
+	}*/
 
 	/**
 	 *	Select first record
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
+	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
+	 * @param string|Charcoal_String $fields          comma separated field list to output
 	 */
 	public function findFirst( $query_target, $criteria, $fields = NULL ) 
 	{
+		Charcoal_ParamTrait::validateString( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateString( 3, $fields, TRUE );
+
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -496,9 +524,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select first record for updating
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
+	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
+	 * @param string|Charcoal_String $fields          comma separated field list to output
 	 */
 	public function findFirstForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
@@ -519,18 +547,26 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
+	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
+	 * @param string|Charcoal_String $fields          comma separated field list to output
+	 * @param Charcoal_IRecordsetFactory $recordsetFactory
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function findAll( $query_target, $criteria, $fields = NULL ) 
+	public function findAll( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
+		Charcoal_ParamTrait::validateString( 1, $query_target );
+		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateString( 3, $fields, TRUE );
+		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 5, $driver_options, TRUE );
+
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->findAll( $query_target, $criteria, $fields );
+			return $this->impl->findAll( $query_target, $criteria, $fields, $recordsetFactory, $driver_options );
 		}
 		catch ( Exception $e )
 		{
@@ -542,18 +578,26 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records for updating
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
+	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
+	 * @param string|Charcoal_String $fields          comma separated field list to output
+	 * @param Charcoal_IRecordsetFactory $recordsetFactory
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function findAllForUpdate( $query_target, $criteria, $fields = NULL ) 
+	public function findAllForUpdate( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
+		Charcoal_ParamTrait::validateString( 1, $query_target );
+		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateString( 3, $fields, TRUE );
+		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 5, $driver_options, TRUE );
+
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->findAllForUpdate( $query_target, $criteria, $fields );
+			return $this->impl->findAllForUpdate( $query_target, $criteria, $fields, $recordsetFactory, $driver_options );
 		}
 		catch ( Exception $e )
 		{
@@ -565,18 +609,26 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select unique record
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
+	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
+	 * @param string|Charcoal_String $fields          comma separated field list to output
+	 * @param Charcoal_IRecordsetFactory $recordsetFactory
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function findDistinct( $query_target, $fields, $criteria, $fields = NULL ) 
+	public function findAllDistinct( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL  ) 
 	{
+		Charcoal_ParamTrait::validateString( 1, $query_target );
+		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateString( 3, $fields, TRUE );
+		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 5, $driver_options, TRUE );
+
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->findDistinct( $query_target, $criteria, $fields );
+			return $this->impl->findAllDistinct( $query_target, $criteria, $fields, $recordsetFactory, $driver_options );
 		}
 		catch ( Exception $e )
 		{
@@ -588,18 +640,28 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records by field value
 	 *	
-	 *	@param string $query_target    description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param array $fields
+	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
+	 * @param string|Charcoal_String $field           field name to restrict records
+	 * @param mixed $value                            field value to restrict records
+	 * @param string|Charcoal_String $fields          comma separated field list to output
+	 * @param Charcoal_IRecordsetFactory $recordsetFactory
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function findAllBy( $query_target, $field, $value, $fields = NULL )
+	public function findAllBy( $query_target, $field, $value, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
+		Charcoal_ParamTrait::validateString( 1, $query_target );
+		Charcoal_ParamTrait::validateString( 2, $field, TRUE );
+		Charcoal_ParamTrait::validateSalar( 3, $value, TRUE );
+		Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
+		Charcoal_ParamTrait::validateIsA( 5, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 6, $driver_options, TRUE );
+
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->findAllBy( $query_target, $criteria, $fields );
+			return $this->impl->findAllBy( $query_target, $field, $value, $fields, $recordsetFactory, $driver_options );
 		}
 		catch ( Exception $e )
 		{
@@ -614,7 +676,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param array $id
 	 */
-	public function findById( $model_name, $id ) 
+	public function findById( $query_target, $id ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
@@ -904,12 +966,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function select( $fields ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $fields );
+		Charcoal_ParamTrait::validateString( 1, $fields );
 
 		$context = new Charcoal_QueryContext( $this );
 
-		if ( !$fields->isEmpty() ){
-			$fields = $fields->split( s(',') );
+		if ( !empty($fields) ){
 			$context->setFields( $fields );
 		}
 

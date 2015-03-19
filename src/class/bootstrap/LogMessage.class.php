@@ -31,12 +31,12 @@ class Charcoal_LogMessage extends Charcoal_Object
 	public function __construct( $level, $message, $tag, $file, $line, $logger_names )
 	{
 /*
-//		Charcoal_ParamTrait::checkString( 1, $level );
-//		Charcoal_ParamTrait::checkString( 2, $message );
-//		Charcoal_ParamTrait::checkString( 3, $tag );
-//		Charcoal_ParamTrait::checkString( 4, $file );
-//		Charcoal_ParamTrait::checkInteger( 5, $line );
-//		Charcoal_ParamTrait::checkVector( 6, $logger_names );
+//		Charcoal_ParamTrait::validateString( 1, $level );
+//		Charcoal_ParamTrait::validateString( 2, $message );
+//		Charcoal_ParamTrait::validateString( 3, $tag );
+//		Charcoal_ParamTrait::validateString( 4, $file );
+//		Charcoal_ParamTrait::validateInteger( 5, $line );
+//		Charcoal_ParamTrait::validateVector( 6, $logger_names );
 */
 
 		$this->level         = $level;

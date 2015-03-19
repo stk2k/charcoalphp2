@@ -20,7 +20,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -61,7 +61,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public  function getCache( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$this->init();
 
@@ -87,8 +87,8 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public function setCache( $key, $value, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 3, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 3, $duration, TRUE );
 
 		$this->init();
 
@@ -109,7 +109,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public function deleteCache( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$this->init();
 
@@ -129,7 +129,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public function deleteRegEx( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$this->init();
 
@@ -146,8 +146,8 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public function touch( $key, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $duration, TRUE );
 
 		$this->init();
 
@@ -167,8 +167,8 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 	 */
 	public function touchRegEx( $key, $duration = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $duration, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $duration, TRUE );
 
 		$this->init();
 

@@ -83,7 +83,7 @@ class Charcoal_FeedCreatorFeedItem extends Charcoal_Object
 	 */
 	public function setLink( $link )
 	{
-		Charcoal_ParamTrait::checkString( 1, $link, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $link, TRUE );
 
 		$this->item->link = us($link);
 
@@ -107,7 +107,7 @@ class Charcoal_FeedCreatorFeedItem extends Charcoal_Object
 	 */
 	public function setTitle( $title )
 	{
-		Charcoal_ParamTrait::checkString( 1, $title, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $title, TRUE );
 
 		$this->item->title = us($title);
 
@@ -131,7 +131,7 @@ class Charcoal_FeedCreatorFeedItem extends Charcoal_Object
 	 */
 	public function setDescription( $description )
 	{
-		Charcoal_ParamTrait::checkString( 1, $description, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $description, TRUE );
 
 		$this->item->description = us($description);
 
@@ -155,7 +155,7 @@ class Charcoal_FeedCreatorFeedItem extends Charcoal_Object
 	 */
 	public function setDate( $date )
 	{
-		Charcoal_ParamTrait::checkString( 1, $date, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $date, TRUE );
 
 		$this->item->date = us($date);
 
@@ -179,7 +179,7 @@ class Charcoal_FeedCreatorFeedItem extends Charcoal_Object
 	 */
 	public function setAuthor( $author )
 	{
-		Charcoal_ParamTrait::checkString( 1, $author, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $author, TRUE );
 
 		$this->item->author = us($author);
 

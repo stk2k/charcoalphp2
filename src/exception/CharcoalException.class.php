@@ -18,8 +18,8 @@ class Charcoal_CharcoalException extends Exception
 	 */
 	public function __construct( $message, $prev = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $message );
-		Charcoal_ParamTrait::checkException( 2, $prev, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $message );
+		Charcoal_ParamTrait::validateException( 2, $prev, TRUE );
 
 		parent::__construct( us($message), 0 );
 

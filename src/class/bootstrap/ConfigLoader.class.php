@@ -16,9 +16,9 @@ class Charcoal_ConfigLoader
 	 */
 	public static function loadConfig( $sandbox, $obj_path, $type_name )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
-//		Charcoal_ParamTrait::checkStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
-//		Charcoal_ParamTrait::checkString( 3, $type_name );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
+//		Charcoal_ParamTrait::validateString( 3, $type_name );
 
 		if ( !($obj_path instanceof Charcoal_ObjectPath) ){
 			$obj_path = new Charcoal_ObjectPath( $obj_path );

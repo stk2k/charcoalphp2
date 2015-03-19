@@ -79,8 +79,8 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getString( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkString( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getString( $key );
@@ -102,8 +102,8 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getArray( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkVector( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateVector( 2, $default_value, TRUE );
 
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getArray( $key );
@@ -125,8 +125,8 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkBoolean( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateBoolean( 2, $default_value, TRUE );
 
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getBoolean( $key );
@@ -148,8 +148,8 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkInteger( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $default_value, TRUE );
 
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getInteger( $key );
@@ -171,8 +171,8 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkFloat( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validatFloat( 2, $default_value, TRUE );
 
 		if ( $this->_global->keyExists($key) ){
 			return $this->_global->getFloat( $key );
@@ -258,7 +258,7 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function get( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 
@@ -281,7 +281,7 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getGlobal( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 
@@ -301,7 +301,7 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
 	 */
 	public function getLocal( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 

@@ -18,7 +18,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 
@@ -34,7 +34,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 	 */
 	public function get( $key )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		// get config povier
 		$provider = $this->sandbox->getConfigProvider();

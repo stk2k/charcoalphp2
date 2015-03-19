@@ -13,8 +13,8 @@ class Charcoal_ProfileLoadingException extends Charcoal_RuntimeException
 {
 	public function __construct( $config_file, $profile_name, $prev = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $config_file );
-//		Charcoal_ParamTrait::checkString( 2, $profile_name );
+//		Charcoal_ParamTrait::validateString( 1, $config_file );
+//		Charcoal_ParamTrait::validateString( 2, $profile_name );
 
 		parent::__construct( "Profile loading failed. [config_file]$config_file [profile_name]$profile_name", $prev );
 	}

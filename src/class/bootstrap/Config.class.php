@@ -18,7 +18,7 @@ class Charcoal_Config extends Charcoal_ConfigPropertySet
 	 */
 	public function __construct( $env, array $data = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
 		
 		parent::__construct( $env, $data );
 	}

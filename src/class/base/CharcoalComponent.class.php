@@ -39,7 +39,7 @@ class Charcoal_CharcoalComponent extends Charcoal_CharcoalObject
 	 */
 	public function setComponentName( $component_name )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $component_name );
+//		Charcoal_ParamTrait::validateString( 1, $component_name );
 
 		$this->component_name = $component_name;
 	}

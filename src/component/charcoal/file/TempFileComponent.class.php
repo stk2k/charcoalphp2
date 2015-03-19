@@ -49,7 +49,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function setContents( $contents )
 	{
-		Charcoal_ParamTrait::checkString( 1, $contents );
+		Charcoal_ParamTrait::validateString( 1, $contents );
 
 		$this->contents = us($contents);
 	}
@@ -71,7 +71,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function setMode( $mode )
 	{
-		Charcoal_ParamTrait::checkString( 1, $mode );
+		Charcoal_ParamTrait::validateString( 1, $mode );
 
 		$this->mode = us($mode);
 	}
@@ -93,7 +93,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function setParentDir( $parent_dir )
 	{
-		Charcoal_ParamTrait::checkString( 1, $parent_dir );
+		Charcoal_ParamTrait::validateString( 1, $parent_dir );
 
 		$this->parent_dir = us($parent_dir);
 	}
@@ -115,7 +115,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function setFileName( $file_name )
 	{
-		Charcoal_ParamTrait::checkString( 1, $file_name );
+		Charcoal_ParamTrait::validateString( 1, $file_name );
 
 		$this->file_name = us($file_name);
 	}
@@ -137,7 +137,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 	 */
 	public function setOverwrite( $overwrite )
 	{
-		Charcoal_ParamTrait::checkBoolean( 1, $file_name );
+		Charcoal_ParamTrait::validateBoolean( 1, $file_name );
 
 		$this->overwrite = ub($overwrite);
 	}

@@ -46,12 +46,12 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildSelectSQL( $model, $alias, $options, $criteria, $joins, $fields = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkInteger( 3, $options );
-		Charcoal_ParamTrait::checkIsA( 4, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 5, $joins );
-		Charcoal_ParamTrait::checkVector( 6, $fields, NULL );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateInteger( 3, $options );
+		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateVector( 5, $joins );
+		Charcoal_ParamTrait::validateVector( 6, $fields, NULL );
 
 		$options = ui($options);
 		$alias = us($alias);
@@ -91,11 +91,11 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 				break;
 			}
 
-			if ( $join_alias && !$join_alias->isEmpty() ){
+			if ( $join_alias && !empty($join_alias) ){
 				$sql .= ' AS ' . $join_alias;
 			}
 
-			if ( $join_cond && !$join_cond->isEmpty() ){
+			if ( $join_cond && !empty($join_cond) ){
 				$sql .= ' ON ' . $join_cond;
 			}
 		}
@@ -142,11 +142,11 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildUpdateSQL( $model, $alias, $dto, $criteria, $override = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_DTO', $dto );
-		Charcoal_ParamTrait::checkIsA( 4, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkHashMap( 5, $override, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_DTO', $dto );
+		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateHashMap( 5, $override, TRUE );
 
 		try{
 			$SQL_params      = array();
@@ -259,10 +259,10 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildInsertSQL( $model, $alias, $dto, $override = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_DTO', $dto );
-		Charcoal_ParamTrait::checkHashMap( 4, $override, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_DTO', $dto );
+		Charcoal_ParamTrait::validateHashMap( 4, $override, TRUE );
 
 		try{
 			$SQL_field_list   = NULL;
@@ -347,10 +347,10 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildBulkInsertSQL( $model, $alias, $data_set, $override = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkVector( 3, $data_set );
-		Charcoal_ParamTrait::checkHashMap( 4, $override, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateVector( 3, $data_set );
+		Charcoal_ParamTrait::validateHashMap( 4, $override, TRUE );
 
 		try{
 			$SQL_field_list   = NULL;
@@ -470,12 +470,12 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkInteger( 3, $aggregate_func );
-		Charcoal_ParamTrait::checkIsA( 4, 'Charcoal_SQLCriteria', $criteria );
-		Charcoal_ParamTrait::checkVector( 5, $joins );
-		Charcoal_ParamTrait::checkVector( 6, $fields, NULL );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateInteger( 3, $aggregate_func );
+		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateVector( 5, $joins );
+		Charcoal_ParamTrait::validateVector( 6, $fields, NULL );
 
 		$table_name = $model->getTableName();
 
@@ -560,9 +560,9 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildDeleteSQL( $model, $alias, $criteria )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkString( 2, $alias, TRUE );
-		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_SQLCriteria', $criteria );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
+		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
 
 		$table_name = $model->getTableName();
 
@@ -599,8 +599,8 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildDropTableSQL( Charcoal_ITableModel $model, $if_exists = false )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkBoolean( 2, $if_exists );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateBoolean( 2, $if_exists );
 
 		$table_name = $model->getTableName();
 
@@ -620,7 +620,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 */
 	public  function buildTruncateTableSQL( Charcoal_ITableModel $model )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 
 		$table_name = $model->getTableName();
 

@@ -23,7 +23,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_PreparedContext    prepared context
 	 */
-	public function prepare()
+	public function prepareExecute()
 	{
 		return new Charcoal_PreparedContext( $this->getContext() );
 	}
@@ -33,7 +33,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_OrderByContext    order by context
 	 */
-	public function orderBy( Charcoal_String $order_by )
+	public function orderBy( $order_by )
 	{
 		$this->getContext()->getCriteria()->setOrderBy( $order_by );
 
@@ -43,7 +43,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare 
 	 */
-	public function compare( Charcoal_String $field, Charcoal_Scalar $value, Charcoal_String $operator )
+	public function compare( $field, $value, $operator )
 	{
 		$criteria = $this->getContext()->getCriteria();
 
@@ -59,7 +59,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by equal(=) operator
 	 */
-	public function equal( Charcoal_String $field, Charcoal_Scalar $value )
+	public function equal( $field, $value )
 	{
 		return $this->compare( $field, $value, s('=') );
 	}
@@ -67,7 +67,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by equal(<>) operator
 	 */
-	public function notEqual( Charcoal_String $field, Charcoal_Scalar $value )
+	public function notEqual( $field, $value )
 	{
 		return $this->compare( $field, $value, s('<>') );
 	}
@@ -75,7 +75,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by equal(<>) operator
 	 */
-	public function ne( Charcoal_String $field, Charcoal_Scalar $value )
+	public function ne( $field, $value )
 	{
 		return $this->compare( $field, $value, s('<>') );
 	}
@@ -83,7 +83,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by greater than(>) operator
 	 */
-	public function greaterThan( Charcoal_String $field, Charcoal_Scalar $value )
+	public function greaterThan( $field, $value )
 	{
 		return $this->compare( $field, $value, s('>') );
 	}
@@ -91,7 +91,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by greater than(>) operator
 	 */
-	public function gt( Charcoal_String $field, Charcoal_Scalar $value )
+	public function gt( $field, $value )
 	{
 		return $this->compare( $field, $value, s('>') );
 	}
@@ -99,7 +99,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by greater than or equal(>=) operator
 	 */
-	public function greaterThanOrEqual( Charcoal_String $field, Charcoal_Scalar $value )
+	public function greaterThanOrEqual( $field, $value )
 	{
 		return $this->compare( $field, $value, s('>=') );
 	}
@@ -107,7 +107,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by greater than or equal(>=) operator
 	 */
-	public function gte( Charcoal_String $field, Charcoal_Scalar $value )
+	public function gte( $field, $value )
 	{
 		return $this->compare( $field, $value, s('>=') );
 	}
@@ -115,7 +115,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by less than(<) operator
 	 */
-	public function lessThan( Charcoal_String $field, Charcoal_Scalar $value )
+	public function lessThan( $field, $value )
 	{
 		return $this->compare( $field, $value, s('<') );
 	}
@@ -123,7 +123,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by less than(<) operator
 	 */
-	public function lt( Charcoal_String $field, Charcoal_Scalar $value )
+	public function lt( $field, $value )
 	{
 		return $this->compare( $field, $value, s('<') );
 	}
@@ -131,7 +131,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by less than or equal(<=) operator
 	 */
-	public function lessThanOrEqual( Charcoal_String $field, Charcoal_Scalar $value )
+	public function lessThanOrEqual( $field, $value )
 	{
 		return $this->compare( $field, $value, s('<') );
 	}
@@ -139,7 +139,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  compare by less than or equal(<=) operator
 	 */
-	public function lte( Charcoal_String $field, Charcoal_Scalar $value )
+	public function lte( $field, $value )
 	{
 		return $this->compare( $field, $value, s('<') );
 	}
@@ -147,7 +147,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  LIKE
 	 */
-	public function like( Charcoal_String $field, Charcoal_Scalar $value )
+	public function like( $field, $value )
 	{
 		return $this->compare( $field, $value, s('LIKE') );
 	}
@@ -155,7 +155,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  BETWEEN
 	 */
-	public function between( Charcoal_String $field, Charcoal_Scalar $value1, Charcoal_Scalar $value2 )
+	public function between( $field, $value1, $value2 )
 	{
 		$criteria = $this->getContext()->getCriteria();
 
@@ -171,7 +171,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  NOT BETWEEN
 	 */
-	public function notBetween( Charcoal_String $field, Charcoal_Scalar $value1, Charcoal_Scalar $value2 )
+	public function notBetween( $field, $value1, $value2 )
 	{
 		$criteria = $this->getContext()->getCriteria();
 
@@ -187,7 +187,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  IS
 	 */
-	public function is( Charcoal_String $field, Charcoal_Scalar $value )
+	public function is( $field, $value )
 	{
 		return $this->compare( $field, $value, s('IS') );
 	}
@@ -195,7 +195,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  IS NOT
 	 */
-	public function isNot( Charcoal_String $field, Charcoal_Scalar $value )
+	public function isNot( $field, $value )
 	{
 		return $this->compare( $field, $value, s('IS NOT') );
 	}
@@ -203,7 +203,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  IS NULL
 	 */
-	public function isNull( Charcoal_String $field )
+	public function isNull( $field )
 	{
 		$criteria = $this->getContext()->getCriteria();
 
@@ -217,7 +217,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  IS NOT NULL
 	 */
-	public function isNotNull( Charcoal_String $field )
+	public function isNotNull( $field )
 	{
 		$criteria = $this->getContext()->getCriteria();
 
@@ -231,7 +231,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  IN
 	 */
-	public function in( Charcoal_String $field, Charcoal_Vector $values )
+	public function in( $field, Charcoal_Vector $values )
 	{
 		$criteria = $this->getContext()->getCriteria();
 
@@ -255,7 +255,7 @@ class Charcoal_WhereContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  NOT IN
 	 */
-	public function notIn( Charcoal_String $field, Charcoal_Vector $values )
+	public function notIn( $field, Charcoal_Vector $values )
 	{
 		$criteria = $this->getContext()->getCriteria();
 

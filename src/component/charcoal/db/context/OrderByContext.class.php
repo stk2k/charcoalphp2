@@ -21,7 +21,7 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  switch to prepared context 
 	 */
-	public function prepare()
+	public function prepareExecute()
 	{
 		return new Charcoal_PreparedContext( $this->getContext() );
 	}
@@ -41,7 +41,7 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  switch to offset context 
 	 */
-	public function offset( Charcoal_Integer $offset )
+	public function offset( $offset )
 	{
 		$this->getContext()->getCriteria()->setOffset( $offset );
 
@@ -51,7 +51,7 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  switch to group by context 
 	 */
-	public function groupBy( Charcoal_String $group_by )
+	public function groupBy( $group_by )
 	{
 		$this->getContext()->getCriteria()->setGroupBy( $group_by );
 

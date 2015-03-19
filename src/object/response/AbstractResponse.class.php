@@ -145,7 +145,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function offsetGet($key)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
@@ -164,7 +164,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function offsetExists($key)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return isset($this->values[$key]);
@@ -175,7 +175,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function offsetUnset($key)
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
+		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		unset($this->values[$key]);
@@ -200,8 +200,8 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function set( $key, $value, $skipfilters = FALSE )
 	{
-		Charcoal_ParamTrait::checkString( 1, $key );
-		Charcoal_ParamTrait::checkRawBool( 2, $skipfilters );
+		Charcoal_ParamTrait::validateString( 1, $key );
+		Charcoal_ParamTrait::validateRawBool( 2, $skipfilters );
 
 		$skipfilters = b($skipfilters);
 		
@@ -221,7 +221,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function setArray( $array )
 	{
-		Charcoal_ParamTrait::checkRawArray( 1, $array );
+		Charcoal_ParamTrait::validatRawArray( 1, $array );
 
 		$this->values = $array;
 	}
@@ -234,8 +234,8 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function mergeArray( $array, $overwrite = TRUE )
 	{
-		Charcoal_ParamTrait::checkRawArray( 1, $array );
-		Charcoal_ParamTrait::checkRawBool( 2, $overwrite );
+		Charcoal_ParamTrait::validatRawArray( 1, $array );
+		Charcoal_ParamTrait::validateRawBool( 2, $overwrite );
 
 		$overwrite = ub($overwrite);
 
@@ -253,7 +253,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function setHashMap( $map )
 	{
-		Charcoal_ParamTrait::checkHashMap( 1, $map );
+		Charcoal_ParamTrait::validateHashMap( 1, $map );
 
 		$this->values = is_array($map) ? $map : $map->getAll();
 	}
@@ -266,8 +266,8 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function mergeHashMap( $map, $overwrite = TRUE )
 	{
-		Charcoal_ParamTrait::checkHashMap( 1, $map );
-		Charcoal_ParamTrait::checkRawBool( 2, $overwrite );
+		Charcoal_ParamTrait::validateHashMap( 1, $map );
+		Charcoal_ParamTrait::validateRawBool( 2, $overwrite );
 
 		$overwrite = ub($overwrite);
 
@@ -285,7 +285,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function setRequest( $request )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IRequest', $request );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IRequest', $request );
 
 		$this->values = $request->getAll();
 	}
@@ -298,8 +298,8 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function mergeRequest( $request, $overwrite = TRUE )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IRequest', $request );
-		Charcoal_ParamTrait::checkRawBool( 2, $overwrite );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IRequest', $request );
+		Charcoal_ParamTrait::validateRawBool( 2, $overwrite );
 
 		$overwrite = ub($overwrite);
 
@@ -346,7 +346,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function addResponseFilter( $filter )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IResponseFilter', $filter );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IResponseFilter', $filter );
 
 		$this->filters[] = $filter;
 	}
@@ -358,7 +358,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charc
 	 */
 	public function removeResponseFilter( $filter )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IResponseFilter', $filter );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IResponseFilter', $filter );
 		
 		if ( $this->filters && is_array($this->filters) ){
 			foreach( $this->filters as $key => $f ){

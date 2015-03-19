@@ -16,10 +16,10 @@ class Charcoal_TableContext extends Charcoal_Object
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_SmartGateway $gw, $model_name )
+	public function __construct( $gw, $model_name )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_SmartGateway', $gw );
-		Charcoal_ParamTrait::checkString( 1, $model_name );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_SmartGateway', $gw );
+		Charcoal_ParamTrait::validateString( 1, $model_name );
 
 		$this->_gw = $gw;
 		$this->_model_name = $model_name;
@@ -58,7 +58,7 @@ class Charcoal_TableContext extends Charcoal_Object
 	 */
 	public function select( $fields ) 
 	{
-		Charcoal_ParamTrait::checkString( 1, $fields );
+		Charcoal_ParamTrait::validateString( 1, $fields );
 
 		$context = new Charcoal_QueryContext( $this->_gw );
 

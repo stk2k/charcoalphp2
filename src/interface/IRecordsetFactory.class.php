@@ -14,7 +14,9 @@ interface Charcoal_IRecordsetFactory
 	 * create recordset
 	 *
 	 * @param mixed $result         query result
+	 *
+	 * @return Charcoal_IRecordset      recordset object
 	 */
-	public function createRecordset( $result, $fetch_mode, $options );
+	public function createRecordset( $result );
 }
 

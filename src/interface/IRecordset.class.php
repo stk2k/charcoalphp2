@@ -17,26 +17,13 @@ interface Charcoal_IRecordset extends Iterator
 	const FETCHMODE_CLASS  = 5;
 	const FETCHMODE_COLUMN  = 6;
 
-	/**
-	 * Set fetch mode
-	 *
-	 * @param integer $mode         fetch mode(self::FETCHMODE_XXX)
-	 * @param mixed $options        option parameters
-	 */
-	public function setFetchMode( $mode, $options );
+	const FETCHMODE_DEFAULT  = self::FETCHMODE_ASSOC;
 
 	/**
 	 * fetch record
 	 *
-	 * @param integer $mode         fetch style(self::FETCHMODE_XXX)
+	 * @return mixed        fetch result
 	 */
-	public function fetch( $mode );
-
-	/**
-	 * Implementation method of IteratorAggregate interface
-	 *
-	 * @return Traversable    iterator object
-	 */
-	public function getIterator();
+	public function fetch();
 }
 

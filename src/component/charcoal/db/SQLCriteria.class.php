@@ -29,12 +29,12 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function __construct( $where = NULL, $params = NULL, $order_by = NULL, $limit = NULL, $offset = NULL, $group_by = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $where, TRUE );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-		Charcoal_ParamTrait::checkString( 3, $order_by, TRUE );
-		Charcoal_ParamTrait::checkInteger( 4, $limit, TRUE );
-		Charcoal_ParamTrait::checkInteger( 5, $offset, TRUE );
-		Charcoal_ParamTrait::checkString( 6, $group_by, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $where, TRUE );
+		Charcoal_ParamTrait::validateVector( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateString( 3, $order_by, TRUE );
+		Charcoal_ParamTrait::validateInteger( 4, $limit, TRUE );
+		Charcoal_ParamTrait::validateInteger( 5, $offset, TRUE );
+		Charcoal_ParamTrait::validateString( 6, $group_by, TRUE );
 
 		$this->where     = us($where);
 		$this->params    = uv($params);
@@ -61,7 +61,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setWhere( $where )
 	{
-		Charcoal_ParamTrait::checkString( 1, $where );
+		Charcoal_ParamTrait::validateString( 1, $where );
 
 		$this->where = us($where);
 	}
@@ -73,8 +73,8 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function addWhere( $where, $operator = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $where );
-		Charcoal_ParamTrait::checkString( 2, $operator, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $where );
+		Charcoal_ParamTrait::validateString( 2, $operator, TRUE );
 
 		if ( $operator === NULL ){
 			$operator = 'AND';
@@ -105,7 +105,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setParams( $params )
 	{
-		Charcoal_ParamTrait::checkVector( 1, $params );
+		Charcoal_ParamTrait::validateVector( 1, $params );
 
 		$this->params = uv($params);
 	}
@@ -117,7 +117,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function addParams( $params )
 	{
-		Charcoal_ParamTrait::checkVector( 1, $params );
+		Charcoal_ParamTrait::validateVector( 1, $params );
 
 		if ( $this->params ){
 			$this->params->addAll( $params );
@@ -144,7 +144,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setOrderBy( $order_by )
 	{
-		Charcoal_ParamTrait::checkString( 1, $order_by );
+		Charcoal_ParamTrait::validateString( 1, $order_by );
 
 		$this->order_by = us($order_by);
 	}
@@ -166,7 +166,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setLimit( $limit )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $limit );
+		Charcoal_ParamTrait::validateInteger( 1, $limit );
 
 		$this->limit = ui($limit);
 	}
@@ -188,7 +188,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setOffset( Charcoal_Integer $offset )
 	{
-		Charcoal_ParamTrait::checkInteger( 1, $offset );
+		Charcoal_ParamTrait::validateInteger( 1, $offset );
 
 		$this->offset = ui($offset);
 	}
@@ -210,7 +210,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	 */
 	public function setGroupBy( $group_by )
 	{
-		Charcoal_ParamTrait::checkString( 1, $group_by );
+		Charcoal_ParamTrait::validateString( 1, $group_by );
 
 		$this->group_by = us($group_by);
 	}

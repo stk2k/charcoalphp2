@@ -20,7 +20,7 @@ class Charcoal_SimpleHtmlDomElement extends Charcoal_Object
 	 */
 	public function __construct( $element )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'simple_html_dom_node', $element );
+		Charcoal_ParamTrait::validateIsA( 1, 'simple_html_dom_node', $element );
 
 		parent::__construct();
 
@@ -65,8 +65,8 @@ class Charcoal_SimpleHtmlDomElement extends Charcoal_Object
 	 */
 	public function find( $selector, $index = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $selector );
-		Charcoal_ParamTrait::checkInteger( 2, $index, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $selector );
+		Charcoal_ParamTrait::validateInteger( 2, $index, TRUE );
 
 		$selector = us($selector);
 

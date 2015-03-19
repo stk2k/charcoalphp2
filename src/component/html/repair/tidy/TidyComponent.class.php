@@ -68,7 +68,7 @@ class Charcoal_TidyComponent extends Charcoal_CharcoalComponent implements Charc
 	 */
 	public function parseString( $input )
 	{
-		Charcoal_ParamTrait::checkString( 1, $input );
+		Charcoal_ParamTrait::validateString( 1, $input );
 
 		$this->tidy->parseString( us($input), $this->config, $this->encoding );
 	}
@@ -81,7 +81,7 @@ class Charcoal_TidyComponent extends Charcoal_CharcoalComponent implements Charc
 	 */
 	public function parseFile( $file, $use_include_path = FALSE )
 	{
-		Charcoal_ParamTrait::checkString( 1, $file );
+		Charcoal_ParamTrait::validateString( 1, $file );
 
 		$this->tidy->parseFile( $us($file), $this->config, $this->encoding, $use_include_path );
 	}
@@ -96,7 +96,7 @@ class Charcoal_TidyComponent extends Charcoal_CharcoalComponent implements Charc
 	 */
 	public function repairString( $input )
 	{
-		Charcoal_ParamTrait::checkString( 1, $input );
+		Charcoal_ParamTrait::validateString( 1, $input );
 
 		return $this->tidy->repairString( us($input), $this->config, $this->encoding );
 	}
@@ -110,7 +110,7 @@ class Charcoal_TidyComponent extends Charcoal_CharcoalComponent implements Charc
 	 */
 	public function repairFile( $file, $use_include_path = FALSE )
 	{
-		Charcoal_ParamTrait::checkString( 1, $file );
+		Charcoal_ParamTrait::validateString( 1, $file );
 
 		return $this->tidy->repairFile( us($file), $this->config, $this->encoding, $use_include_path );
 	}

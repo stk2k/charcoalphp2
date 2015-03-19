@@ -401,7 +401,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 		}
 */
 
-		$stmt = $this->_connection->prepare($sql);
+		$stmt = $this->_connection->prepareExecute($sql);
 	
 		if ( DB::isError($stmt) ){
 			$msg = $stmt->getMessage() . "(" . $stmt->getCode() . ")";
@@ -541,7 +541,7 @@ class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function fetchAssoc( $result )
 	{
-		Charcoal_ParamTrait::checkResource( 1, $result );
+		Charcoal_ParamTrait::validateResource( 1, $result );
 
 		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 

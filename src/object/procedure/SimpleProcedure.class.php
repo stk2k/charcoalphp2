@@ -59,9 +59,9 @@ class Charcoal_SimpleProcedure extends Charcoal_AbstractProcedure
 	 */
 	public function execute( $request, $response, $session = NULL )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IRequest', $request );
-//		Charcoal_ParamTrait::checkImplements( 2, 'Charcoal_IResponse', $response );
-//		Charcoal_ParamTrait::checkIsA( 3, 'Charcoal_Session', $session, TRUE );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IRequest', $request );
+//		Charcoal_ParamTrait::validateImplements( 2, 'Charcoal_IResponse', $response );
+//		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_Session', $session, TRUE );
 
 		$proc_path = $this->getObjectPath();
 		$proc_name = $proc_path->toString();

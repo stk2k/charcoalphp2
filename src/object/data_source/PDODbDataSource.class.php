@@ -22,9 +22,10 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	private $port;
 	private $charset;
 	private $autocommit;
-	private $command_id;
+	private $set_names;
+	private $buffered_query;
 
-	private $trans_cnt;
+	private $command_id;
 
 	private $exec_sql_stack;
 
@@ -40,6 +41,27 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->command_id 	= 0;
 
 		$this->exec_sql_stack = new Charcoal_Stack();
+	}
+
+	/**
+	 * Get configurations
+	 *
+	 * @return array   configuration data
+	 */
+	public function getConfig()
+	{
+		return array(
+				'backend' => $this->backend,
+				'user' => $this->user,
+				'password' => $this->password,
+				'db_name' => $this->db_name,
+				'server' => $this->server,
+				'port' => $this->port,
+				'charset' => $this->charset,
+				'autocommit' => $this->autocommit,
+				'set_names' => $this->set_names,
+				'buffered_query' => $this->buffered_query,
+			);
 	}
 
 	/**
@@ -60,6 +82,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->charset   = us( $config->getString( 'charset' ) );
 		$this->autocommit = ub( $config->getBoolean( 'autocommit', TRUE ) );
 		$this->set_names  = ub( $config->getBoolean( 'set_names', FALSE ) );
+		$this->buffered_query  = ub( $config->getBoolean( 'buffered_query', TRUE ) );
 
 		if ( strlen($this->backend) === 0 ){
 			_throw( new Charcoal_ComponentConfigException( 'backend', 'mandatory' ) );
@@ -76,15 +99,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		if ( $this->getSandbox()->isDebug() )
 		{
-			log_debug( 'data_source', "backend=" . $this->backend, 'data_source' );
-			log_debug( 'data_source', "user=" . $this->user, 'data_source' );
-			log_debug( 'data_source', "password=" . $this->password, 'data_source' );
-			log_debug( 'data_source', "db_name=" . $this->db_name, 'data_source' );
-			log_debug( 'data_source', "server=" . $this->server, 'data_source' );
-			log_debug( 'data_source', "port=" . $this->port, 'data_source' );
-			log_debug( 'data_source', "charset=" . $this->charset, 'data_source' );
-			log_debug( 'data_source', "autocommit=" . $this->autocommit, 'data_source' );
-			log_debug( 'data_source', "set_names=" . $this->set_names, 'data_source' );
+			log_debug( 'data_source', "backend=" . $this->backend, __METHOD__ );
+			log_debug( 'data_source', "user=" . $this->user, __METHOD__ );
+			log_debug( 'data_source', "password=" . $this->password, __METHOD__ );
+			log_debug( 'data_source', "db_name=" . $this->db_name, __METHOD__ );
+			log_debug( 'data_source', "server=" . $this->server, __METHOD__ );
+			log_debug( 'data_source', "port=" . $this->port, __METHOD__ );
+			log_debug( 'data_source', "charset=" . $this->charset, __METHOD__ );
+			log_debug( 'data_source', "autocommit=" . $this->autocommit, __METHOD__ );
+			log_debug( 'data_source', "set_names=" . $this->set_names, __METHOD__ );
+			log_debug( 'data_source', "buffered_query=" . $this->buffered_query, __METHOD__ );
 		}
 	}
 
@@ -196,7 +220,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	public function autoCommit( $on )
 	{
 		try {
-			Charcoal_ParamTrait::checkBoolean( 1, $on );
+			Charcoal_ParamTrait::validateBoolean( 1, $on );
 
 			// 接続処理
 			$this->connect();
@@ -300,21 +324,27 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			$charset = $charset_db ? "charset={$charset_db};" : '';
 			$DSN = "$backend:host=$server;{$port}dbname=$db_name;{$charset}";
 
-			log_info( 'debug, sql, data_source', "DSN=[$DSN]", 'data_source' );
+			log_info( 'debug, sql, data_source', "DSN=[$DSN]", __METHOD__ );
 
 			$options = array(
 					PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 					PDO::ATTR_EMULATE_PREPARES => false,
 					PDO::ATTR_AUTOCOMMIT => $this->autocommit,
+					PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => $this->buffered_query,
 				);
-			log_info( 'debug, sql, data_source', 'driver options:' . print_r($options, true), 'data_source' );
+			log_info( 'debug, sql, data_source', 'driver options:' . print_r($options, true), __METHOD__ );
+
+			$th_connect = Charcoal_Benchmark::start();
 
 			$pdo = new PDO( $DSN, $user, $password, $options );
+
+			$bench_score = Charcoal_Benchmark::stop( $th_connect );
+			log_debug( 'data_source,sql,debug', sprintf("connected in [%0.4f] msec",$bench_score), __METHOD__ );
 
 			$this->connection = $pdo;
 			$this->connected = true;
 
-			log_info( 'debug, sql, data_source', "connected database: DSN=[$DSN]", 'data_source' );
+			log_info( 'debug, sql, data_source', "connected database: DSN=[$DSN]", __METHOD__ );
 
 			if ( $this->set_names ){
 				switch( strtolower($this->charset) ){
@@ -352,15 +382,24 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->connected = FALSE;
 	}
 
-	/*
-	 *    プリペアドステートメントの発行
+	/**
+	 *    Prepare for statement and execute query
+	 *
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	private function _prepareExecute( $sql, $params = NULL )
+	private function _prepareExecute( $sql, $params, $driver_options )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $sql );
+		Charcoal_ParamTrait::validateHashMap( 2, $params, TRUE );
+		Charcoal_ParamTrait::validateHashMap( 3, $driver_options, TRUE );
 
-		$params = uv( $params );
+		$params = um( $params );
+		$driver_options = um( $driver_options );
+
+		$params = $params ? $params : array();
+		$driver_options = $driver_options ? $driver_options : array();
 
 		$timer_handle = Charcoal_Benchmark::start();
 
@@ -368,48 +407,28 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		$params_disp = $params ? implode( ',' , $params ) :'';
 
-		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", 'data_source' );
-		log_info( "data_source,sql,debug", "[ID]$command_id [params]$params_disp", 'data_source' );
-/*
-		$log_sql = str_replace( '?', '%s', $sql );
-		$log_params = NULL;
-		if ( $params ){
-			foreach( $params as $value ){
-				if ( is_string($value) || $value instanceof Charcoal_String || $value instanceof Charcoal_Date || $value instanceof Charcoal_DateWithTime ){
-//					$value = $this->connection->quote($value);
-					$log_params[] = "'{$value}'";
-				}
-				else{
-					$log_params[] = $value;
-				}
-			}
-		}
-		$log_sql = $log_params ? vsprintf( $log_sql, uv($log_params) ) : $log_sql;
-		log_info( "data_source,sql,debug", 'data_source', "[ID]$command_id [SQL]$log_sql" );
-*/
+		log_debug( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", __METHOD__ );
+		log_debug( 'data_source,sql,debug', "[ID]$command_id [params]$params_disp", __METHOD__ );
 
-		$stmt = $this->connection->prepare( $sql );
-
-		$params = $params ? $params : array();
+		$stmt = $this->connection->prepare( $sql, $driver_options );
 
 		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql, $params) );
-		
 
 		$success = $stmt->execute( $params );
 
 		if ( !$success ){
 			list( $sqlstate, $err_code, $err_msg ) = $stmt->errorInfo();
 			$msg = "PDO#execute failed. [ID]$command_id [SQL]$sql [params]$params_disp [SQLSTATE]$sqlstate [ERR_CODE]$err_code [ERR_MSG]$err_msg";
-			log_error( "data_source,sql,debug", "...FAILED: $msg", 'data_source' );
+			log_error( 'data_source,sql,debug', "...FAILED: $msg", __METHOD__ );
 			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
 		$numRows = $stmt->rowCount();
-		log_info( "data_source,sql,debug", "[ID]$command_id ...success(numRows=$numRows)", 'data_source' );
+		log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows=$numRows)", __METHOD__ );
 
 		// ログ
 		$elapse = Charcoal_Benchmark::stop( $timer_handle );
-		log_debug( 'data_source,sql,debug', "[ID]$command_id prepareExecute() end. time=[$elapse]msec.", 'data_source' );
+		log_debug( 'data_source,sql,debug', "[ID]$command_id _prepareExecute() end. time=[$elapse]msec.", __METHOD__ );
 
 		return $stmt;
 	}
@@ -419,13 +438,13 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 */
 	private function _query( $sql )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
+		Charcoal_ParamTrait::validateString( 1, $sql );
 
 		$sql = us( $sql );
 
 		$command_id = $this->command_id++;
 
-		log_info( "data_source,sql,debug", "[ID]$command_id [SQL]$sql", 'data_source' );
+		log_info( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", __METHOD__ );
 
 		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
 
@@ -439,7 +458,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function query( $sql )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
+		Charcoal_ParamTrait::validateString( 1, $sql );
 
 		// 接続処理
 		$this->connect();
@@ -458,7 +477,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function execute( $sql )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
+		Charcoal_ParamTrait::validateString( 1, $sql );
 
 		// 接続処理
 		$this->connect();
@@ -469,22 +488,23 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->_query( $sql );
 	}
 
-	/*
-	 *    プリペアドステートメントの発行
+	/**
+	 *    Prepare for statement and execute query
+	 *
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function prepareExecute( $sql, $params = NULL )
+	public function prepareExecute( $sql, $params = NULL, $driver_options = NULL )
 	{
 		try {
-			Charcoal_ParamTrait::checkString( 1, $sql );
-			Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-
 			$result = null;
 
 			// 接続処理
 			$this->connect();
 			
 			// statementの実行
-			$result = $this->_prepareExecute( $sql, $params );
+			$result = $this->_prepareExecute( $sql, $params, $driver_options );
 		}
 		catch ( Exception $e )
 		{
@@ -550,12 +570,15 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		return -1;
 	}
 
-	/*
+	/**
 	 *   create recordset factory
+	 *   
+	 * @param integer $fetch_mode    fetch mode(defined at Charcoal_IRecordset::FETCHMODE_XXX)
+	 * @param array $options         fetch mode options
 	 */
-	public function createRecordsetFactory()
+	public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL )
 	{
-		return new Charcoal_PDORecordsetFactory();
+		return new Charcoal_PDORecordsetFactory( $fetch_mode, $options );
 	}
 
 }

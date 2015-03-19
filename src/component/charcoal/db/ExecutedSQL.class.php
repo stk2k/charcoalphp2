@@ -16,18 +16,15 @@ class Charcoal_ExecutedSQL extends Charcoal_Object
 	/**
 	 *  Constructor
 	 *  
-	 *  @param string $sql        SQL
-	 *  @param array $params      array data which aree used for binding
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
 	 */
 	public function __construct( $sql, $params = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $sql );
-		Charcoal_ParamTrait::checkVector( 2, $params, TRUE );
-
 		parent::__construct();
 
-		$this->sql         = s($sql);
-		$this->params      = v($params);
+		$this->sql         = $sql;
+		$this->params      = $params;
 	}
 
 	/**
@@ -57,7 +54,7 @@ class Charcoal_ExecutedSQL extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return us($this->sql);
+		return $this->sql;
 	}
 }
 

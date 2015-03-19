@@ -21,8 +21,8 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function __construct( $file_name, $parent = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $file_name );
-//		Charcoal_ParamTrait::checkFile( 2, $parent, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $file_name );
+//		Charcoal_ParamTrait::validateFile( 2, $parent, TRUE );
 
 		parent::__construct();
 
@@ -42,7 +42,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public static function create( $file_name )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $file_name );
+//		Charcoal_ParamTrait::validateString( 1, $file_name );
 
 		return new Charcoal_File( $file_name );
 	}
@@ -283,8 +283,8 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function makeFile( $mode, $contents, $drilldown = TRUE )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $mode );
-//		Charcoal_ParamTrait::checkString( 2, $contents );
+//		Charcoal_ParamTrait::validateString( 1, $mode );
+//		Charcoal_ParamTrait::validateString( 2, $contents );
 //		Charcoal_ParamTrait::checkBool( 3, $drilldown );
 
 		$parent_dir = $this->getDir();
@@ -309,8 +309,8 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function makeDirectory( $drilldown = TRUE, $mode = NULL )
 	{
-//		Charcoal_ParamTrait::checkBoolean( 1, $drilldown );
-//		Charcoal_ParamTrait::checkInteger( 2, $mode, TRUE );
+//		Charcoal_ParamTrait::validateBoolean( 1, $drilldown );
+//		Charcoal_ParamTrait::validateInteger( 2, $mode, TRUE );
 
 		$path = $this->path;
 		$mode = $mode ? ui( $mode ) : 0777;

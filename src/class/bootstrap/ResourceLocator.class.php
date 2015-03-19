@@ -18,9 +18,9 @@ class Charcoal_ResourceLocator
 	 */
 	public static function processMacro( $env, $value )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
 
-		if ( is_array($value) || $value instanceof Iterator ){
+		if ( is_array($value) || $value instanceof Traversable ){
 			$new_array = array();
 			foreach( $value as $key => $value ){
 				$key = is_string($key) ? self::processMacro( $env, $key ) : $key;
@@ -88,11 +88,11 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getPath( $env, $virtual_path, $filename = NULL )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IEnvironment', $env );
-		Charcoal_ParamTrait::checkString( 2, $virtual_path );
-		Charcoal_ParamTrait::checkString( 3, $filename, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
+		Charcoal_ParamTrait::validateString( 2, $virtual_path );
+		Charcoal_ParamTrait::validateString( 3, $filename, TRUE );
 
-		$path = self::processMacro( $virtual_path );
+		$path = self::processMacro( $env, $virtual_path );
 
 		if ( $filename ){
 			$path .= '/' . $filename;
@@ -106,8 +106,8 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getFrameworkPath( $folder = NULL, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $folder );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $folder );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
 		if ( !$folder ){
 			return CHARCOAL_HOME;
@@ -127,8 +127,8 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getProjectPath( $folder = NULL, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $folder );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $folder );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
 		if ( !$folder ){
 			return CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT;
@@ -148,8 +148,8 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getApplicationPath( $folder = NULL, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $folder );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $folder );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
 		if ( !$folder ){
 			return CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/app/' . CHARCOAL_APPLICATION;
@@ -167,17 +167,19 @@ class Charcoal_ResourceLocator
 	/**
 	 * Get framework/project/application file
 	 *
-	 * @param Charcoal_String $folder          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
-	 * @param Charcoal_Object $value                 cache data to save
+	 * @param Charcoal_IEnvironment $env    framework's environment variables
+	 * @param string $virtual_path          virtual path to retrieve, including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param string $filename              file name
 	 *
 	 * @return Charcoal_File        file object
 	 */
-	public static function getFile( $folder, $filename = NULL )
+	public static function getFile( $env, $virtual_path, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
+		Charcoal_ParamTrait::validateString( 2, $virtual_path );
+		Charcoal_ParamTrait::validateString( 3, $filename, TRUE );
 
-		return new Charcoal_File( self::getPath( $folder, $filename ) );
+		return new Charcoal_File( self::getPath( $env, $virtual_path, $filename ) );
 	}
 
 	/*
@@ -185,8 +187,8 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getFrameworkFile( $folder = NULL, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $folder, TRUE );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $folder, TRUE );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
 		return new Charcoal_File( self::getFrameworkPath( $folder, $filename ) );
 	}
@@ -196,8 +198,8 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getProjectFile( $folder = NULL, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $folder, TRUE );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $folder, TRUE );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
 		return new Charcoal_File( self::getProjectPath( $folder, $filename ) );
 	}
@@ -207,8 +209,8 @@ class Charcoal_ResourceLocator
 	 */
 	public static function getApplicationFile( $folder = NULL, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $folder, TRUE );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $folder, TRUE );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
 		return new Charcoal_File( self::getApplicationPath( $folder, $filename ) );
 	}

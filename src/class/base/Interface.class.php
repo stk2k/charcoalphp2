@@ -18,7 +18,7 @@ class Charcoal_Interface extends Charcoal_Object
 	 */
 	public function __construct( $interface_name )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $interface_name );
+//		Charcoal_ParamTrait::validateString( 1, $interface_name );
 
 		parent::__construct();
 
@@ -39,7 +39,7 @@ class Charcoal_Interface extends Charcoal_Object
 	 *  Check if an object implements this interface
 	 *
 	 */
-	public function checkImplements( $object )
+	public function validateImplements( $object )
 	{
 		$interface_name = $this->interface_name;
 

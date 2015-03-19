@@ -20,7 +20,7 @@ class Charcoal_HtmlFileOutputExceptionHandler extends Charcoal_AbstractException
 	 */
 	public function handleException( $e )
 	{
-		Charcoal_ParamTrait::checkException( 1, $e );
+		Charcoal_ParamTrait::validateException( 1, $e );
 
 		log_info( 'system, debug', "handled a framework exception!", 'exception_handler' );
 

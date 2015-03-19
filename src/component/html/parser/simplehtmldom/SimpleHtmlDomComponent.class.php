@@ -87,8 +87,8 @@ class Charcoal_SimpleHtmlDomComponent extends Charcoal_CharcoalComponent impleme
 	 */
 	public function find( $selector, $index = NULL )
 	{
-		Charcoal_ParamTrait::checkString( 1, $selector );
-		Charcoal_ParamTrait::checkInteger( 2, $index, TRUE );
+		Charcoal_ParamTrait::validateString( 1, $selector );
+		Charcoal_ParamTrait::validateInteger( 2, $index, TRUE );
 
 		if ( !$this->simple_html_dom ){
 			_throw( new SimpleHtmlDomComponentException("SimpleHtmlDom object is not created") );

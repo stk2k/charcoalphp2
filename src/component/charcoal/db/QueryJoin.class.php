@@ -18,7 +18,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	/*
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_Integer $join_type )
+	public function __construct( $join_type )
 	{
 		$this->join_type = ui($join_type);
 	}
@@ -42,7 +42,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	/*
 	 *  set model name
 	 */
-	public function setModelName( Charcoal_String $model_name )
+	public function setModelName( $model_name )
 	{
 		$this->model_name = $model_name;
 	}
@@ -58,7 +58,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	/*
 	 *  set alias
 	 */
-	public function setAlias( Charcoal_String $alias )
+	public function setAlias( $alias )
 	{
 		$this->alias = $alias;
 	}
@@ -74,7 +74,7 @@ class Charcoal_QueryJoin extends Charcoal_Object
 	/*
 	 *  set condition
 	 */
-	public function setCondition( Charcoal_String $condition )
+	public function setCondition($condition )
 	{
 		$this->condition = $condition;
 	}

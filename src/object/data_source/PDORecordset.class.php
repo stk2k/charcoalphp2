@@ -22,15 +22,14 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 	 */
 	public function __construct( $statement, $fetch_mode, $options )
 	{
-		parent::__construct();
-
 		$this->statement = $statement;
 		$this->valid = true;
 		$this->fetch_mode = $this->setFetchMode( $fetch_mode, $options );
 		$this->current = NULL;
 		$this->key = 0;
-	}
 
+		$this->next();
+	}
 
 	/**
 	 * Set fetch mode
@@ -40,6 +39,9 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 	 */
 	private function setFetchMode( $fetch_mode, $options )
 	{
+		$fetch_mode = $fetch_mode ? $fetch_mode : Charcoal_IRecordset::FETCHMODE_DEFAULT;
+		$options = is_array($options) ? $options : array();
+
 		switch( $fetch_mode ){
 		case Charcoal_IRecordset::FETCHMODE_COLUMN:
 			$colno = isset($options['colno']) ? $options['colno'] : NULL;
@@ -69,7 +71,7 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 			$this->statement->setFetchMode( PDO::FETCH_INTO, $object );
 			return PDO::FETCH_INTO;
 			break;
-		case Charcoal_IRecordset::FETCHMODE_ARRAY:
+		case Charcoal_IRecordset::FETCHMODE_NUM:
 			$this->statement->setFetchMode( PDO::FETCH_NUM );
 			return PDO::FETCH_NUM;
 			break;

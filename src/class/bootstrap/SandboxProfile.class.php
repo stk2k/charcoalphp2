@@ -18,7 +18,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 

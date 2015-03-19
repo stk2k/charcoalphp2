@@ -52,7 +52,7 @@ class Charcoal_RenderLayoutEvent extends Charcoal_UserEvent implements Charcoal_
 	 */
 	public function setLayout( $layout )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_Layout', $layout );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_Layout', $layout );
 
 		$this->layout = $layout;
 	}
@@ -74,7 +74,7 @@ class Charcoal_RenderLayoutEvent extends Charcoal_UserEvent implements Charcoal_
 	 */
 	public function setValues( $values )
 	{
-		Charcoal_ParamTrait::checkHashMap( 1, $values );
+		Charcoal_ParamTrait::validateHashMap( 1, $values );
 		
 		$this->values = um( $values );
 	}
@@ -96,7 +96,7 @@ class Charcoal_RenderLayoutEvent extends Charcoal_UserEvent implements Charcoal_
 	 */
 	public function setRenderTarget( $render_target )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_IRenderTarget', $render_target );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IRenderTarget', $render_target );
 		
 		$this->render_target = $render_target;
 	}

@@ -12,6 +12,8 @@ class MyDTO extends Charcoal_DTO
 {
 	public $foo;
 	public $bar;
+    public $baz;
+    public $qux;
 }
 
 class DtoTestTask extends Charcoal_TestTask
@@ -74,7 +76,7 @@ class DtoTestTask extends Charcoal_TestTask
 
 			//echo print_r($dto,true);
 
-			// •]‰¿
+			// ï¿½]ï¿½ï¿½
 			$this->assertEquals( 1, $dto["foo"] );
 			$this->assertEquals( "apple", $dto["bar"] );
 			$this->assertEquals( NULL, $dto["baz"] );
@@ -206,7 +208,7 @@ class DtoTestTask extends Charcoal_TestTask
 			unset($dto["foo"]);
 			//unset($dto->foo);		// NG!!
 
-			$this->assertEquals( FALSE, isset($dto["foo"]) );
+			$this->assertEquals( NULL, $dto["foo"] );
 
 			$dto2 = new MyDTO();
 

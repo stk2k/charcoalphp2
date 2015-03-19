@@ -27,7 +27,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	{
 //		parent::__construct();
 
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 	}
@@ -59,7 +59,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setProcedure( $procedure )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IProcedure', $procedure );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IProcedure', $procedure );
 
 		$this->procedure = $procedure;
 	}
@@ -81,7 +81,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setRequest( $request )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IRequest', $request );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IRequest', $request );
 
 		$this->request = $request;
 	}
@@ -103,7 +103,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setEvent( $event )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IEvent', $event );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IEvent', $event );
 
 		$this->event = $event;
 	}
@@ -127,7 +127,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setSequence( $sequence )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ISequence', $sequence );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_ISequence', $sequence );
 
 		$this->sequence = $sequence;
 	}
@@ -149,7 +149,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setResponse( $response )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IResponse', $response );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IResponse', $response );
 
 		$this->response = $response;
 	}
@@ -171,7 +171,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setEventQueue( $event_queue )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_IEventQueue', $event_queue );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IEventQueue', $event_queue );
 
 		$this->event_queue = $event_queue;
 	}
@@ -183,7 +183,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setTaskManager( $task_manager )
 	{
-//		Charcoal_ParamTrait::checkImplements( 1, 'Charcoal_ITaskManager', $task_manager );
+//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_ITaskManager', $task_manager );
 
 		$this->task_manager = $task_manager;
 	}
@@ -230,9 +230,9 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function createObject( $obj_path, $type_name, $args = array(), $config = NULL )
 	{
-//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
-//		Charcoal_ParamTrait::checkString( 2, $type_name );
-//		Charcoal_ParamTrait::checkConfig( 3, $config, TRUE );
+//		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateString( 2, $type_name );
+//		Charcoal_ParamTrait::validateConfig( 3, $config, TRUE );
 
 		try{
 			$object = $this->sandbox->createObject( $obj_path, $type_name, $args );
@@ -278,6 +278,25 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	}
 
 	/**
+	 *	Create condig
+	 *
+	 *	@param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_Config        config object
+	 */
+	public function createConfig( array $config = array() )
+	{
+		try{
+			return new Charcoal_Config( $this->getEnvironment(), $config );
+		}
+		catch( Exception $ex )
+		{
+			_catch( $ex );
+			_throw( new Charcoal_EventContextException( __METHOD__ . '() failed.', $ex ) );
+		}
+	}
+
+	/**
 	 * Create and configure a component 
 	 *
 	 * @param string $obj_path         object path to create
@@ -288,8 +307,8 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function getComponent( $obj_path, $args = array(), $config = NULL )
 	{
-//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $obj_path );
-//		Charcoal_ParamTrait::checkConfig( 2, $config, TRUE );
+//		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
+//		Charcoal_ParamTrait::validateConfig( 2, $config, TRUE );
 
 		try{
 			$component = $this->sandbox->getContainer()->getComponent( $obj_path, $args );
@@ -316,8 +335,8 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function getCache( $key, Charcoal_String $type_name_checked = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
-//		Charcoal_ParamTrait::checkString( 2, $type_name_checked, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $type_name_checked, TRUE );
 
 		try{
 			$type_name_checked = us($type_name_checked);
@@ -357,7 +376,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function setCache( $key, $value )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		try{
 			Charcoal_Cache::set( $key, $value );
@@ -392,13 +411,10 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function getPath( $virtual_path, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $virtual_path );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
-		if ( $filename )
-			return Charcoal_ResourceLocator::getPath( $virtual_path, $filename );
-		else
-			return Charcoal_ResourceLocator::getPath( $virtual_path );
+		return Charcoal_ResourceLocator::getPath( $this->getSandbox()->getEnvironment(), $virtual_path, $filename );
 	}
 
 
@@ -424,13 +440,10 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function getFile( $virtual_path, $filename = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $virtual_path );
-//		Charcoal_ParamTrait::checkString( 2, $filename, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $virtual_path );
+//		Charcoal_ParamTrait::validateString( 2, $filename, TRUE );
 
-		if ( $filename )
-			return Charcoal_ResourceLocator::getFile( $virtual_path, $filename );
-		else
-			return Charcoal_ResourceLocator::getFile( $virtual_path );
+		return Charcoal_ResourceLocator::getFile( $this->getSandbox()->getEnvironment(), $virtual_path, $filename );
 	}
 
 	/**
@@ -440,7 +453,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 */
 	public function loadModule( $module_path )
 	{
-//		Charcoal_ParamTrait::checkStringOrObjectPath( 1, $module_path );
+//		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $module_path );
 
 		Charcoal_ModuleLoader::loadModule( $this->sandbox, $module_path, $this->task_manager );
 	}

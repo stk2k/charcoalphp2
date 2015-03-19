@@ -47,8 +47,10 @@ class Charcoal_Bootstrap
 			// create fake exception
 			$e = new Charcoal_PHPErrorException($errno, $errstr, $errfile, $errline);
 
-			// output error message to STDERR
-			fputs(STDERR, $e);
+			// output error message to STDERR if CLI
+			if ( defined('STDERR') ){
+				fputs(STDERR, $e);
+			}
 
 			_throw( $e );
 		}

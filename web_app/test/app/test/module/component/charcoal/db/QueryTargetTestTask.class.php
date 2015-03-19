@@ -75,11 +75,12 @@ class QueryTargetTestTask extends Charcoal_TestTask
 			$this->assertEquals( 'model_a', $target->getModelName() );
 			$this->assertEquals( '', $target->getAlias() );
 
-			$join = $target->getJoins()->getHead();
+			$joins = $target->getJoins();
+			$join_head = array_shift($joins);
 
-			$this->assertEquals( Charcoal_EnumSQLJoinType::INNER_JOIN, $join->getJoinType() );
-			$this->assertEquals( 'model_b', $join->getModelName() );
-			$this->assertEquals( '', $join->getAlias() );
+			$this->assertEquals( Charcoal_EnumSQLJoinType::INNER_JOIN, $join_head->getJoinType() );
+			$this->assertEquals( 'model_b', $join_head->getModelName() );
+			$this->assertEquals( '', $join_head->getAlias() );
 
 			return TRUE;
 
@@ -91,11 +92,12 @@ class QueryTargetTestTask extends Charcoal_TestTask
 			$this->assertEquals( 'model_a', $target->getModelName() );
 			$this->assertEquals( 'a', $target->getAlias() );
 
-			$join = $target->getJoins()->getHead();
+			$joins = $target->getJoins();
+			$join_head = array_shift($joins);
 
-			$this->assertEquals( Charcoal_EnumSQLJoinType::INNER_JOIN, $join->getJoinType() );
-			$this->assertEquals( 'model_b', $join->getModelName() );
-			$this->assertEquals( 'b', $join->getAlias() );
+			$this->assertEquals( Charcoal_EnumSQLJoinType::INNER_JOIN, $join_head->getJoinType() );
+			$this->assertEquals( 'model_b', $join_head->getModelName() );
+			$this->assertEquals( 'b', $join_head->getAlias() );
 
 			return TRUE;
 
@@ -107,11 +109,12 @@ class QueryTargetTestTask extends Charcoal_TestTask
 			$this->assertEquals( 'model_a', $target->getModelName() );
 			$this->assertEquals( '', $target->getAlias() );
 
-			$join = $target->getJoins()->getHead();
+			$joins = $target->getJoins();
+			$join_head = array_shift($joins);
 
-			$this->assertEquals( Charcoal_EnumSQLJoinType::LEFT_JOIN, $join->getJoinType() );
-			$this->assertEquals( 'model_b', $join->getModelName() );
-			$this->assertEquals( '', $join->getAlias() );
+			$this->assertEquals( Charcoal_EnumSQLJoinType::LEFT_JOIN, $join_head->getJoinType() );
+			$this->assertEquals( 'model_b', $join_head->getModelName() );
+			$this->assertEquals( '', $join_head->getAlias() );
 
 			return TRUE;
 
@@ -123,11 +126,12 @@ class QueryTargetTestTask extends Charcoal_TestTask
 			$this->assertEquals( 'model_a', $target->getModelName() );
 			$this->assertEquals( 'a', $target->getAlias() );
 
-			$join = $target->getJoins()->getHead();
+			$joins = $target->getJoins();
+			$join_head = array_shift($joins);
 
-			$this->assertEquals( Charcoal_EnumSQLJoinType::LEFT_JOIN, $join->getJoinType() );
-			$this->assertEquals( 'model_b', $join->getModelName() );
-			$this->assertEquals( 'b', $join->getAlias() );
+			$this->assertEquals( Charcoal_EnumSQLJoinType::LEFT_JOIN, $join_head->getJoinType() );
+			$this->assertEquals( 'model_b', $join_head->getModelName() );
+			$this->assertEquals( 'b', $join_head->getAlias() );
 
 			return TRUE;
 
@@ -139,11 +143,12 @@ class QueryTargetTestTask extends Charcoal_TestTask
 			$this->assertEquals( 'model_a', $target->getModelName() );
 			$this->assertEquals( '', $target->getAlias() );
 
-			$join = $target->getJoins()->getHead();
+			$joins = $target->getJoins();
+			$join_head = array_shift($joins);
 
-			$this->assertEquals( Charcoal_EnumSQLJoinType::RIGHT_JOIN, $join->getJoinType() );
-			$this->assertEquals( 'model_b', $join->getModelName() );
-			$this->assertEquals( '', $join->getAlias() );
+			$this->assertEquals( Charcoal_EnumSQLJoinType::RIGHT_JOIN, $join_head->getJoinType() );
+			$this->assertEquals( 'model_b', $join_head->getModelName() );
+			$this->assertEquals( '', $join_head->getAlias() );
 
 			return TRUE;
 
@@ -155,11 +160,12 @@ class QueryTargetTestTask extends Charcoal_TestTask
 			$this->assertEquals( 'model_a', $target->getModelName() );
 			$this->assertEquals( 'a', $target->getAlias() );
 
-			$join = $target->getJoins()->getHead();
+			$joins = $target->getJoins();
+			$join_head = array_shift($joins);
 
-			$this->assertEquals( Charcoal_EnumSQLJoinType::RIGHT_JOIN, $join->getJoinType() );
-			$this->assertEquals( 'model_b', $join->getModelName() );
-			$this->assertEquals( 'b', $join->getAlias() );
+			$this->assertEquals( Charcoal_EnumSQLJoinType::RIGHT_JOIN, $join_head->getJoinType() );
+			$this->assertEquals( 'model_b', $join_head->getModelName() );
+			$this->assertEquals( 'b', $join_head->getAlias() );
 
 			return TRUE;
 

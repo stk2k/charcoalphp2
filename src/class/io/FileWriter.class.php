@@ -23,8 +23,8 @@ class Charcoal_FileWriter
 	 */
 	public function __construct( $file, $mode = NULL )
 	{
-//		Charcoal_ParamTrait::checkFile( 1, $pattern );
-//		Charcoal_ParamTrait::checkString( 2, $extension, TRUE );
+//		Charcoal_ParamTrait::validateFile( 1, $pattern );
+//		Charcoal_ParamTrait::validateString( 2, $extension, TRUE );
 
 		$this->file = $file;
 		$this->mode = $mode ? $mode : 'w';

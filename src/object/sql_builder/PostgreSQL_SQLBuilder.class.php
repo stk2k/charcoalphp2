@@ -20,7 +20,7 @@ class Charcoal_PostgreSQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 	 */
 	public  function buildCreateTableSQL( Charcoal_ITableModel $model )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 
 		try{
 			$field_list = $model->getFieldList();

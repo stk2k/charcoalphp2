@@ -21,8 +21,8 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 	 */
 	public  function buildCreateTableSQL( Charcoal_ITableModel $model, $if_not_exists = false )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_ITableModel', $model );
-		Charcoal_ParamTrait::checkBoolean( 2, $if_not_exists );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
+		Charcoal_ParamTrait::validateBoolean( 2, $if_not_exists );
 
 		try{
 			$field_list = $model->getFieldList();

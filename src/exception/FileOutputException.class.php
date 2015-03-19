@@ -13,7 +13,7 @@ class Charcoal_FileOutputException extends Charcoal_RuntimeException
 {
 	public function __construct( $path, Exception $prev = NULL )
 	{
-//		Charcoal_ParamTrait::checkString( 1, $path );
+//		Charcoal_ParamTrait::validateString( 1, $path );
 
 		parent::__construct( "Output to file[$path] failed.", $prev );
 	}

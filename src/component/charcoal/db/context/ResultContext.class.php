@@ -29,7 +29,7 @@ class Charcoal_ResultContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  Make list of copies on target DTO
 	 */
-	public function pack( Charcoal_DTO $target_dto )
+	public function pack( $target_dto )
 	{
 		$rs = $this->getContext()->getResultSet();
 
@@ -55,7 +55,7 @@ class Charcoal_ResultContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  transform
 	 */
-	public function transform( Charcoal_ITransformer $transformer, Charcoal_DTO $target_dto, Charcoal_Properties $options = NULL )
+	public function transform( $transformer, $target_dto, $options = NULL )
 	{
 		$rs = $this->getContext()->getResultSet();
 

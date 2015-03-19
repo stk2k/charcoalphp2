@@ -18,7 +18,7 @@ class Charcoal_MemoryRegistry extends Charcoal_AbstractRegistry
 	 */
 	public function __construct( $sandbox )
 	{
-//		Charcoal_ParamTrait::checkSandbox( 1, $sandbox );
+//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
 		$this->sandbox = $sandbox;
 

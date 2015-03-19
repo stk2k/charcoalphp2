@@ -18,7 +18,7 @@ class Charcoal_Layout extends Charcoal_Object
 	 */
 	public function __construct( $attributes )
 	{
-//		Charcoal_ParamTrait::checkProperties( 1, $attributes );
+//		Charcoal_ParamTrait::validateProperties( 1, $attributes );
 
 		parent::__construct();
 

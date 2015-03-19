@@ -19,9 +19,9 @@ class Charcoal_QueryContext extends Charcoal_Object
 	/**
 	 *  Constructor
 	 */
-	public function __construct( Charcoal_SmartGateway $gw )
+	public function __construct( $gw )
 	{
-		Charcoal_ParamTrait::checkIsA( 1, 'Charcoal_SmartGateway', $gw );
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_SmartGateway', $gw );
 
 		$this->_gw = $gw;
 		$this->_criteria = new Charcoal_SQLCriteria();
@@ -48,6 +48,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function setQueryTarget( $query_target )
 	{
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		$this->_query_target = $query_target;
 	}
 
@@ -64,6 +65,7 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 */
 	public function setFields( $fields )
 	{
+		Charcoal_ParamTrait::validateString( 1, $fields );
 		$this->_fields = $fields;
 	}
 

@@ -86,10 +86,14 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	 */
 	public function execute( $sql );
 
-	/*
-	 *    プリペアドステートメントの発行
+	/**
+	 *    Prepare for statement and execute query
+	 *
+	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
+	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function prepareExecute( $sql, $params = NULL );
+	public function prepareExecute( $sql, $params = NULL, $driver_options = NULL );
 
 	/*
 	 *    実行結果件数取得
@@ -116,9 +120,12 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	 */
 	public function getLastInsertId();
 
-	/*
+	/**
 	 *   create recordset factory
+	 *   
+	 * @param integer $fetch_mode    fetch mode(defined at Charcoal_IRecordset::FETCHMODE_XXX)
+	 * @param array $options         fetch mode options
 	 */
-	public function createRecordsetFactory();
+	public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL );
 }
 
