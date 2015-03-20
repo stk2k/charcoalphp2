@@ -97,8 +97,6 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "nested_recordset_query":
 		case "nested_recordset_find":
 
-		return TRUE;
-
 			// truncate all tables
 			$this->gw->execute( "TRUNCATE blogs" );
 			$this->gw->execute( "TRUNCATE blog_category" );

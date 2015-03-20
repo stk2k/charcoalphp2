@@ -55,24 +55,16 @@ class Charcoal_ResourceLocator
 		}
 
 		// fill static values
-		foreach( self::$static_macro_defs as $macro_key => $macro_value ){
-			if ( strpos($value,$macro_key) !== FALSE ){
-				$value = str_replace( $macro_key, $macro_value, $value );
-			}
-		}
+		$value = strtr( $value, self::$static_macro_defs );
 
 		// set runtime values
 		$request_path = $env->get( '%REQUEST_PATH%' );
 		$runtime_macro_defs = array(
-				'%PROC_PATH_REAL%' => str_replace( ':', '/', substr($request_path,2) ),
+				'%REQUEST_PATH_REAL%' => str_replace( ':', '/', substr($request_path,2) ),
 			);
 
 		// fill runtime values
-		foreach( $runtime_macro_defs as $macro_key => $macro_value ){
-			if ( strpos($value,$macro_key) !== FALSE ){
-				$value = str_replace( $macro_key, $macro_value, $value );
-			}
-		}
+		$value = strtr( $value, $runtime_macro_defs );
 
 		return $value;
 	}

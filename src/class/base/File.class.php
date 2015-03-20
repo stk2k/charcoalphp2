@@ -28,11 +28,7 @@ class Charcoal_File extends Charcoal_Object
 
 		$path = $parent ? $parent->getPath() . '/' . us($file_name) : us($file_name);
 
-		while( stripos($path,'//') !== FALSE ){
-			$path = str_replace('//','/',$path);
-		}
-
-		$this->path = $path;
+		$this->path = str_replace('//','/',$path);
 	}
 
 	/**

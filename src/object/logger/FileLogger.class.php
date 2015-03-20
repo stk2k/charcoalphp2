@@ -110,7 +110,7 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 	/*
 	 * 出力
 	 */
-	protected function write( Charcoal_String $data )
+	protected function write( $data )
 	{
 		$ret = fwrite( $this->fp, us($data) );
 
@@ -130,7 +130,7 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
 		// フォーマット
 		$out = parent::formatMessage( $message )  . us($this->line_end);
 
-		$this->write( s($out) ); 
+		$this->write( $out ); 
 
 		$this->close();
 	}
