@@ -455,16 +455,16 @@ class Charcoal_Framework
 		// セッションハンドラの作成
 		//
 
-		$use_session = $profile->getBoolean( 'USE_SESSION', FALSE );
+		$use_session = b( $profile->getBoolean( 'USE_SESSION', FALSE ) );
 
 		if ( $use_session->isTrue() )
 		{
 			self::setHookStage( Charcoal_EnumCoreHookStage::BEFORE_SET_SESSION_HANDLER );
 
 			// セッションハンドラ名の取得
-			$session_handler_name = $profile->getString( 'SESSION_HANDLER_NAME' );
+			$session_handler_name = s( $profile->getString( 'SESSION_HANDLER_NAME' ) );
 
-			if ( !$session_handler_name->isEmpty() )
+			if ( $session_handler_name && !$session_handler_name->isEmpty() )
 			{
 				// セッションハンドラの作成
 				$session_handler = $sandbox->createObject( $session_handler_name, 'session_handler', array(), 'Charcoal_ISessionHandler' );

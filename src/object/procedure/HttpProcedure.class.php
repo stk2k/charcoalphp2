@@ -127,7 +127,7 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 		// ステートフルタスクの復帰
 		//
 
-		$use_session = $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' );
+		$use_session = b( $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' ) );
 
 		if ( $use_session->isTrue() ){
 //			log_info( "system", "procedure", 'ステートフルタスクの復元を開始します。' );

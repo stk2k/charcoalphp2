@@ -86,7 +86,7 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
 	public function getCookie( $name )
 	{
 		$name = us($name);
-		return $this->cookie->getValue( $name );
+		return $this->cookie ? $this->cookie->getValue( $name ) : NULL;
 	}
 
 	/*

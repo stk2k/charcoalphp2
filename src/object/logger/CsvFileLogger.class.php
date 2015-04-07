@@ -62,7 +62,7 @@ class Charcoal_CsvFileLogger extends Charcoal_FileLogger implements Charcoal_ILo
 		$str = str_replace( ",", "_", $str );
 		$str = str_replace( self::DQ, "'", $str );
 
-		if ( $this->_double_quoted && $this->_double_quoted->isTrue() ){
+		if ( $this->_double_quoted ){
 			$str = self::DQ . $str . self::DQ;
 		}
 

@@ -69,7 +69,7 @@ class FileSystemTestTask extends Charcoal_TestTask
 			return TRUE;
 
 		case "create_file":
-			$file = $fs->createFile( "test.txt", "707", "Hello, File System!" );
+			$file = $fs->createFile( "test.txt", "Hello, File System!" );
 			echo "created file: $file" . PHP_EOL;
 
 			return TRUE;

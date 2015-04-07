@@ -109,13 +109,10 @@ class Charcoal_CommandLineUtil
 
 		foreach( $argv as $arg ){
 			if ( strpos($arg,'-') === 0 ){
-				if ( $param ){
-					// add empty element
-					$p_array[ $param ] = '';
-					$param = NULL;
-				}
 				// ハイフンで始まる文字列はパラメータ名
 				$param = substr($arg,1);
+				// add empty element
+				$p_array[ $param ] = NULL;
 			}
 			elseif ( $param ){
 				// パラメータ名の後の文字列は値

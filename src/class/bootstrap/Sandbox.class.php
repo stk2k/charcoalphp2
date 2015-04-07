@@ -239,7 +239,7 @@ class Charcoal_Sandbox
 			// get class name from configure file
 			$class_name = $config->getString( 'class_name' );
 
-			if ( $class_name && !$class_name->isEmpty() ){
+			if ( $class_name && !empty($class_name) ){
 				$klass = new Charcoal_Class( $class_name );
 			}
 			else{
@@ -372,6 +372,10 @@ class Charcoal_Sandbox
 		// 設定プロバイダのインスタンス生成
 		$provider = $klass->newInstance();
 
+		// set properties
+		$provider->setSandbox( $this );
+
+		// configure object
 		$provider->setOptions( $options );
 
 		// 生成したインスタンスがIConfigProviderインタフェースを実装しているか確認

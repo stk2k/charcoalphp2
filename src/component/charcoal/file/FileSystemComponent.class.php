@@ -32,9 +32,9 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
 	{
 		parent::configure( $config );
 
-		$this->_base_dir    = $config->getString( s('base_dir'), s(CHARCOAL_BASE_DIR) )->getValue();
+		$this->_base_dir    = $config->getString( 'base_dir', CHARCOAL_BASE_DIR, TRUE );
 
-		$this->_base_dir_obj    = new Charcoal_File( s($this->_base_dir) );
+		$this->_base_dir_obj    = new Charcoal_File( $this->_base_dir );
 	}
 
 	/*
