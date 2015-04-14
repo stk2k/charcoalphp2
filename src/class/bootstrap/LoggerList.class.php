@@ -23,6 +23,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 	private $sandbox;
 	private $options;
 	private $init;
+	private $init_procedure;
 	private $log_enabled;
 	private $log_level;
 	private $log_no_buffer;
@@ -113,8 +114,10 @@ class Charcoal_LoggerList extends Charcoal_Object
 					self::register( $logger_name, $logger );
 				}
 			}
-
 		}
+
+		// initialized by procedure
+		$this->init_procedure = true;
 	} 
 
 	/**
@@ -278,7 +281,7 @@ class Charcoal_LoggerList extends Charcoal_Object
 			$msg = new Charcoal_LogMessage( $level, $message, $tag, $file, $line, $logger_names );
 
 			// get LOG_NO_BUFFER flag
-			if ( $this->init && $this->log_no_buffer ){
+			if ( $this->init && $this->init_procedure && $this->log_no_buffer ){
 				// flush immediately
 				$this->buffer[] = $msg;
 				self::flush();
