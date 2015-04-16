@@ -94,12 +94,12 @@ function ad( $array, $options = NULL, $return = FALSE, $max_depth = 30 )
  *	stringをStringオブジェクトに変換
  **/
 
-function s( $value )
+function s( $value, $encoding = NULL )
 {
 	if ( $value instanceof Charcoal_String ){
 		return $value;
 	}
-	return $value !== NULL ? new Charcoal_String( $value ) : Charcoal_String::defaultValue();
+	return $value !== NULL ? new Charcoal_String( $value, $encoding ) : Charcoal_String::defaultValue( $encoding );
 }
 
 /**
@@ -260,6 +260,11 @@ if ( !function_exists('spl_object_hash') ){
 
 function _throw( Exception $e, $log_error = TRUE )
 {
+	if ( $e instanceof Charcoal_BusinessException ){
+		throw $e;
+		return;
+	}
+
 	list( $file, $line ) = Charcoal_System::caller();
 	$clazz = get_class($e);
 	$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
@@ -283,6 +288,10 @@ function _throw( Exception $e, $log_error = TRUE )
 // 例外をキャッチ
 function _catch( Exception $e, $log_error = TRUE )
 {
+	if ( $e instanceof Charcoal_BusinessException ){
+		return;
+	}
+
 	list( $file, $line ) = Charcoal_System::caller();
 	$clazz = get_class($e);
 	$id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);

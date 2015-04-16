@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_HttpStatusException extends Charcoal_RuntimeException
+class Charcoal_HttpStatusException extends Charcoal_BusinessException
 {
 	private $status;
 

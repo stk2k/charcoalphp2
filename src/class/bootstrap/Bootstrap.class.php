@@ -228,17 +228,18 @@ class Charcoal_Bootstrap
 				'Charcoal_Sandbox' 						=> 'class/bootstrap',
 
 				// Class loaders
-				'Charcoal_FrameworkClassLoader' 			=> 'object/class_loader',
+				'Charcoal_FrameworkClassLoader' 		=> 'object/class_loader',
 				'Charcoal_UserClassLoader'				=> 'object/class_loader',
 
 				// exception handler classes
-				'Charcoal_AbstractExceptionHandler'					=> 'object/exception_handler',
+				'Charcoal_AbstractExceptionHandler'				=> 'object/exception_handler',
+				'Charcoal_HttpErrorHeaderExceptionHandler'		=> 'object/exception_handler',
 				'Charcoal_HttpErrorDocumentExceptionHandler'	=> 'object/exception_handler',
 				'Charcoal_HtmlFileOutputExceptionHandler'		=> 'object/exception_handler',
 				'Charcoal_ConsoleOutputExceptionHandler'		=> 'object/exception_handler',
 
 				// debugtrace renderer classes
-				'Charcoal_AbstractDebugtraceRenderer'			=> 'object/debugtrace_renderer',
+				'Charcoal_AbstractDebugtraceRenderer'		=> 'object/debugtrace_renderer',
 				'Charcoal_HtmlDebugtraceRenderer'			=> 'object/debugtrace_renderer',
 				'Charcoal_ConsoleDebugtraceRenderer'		=> 'object/debugtrace_renderer',
 				'Charcoal_LogDebugtraceRenderer'			=> 'object/debugtrace_renderer',

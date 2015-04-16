@@ -160,179 +160,6 @@ HTML_HEADER;
 	}
 
 	/**
-	 * check PHP core interfaces
-	 */
-	private static function _isCoreInterfaces( $class_name )
-	{
-		$core_classes = array(
-				"ArrayAccess",
-				"Countable",
-				"Iterator",
-				"IteratorAggregate",
-				"OuterIterator",
-				"RecursiveIterator",
-				"Reflector",
-				"SeekableIterator",
-				"Serializable",
-				"SplObserver",
-				"SplSubject",
-				"Traversable",
-			);
-
-		return in_array($class_name,$core_classes);
-	}
-
-	/**
-	 * check PHP core class
-	 */
-	private static function _isCoreClass( $class_name )
-	{
-		$core_classes = array(
-				"stdClass",
-				"Exception",
-				"ErrorException",
-				"Closure",
-				"COMPersistHelper",
-				"com_exception",
-				"com_safearray_proxy",
-				"variant",
-				"com",
-				"dotnet",
-				"DateTime",
-				"DateTimeZone",
-				"DateInterval",
-				"DatePeriod",
-				"LogicException",
-				"BadFunctionCallException",
-				"BadMethodCallException",
-				"DomainException",
-				"InvalidArgumentException",
-				"LengthException",
-				"OutOfRangeException",
-				"RuntimeException",
-				"OutOfBoundsException",
-				"OverflowException",
-				"RangeException",
-				"UnderflowException",
-				"UnexpectedValueException",
-				"RecursiveIteratorIterator",
-				"IteratorIterator",
-				"FilterIterator",
-				"RecursiveFilterIterator",
-				"ParentIterator",
-				"LimitIterator",
-				"CachingIterator",
-				"RecursiveCachingIterator",
-				"NoRewindIterator",
-				"AppendIterator",
-				"InfiniteIterator",
-				"RegexIterator",
-				"RecursiveRegexIterator",
-				"EmptyIterator",
-				"RecursiveTreeIterator",
-				"ArrayObject",
-				"ArrayIterator",
-				"RecursiveArrayIterator",
-				"SplFileInfo",
-				"DirectoryIterator",
-				"FilesystemIterator",
-				"RecursiveDirectoryIterator",
-				"GlobIterator",
-				"SplFileObject",
-				"SplTempFileObject",
-				"SplDoublyLinkedList",
-				"SplQueue",
-				"SplStack",
-				"SplHeap",
-				"SplMinHeap",
-				"SplMaxHeap",
-				"SplPriorityQueue",
-				"SplFixedArray",
-				"SplObjectStorage",
-				"MultipleIterator",
-				"ReflectionException",
-				"Reflection",
-				"ReflectionFunctionAbstract",
-				"ReflectionFunction",
-				"ReflectionParameter",
-				"ReflectionMethod",
-				"ReflectionClass",
-				"ReflectionObject",
-				"ReflectionProperty",
-				"ReflectionExtension",
-				"__PHP_Incomplete_Class",
-				"php_user_filter",
-				"Directory",
-				"ZipArchive",
-				"LibXMLError",
-				"DOMException",
-				"DOMStringList",
-				"DOMNameList",
-				"DOMImplementationList",
-				"DOMImplementationSource",
-				"DOMImplementation",
-				"DOMNode",
-				"DOMNameSpaceNode",
-				"DOMDocumentFragment",
-				"DOMDocument",
-				"DOMNodeList",
-				"DOMNamedNodeMap",
-				"DOMCharacterData",
-				"DOMAttr",
-				"DOMElement",
-				"DOMText",
-				"DOMComment",
-				"DOMTypeinfo",
-				"DOMUserDataHandler",
-				"DOMDomError",
-				"DOMErrorHandler",
-				"DOMLocator",
-				"DOMConfiguration",
-				"DOMCdataSection",
-				"DOMDocumentType",
-				"DOMNotation",
-				"DOMEntity",
-				"DOMEntityReference",
-				"DOMProcessingInstruction",
-				"DOMStringExtend",
-				"DOMXPath",
-				"PDOException",
-				"PDO",
-				"PDOStatement",
-				"PDORow",
-				"SimpleXMLElement",
-				"SimpleXMLIterator",
-				"XMLReader",
-				"XMLWriter",
-				"PharException",
-				"Phar",
-				"PharData",
-				"PharFileInfo",
-				"mysqli_sql_exception",
-				"mysqli_driver",
-				"mysqli",
-				"mysqli_warning",
-				"mysqli_result",
-				"mysqli_stmt",
-				"SoapClient",
-				"SoapVar",
-				"SoapServer",
-				"SoapFault",
-				"SoapParam",
-				"SoapHeader",
-				"SQLiteDatabase",
-				"SQLiteResult",
-				"SQLiteUnbuffered",
-				"SQLiteException",
-				"SQLite3",
-				"SQLite3Stmt",
-				"SQLite3Result",
-			);
-
-		return in_array($class_name,$core_classes);
-	}
-
-	/**
 	 * Get php.ini settings
 	 */
 	private static function _getPhpValue( $key )
@@ -566,9 +393,7 @@ HTML_HEADER;
 		$interfaces = NULL;
 		foreach( $declared_interfaces as $interface )
 		{
-			if ( !self::_isCoreInterfaces($interface) ){
-				$interfaces[] = $interface;
-			}
+			$interfaces[] = $interface;
 		}
 		sort($interfaces);
 
@@ -588,14 +413,41 @@ HTML_HEADER;
 		}
 		$html .= '</table>' . PHP_EOL;
 
+		// output defined functions
+		$defined_functions = get_defined_functions();
+		$functions = NULL;
+		foreach( $defined_functions['internal'] as $function )
+		{
+			$functions[] = '[core]' . $function;
+		}
+		foreach( $defined_functions['user'] as $function )
+		{
+			$functions[] = '[user]' . $function;
+		}
+		sort($functions);
+
+		$html .= '<h2><div class="value">Declared Functions&nbsp;&nbsp;<a href="#" onclick="expand(\'defined_functions\');">(' . count($functions) . ')</a></div></h2>' . PHP_EOL;
+
+		$html .= '' . PHP_EOL;
+		$html .= '<table cellspacing="0" cellpadding="0" id="defined_functions" style="display:none">' . PHP_EOL;
+		$no = 1;
+		foreach( $functions as $function )
+		{
+			$html .= '<tr>' . PHP_EOL;
+			$html .= '  <th class="no">' . $no . '</th>' . PHP_EOL;
+			$html .= '  <td class="title"><span class="value">' . $function . '</span></td>' . PHP_EOL;
+			$html .= '</tr>' . PHP_EOL;
+
+			$no ++;
+		}
+		$html .= '</table>' . PHP_EOL;
+
 		// output defined classes
 		$declared_klasses = get_declared_classes();
 		$klasses = NULL;
 		foreach( $declared_klasses as $klass )
 		{
-			if ( !self::_isCoreClass($klass) ){
-				$klasses[] = $klass;
-			}
+			$klasses[] = $klass;
 		}
 		sort($klasses);
 

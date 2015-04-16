@@ -14,13 +14,20 @@ class Charcoal_String extends Charcoal_Scalar
 	const DEFAULT_VALUE = '';
 
 	private $value;
+	private $is_mb;
+	private $mb_encoding;
 
 	/**
 	 *	Constructor
 	 */
-	public function __construct( $value = self::DEFAULT_VALUE )
+	public function __construct( $value = self::DEFAULT_VALUE, $encoding = NULL )
 	{
 		parent::__construct();
+
+		$this->is_mb = extension_loaded('mbstring');
+		if ( $this->is_mb ){
+			$this->mb_encoding = $encoding ? $encoding : mb_internal_encoding();
+		}
 
 		if ( is_string($value) ){
 			$this->value = $value;
@@ -72,13 +79,33 @@ class Charcoal_String extends Charcoal_Scalar
 	}
 
 	/**
+	 *	get character encoding
+	 *
+	 * @param string $encoding       chracter encoding
+	 */
+	public function getEncoding()
+	{
+		return $this->mb_encoding;
+	}
+
+	/**
+	 *	set character encoding
+	 *
+	 * @param string $encoding       chracter encoding
+	 */
+	public function setEncoding( $encoding )
+	{
+		$this->mb_encoding = $encoding;
+	}
+
+	/**
 	 *	get string length
 	 *
 	 * @return integer       length of the string or -1 if fails
 	 */
 	public function length()
 	{
-		return strlen($this->value);
+		return $this->is_mb ? mb_strlen($this->value, $this->mb_encoding) : strlen($this->value);
 	}
 
 	/**

@@ -263,16 +263,48 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 *
 	 * @param string $key             Key string to get
 	 * @param string $default_value   default value
+	 * @param string $encoding        charcter encoding
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL )
+	public function getString( $key, $default_value = NULL, $encoding = NULL )
 	{
 //		Charcoal_ParamTrait::validateString( 1, $key );
 //		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
 		$key = us($key);
-		return Charcoal_ArrayTrait::getString( $this->values, $key, $default_value );
+		return Charcoal_ArrayTrait::getString( $this->values, $key, $default_value, $encoding );
+	}
+
+	/**
+	 * Get as json value
+	 *
+	 * @param string $key             key string for hash map
+	 * @param string $default_value   default value
+	 * @param string $encoding        charcter encoding
+	 *
+	 * @return string
+	 */
+	public function getJson( $key, $default_value = NULL, $encoding = NULL )
+	{
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
+
+		$key = us($key);
+		$value = self::getString( $key, $default_value, $encoding );
+
+//		log_debug( "debug", "caller: " . print_r(Charcoal_System::caller(),true) );
+//		log_debug( "debug", "json_decode: $value" );
+
+		$decoded = json_decode( us($value), true );
+
+//		log_debug( "debug", "decoded: " . print_r($decoded,true) );
+
+		if ( $decoded === NULL ){
+			_throw( new Charcoal_JsonDecodingException($value) );
+		}
+
+		return $decoded;
 	}
 
 	/**

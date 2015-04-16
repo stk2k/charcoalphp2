@@ -17,16 +17,17 @@ class Charcoal_ArrayTrait
 	 * @param array $data             array data
 	 * @param string $key             key string for hash map
 	 * @param string $default_value   default value
+	 * @param string $encoding        charcter encoding
 	 * 
 	 * @return string|NULL
 	 */
-	public static function getString( $data, $key, $default_value = NULL )
+	public static function getString( $data, $key, $default_value = NULL, $encoding = NULL )
 	{
 		$value = isset( $data[$key] ) ? $data[$key] : NULL;
 
 		// return default value if the element is null
 		if ( NULL === $value ){
-			return NULL === $default_value ? NULL : s($default_value);
+			return NULL === $default_value ? NULL : s($default_value, $encoding);
 		}
 
 		// throws exception if the element's type is not match for required type
@@ -34,7 +35,7 @@ class Charcoal_ArrayTrait
 			_throw( new Charcoal_StringFormatException( $value ) );
 		}
 
-		return s($value);
+		return s($value, $encoding);
 	}
 
 	/**

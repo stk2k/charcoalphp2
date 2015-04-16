@@ -118,6 +118,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_AnnotaionException'					=> 'exception',
 				'Charcoal_BadExitCodeException'					=> 'exception',
 				'Charcoal_BenchmarkException'					=> 'exception',
+				'Charcoal_BusinessException'					=> 'exception',
 				'Charcoal_CacheDriverException'					=> 'exception',
 				'Charcoal_ComponentConfigException'				=> 'exception',
 				'Charcoal_ComponentNotRegisteredException'		=> 'exception',

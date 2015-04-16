@@ -205,15 +205,16 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 	 *
 	 * @param string $key             Key string to get
 	 * @param string $default_value   default value
+	 * @param string $encoding        charcter encoding
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL )
+	public function getString( $key, $default_value = NULL, $encoding = NULL )
 	{
 //		Charcoal_ParamTrait::validateString( 1, $key );
 //		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
-		return Charcoal_ArrayTrait::getString( $this->values, $key, $default_value );
+		return Charcoal_ArrayTrait::getString( $this->values, $key, $default_value, $encoding );
 	}
 
 	/**

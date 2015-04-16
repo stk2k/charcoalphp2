@@ -140,59 +140,6 @@ class Charcoal_Framework
 		return self::$hook_stage;
 	}
 
-	/*
-	 *	HTTPエラードキュメントを表示
-	 */
-	public static function showHttpErrorDocument( $status_code )
-	{
-//		Charcoal_ParamTrait::validateInteger( 1, $status_code );
-
-		$status_code = ui($status_code);
-
-		// HTML
-		$html_file = $status_code . '.html';
-
-		// アプリケーション以下のerror_docを検索
-		$html_file_path = Charcoal_ResourceLocator::getApplicationPath( 'error_doc', $html_file );
-		if ( !is_file($html_file_path) ){
-//			log_info( 'system,debug,error',"エラードキュメント($html_file_path)は存在しません。", 'framework');
-
-			// プロジェクト以下のerror_docを検索
-			$html_file_path = Charcoal_ResourceLocator::getProjectPath( 'error_doc' , $html_file );
-			if ( !is_file($html_file_path) ){
-//				log_debug( 'system,debug,error',"エラードキュメント($html_file_path)は存在しません。", 'framework');
-
-				// フレームワーク以下のerror_docを検索
-				$html_file_path = Charcoal_ResourceLocator::getFrameworkPath( 'error_doc', $html_file );
-				if ( !is_file($html_file_path) ){
-//					log_warning( 'system,debug,error',"エラードキュメント($html_file_path)は存在しません。", 'framework');
-				}
-			}
-		}
-
-		// 読み込みと表示
-		if ( is_file($html_file_path) ){
-			readfile( $html_file_path );
-			print "<br>";
-		}
-
-		// ヘッダ文字列
-		$status_message_file = Charcoal_ResourceLocator::getFrameworkPath( 'preset' , 'status_messages.ini' );
-		if ( !is_file($status_message_file) ){
-//			log_warning( 'system,debug,error', 'framework',"ステータスメッセージファイル($status_message_file)が存在しません。");
-		}
-		$status_messages = parse_ini_file($status_message_file,FALSE);
-		if ( FALSE === $status_messages ){
-//			log_warning( 'system,debug,error', 'framework',"ステータスメッセージファイル($status_message_file)の読み込みに失敗しました。");
-		}
-		$header_msg = isset($status_messages[$status_code]) ? $status_messages[$status_code] : '';
-
-		// ヘッダ出力
-		header( "HTTP/1.0 $status_code $header_msg", true, $status_code );
-
-		log_error( 'system,debug,error', "HTTP/1.0 $status_code $header_msg", 'framework');
-	}
-
 	/**
 	 *	get version info about framework
 	 *	
@@ -341,6 +288,9 @@ class Charcoal_Framework
 			_catch( $ex );
 			_throw( $ex );
 		}
+
+		$is_debug = $profile->getBoolean( 'DEBUG_MODE', false );
+		$sandbox->setDebug( ub($is_debug) );
 
 		//=======================================
 		// Start bootstrap
@@ -688,7 +638,7 @@ class Charcoal_Framework
 				switch( CHARCOAL_RUNMODE ){
 				// ランモードがhttpの時は404エラー
 				case 'http':
-					_throw( new Charcoal_HttpStatusException( 404, $ex ) );
+					throw( new Charcoal_HttpStatusException( 404, $ex ) );
 					break;
 				// それ以外の場合はリスロー
 				default:
@@ -713,7 +663,7 @@ class Charcoal_Framework
 			$ret = self::handleException( $e );
 
 			// display debugtrace
-			if ( $ret === NULL || $ret === FALSE || ($ret instanceof Charcoal_Boolean) && $ret->isFalse() || $sandbox->isDebug() ){
+			if ( $ret === NULL || $ret === FALSE || ($ret instanceof Charcoal_Boolean) && $ret->isFalse() ){
 				self::renderExceptionFinally( $e );
 			}
 

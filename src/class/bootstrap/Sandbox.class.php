@@ -79,6 +79,16 @@ class Charcoal_Sandbox
 	}
 
 	/**
+	 * set debug flag
+	 * 
+	 * @param bool $debug         TRUE if debug flag is on, otherwise FALSE
+	 */
+	public function setDebug( $debug )
+	{
+		$this->debug = $debug;
+	}
+
+	/**
 	 * returns the sanbox is loaded
 	 * 
 	 * @return bool         TRUE if sandbox is loaded

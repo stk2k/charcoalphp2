@@ -58,17 +58,18 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 * @param string $key             key string for hash map
 	 * @param string $default_value   default value
 	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 * @param string $encoding        charcter encoding
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
+	public function getString( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
 		Charcoal_ParamTrait::validateString( 1, $key );
 		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
-		$value = parent::getString( $key, $default_value );
+		$value = parent::getString( $key, $default_value, $encoding );
 
 		return $process_macro ? Charcoal_ResourceLocator::processMacro( $this->env, $value ) : $value;
 	}
@@ -79,17 +80,18 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 * @param string $key             key string for hash map
 	 * @param string $default_value   default value
 	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 * @param string $encoding        charcter encoding
 	 *
 	 * @return string
 	 */
-	public function getJson( $key, $default_value = NULL, $process_macro = FALSE )
+	public function getJson( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
 		Charcoal_ParamTrait::validateString( 1, $key );
 		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
-		$value = parent::getString( $key, $default_value );
+		$value = parent::getString( $key, $default_value, $encoding );
 
 		log_debug( "debug", "caller: " . print_r(Charcoal_System::caller(),true) );
 		log_debug( "debug", "json_decode: $value" );
