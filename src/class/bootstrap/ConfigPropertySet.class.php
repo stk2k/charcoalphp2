@@ -64,9 +64,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getString( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
-		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value, $encoding );
@@ -86,9 +86,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getJson( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
-		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value, $encoding );
@@ -118,9 +118,9 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateVector( 2, $default_value, TRUE );
-		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateVector( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
 
 		$key = us($key);
 		$items = parent::getArray( $key, $default_value );
@@ -151,8 +151,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateBoolean( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateBoolean( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getBoolean( $key, $default_value );
@@ -168,8 +168,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateInteger( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateInteger( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getInteger( $key, $default_value );
@@ -185,8 +185,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validatFloat( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validatFloat( 2, $default_value, TRUE );
 
 		$key = us($key);
 		return parent::getFloat( $key, $default_value );
@@ -202,8 +202,8 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 	 */
 	public function getSize( $key, $default_value = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 2, $default_value, TRUE );
 
 		$key = us($key);
 		$value = parent::getString( $key, $default_value );

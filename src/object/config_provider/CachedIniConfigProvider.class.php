@@ -98,6 +98,7 @@ class Charcoal_CachedIniConfigProvider extends Charcoal_IniConfigProvider
 		if ( $fp ){
 			if ( flock($fp, LOCK_EX) ){
 				fwrite( $fp, $contents );
+				fflush( $fp );
 				flock($fp, LOCK_UN);
 			}
 			$ret = fclose($fp);

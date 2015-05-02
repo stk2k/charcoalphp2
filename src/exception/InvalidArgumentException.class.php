@@ -11,12 +11,11 @@
 
 class Charcoal_InvalidArgumentException extends Charcoal_RuntimeException
 {
-	public function __construct( $argument, $prev = NULL )
+	public function __construct( $arg, $prev = NULL )
 	{
-		Charcoal_ParamTrait::validateString( 1, $argument );
-		Charcoal_ParamTrait::validateException( 2, $prev, TRUE );
+		$expr = method_exists($arg,'_toString') ? "$arg" : gettype($arg) . '#' . spl_object_hash($arg);
 
-		parent::__construct( "Invalid argument: $argument", $prev );
+		parent::__construct( "Invalid argument: $expr", $prev );
 	}
 
 }

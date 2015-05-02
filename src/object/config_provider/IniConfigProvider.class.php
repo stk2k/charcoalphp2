@@ -33,14 +33,12 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	 *  load config
 	 *
 	 * @param  string|Charcoal_String $key                  config key
-	 * @param  Charcoal_RegistryAccessLog $access_log       registry access log
 	 *
 	 * @return mixed   configure data
 	 */
-	public function loadConfig( $key, $access_log = NULL )
+	public function loadConfig( $key )
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
-		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_RegistryAccessLog', $access_log, TRUE );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$source = $key . '.ini';
 
@@ -51,9 +49,6 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 			if ( $is_debug ){
 				print "ini file[$source] does not exist." . eol();
 				log_warning( "system, debug, config", "config", "ini file[$source] does not exist." );
-			}
-			if ( $access_log ){
-				$access_log->addLog($source . '[**NOT FOUND**]', Charcoal_EnumRegistryAccessLogResult::E_NOT_FOUND );
 			}
 		}
 		else{
@@ -69,14 +64,6 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 				}
 				else{
 					log_debug( "system, debug, config", "config", "read ini file[$source]:" . print_r($result,true) );
-				}
-			}
-			if ( $access_log ){
-				if ( $result === FALSE ){
-					$access_log->addLog($source . '[**FAILED**]', Charcoal_EnumRegistryAccessLogResult::E_FAILED );
-				}
-				else{
-					$access_log->addLog($source . '[SUCCESS]', Charcoal_EnumRegistryAccessLogResult::SUCCESS );
 				}
 			}
 		}

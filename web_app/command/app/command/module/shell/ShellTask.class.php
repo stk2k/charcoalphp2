@@ -12,31 +12,6 @@
 class ShellTask extends Charcoal_Task
 {
 	/**
-	 * execute exception handlers
-	 * 
-	 * @param Exception $e     exception to handle
-	 * 
-	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
-	 */
-	public function handleException( $e )
-	{
-		if ( $e instanceof Charcoal_CreateObjectException ){
-			$path = $e->getObjectPath();
-			echo 'illegal object path: ' . $path . PHP_EOL;
-		}
-		else if ( $e instanceof Charcoal_ObjectPathFormatException ){
-			$path = $e->getObjectPath();
-			echo 'bad object path: ' . $path . PHP_EOL;
-		}
-		else if ( $e instanceof Charcoal_ModuleLoaderException ){
-			$path = $e->getModulePath();
-			echo 'bad module path: ' . $path . PHP_EOL;
-		}
-
-		return TRUE;
-	}
-
-	/**
 	 * process event
 	 *
 	 * @param Charcoal_IEventContext $context   event context
@@ -59,7 +34,10 @@ class ShellTask extends Charcoal_Task
 
 		$context->loadModule( $target_module );
 
-		return 'shell_command';
+		$event = $context->createEvent( 'shell_command' );
+		$context->pushEvent( $event );
+
+		return b(true);
 	}
 }
 

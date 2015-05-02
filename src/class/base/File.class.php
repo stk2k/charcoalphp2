@@ -19,7 +19,7 @@ class Charcoal_File extends Charcoal_Object
 	 * @param Charcoal_String $file_name    Name of the file or directory.
 	 * @param Charcoal_File $parent    Parent object
 	 */
-	public function __construct( $file_name, $parent = NULL )
+	public function __construct( $file_name, Charcoal_File $parent = NULL )
 	{
 //		Charcoal_ParamTrait::validateString( 1, $file_name );
 //		Charcoal_ParamTrait::validateFile( 2, $parent, TRUE );

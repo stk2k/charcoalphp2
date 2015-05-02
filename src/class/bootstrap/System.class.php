@@ -572,6 +572,7 @@ class Charcoal_System
 			$options = array();
 		}
 		$default_options = array(
+				'output' => defined('CHARCOAL_DEBUG_OUTPUT') ? CHARCOAL_DEBUG_OUTPUT : 'shell',
 				'title' => 'system dump',
 				'font_size' => 11,
 				'max_string_length' => self::DUMP_MAX_LENGTH,
@@ -579,6 +580,7 @@ class Charcoal_System
 			);
 		$options = array_merge( $default_options, $options );
 
+		$output            = $options['output'];
 		$title             = $options['title'];
 		$font_size         = $options['font_size'];
 		$max_string_length = $options['max_string_length'];
@@ -588,7 +590,7 @@ class Charcoal_System
 		$recursion = array();
 		self::_dump( '-', $var, 0, $max_string_length, $lines, $max_depth, $recursion );
 
-		switch( CHARCOAL_DEBUG_OUTPUT )
+		switch( $output )
 		{
 		case "html":
 			switch( $type ){

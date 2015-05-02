@@ -360,6 +360,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		{
 			_catch( $e );
 
+			log_error( 'data_source,sql,debug', __METHOD__ . " failed: DSN=[$DSN]", __METHOD__ );
+
 			_throw( new Charcoal_DBConnectException( __METHOD__ . " failed: DSN=[$DSN]", $e ) );
 		}
 
@@ -513,6 +515,9 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			$msg  = __METHOD__ . ' failed:';
 			$msg .= ' [SQL]' . $sql;
 			$msg .= ' [params]' . ($params ? v($params)->join(',',TRUE) : '');
+			$msg .= ' [message]' . $e->getMessage();
+
+			log_error( 'data_source,sql,debug', $msg, __METHOD__ );
 
 			_throw( new Charcoal_DBDataSourceException( $msg, $e ) );
 		}

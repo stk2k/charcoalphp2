@@ -646,6 +646,21 @@ class Charcoal_Framework
 					break;
 				}
 			}
+			catch( Exception $ex )
+			{
+				_catch( $ex );
+
+				switch( CHARCOAL_RUNMODE ){
+				// ランモードがhttpの時は500エラー
+				case 'http':
+					throw( new Charcoal_HttpStatusException( 500, $ex ) );
+					break;
+				// それ以外の場合はリスロー
+				default:
+					_throw( $ex );
+					break;
+				}
+			}
 		}
 		catch( Charcoal_ProfileLoadingException $e )
 		{
@@ -663,25 +678,11 @@ class Charcoal_Framework
 			$ret = self::handleException( $e );
 
 			// display debugtrace
-			if ( $ret === NULL || $ret === FALSE || ($ret instanceof Charcoal_Boolean) && $ret->isFalse() ){
-				self::renderExceptionFinally( $e );
+			if ( $debug || $sandbox->isDebug() ){
+				self::$debugtrace_renderers->render( $e );
 			}
 
 			self::$loggers->flush();
-		}
-
-		// output registry access logs to log file
-		$registry_access_log = $sandbox->getRegistryAccessLog();
-		if ( $registry_access_log ){
-			$logs = $registry_access_log->getAllLogs();
-			if ( is_array($logs) ){
-				foreach( $logs as $log ){
-					$message = isset($log['log']) ? $log['log'] : NULL;
-					if ( $message ){
-						log_debug( 'registry', $message, 'registry_access' );
-					}
-				}
-			}
 		}
 
 		// finally process
@@ -696,36 +697,5 @@ class Charcoal_Framework
 
 		self::$loggers->terminate();
 	}
-
-
-	/**
-	 *	Render not handled exception
-	 */
-	public static function renderExceptionFinally( $e )
-	{
-		// Render exception
-		$rendered = self::$debugtrace_renderers->render( $e );
-
-		// Show something if debugtrace rendering failed
-		if ( !$rendered || $rendered->isFalse() ){
-			log_debug( 'system, debug','debugtrace was not rendered.', 'framework' );
-			switch( CHARCOAL_RUNMODE ){
-			case 'http':
-				if ( $e instanceof Charcoal_HttpStatusException ){
-					$status = $e->getStatusCode();
-					self::showHttpErrorDocument( $status );
-				}
-				else{
-					self::showHttpErrorDocument( 500 );
-				}
-				break;
-			case 'shell':
-			default:
-				echo 'Exception was not handled: ' . $e;
-				break;
-			}
-		}
-	}
-
 }
 

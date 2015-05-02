@@ -21,7 +21,7 @@ class Charcoal_CharcoalException extends Exception
 		Charcoal_ParamTrait::validateString( 1, $message );
 		Charcoal_ParamTrait::validateException( 2, $prev, TRUE );
 
-		parent::__construct( us($message), 0 );
+		parent::__construct( us($message), 0, $prev );
 
 		$this->backtrace = debug_backtrace();
 		$this->previous = $prev;

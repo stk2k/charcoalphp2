@@ -74,13 +74,14 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
 
 		$this->init();
 
-		$handled = b(FALSE);
 		foreach( $this->handlers as $handler ){
 			log_info( "system,debug,error", "calling exception handler[$handler].", "exception" );
-				$ret = $handler->handleException( $e );
-			$handled->operateOr( $ret );
+			$ret = $handler->handleException( $e );
+			if ( b($ret)->isTrue() ){
+				return true;
+			}
 		}
 
-		return $handled;
+		return false;
 	}
 }

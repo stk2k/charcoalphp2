@@ -159,7 +159,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetGet($key)
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return isset($this->values[ $key ]) ? $this->values[ $key ] : NULL;
@@ -170,7 +170,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetSet($key, $value)
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		$this->values[ $key ] = $value;
@@ -181,7 +181,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetExists($key)
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		return isset($this->values[$key]);
@@ -192,7 +192,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implemen
 	 */
 	public function offsetUnset($key)
 	{
-		Charcoal_ParamTrait::validateString( 1, $key );
+//		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
 		unset($this->values[$key]);

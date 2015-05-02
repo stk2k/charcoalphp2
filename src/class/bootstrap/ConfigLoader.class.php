@@ -80,6 +80,7 @@ class Charcoal_ConfigLoader
 		// read under modules directory(current object path)
 		$config_name = strlen($real_path) > 0 ? $real_path . '/' . $config_basename : $config_basename;
 		
+		$config_target_list[] = $dir_framework_module . $config_name;
 		$config_target_list[] = $dir_project_module . $config_name;
 		$config_target_list[] = $dir_application_module . $config_name;
 

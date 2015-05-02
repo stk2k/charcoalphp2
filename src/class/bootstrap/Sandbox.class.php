@@ -20,7 +20,6 @@ class Charcoal_Sandbox
 	private $codebase;
 	private $container;
 	private $environment;
-	private $registry_access_log;
 
 	private $profile;
 	private $debug;
@@ -47,8 +46,6 @@ class Charcoal_Sandbox
 		$this->environment = isset($config['environment'])? $config['environment'] : $this->getDefaultEnvironment();
 
 		$this->profile = isset($config['profile'])? $config['profile'] : new Charcoal_SandboxProfile( $this );
-
-		$this->registry_access_log = new Charcoal_RegistryAccessLog( $this );
 	}
 
 	/**
@@ -188,16 +185,6 @@ class Charcoal_Sandbox
 			_throw( new Charcoal_SandboxNotLoadedException( $file, $line ) );
 		}
 		return $this->profile;
-	}
-
-	/**
-	 * get registry access log object
-	 * 
-	 * @return Charcoal_RegistryAccessLog         registry access log object
-	 */
-	public function getRegistryAccessLog()
-	{
-		return $this->registry_access_log;
 	}
 
 	/*

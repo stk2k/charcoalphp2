@@ -48,6 +48,28 @@ class Charcoal_FileSystemUtil
 		$info = pathinfo( us($path_text) );
 		return isset($info['extension']) ? $info['extension'] : '';
 	}
+
+	/**
+	 * Output file
+	 * 
+	 * @param Charcoal_File $file       path to output
+	 * @param array $lines              each line of the file to output
+	 */
+	public static function outputFile( Charcoal_File $file, array $lines )
+	{
+		$file_name = $file->getPath();
+		$fp = fopen($file_name,"w");
+		if ( $fp === FALSE ){
+			_throw( new Charcoal_FileOpenException($file) );
+		}
+		foreach( $lines as $line ){
+			$res = fwrite( $fp, $line . PHP_EOL );
+			if ( $res === FALSE ){
+				_throw( new Charcoal_FileOutputException($file) );
+			}
+		}
+		fclose($fp);
+	}
 }
 
 

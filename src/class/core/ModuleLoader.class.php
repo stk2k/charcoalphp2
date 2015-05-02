@@ -77,13 +77,13 @@ class Charcoal_ModuleLoader
 				foreach( $required_modules as $module_name ){
 					if ( strlen($module_name) === 0 )    continue;
 
-					self::loadModule( $module_name, $task_manager );
+					self::loadModule( $sandbox, $module_name, $task_manager );
 				}
 			}
 
 			self::$loaded_paths[$module_path] = $module_path;
 
-			log_debug( 'debug, event', "loaded module: $module_path" );
+			log_debug( 'debug, event, module', "loaded module: $module_path" );
 
 		}
 		catch( Exception $ex ){

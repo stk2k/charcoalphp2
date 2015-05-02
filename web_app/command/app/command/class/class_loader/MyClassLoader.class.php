@@ -9,6 +9,8 @@ class MyClassLoader extends Charcoal_UserClassLoader implements Charcoal_IClassL
 		return array(
 				// constant classes
 				// core classes
+				// base classes
+				'CommandTaskBase' => 'class/base',
 				// layout manager classes
 				// service classes
 				// events classes
@@ -19,6 +21,7 @@ class MyClassLoader extends Charcoal_UserClassLoader implements Charcoal_IClassL
 				// table model classes
 				// exception classes
 				// exception handler classes
+				'ShellCommandExceptionHandler' => 'class/exception_handler',
 			);
 	}
 }

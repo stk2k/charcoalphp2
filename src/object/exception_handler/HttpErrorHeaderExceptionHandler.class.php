@@ -58,8 +58,6 @@ class Charcoal_HttpErrorHeaderExceptionHandler extends Charcoal_AbstractExceptio
 			header( "HTTP/{$http_ver} {$status_code} {$header_msg}", true, $status_code );
 
 			log_error( 'system,debug,error', "HTTP/1.0 $status_code $header_msg", 'framework');
-
-			return TRUE;
 		}
 
 		return FALSE;

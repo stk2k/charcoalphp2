@@ -171,9 +171,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 			{
 				if ( $debug ) log_debug( 'system,event', "event queue(" . count($queue) . "): $queue");
 
-				// initialize values for this loop
-				$abort_after_this_loop = FALSE;
-
 				// increment loop counter
 				$loop_id ++;
 
@@ -298,15 +295,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 						if ( $ret === TRUE || ($ret instanceof Charcoal_Boolean) && $ret->isTrue() ){
 							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler." );
 						}
-						elseif ( $ret instanceof Charcoal_IEvent ){
-							$this->pushEvent( $ret );
-							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler, but event object was returned." );
-						}
-						elseif ( is_string($ret) || ($ret instanceof Charcoal_String) ){
-							$e = $this->getSandbox->createEvent( $ret );
-							$this->pushEvent( $ret );
-							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler, but event name was returned." );
-						}
 						else{
 							$e = $this->getSandbox()->createEvent( 'exception', array($e) );
 							$this->pushEvent( $e );
@@ -315,46 +303,15 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					}
 
 					// result value handling
-					$result_str = array();
-					if ( $result === NULL ){
-						$result_str[] = 'NULL';
-					}
-					elseif ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
-						$result_str[] = 'FALSE';
+					if ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
+						$result_str = 'FALSE';
 					}
 					elseif ( $result === TRUE || ($result instanceof Charcoal_Boolean) && $result->isTrue() ){
-						$result_str[] = 'TRUE';
-					}
-					elseif ( is_string($result) || ($result instanceof Charcoal_String) ){
-						$e = $this->getSandbox()->createEvent( $result );
-						$this->pushEvent( $e );
-						$result_str[] = "event($result)";
-						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
-					}
-					elseif ( $result instanceof Charcoal_IEvent ){
-						$this->pushEvent( $result );
-						$result_str[] = "event($result)";
-						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($result) is enqueued." );
-					}
-					elseif ( is_array($result) || ($result instanceof Charcoal_Vector) ){
-						foreach( $result as $item ){
-							if ( is_string($item) || ($item instanceof Charcoal_String) ){
-								$e = $this->getSandbox()->createEvent( $item );
-								$this->pushEvent( $e );
-								$result_str[] = "event($item)";
-								if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($item) is enqueued." );
-							}
-							elseif ( $item instanceof Charcoal_IEvent ){
-								$this->pushEvent( $item );
-								$result_str[] = "event($item)";
-								if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] an event($item) is enqueued." );
-							}
-						}
+						$result_str = 'TRUE';
 					}
 					else{
-						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] or [IEvent] value." ) );
+						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] value." ) );
 					}
-					$result_str = implode( ',', $result_str );
 
 					// task timer stop
 					$elapse = Charcoal_Benchmark::stop( $timer_task );
@@ -410,21 +367,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] no post action is  defined for event.");	
 					}
 
-					// exit task/event loop when abort event is detected
-					if ( $result instanceof Charcoal_AbortEvent ){
-						$exit_code  = $result->getExitCode()->getValue();
-						$abort_type = $result->getAbortType()->getValue();
-						if ( $debug ) log_debug( 'system,event', "event loop aborted(exit code:$exit_code");
-						if ( $abort_type == Event::ABORT_TYPE_IMMEDIATELY ){
-							log_warning( "system,event", "[loop:$loop_id/$event_name/$task_name] aborting by request immediately.");
-							break 2;
-						}
-						elseif ( $abort_type == Event::ABORT_TYPE_AFTER_THIS_LOOP ){
-							log_warning( "system,event", "[loop:$loop_id/$event_name/$task_name] aborting by request after current loop end.");
-							$abort_after_this_loop = true;
-						}
-					}
-
 					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] task loop end.");
 
 				} // task loop end
@@ -436,12 +378,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] removed task: $task_id" );
 					}
 					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] next task list: [$this->tasks]" );
-				}
-
-				// このループ終了時にアボートのフラグが成立していれば抜ける
-				if ( $abort_after_this_loop ){
-					log_warning( "system,event", "[loop:$loop_id/$event_name] aborting by flag.");
-					break;
 				}
 
 				if ( !$delete_event ){

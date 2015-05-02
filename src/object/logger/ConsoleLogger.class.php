@@ -39,22 +39,17 @@ class Charcoal_ConsoleLogger extends Charcoal_AbstractLogger implements Charcoal
 	/*
 	 * 一行出力
 	 */
-	public function writeln( $level, $message, $file, $line )
+	public function writeln( Charcoal_LogMessage $msg )
 	{
-		$time = date("y/m/d H:i:s");
-		$file = basename($file);
-
-		// 変数展開（PHP5.2.0以前との互換のため）
-		$message = System::toString( $message );
+		// フォーマット
+		$out = parent::formatMessage( $msg )  . PHP_EOL;
 
 		// エンコーディング変換
-		$conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'LOG' );
-		$message = $conv->convertEncoding( $message );
+		$conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'PHP', 'CLI' );
+		$out = $conv->convert( $out );
 
 		// 画面出力
-		$msg = $time . '[' . $level . '] ' . $message . '\t\t\t @' . $file . '(' . $line . ')'; 
-		$msg = h($msg) . PHP_EOL;
-		echo $msg;
+		echo $out;
 	}
 
 	/**

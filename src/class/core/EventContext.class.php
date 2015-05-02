@@ -469,6 +469,16 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	{
 		return Charcoal_Framework::setLogLevel( $log_level );
 	}
+
+	/**
+	 *  add an event to task manager
+	 *
+	 */
+	public function pushEvent( Charcoal_IEvent $event )
+	{
+		$this->task_manager->pushEvent( $event );
+	}
+
 }
 
 
