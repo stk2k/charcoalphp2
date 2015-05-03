@@ -232,52 +232,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					}
 					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is found in task's event filters: [$event_filters].");
 
-					// ガード条件判定
-/*
-					$process = TRUE;
-					$guard_conditions = $task->getGuardConditions();
-					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task guard conditions are : [$guard_conditions]" );
-					if ( $guard_conditions ){
-						foreach( $guard_conditions as $tid => $conditions )
-						{
-							$tid = s($tid);
-							if ( $this->isTaskRegistered( $tid ) ){
-								$guard_task = $this->getTask( $tid );
-								foreach( $conditions as $key => $value ){
-									// valueを型名：値に分ける
-									$pos = strpos($value,":");
-									if ( $pos === FALSE ){
-										// 型指定がない場合、デフォルトは文字列
-										$value = s($value);
-									}
-									else{
-										$type = substr($value,0,$pos);
-										$value = substr($value,$pos+1);
-										switch( $type ){
-										case "b":	$value = boolval($value);		break;
-										case "i":	$value = intval($value);		break;
-										case "s":	$value = $value;				break;
-										default:
-											_throw ( new TaskGuardConditionException($task,$guard_task,$key,"invalid data type in guard value[$value]" ) );
-										}
-									}
-									if ( $guard_task->$key !== $value ){
-										// ガード条件を満たさないので処理しない
-										$type = gettype($guard_task->$key);
-										$type2 = gettype($value);
-										log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] guard task[$guard_task] status[$key => $type:{$guard_task->$key}] did not meet the guard conditions: task[$tid] status[$key => $type2:{$value}].");
-										$process = FALSE;
-										break 2;
-									}
-								}
-							}
-						}
-					}
-					if ( !$process ){
-						continue;
-					}
-*/
-
 					// task timer start
 					$timer_task = Charcoal_Benchmark::start();
 
@@ -285,22 +239,21 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					try{
 						$result = $task->processEvent( $context );
 					}
-					catch( Charcoal_RuntimeException $e ){
-						_catch( $e );
-						
-						log_warning( "system,event,error", "[loop:$loop_id/$event_name/$task_name] an exception(" . get_class($e) . ") was raised:" . $e->getMessage() );
-
-						$ret = $task->handleException( $e );
-
-						if ( $ret === TRUE || ($ret instanceof Charcoal_Boolean) && $ret->isTrue() ){
-							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] exception was handled by task's exception handler." );
-						}
-						else{
-							$e = $this->getSandbox()->createEvent( 'exception', array($e) );
-							$this->pushEvent( $e );
-							if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] exception was not handled by task's exception handler.enqued an exception event." );
-						}
+					catch( Charcoal_BusinessException $e )
+					{
+						// just handle the exception
+						$task->handleException( $e );
 					}
+					catch( Charcoal_RuntimeException $e )
+					{
+						// write log and handle the exception
+						_catch( $e );
+						$task->handleException( $e );
+					}
+
+					// task timer stop
+					$elapse = Charcoal_Benchmark::stop( $timer_task );
+					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
 
 					// result value handling
 					if ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
@@ -312,10 +265,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					else{
 						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] value." ) );
 					}
-
-					// task timer stop
-					$elapse = Charcoal_Benchmark::stop( $timer_task );
-					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
 
 					// ポストアクション
 					$post_actions = $task->getPostActions();
@@ -381,12 +330,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 				}
 
 				if ( !$delete_event ){
-					// if current event is exception event, throw original exception
-					if ( $event instanceof Charcoal_ExceptionEvent ){
-						$e = $event->getException();
-						_throw( $e );
-					}
-
 					// push back the event into our event queue
 					$this->pushEvent( $event );
 				}

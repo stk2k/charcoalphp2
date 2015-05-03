@@ -101,7 +101,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_AbortEvent'							=> 'object/event',
 				'Charcoal_AuthTokenEvent'						=> 'object/event',
 				'Charcoal_Event'								=> 'object/event',
-				'Charcoal_ExceptionEvent'						=> 'object/event',
 				'Charcoal_HttpRequestEvent'						=> 'object/event',
 				'Charcoal_PermissionDeniedEvent'				=> 'object/event',
 				'Charcoal_RenderLayoutEvent'					=> 'object/event',

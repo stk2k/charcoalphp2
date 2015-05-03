@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-interface Charcoal_ITask extends Charcoal_IExceptionHandler
+interface Charcoal_ITask
 {
 
 	/**
@@ -45,5 +45,12 @@ interface Charcoal_ITask extends Charcoal_IExceptionHandler
 	 */
 	public function processEvent( $context );
 
+	/**
+	 * handle an exception
+	 * 
+	 * @param Exception $e                        exception to handle
+	 * @param Charcoal_EventContext $context      event context
+	 */
+	public function handleException( $e, $context );
 }
 

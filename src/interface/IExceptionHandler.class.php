@@ -11,7 +11,7 @@
 interface Charcoal_IExceptionHandler
 {
 	/**
-	 * execute exception handlers
+	 * handle an exception
 	 * 
 	 * @param Exception $e     exception to handle
 	 * 
