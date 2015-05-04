@@ -242,21 +242,20 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					catch( Charcoal_BusinessException $e )
 					{
 						// just handle the exception
-						$task->handleException( $e );
+						$task->handleException( $e, $context );
 					}
 					catch( Charcoal_RuntimeException $e )
 					{
 						// write log and handle the exception
 						_catch( $e );
-						$task->handleException( $e );
+						$task->handleException( $e, $context );
 					}
 
-					// task timer stop
-					$elapse = Charcoal_Benchmark::stop( $timer_task );
-					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
-
 					// result value handling
-					if ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
+					if ( $result === NULL ){
+						$result_str = 'NULL';
+					}
+					elseif ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
 						$result_str = 'FALSE';
 					}
 					elseif ( $result === TRUE || ($result instanceof Charcoal_Boolean) && $result->isTrue() ){
@@ -265,6 +264,10 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					else{
 						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] value." ) );
 					}
+
+					// task timer stop
+					$elapse = Charcoal_Benchmark::stop( $timer_task );
+					log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
 
 					// ポストアクション
 					$post_actions = $task->getPostActions();

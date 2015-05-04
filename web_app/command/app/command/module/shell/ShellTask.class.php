@@ -34,6 +34,7 @@ class ShellTask extends Charcoal_Task
 
 		$context->loadModule( $target_module );
 
+		// create shell_command event and push it into the event queue
 		$event = $context->createEvent( 'shell_command' );
 		$context->pushEvent( $event );
 

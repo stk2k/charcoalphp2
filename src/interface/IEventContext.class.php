@@ -18,13 +18,6 @@ interface Charcoal_IEventContext
 	public function getProcedure();
 
 	/**
-	 *	Set current procedure object
-	 *
-	 * @param Charcoal_IProcedure $procedure   Procedure object to set
-	 */
-	public function setProcedure( $procedure );
-
-	/**
 	 *	Get current request object
 	 *
 	 *	@return Charcoal_IRequest
@@ -32,25 +25,11 @@ interface Charcoal_IEventContext
 	public function getRequest();
 
 	/**
-	 *	Set current request object
-	 *
-	 * @param Charcoal_IRequest $request   Request object to set
-	 */
-	public function setRequest( $request );
-
-	/**
 	 *	Get current event object
 	 *
 	 *	@return Charcoal_IEvent
 	 */
 	public function getEvent();
-
-	/**
-	 *	Set current event object
-	 *
-	 * @param Charcoal_IEvent $event   Event object to set
-	 */
-	public function setEvent( $event );
 
 	/**
 	 *	Get current sequence object
@@ -62,13 +41,6 @@ interface Charcoal_IEventContext
 	public function getSequence();
 
 	/**
-	 *	Set current event object
-	 *
-	 * @param Charcoal_ISequence $sequence   Ssequence object to set
-	 */
-	public function setSequence( $sequence );
-
-	/**
 	 *	Get current response object
      *
      * @return Charcoal_Response
@@ -76,25 +48,142 @@ interface Charcoal_IEventContext
 	public function getResponse();
 
 	/**
-	 *	Set current response object
+	 *	Get sandbox profile
 	 *
-	 * @param Charcoal_IResponse $response   Response object to set
+	 * @return Charcoal_SandboxProfile
 	 */
-	public function setResponse( $response );
+	public function getProfile();
 
 	/**
-	 *	Get event queue object
-     *
-     * @return Charcoal_IEventQueue      event queue object
+	 *	Get sandbox environment
+	 *
+	 * @return Charcoal_IEnvironment         environment object
 	 */
-	public function getEventQueue();
+	public function getEnvironment();
 
 	/**
-	 *	Set event queue object
+	 *	Get debug mode
 	 *
-	 * @param Charcoal_IEventQueue $event_queue   event queue object
+	 * @return boolean        TRUE means running in debug mode
 	 */
-	public function setEventQueue( $event_queue );
+	public function isDebug();
+
+
+	/**
+	 *	Create and configure an object 
+	 *
+	 *	@param string $obj_path         object path to create
+	 *	@param string $type_name        type name of the object
+	 *	@param array $args             constructor arguments
+	 *	@param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_ChacoalObject        object instance
+	 */
+	public function createObject( $obj_path, $type_name, $args = array(), $config = NULL );
+
+	/**
+	 *	Create event
+	 *
+	 *	@param string $obj_path         object path to create
+	 *	@param array $args             constructor arguments
+	 *	@param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_ChacoalObject        object instance
+	 */
+	public function createEvent( $obj_path, $args = array(), $config = NULL );
+
+	/**
+	 *	Create condig
+	 *
+	 *	@param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_Config        config object
+	 */
+	public function createConfig( array $config = array() );
+
+	/**
+	 * Create and configure a component 
+	 *
+	 * @param string $obj_path         object path to create
+	 * @param array $args             constructor arguments
+	 * @param array $config           object configuration parameters
+	 *
+	 * @return Charcoal_IComponent        component instance
+	 */
+	public function getComponent( $obj_path, $args = array(), $config = NULL );
+
+	/**
+	 *	Get cache data
+	 *
+	 * @param Charcoal_String $key				   string name to identify cached data
+	 * @param Charcoal_String $type_name_checked	 checks type(class/interface) if not NULL
+	 */
+	public function getCache( $key, Charcoal_String $type_name_checked = NULL );
+
+	/**
+	 *	Set cache data
+	 *
+	 * @param Charcoal_String $key				   string name to identify cached data
+	 * @param Charcoal_Object $value				 cache data to save
+	 */
+	public function setCache( $key, $value );
+
+	/**
+	 * Get framework/project/application path
+	 *
+	 * @param Charcoal_String $virtual_path		  virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_Object $value				 cache data to save
+	 *
+	 * @return Charcoal_String		full path string
+	 *
+	 * [macro keyword sample]
+	 *
+	 *	  macro keyword	   |				return value(real path)
+	 * -------------------------|------------------------------------------------
+	 *   %APPLICATION_DIR%	  | (web_app_root)/webapp/(project_name)/app/(application name)/
+	 *   %PROJECT_DIR%		  | (web_app_root)/webapp/(project_name)/
+	 *   %WEBAPP_DIR%		   | (web_app_root)/webapp/
+	 * 
+	 *
+	 * @see Charcoal_ResourceLocator
+	 *
+	 */
+	public function getPath( $virtual_path, $filename = NULL );
+
+	/**
+	 * Get framework/project/application file
+	 *
+	 * @param Charcoal_String $virtual_path		  virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_Object $value				 cache data to save
+	 *
+	 * @return Charcoal_File		file object
+	 *
+	 * [macro keyword sample]
+	 *
+	 *	  macro keyword	    |				return value(real path)
+	 * ---------------------|------------------------------------------------
+	 *   %APPLICATION_DIR%	| (web_app_root)/webapp/(project_name)/app/(application name)/
+	 *   %PROJECT_DIR%		| (web_app_root)/webapp/(project_name)/
+	 *   %WEBAPP_DIR%		| (web_app_root)/webapp/
+	 * 
+	 *
+	 * @see Charcoal_ResourceLocator
+	 *
+	 */
+	public function getFile( $virtual_path, $filename = NULL );
+
+	/**
+	 * load another module
+	 *
+	 * @param CharcCharcoal_ObjectPath $module_path      module path to load
+	 */
+	public function loadModule( $module_path );
+
+	/**
+	 *  add an event to task manager
+	 *
+	 */
+	public function pushEvent( Charcoal_IEvent $event );
 
 }
 

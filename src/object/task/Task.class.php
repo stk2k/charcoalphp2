@@ -43,15 +43,13 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	}
 
 	/**
-	 * execute exception handlers
+	 * handle an exception
 	 * 
-	 * @param Exception $e     exception to handle
-	 * 
-	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
+	 * @param Exception $e                        exception to handle
+	 * @param Charcoal_EventContext $context      event context
 	 */
-	public function handleException( $e )
+	public function handleException( $e, $context )
 	{
-		return FALSE;
 	}
 
 	/**
