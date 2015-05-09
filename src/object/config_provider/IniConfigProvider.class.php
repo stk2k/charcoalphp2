@@ -30,6 +30,20 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 	}
 
 	/**
+	 *  get config last updated date
+	 *
+	 * @param  string|Charcoal_String $key                  config key
+	 *
+	 * @return int|NULL     last updated date(UNIX timestamp), or FALSE if file does not exist
+	 */
+	public function getConfigDate( $key )
+	{
+		$source = $key . '.ini';
+
+		return is_file($source) ? filemtime($source) : false;
+	}
+
+	/**
 	 *  load config
 	 *
 	 * @param  string|Charcoal_String $key                  config key

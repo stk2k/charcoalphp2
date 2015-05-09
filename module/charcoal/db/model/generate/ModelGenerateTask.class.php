@@ -9,25 +9,21 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class ModelGenerateTask extends CommandTaskBase
+class ModelGenerateTask extends Charcoal_Task
 {
-	const DIR_MODE     = '666';
+	const DIR_MODE        = '666';
+	const SPACE_COUNT     = 30;
 
 	/**
 	 * イベントを処理する
 	 */
 	public function processEvent( $context )
 	{
-		$request   = $context->getRequest();
-		$response  = $context->getResponse();
-		$sequence  = $context->getSequence();
-		$procedure = $context->getProcedure();
-
-		$space_count = 30;
+		$event   = $context->getEvent();
 
 		// パラメータを取得
-		$table         = $request->getString( 'p2' );
-		$out_dir       = $request->getString( 'p3' );
+		$table         = $event->getTable();
+		$out_dir       = $event->getTargetDir();
 
 		$entity = $table;
 
@@ -44,9 +40,6 @@ class ModelGenerateTask extends CommandTaskBase
 		//=======================================
 		// Mmake output directory
 		//=======================================
-		if ( !$out_dir ){
-			$out_dir = Charcoal_ResourceLocator::getFrameworkPath( 'tmp' );
-		}
 		$out_dir = new Charcoal_File( $out_dir );
 
 		$out_dir->makeDirectory( self::DIR_MODE );
@@ -82,7 +75,7 @@ class ModelGenerateTask extends CommandTaskBase
 			$default   = $colmn_attr['Default'];
 			$extra     = $colmn_attr['Extra'];
 
-			$spaces = str_repeat( " ", $space_count - strlen($field) );
+			$spaces = str_repeat( " ", self::SPACE_COUNT - strlen($field) );
 
 			if ( $key == "PRI" ){
 				$lines[] = "    public \${$field}{$spaces}= '@field @type:$type @pk @insert:no @update:no @serial';";
@@ -105,7 +98,7 @@ class ModelGenerateTask extends CommandTaskBase
 
 		$file_name = $table_model_class_name . ".class.php";
 		$outfile = new Charcoal_File( $file_name, $out_dir );
-		$this->outputFile( $outfile, $lines );
+		Charcoal_FileSystemUtil::outputFile( $outfile, $lines );
 
 		print "{$outfile} was successfully generated." . PHP_EOL;
 
@@ -147,7 +140,7 @@ class ModelGenerateTask extends CommandTaskBase
 
 		$file_name = $table_dto_class_name . ".class.php";
 		$outfile = new Charcoal_File( $file_name, $out_dir );
-		$this->outputFile( $outfile, $lines );
+		Charcoal_FileSystemUtil::outputFile( $outfile, $lines );
 
 		print "{$outfile} was successfully generated." . PHP_EOL;
 
@@ -161,7 +154,7 @@ class ModelGenerateTask extends CommandTaskBase
 
 		$file_name = $config_key . ".table_model.ini";
 		$outfile = new Charcoal_File( $file_name, $out_dir );
-		$this->outputFile( $outfile, $lines );
+		Charcoal_FileSystemUtil::outputFile( $outfile, $lines );
 
 		print "{$outfile} was successfully generated." . PHP_EOL;
 

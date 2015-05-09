@@ -78,7 +78,7 @@ class Charcoal_ConfigLoader
 		}
 
 		// read under modules directory(current object path)
-		$config_name = strlen($real_path) > 0 ? $real_path . '/' . $config_basename : $config_basename;
+		$config_name = strlen($real_path) > 0 ? $real_path . '/' . $config_basename : '/' . $config_basename;
 		
 		$config_target_list[] = $dir_framework_module . $config_name;
 		$config_target_list[] = $dir_project_module . $config_name;
@@ -96,7 +96,7 @@ class Charcoal_ConfigLoader
 				if ( strlen($virt_dir) > 0 )
 				{
 					$proc_dir = str_replace( ':', '/', $virt_dir );
-					$config_target_list[] = $dir_application_module . $proc_dir . $config_basename;
+					$config_target_list[] = $dir_application_module . $proc_dir . '/' . $config_basename;
 				}
 			}
 		}
@@ -105,14 +105,7 @@ class Charcoal_ConfigLoader
 		$registry = $sandbox->getRegistry();
 
 		// load all config files
-		$cache = array();
-		$config = array();
-		foreach( $config_target_list as $target ){
-			$data = $registry->get( $target );
-			if ( $data ){
-				$config = array_merge( $config, $data );
-			}
-		}
+		$config = $registry->get( $config_target_list, $obj_path, $type_name );
 
 		// import
 		if ( isset($config['import']) ){

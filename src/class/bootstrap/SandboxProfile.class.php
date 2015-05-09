@@ -87,13 +87,14 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 * @param string $key             key string for hash map
 	 * @param string $default_value   default value
 	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 * @param string $encoding        charcter encoding
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL, $process_macro = FALSE )
+	public function getString( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
 		try{
-			return parent::getString( $key, $default_value, $process_macro );
+			return parent::getString( $key, $default_value, $process_macro, $encoding );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
@@ -108,13 +109,14 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 * @param string $key             key string for hash map
 	 * @param string $default_value   default value
 	 * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+	 * @param string $encoding        charcter encoding
 	 *
 	 * @return string
 	 */
-	public function getJson( $key, $default_value = NULL, $process_macro = FALSE )
+	public function getJson( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
 		try{
-			return parent::getJson( $key, $default_value, $process_macro );
+			return parent::getJson( $key, $default_value, $process_macro, $encoding );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );

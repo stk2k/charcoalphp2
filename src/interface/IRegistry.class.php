@@ -13,11 +13,13 @@ interface Charcoal_IRegistry
 	/**
 	 * get configuration data by key
 	 * 
-	 * @param string $key      registry data id
+	 * @param string[] $keys           key list
+	 * @param string $obj_path         object path
+	 * @param string $type_name        type name of the object
 	 *
-	 * @return mixed           configuration data
+	 * @return mixed              configuration data
 	 */
-	public function get( $key );
+	public function get( array $keys, $obj_path, $type_name );
 
 }
 

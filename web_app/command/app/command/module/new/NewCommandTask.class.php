@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class NewTask extends CommandTaskBase
+class NewCommandTask extends CommandTaskBase
 {
 	const DIR_MODE     = '666';
 

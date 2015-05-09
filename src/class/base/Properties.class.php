@@ -105,12 +105,12 @@ class Charcoal_Properties extends Charcoal_HashMap implements Charcoal_IProperti
 	 *
 	 * @return string
 	 */
-	public function getString( $key, $default_value = NULL )
+	public function getString( $key, $default_value = NULL, $encoding = NULL )
 	{
 //		Charcoal_ParamTrait::validateString( 1, $key );
 
 		$key = us($key);
-		return parent::getString( $key, $default_value );
+		return parent::getString( $key, $default_value, $encoding );
 	}
 
 	/**

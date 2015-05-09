@@ -136,6 +136,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ExtensionNotLoadedException'			=> 'exception',
 				'Charcoal_FileOpenException'					=> 'exception',
 				'Charcoal_FileOutputException'					=> 'exception',
+				'Charcoal_FilePermissionException'				=> 'exception',
 				'Charcoal_FileRenameException'					=> 'exception',
 				'Charcoal_FileUploadCantWriteException'			=> 'exception',
 				'Charcoal_FileUploadExtensionException'			=> 'exception',

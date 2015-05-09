@@ -19,6 +19,15 @@ interface Charcoal_IConfigProvider
 	public function setOptions( $options );
 
 	/**
+	 *  get config last updated date
+	 *
+	 * @param  string|Charcoal_String $key                  config key
+	 *
+	 * @return int     last updated date(UNIX timestamp)
+	 */
+	public function getConfigDate( $key );
+
+	/**
 	 *  load config
 	 *
 	 * @param  string|Charcoal_String $key                  config key

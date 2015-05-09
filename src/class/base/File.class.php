@@ -80,7 +80,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function delete()
 	{
-		return unlink( $this->path );
+		return @unlink( $this->path );
 	}
 
 	/**

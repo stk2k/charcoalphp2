@@ -422,7 +422,7 @@ class Charcoal_SmartGatewayImpl
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
 	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
-	public function findAllDistinct( $query_target, $fields, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
+	public function findAllDistinct( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
 		return $this->find( $query_target, Charcoal_EnumQueryOption::DISTINCT, $criteria, $fields, $recordsetFactory, $driver_options );
 	}
