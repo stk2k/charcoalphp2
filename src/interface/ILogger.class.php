@@ -25,5 +25,11 @@ interface Charcoal_ILogger extends Charcoal_ICharcoalObject
 	 * write one message
 	 */
 	public function writeln( Charcoal_LogMessage $message );
+
+	/**
+	 * destruct instance
+	 */
+	public function terminate();
+
 }
 

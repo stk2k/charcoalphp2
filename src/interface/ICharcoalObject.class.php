@@ -32,10 +32,5 @@ interface Charcoal_ICharcoalObject
 	 */
 	public function configure( $config );
 
-	/**
-	 * destruct instance
-	 */
-	public function terminate();
-
 }
 

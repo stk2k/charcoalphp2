@@ -32,7 +32,14 @@ if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
 // EOL
 function eol()
 {
-	return ( CHARCOAL_DEBUG_OUTPUT == 'html' ) ? '<br />' : PHP_EOL;
+	return CHARCOAL_DEBUG_OUTPUT == 'html' ? '<br />' : PHP_EOL;
+}
+
+//==================================================================
+// space
+function space( $multiplier = 1 )
+{
+	return str_repeat( CHARCOAL_DEBUG_OUTPUT == 'html' ? '&nbsp;' : ' ', $multiplier );
 }
 
 //==================================================================
@@ -258,9 +265,9 @@ if ( !function_exists('spl_object_hash') ){
 //==================================================================
 // 例外をスロー
 
-function _throw( Exception $e, $log_error = TRUE )
+function _throw( $e, $log_error = TRUE )
 {
-	if ( $e instanceof Charcoal_BusinessException ){
+	if ( $e instanceof Charcoal_BusinessException || !($e instanceof Exception) ){
 		throw $e;
 		return;
 	}
@@ -286,9 +293,9 @@ function _throw( Exception $e, $log_error = TRUE )
 
 //==================================================================
 // 例外をキャッチ
-function _catch( Exception $e, $log_error = TRUE )
+function _catch( $e, $log_error = TRUE )
 {
-	if ( $e instanceof Charcoal_BusinessException ){
+	if ( $e instanceof Charcoal_BusinessException || !($e instanceof Exception) ){
 		return;
 	}
 

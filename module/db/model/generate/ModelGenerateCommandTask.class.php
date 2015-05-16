@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class ModelGenerateCommandTask extends CommandTaskBase
+class ModelGenerateCommandTask extends Charcoal_Task
 {
 	const DIR_MODE     = '666';
 

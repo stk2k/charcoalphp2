@@ -197,11 +197,21 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 				case 'function':
 					// 関数を決定
 					$params = uv( $update->getParameters() );
-					if ( count($params) == 1 ){
+					if ( count($params) >= 1 ){
 						switch( $params[0] ){
 						case 'now':			$function = 'NOW()';	break;
-						case 'increment':	$function = $field . ' + 1';	break;
-						case 'decrement':	$function = $field . ' - 1';	break;
+						case 'increment':
+							{
+								$increment_by = isset($params[1]) ? $params[1] : 1;
+								$function = $field . ' + ' . $increment_by;
+							}
+							break;
+						case 'decrement':
+							{
+								$decrement_by = isset($params[1]) ? $params[1] : 1;
+								$function = $field . ' - ' . $decrement_by;
+							}
+							break;
 						default:        	$function = 'NULL';		break;
 						}
 					}

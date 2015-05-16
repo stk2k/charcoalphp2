@@ -583,16 +583,12 @@ class Charcoal_Framework
 		self::setHookStage( Charcoal_EnumCoreHookStage::START_OF_SHUTDOWN );
 		self::setHookStage( Charcoal_EnumCoreHookStage::BEFORE_SAVE_SESSION );
 
-		$response->terminate();
-
 		// セッション情報の保存
 		if ( $use_session->isTrue() && $session )
 		{
-
 			// セッションを保存
 			$session->save();
 			$session->close();
-
 		}
 
 		self::setHookStage( Charcoal_EnumCoreHookStage::AFTER_SAVE_SESSION );
@@ -668,6 +664,23 @@ class Charcoal_Framework
 			exit;
 		}
 		catch( Exception $e )
+		{
+			_catch( $e );
+
+			// restore error handlers for avoiding infinite loop
+			restore_error_handler();
+			restore_exception_handler();
+
+			$ret = self::handleException( $e );
+
+			// display debugtrace
+			if ( $debug || $sandbox->isDebug() ){
+				self::$debugtrace_renderers->render( $e );
+			}
+
+			self::$loggers->flush();
+		}
+		catch( BaseException $e )
 		{
 			_catch( $e );
 

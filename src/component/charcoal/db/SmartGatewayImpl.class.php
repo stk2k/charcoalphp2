@@ -953,8 +953,9 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int $data_id                          identify database entity
 	 *	@param string $field                         field name to increment
+	 *	@param int $increment_by                     amount of increment
 	 */
-	public function incrementField( $query_target, $data_id, $field ) 
+	public function incrementField( $query_target, $data_id, $field, $increment_by = 1 ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateInteger( 2, $data_id );
@@ -969,7 +970,7 @@ class Charcoal_SmartGatewayImpl
 
 		$field = us($field);
 
-		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('increment') );
+		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('increment', $increment_by) );
 
 		$pk = $model->getPrimaryKey();
 		$where = "$pk = ?";
@@ -990,8 +991,9 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int $data_id                          identify database entity
 	 *	@param string $field                         field name to decrement
+	 *	@param int $decrement_by                     amount of decrement
 	 */
-	public function decrementField( $query_target, $data_id, $field ) 
+	public function decrementField( $query_target, $data_id, $field, $decrement_by = 1 ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateInteger( 2, $data_id );
@@ -1006,7 +1008,7 @@ class Charcoal_SmartGatewayImpl
 
 		$field = us($field);
 
-		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('decrement') );
+		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('decrement', $decrement_by) );
 
 		$pk = $model->getPrimaryKey();
 		$where = "$pk = ?";

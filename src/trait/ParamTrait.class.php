@@ -31,6 +31,7 @@ class Charcoal_ParamTrait
 	const TYPE_O_OBJECTPATH  = 'Charcoal_ObjectPath';
 	const TYPE_O_CONFIG      = 'Charcoal_Config';
 	const TYPE_O_EXCEPTION   = 'Exception';
+	const TYPE_O_EXCEPTION2  = 'BaseException';
 	const TYPE_O_OBJECT      = 'Charcoal_Object';
 	const TYPE_O_FILE        = 'Charcoal_File';
 	const TYPE_O_DTO         = 'Charcoal_DTO';
@@ -344,7 +345,7 @@ class Charcoal_ParamTrait
 	 */
 	public static function validateException( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_O_EXCEPTION, $actual, $null_allowed );
+		return self::validateTypes( $key, array( self::TYPE_O_EXCEPTION, self::TYPE_O_EXCEPTION2 ), $actual, $null_allowed );
 	}
 
 	/**

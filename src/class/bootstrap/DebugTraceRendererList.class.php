@@ -43,7 +43,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
 	 *
 	 * @param Charcoal_String $title  title
 	 */
-	public function render( Exception $e )
+	public function render( $e )
 	{
 //		Charcoal_ParamTrait::validateException( 1, $e );
 

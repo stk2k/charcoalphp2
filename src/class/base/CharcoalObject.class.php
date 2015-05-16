@@ -46,13 +46,6 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	}
 
 	/**
-	 * destruct instance
-	 */
-	public function terminate()
-	{
-	}
-
-	/**
 	 *  get object name
 	 *
 	 * @return string           object name

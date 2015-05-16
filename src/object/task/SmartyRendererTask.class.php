@@ -49,7 +49,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 		$plugins_dir = $config->getArray( 'plugins_dir', array(), TRUE )->unbox();
 
-		$this->smarty->plugins_dir	= empty($plugins_dir) ? 'plugins' : $plugins_dir;
+		//$this->smarty->plugins_dir	= empty($plugins_dir) ? 'plugins' : $plugins_dir;
 
 		if ( $this->getSandbox()->isDebug() )
 		{

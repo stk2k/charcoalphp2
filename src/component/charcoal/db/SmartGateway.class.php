@@ -258,15 +258,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $data_id            identify database entity
 	 *	@param string $field           field name to increment
+	 *	@param int $increment_by       amount of increment
 	 */
-	public function incrementField( $query_target, $data_id, $field ) 
+	public function incrementField( $query_target, $data_id, $field, $increment_by = 1 ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			$this->impl->incrementField( $query_target, $data_id, $field );
+			$this->impl->incrementField( $query_target, $data_id, $field, $increment_by );
 		}
 		catch ( Exception $e )
 		{
@@ -281,15 +282,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $data_id            identify database entity
 	 *	@param string $field           field name to decrement
+	 *	@param int $decrement_by       amount of decrement
 	 */
-	public function decrementField( $query_target, $data_id, $field ) 
+	public function decrementField( $query_target, $data_id, $field, $decrement_by = 1 ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			$this->impl->decrementField( $query_target, $data_id, $field );
+			$this->impl->decrementField( $query_target, $data_id, $field, $decrement_by );
 		}
 		catch ( Exception $e )
 		{

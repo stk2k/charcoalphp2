@@ -150,6 +150,7 @@ class Charcoal_Bootstrap
 				// Basic exception classes
 				'Charcoal_ArrayFormatException'					=> 'exception',
 				'Charcoal_BooleanFormatException'				=> 'exception',
+				'Charcoal_BusinessException'					=> 'exception',
 				'Charcoal_CharcoalException' 					=> 'exception',
 				'Charcoal_ClassNameEmptyException'				=> 'exception',
 				'Charcoal_ConfigSectionNotFoundException'		=> 'exception',
@@ -161,6 +162,7 @@ class Charcoal_Bootstrap
 				'Charcoal_CreateClassLoaderException'			=> 'exception',
 				'Charcoal_CreateObjectException'				=> 'exception',
 				'Charcoal_HashMapFormatException'				=> 'exception',
+				'Charcoal_HttpStatusException'					=> 'exception',
 				'Charcoal_IllegalRunModeException'				=> 'exception',
 				'Charcoal_InterfaceImplementException'			=> 'exception',
 				'Charcoal_InterfaceNotFoundException'			=> 'exception',
@@ -285,6 +287,7 @@ class Charcoal_Bootstrap
 				'Charcoal_ShellEnvironment' 					=> 'class/bootstrap/environment',
 
 				// utility classes
+				'Charcoal_DebugUtil'							=> 'class/util',
 				'Charcoal_EncodingConverter'					=> 'class/util',
 				'Charcoal_MemoryUtil'							=> 'class/util',
 

@@ -10,7 +10,6 @@ class MyClassLoader extends Charcoal_UserClassLoader implements Charcoal_IClassL
 				// constant classes
 				// core classes
 				// base classes
-				'CommandTaskBase' => 'class/base',
 				// layout manager classes
 				// service classes
 				// events classes

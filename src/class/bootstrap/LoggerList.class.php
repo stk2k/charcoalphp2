@@ -164,10 +164,6 @@ class Charcoal_LoggerList extends Charcoal_Object
 	{
 //		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_LogMessage', $msg );
 
-		if ( !$this->init() ){
-			return;
-		}
-
 		if ( !$this->log_enabled ){
 			return;
 		}

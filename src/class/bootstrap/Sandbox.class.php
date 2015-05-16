@@ -281,6 +281,13 @@ class Charcoal_Sandbox
 			// 上位にthrow
 			_throw( new Charcoal_CreateObjectException($obj_path, $type_name, $e) );
 		}
+		catch ( BaseException $e ) 
+		{
+			_catch( $e );
+
+			// 上位にthrow
+			_throw( new Charcoal_CreateObjectException($obj_path, $type_name, $e) );
+		}
 	}
 
 	/**

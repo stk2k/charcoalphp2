@@ -75,7 +75,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 
 				// correct cached data
 				$cache_data = $cached_config['config'][$key];
-				$config_all = $cache_data ? array_merge( $config_all, $cache_data ) : $config_all;
+				$config_all = is_array($cache_data) ? array_merge( $config_all, $cache_data ) : $config_all;
 			}
 
 			// if cache is not modified, return cache data
