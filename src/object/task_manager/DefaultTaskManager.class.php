@@ -242,13 +242,21 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					catch( Charcoal_BusinessException $e )
 					{
 						// just handle the exception
-						$task->handleException( $e, $context );
+						$exception_handled = $task->handleException( $e, $context );
+						if ( b($exception_handled)->isFalse() ){
+							// just re-throw the exception, if the exception was not handled by the task
+							throw( $e );
+						}
 					}
 					catch( Charcoal_RuntimeException $e )
 					{
 						// write log and handle the exception
 						_catch( $e );
-						$task->handleException( $e, $context );
+						$exception_handled = $task->handleException( $e, $context );
+						if ( b($exception_handled)->isFalse() ){
+							// write log and re-throw the exception, if the exception was not handled by the task
+							_throw( $e );
+						}
 					}
 
 					// result value handling

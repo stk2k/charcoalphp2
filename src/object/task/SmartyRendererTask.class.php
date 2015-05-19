@@ -16,6 +16,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 	private $template_files;
 	private $smarty;
+	private $debug_mode;
 
 	/**
 	 *	Constructor
@@ -37,6 +38,8 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 	{
 		parent::configure( $config );
 
+		$this->debug_mode					= ub( $config->getBoolean( 'debug_mode', FALSE ) );
+
 		$this->smarty->caching 				= 0;	//$config->getBoolean( 'caching' )->unbox();
 		$this->smarty->compile_check 		= ub( $config->getBoolean( 'compile_check', FALSE ) );
 		$this->smarty->template_dir 		= us( $config->getString( 'template_dir', '', TRUE ) );
@@ -51,7 +54,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
 		//$this->smarty->plugins_dir	= empty($plugins_dir) ? 'plugins' : $plugins_dir;
 
-		if ( $this->getSandbox()->isDebug() )
+		if ( $this->debug_mode )
 		{
 			$smarty_options = array(
 					'caching' => $this->smarty->caching,

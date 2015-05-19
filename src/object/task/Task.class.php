@@ -50,6 +50,7 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
 	 */
 	public function handleException( $e, $context )
 	{
+		return FALSE;
 	}
 
 	/**
