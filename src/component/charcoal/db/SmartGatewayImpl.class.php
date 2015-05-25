@@ -559,14 +559,16 @@ class Charcoal_SmartGatewayImpl
 	 *	@param int $aggregate_func                   identify aggregate function tpype
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $fields        comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $comment       comment text
 	 */
-	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL ) 
+	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
 		Charcoal_ParamTrait::validateInteger( 1, $aggregate_func );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
+		Charcoal_ParamTrait::validateString( 5, $comment, TRUE );
 
 		// default count fields
 		if ( $fields === NULL ){
@@ -581,7 +583,14 @@ class Charcoal_SmartGatewayImpl
 		// get current model
 		$model = $this->getModel( $current_model_name );
 
-		$sql = $this->sql_builder->buildAggregateSQL( $model, $current_model_alias, $aggregate_func, $criteria, $current_model_joins, $fields );
+		$sql = $this->sql_builder->buildAggregateSQL( 
+										$model, 
+										$current_model_alias, 
+										$aggregate_func, 
+										$criteria, 
+										$current_model_joins, 
+										$fields, 
+										$comment );
 
 		$params = $criteria->getParams();
 
@@ -606,18 +615,20 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $comment       comment text
 	 */
-	public function count( $query_target, $criteria, $fields = NULL ) 
+	public function count( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateString( 3, $fields, TRUE );
+		Charcoal_ParamTrait::validateString( 4, $comment, TRUE );
 
 		if ( $fields === NULL ){
 			$fields = '*';
 		}
 
-		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_COUNT, $query_target, $criteria, $fields );
+		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_COUNT, $query_target, $criteria, $fields, $comment );
 
 		log_debug( "debug,sql,smart_gateway", "smart_gateway", "COUNT result: $result" );
 
@@ -630,14 +641,16 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $comment       comment text
 	 */
-	public function max( $query_target, $criteria, $fields = NULL  ) 
+	public function max( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateString( 3, $fields, TRUE );
+		Charcoal_ParamTrait::validateString( 4, $comment, TRUE );
 
-		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_MAX, $query_target, $criteria, $fields );
+		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_MAX, $query_target, $criteria, $fields, $comment );
 
 		log_debug( "debug,sql,smart_gateway", "smart_gateway", "MAX result: $result" );
 
@@ -650,14 +663,16 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $comment       comment text
 	 */
-	public function min( $query_target, $criteria, $fields ) 
+	public function min( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateString( 3, $fields );
+		Charcoal_ParamTrait::validateString( 4, $comment, TRUE );
 
-		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_MIN, $query_target, $criteria, $fields );
+		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_MIN, $query_target, $criteria, $fields, $comment );
 
 		log_debug( "debug,sql,smart_gateway", "smart_gateway", "MIN result: $result" );
 
@@ -670,14 +685,16 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria         criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $comment        comment text
 	 */
-	public function sum( $query_target, $criteria, $fields ) 
+	public function sum( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateString( 3, $fields );
+		Charcoal_ParamTrait::validateString( 4, $comment, TRUE );
 
-		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_SUM, $query_target, $criteria, $fields );
+		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_SUM, $query_target, $criteria, $fields, $comment );
 
 		log_debug( "debug,sql,smart_gateway", "smart_gateway", "SUM result: $result" );
 
@@ -687,17 +704,19 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::avg()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target        description about target model, alias, or joins
-	 *	@param Charcoal_SQLCriteria $criteria
-	 *	@param string $fields
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_SQLCriteria $criteria         criteria object
+	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *	@param Charcoal_String|string $comment        comment text
 	 */
-	public function avg( $query_target, $criteria, $fields ) 
+	public function avg( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateString( 3, $fields );
+		Charcoal_ParamTrait::validateString( 4, $comment, TRUE );
 
-		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_AVG, $query_target, $criteria, $fields );
+		$result = $this->execAggregateQuery( Charcoal_EnumSQLAggregateFunc::FUNC_AVG, $query_target, $criteria, $fields, $comment );
 
 		log_debug( "debug,sql,smart_gateway", "smart_gateway", "AVG result: $result" );
 

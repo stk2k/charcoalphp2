@@ -475,17 +475,19 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
 	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
 	 *	@param array $fields                      list of fields which will be returned in query result
+	 *	@param Charcoal_String|string $comment    comment text
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL )
+	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL, $comment = NULL )
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
 		Charcoal_ParamTrait::validateInteger( 3, $aggregate_func );
 		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateVector( 5, $joins );
-		Charcoal_ParamTrait::validateVector( 6, $fields, NULL );
+		Charcoal_ParamTrait::validateVector( 6, $fields, TRUE );
+		Charcoal_ParamTrait::validateString( 7, $comment, TRUE );
 
 		$table_name = $model->getTableName();
 
@@ -503,7 +505,8 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 		$fields = v($fields)->join(",");
 
-		$sql = "SELECT $func($fields) FROM " . us($table_name);
+		$sql = $comment ? "/* $comment */" : '';
+		$sql .= "SELECT $func($fields) FROM " . us($table_name);
 
 		if ( $alias && !empty($alias) ){
 			$sql .= ' AS ' . $alias;

@@ -71,10 +71,11 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
 	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
 	 *	@param array $fields                      list of fields which will be returned in query result
+	 *	@param Charcoal_String|string $comment    comment text
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL );
+	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL, $comment = NULL );
 
 	/**
 	 *	Generate RDBMS-specific SQL for DELETE

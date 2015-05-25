@@ -76,11 +76,54 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Delete the file or directory
 	 *
+	 * @param bool $drilldown If TRUE, all of child directory may be removed automatically.
+	 *
 	 * @return bool TRUE if the file or directory is successfully deleted, otherwise FALSE.
 	 */
-	public function delete()
+	public function delete( $drilldown = FALSE )
 	{
-		return @unlink( $this->path );
+		if ( is_file( $this->path ) ){
+			return @unlink( $this->path );
+		}
+		if ( $drilldown ){
+			return self::removeDirectoryRecursive( $this->path );
+		}
+		return @rmdir( $this->path );
+	}
+
+	/**
+	 *  Delete the file or directory
+	 *
+	 * @param string $path                    directory path to remove
+	 *
+	 * @return bool TRUE if the file or directory is successfully deleted, otherwise FALSE.
+	 */
+	private static function removeDirectoryRecursive( $path )
+	{
+		if ( !file_exists($path) ){
+			//if ( CHARCOAL_RUNMODE != 'http' ) echo "file_exists failed: $path" . PHP_EOL;
+			return FALSE;
+		}
+
+		$handle = opendir("$path");
+		if ( $handle === FALSE ) {
+			//if ( CHARCOAL_RUNMODE != 'http' ) echo "opendir failed: $path" . PHP_EOL;
+			return FALSE;
+		}
+		while ( false !== ($item = readdir($handle)) ) {
+			if ($item != "." && $item != "..") {
+				if (is_dir("$path/$item")) {
+					self::removeDirectoryRecursive( "$path/$item" );
+				} else {
+					$ret = @unlink( "$path/$item" );
+					//if ( CHARCOAL_RUNMODE != 'http' ) echo "unlink: $path/$item ret=$ret" . PHP_EOL;
+				}
+			}
+		}
+		closedir( $handle );
+		$ret = @rmdir( $path );
+		//if ( CHARCOAL_RUNMODE != 'http' ) echo "rmdir: $path ret=$ret" . PHP_EOL;
+		return $ret;
 	}
 
 	/**

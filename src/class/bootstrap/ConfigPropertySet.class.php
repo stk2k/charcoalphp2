@@ -71,7 +71,11 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 		$key = us($key);
 		$value = parent::getString( $key, $default_value, $encoding );
 
-		return $process_macro ? Charcoal_ResourceLocator::processMacro( $this->env, $value ) : $value;
+		if ( $process_macro ){
+			$value = s( Charcoal_ResourceLocator::processMacro( $this->env, $value ) );
+		}
+
+		return $value;
 	}
 
 	/**
@@ -98,13 +102,17 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 		$decoded = json_decode( us($value), true );
 
-		log_debug( "debug", "decoded: " . print_r($decoded,true) );
-
 		if ( $decoded === NULL ){
 			_throw( new Charcoal_JsonDecodingException($value) );
 		}
 
-		return $process_macro ? Charcoal_ResourceLocator::processMacro( $this->env, $decoded ) : $decoded;
+		log_debug( "debug", "decoded: " . print_r($decoded,true) );
+
+		if ( $process_macro ){
+			$decoded = Charcoal_ResourceLocator::processMacro( $this->env, $decoded );
+		}
+
+		return $decoded;
 	}
 
 	/**
@@ -134,7 +142,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 			if ( empty($item) )	unset($items[$key]);
 		}
 
-		if ( $process_macro === TRUE ){
+		if ( $process_macro ){
 			$items = Charcoal_ResourceLocator::processMacro( $this->env, $items );
 		}
 

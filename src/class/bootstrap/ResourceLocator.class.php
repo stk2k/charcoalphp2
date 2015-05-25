@@ -23,7 +23,6 @@ class Charcoal_ResourceLocator
 		if ( is_array($value) || $value instanceof Traversable ){
 			$new_array = array();
 			foreach( $value as $key => $value ){
-				$key = is_string($key) ? self::processMacro( $env, $key ) : $key;
 				$value = is_string($value) ? self::processMacro( $env, $value ) : $value;
 				$new_array[$key] = $value;
 			}
