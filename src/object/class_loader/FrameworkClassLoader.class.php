@@ -274,6 +274,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_QueryJoin'						=> 'component/charcoal/db',
 				'Charcoal_QueryTarget'						=> 'component/charcoal/db',
 				'Charcoal_QueryTargetElement'				=> 'component/charcoal/db',
+				'Charcoal_DbFieldUpdateMethod'				=> 'component/charcoal/db',
 
 				'Charcoal_AbstractWrapperContext'			=> 'component/charcoal/db/context',
 				'Charcoal_SelectContext'					=> 'component/charcoal/db/context',

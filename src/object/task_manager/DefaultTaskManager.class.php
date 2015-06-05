@@ -11,6 +11,8 @@
 
 class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 {
+	const TAG = 'charcoal.object.default_task_manager';
+
 	private $tasks;
 	private $queue;
 
@@ -238,6 +240,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					$result = NULL;
 					try{
 						$result = $task->processEvent( $context );
+						if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] returned from processEvent with result:" . print_r($result,true) );
 					}
 					catch( Charcoal_BusinessException $e )
 					{
@@ -270,7 +273,9 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 						$result_str = 'TRUE';
 					}
 					else{
-						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, "processEvent() must return a [boolean] value." ) );
+						$msg = "processEvent() must return a [boolean] value. but returned:" . print_r($result,true);
+						log_error( 'system,event,error', $msg, self::TAG );
+						_throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, $msg ) );
 					}
 
 					// task timer stop
@@ -280,7 +285,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					// ポストアクション
 					$post_actions = $task->getPostActions();
 
-					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );	
+					if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );
 					if ( $post_actions )
 					{
 						foreach( $post_actions as $key => $action )

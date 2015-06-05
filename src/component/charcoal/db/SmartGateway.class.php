@@ -11,6 +11,8 @@
 */
 class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
+	const VALUE_NULL = 'null';
+
 	private $last_sql;
 	private $last_params;
 
@@ -292,6 +294,29 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			}
 
 			$this->impl->decrementField( $query_target, $data_id, $field, $decrement_by );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
+	 *	update field by null
+	 *	
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param int $data_id            identify database entity
+	 *	@param string $field           field name to set null
+	 */
+	public function updateFieldNull( $query_target, $data_id, $field ) 
+	{
+		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
+			$this->impl->updateFieldNull( $query_target, $data_id, $field );
 		}
 		catch ( Exception $e )
 		{

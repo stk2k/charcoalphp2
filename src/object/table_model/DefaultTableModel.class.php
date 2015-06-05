@@ -49,10 +49,12 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
 		_throw( new Charcoal_TableModelException( $this, s('___table_name property is not set') ) );
 	}
 
-	/*
-	 *  check if primary key field value is valid
+	/**
+	 *   validate primary key value
+	 *   
+	 *  @param Charcoal_DTO $dto         target record
 	 */
-	public function isPrimaryKeyValid( Charcoal_TableDTO $dto )
+	public function validatePrimaryKeyValue( $dto )
 	{
 		$pk = parent::getPrimaryKey();
 

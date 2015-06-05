@@ -115,7 +115,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 		if ( $this->_primary_key ){
 			return $this->_primary_key;
 		}
-		_throw( new Charcoal_TableModelException( $this, s('no primary key') ) );
+		return NULL;
 	}
 
 	/**

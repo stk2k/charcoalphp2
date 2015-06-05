@@ -73,6 +73,7 @@ class SystemTestTask extends Charcoal_TestTask
 		case "get_object_vars":
 		case "snake_case":
 		case "pascal_case":
+		case "hash_collision":
 			return TRUE;
 		}
 		return FALSE;
@@ -270,6 +271,27 @@ class SystemTestTask extends Charcoal_TestTask
 				$actual = Charcoal_System::pascalCase( $key );
 //				echo "[original]$key [expected]$expected [actual]$actual" . eol();
 				$this->assertEquals( $expected, $actual );
+			}
+
+			return TRUE;
+
+		case "hash_collision":
+			{
+				$hashes = array();
+				$max = 1000000;
+				for($i=0; $i<$max; $i++){
+					$hash = Charcoal_System::hash();
+					if ( !isset($hashes[$hash]) ){
+						$hashes[$hash]  = 0;
+					}
+					$hashes[$hash] ++;
+					$p = ((float)$i) / $max * 100;
+					echo sprintf("[%0.2f %%]\r",$p);
+				}
+				$collisions = array_filter( $hashes, function($item){
+					return $item >= 2;
+				});
+				ad($collisions);
 			}
 
 			return TRUE;

@@ -21,9 +21,11 @@ interface Charcoal_ITableModel extends Charcoal_IModel
 	 */
 	public function getPrimaryKey();
 
-	/*
-	 *  check if primary key field value is valid
+	/**
+	 *   check if new record
+	 *   
+	 *  @param Charcoal_DTO $dto         target record
 	 */
-	public function isPrimaryKeyValid( Charcoal_TableDTO $dto );
+	public function validatePrimaryKeyValue( $dto );
 }
 

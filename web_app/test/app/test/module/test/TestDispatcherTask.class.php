@@ -97,7 +97,6 @@ class TestDispatcherTask extends Charcoal_Task
 			return TRUE;
 		}
 
-		$events = array();
 		foreach( $scenario_data as $section => $data ){
 
 			$target = isset($data['target']) ? $data['target'] : NULL;
@@ -123,12 +122,13 @@ class TestDispatcherTask extends Charcoal_Task
 			log_info( "debug,scenario", "loaded module: $module_path" );
 
 			$event_args = array( $section, $target, $actions );
-			$events[] = $context->createEvent( 'test', $event_args );
+			$event = $context->createEvent( 'test', $event_args );
+			$context->pushEvent( $event );
 			log_debug( "debug,scenario", "event_args: " . print_r($event_args,true) );
-			log_debug( "debug,scenario", "events: " . print_r($events,true) );
+			log_debug( "debug,scenario", "pushed event: " . print_r($event,true) );
 		}
 
-		return $events;
+		return TRUE;
 	}
 }
 

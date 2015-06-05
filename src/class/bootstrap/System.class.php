@@ -151,9 +151,9 @@ class Charcoal_System
 		switch( $algorithm )
 		{
 		case 'sha1':
-			return sha1(uniqid(rand(),1));
+			return sha1(microtime().uniqid(mt_rand(),1));
 		case 'md5':
-			return md5(uniqid(rand(),1));
+			return md5(microtime().uniqid(mt_rand(),1));
 		}
 
 		return NULL;

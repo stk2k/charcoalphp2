@@ -452,12 +452,12 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::findById()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $id
+	 *	@param int|bool|float|string $data_id        primary key value of the entity
 	 */
 	public function findById( $query_target, $id ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::validateInteger( 2, $id );
+		Charcoal_ParamTrait::validateScalar( 2, $id );
 
 		$model = $this->getModel( $query_target->getModelName() );
 
@@ -479,12 +479,12 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::destroyById()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $data_id                          identify database entity
+	 *	@param int|bool|float|string $data_id        primary key value of the entity
 	 */
 	public function destroyById( $query_target, $data_id ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::validateInteger( 2, $data_id );
+		Charcoal_ParamTrait::validateScalar( 2, $data_id );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
@@ -783,51 +783,71 @@ class Charcoal_SmartGatewayImpl
 	 */
 	public function save( $query_target, $data )
 	{
-		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
-		Charcoal_ParamTrait::validateHashMapOrDTO( 2, $data );
+		try{
+			Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
+			Charcoal_ParamTrait::validateHashMapOrDTO( 2, $data );
 
-		$model = $this->getModel( $query_target->getModelName() );
-		$alias = $query_target->getAlias();
+			$model = $this->getModel( $query_target->getModelName() );
+			$alias = $query_target->getAlias();
 
-		// primary key
-		$pk      = $model->getPrimaryKey();
+			// primary key
+			$pk      = $model->getPrimaryKey();
 
-		// build SQL
-		$is_new = FALSE;
-		if ( $model->isPrimaryKeyValid($data) ){
-			// UPDATE
-			$data_id = $data[$pk];
+			// validate primary key value
+			$valid = $model->validatePrimaryKeyValue( $data );
 
-			$where = "$pk = ?";
-			$params = array( ui($data_id) );
-			$criteria = new Charcoal_SQLCriteria( $where, $params );
-			list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $data, $criteria );
+			if ( $valid ){
+				// find entity
+				$obj = self::findById( $query_target, $data->$pk );
+				// if not found, dto is regarded as a new entity
+				$is_new = empty($obj);
+			}
+			else{
+				// if promary key value is invalid, dto id rebgarded as a new entity
+				$is_new = true;
+			}
+
+			// build SQL
+			if ( !$is_new ){
+				// UPDATE
+				$data_id = $data[$pk];
+
+				$where = "$pk = ?";
+				$params = array( ui($data_id) );
+				$criteria = new Charcoal_SQLCriteria( $where, $params );
+				list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $data, $criteria );
+			}
+			else{
+				// INSERT
+				list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $alias, $data );
+
+				$is_new = TRUE;
+			}
+
+			$this->data_source->prepareExecute( $sql, $params );
+
+			if ( $is_new ){
+				$sql = $this->sql_builder->buildLastIdSQL();
+
+				$result = $this->data_source->prepareExecute( $sql );
+
+				$row = $this->data_source->fetchArray( $result );
+
+				$new_id = $row[0];
+			}
+			else{
+				$new_id = $data[$pk];
+			}
+
+			log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
+
+			return $new_id;
 		}
-		else{
-			// INSERT
-			list( $sql, $params ) = $this->sql_builder->buildInsertSQL( $model, $alias, $data );
-
-			$is_new = TRUE;
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
-
-		$this->data_source->prepareExecute( $sql, $params );
-
-		if ( $is_new ){
-			$sql = $this->sql_builder->buildLastIdSQL();
-
-			$result = $this->data_source->prepareExecute( $sql );
-
-			$row = $this->data_source->fetchArray( $result );
-
-			$new_id = $row[0];
-		}
-		else{
-			$new_id = $data[$pk];
-		}
-
-		log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
-
-		return $new_id;
 	}
 
 	/**
@@ -1028,6 +1048,43 @@ class Charcoal_SmartGatewayImpl
 		$field = us($field);
 
 		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('decrement', $decrement_by) );
+
+		$pk = $model->getPrimaryKey();
+		$where = "$pk = ?";
+		$params = array( ui($data_id) );
+		$criteria = new Charcoal_SQLCriteria( $where, $params );
+
+		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $model->createDTO(), $criteria, $override );
+
+//		log_debug( "debug,smart_gateway,sql", "sql:$sql" );
+//		log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+
+		$this->data_source->prepareExecute( $sql, $params );
+	}
+
+	/**
+	 *	real implementation of Charcoal_SmartGateway::updateFieldNull()
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param int $data_id                          identify database entity
+	 *	@param string $field                         field name to set null
+	 */
+	public function updateFieldNull( $query_target, $data_id, $field ) 
+	{
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::validateInteger( 2, $data_id );
+		Charcoal_ParamTrait::validateString( 3, $field );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
+
+		if ( !$model->fieldExists($field) ){
+			_throw( new Charcoal_InvalidArgumentException("field=[$field]") );
+		}
+
+		$field = us($field);
+
+		$override[$field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('set_null') );
 
 		$pk = $model->getPrimaryKey();
 		$where = "$pk = ?";

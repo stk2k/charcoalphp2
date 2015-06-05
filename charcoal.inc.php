@@ -280,7 +280,7 @@ function _throw( $e, $log_error = TRUE )
 	try{
 		log_debug( "system,debug", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
 		if ( $log_error ){
-			log_debug( "error", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
+			log_error( "error", "_throw $clazz ($id) $message threw from $file($line)", "exception" );
 		}
 	}
 	catch( Exception $ex ){

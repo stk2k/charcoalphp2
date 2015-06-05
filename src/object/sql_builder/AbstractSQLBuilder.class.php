@@ -188,7 +188,17 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 				case 'value':
 					// 値で更新
 					$value = $dto->$field;
-					if ( $value !== NULL ){
+					if ( $value instanceof Charcoal_DbFieldUpdateMethod ){
+						switch( $value->getValueType() ){
+						case Charcoal_DbFieldUpdateMethod::UPDATE_BY_NULL:
+							$SQL_set[] = $field . ' = NULL';
+							break;
+						case Charcoal_DbFieldUpdateMethod::UPDATE_BY_NOW:
+							$SQL_set[] = $field . ' = NOW()';
+							break;
+						}
+					}
+					elseif ( $value !== NULL ){
 						$SQL_set[] = $field . ' = ?';
 						// パラメータを追加
 						$SQL_params[] = $value;
@@ -210,6 +220,11 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 							{
 								$decrement_by = isset($params[1]) ? $params[1] : 1;
 								$function = $field . ' - ' . $decrement_by;
+							}
+							break;
+						case 'set_null':
+							{
+								$function = 'NULL';
 							}
 							break;
 						default:        	$function = 'NULL';		break;
