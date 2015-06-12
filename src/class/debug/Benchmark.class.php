@@ -13,7 +13,7 @@ class Charcoal_Benchmark
 {
 	const DEFAULT_PRECISION    = 4;
 
-	static private $start_times;
+	static private $benchmarks;
 
 	/**
 	 *  start timer
@@ -26,7 +26,7 @@ class Charcoal_Benchmark
 
 		$start_time = microtime(true);
 
-		self::$start_times[$handle] = $start_time;
+		self::$benchmarks[$handle] = $start_time;
 
 		return $handle++;
 	}
@@ -41,14 +41,14 @@ class Charcoal_Benchmark
 	 */
 	public static function stop( $handle, $precision = self::DEFAULT_PRECISION )
 	{
-		$start_time = isset(self::$start_times[$handle]) ? self::$start_times[$handle] : NULL;
+		$start_time = isset(self::$benchmarks[$handle]) ? self::$benchmarks[$handle] : NULL;
 		$stop_time = microtime(true);
 
 		if ( $start_time === NULL ){
 			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
 
-		self::$start_times[$handle] = $stop_time;
+		self::$benchmarks[$handle] = $stop_time;
 
 		return round( ($stop_time - $start_time) * 1000, $precision );
 	}
@@ -63,7 +63,7 @@ class Charcoal_Benchmark
 	 */
 	public static function score( $handle, $precision = self::DEFAULT_PRECISION )
 	{
-		$start_time = isset(self::$start_times[$handle]) ? self::$start_times[$handle] : NULL;
+		$start_time = isset(self::$benchmarks[$handle]) ? self::$benchmarks[$handle] : NULL;
 		$stop_time = microtime(true);
 
 		if ( $start_time === NULL ){

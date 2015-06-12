@@ -121,6 +121,15 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	public function getLastInsertId();
 
 	/**
+	 *   free result
+	 *   
+	 * @param mixed $result           query result
+	 * 
+	 * @return bool              TRUE if success, otherwise FALSE
+	 */
+	public function free( $result );
+
+	/**
 	 *   create recordset factory
 	 *   
 	 * @param integer $fetch_mode    fetch mode(defined at Charcoal_IRecordset::FETCHMODE_XXX)

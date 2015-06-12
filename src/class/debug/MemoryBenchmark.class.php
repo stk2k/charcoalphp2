@@ -11,7 +11,9 @@
 
 class Charcoal_MemoryBenchmark
 {
-	static private $stack = array();
+	const DEFAULT_PRECISION    = 4;
+
+	static private $benchmarks;
 
 	/**
 	 *  start timer
@@ -19,27 +21,48 @@ class Charcoal_MemoryBenchmark
 	 */
 	public static function start()
 	{
-		self::$stack[] = memory_get_peak_usage(true);
+		static $handle = 0;
+
+		$usage_1 = memory_get_usage(true);
+		$usage_2 = memory_get_usage(false);
+
+		self::$benchmarks[$handle] = array(
+				$usage_1, $usage_2, 
+			);
+
+		return $handle++;
 	}
 
 	/**
 	 *    stop timer
 	 *  
+	 *  @param integer $handle        handle of benchmark
 	 *  @param integer $unit          unit of memory usage
 	 *  @param integer $precision     precision of memory usage
 	 *  
 	 *  @return integer      now score
 	 */
-	public static function stop( $unit = Charcoal_EnumMemoryUnit::UNIT_B, $precision = Charcoal_MemoryUtil::DEFAULT_PRECISION )
+	public static function stop( $handle, $unit = Charcoal_EnumMemoryUnit::UNIT_B, $precision = Charcoal_MemoryUtil::DEFAULT_PRECISION )
 	{
-		$start = array_pop( self::$stack );
-		$stop = memory_get_peak_usage(true);
+		$start = isset(self::$benchmarks[$handle]) ? self::$benchmarks[$handle] : NULL;
 
 		if ( $start === NULL ){
 			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
 
-		return Charcoal_MemoryUtil::convertSize( $stop - $start, $unit, $precision );
+		list( $start_usage_1, $start_usage_2 ) = $start;
+
+		$score_1 = memory_get_usage(true) - $start_usage_1;
+		$score_2 = memory_get_usage(false) - $start_usage_2;
+
+		$score_1 = Charcoal_MemoryUtil::convertSize( $score_1, $unit, $precision );
+		$score_2 = Charcoal_MemoryUtil::convertSize( $score_2, $unit, $precision );
+
+		$scores = array( $score_1, $score_2 );
+
+		self::$benchmarks[$handle] = $scores;
+
+		return $scores;
 	}
 
 	/**
@@ -50,18 +73,23 @@ class Charcoal_MemoryBenchmark
 	 *  
 	 *  @return integer      now score
 	 */
-	public static function score( $unit = Charcoal_EnumMemoryUnit::UNIT_B, $precision = Charcoal_MemoryUtil::DEFAULT_PRECISION  )
+	public static function score( $handle, $unit = Charcoal_EnumMemoryUnit::UNIT_B, $precision = Charcoal_MemoryUtil::DEFAULT_PRECISION  )
 	{
-		$start = array_pop( self::$stack );
-		$stop = memory_get_peak_usage(true);
+		$start = isset(self::$benchmarks[$handle]) ? self::$benchmarks[$handle] : NULL;
 
 		if ( $start === NULL ){
 			_throw( new Charcoal_BenchmarkException('not started yet!') );
 		}
-		
-		self::$stack[] = $start;
 
-		return Charcoal_MemoryUtil::convertSize( $stop - $start, $unit, $precision );
+		list( $start_usage_1, $start_usage_2 ) = $start;
+
+		$score_1 = memory_get_usage(true) - $start_usage_1;
+		$score_2 = memory_get_usage(false) - $start_usage_2;
+
+		$score_1 = Charcoal_MemoryUtil::convertSize( $score_1, $unit, $precision );
+		$score_2 = Charcoal_MemoryUtil::convertSize( $score_2, $unit, $precision );
+
+		return array( $score_1, $score_2 );
 	}
 
 }

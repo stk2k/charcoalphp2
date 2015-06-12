@@ -25,5 +25,11 @@ interface Charcoal_IRecordset extends Iterator
 	 * @return mixed        fetch result
 	 */
 	public function fetch();
+
+	/**
+	 * close cursor
+	 *
+	 */
+	public function close();
 }
 

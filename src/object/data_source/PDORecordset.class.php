@@ -32,6 +32,17 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 	}
 
 	/**
+	 * destruct
+	 */
+	public function __destruct()
+	{
+		if ( $this->statement ){
+			$this->statement->closeCursor();
+			$this->statement = NULL;
+		}
+	}
+
+	/**
 	 * Set fetch mode
 	 *
 	 * @param integer $fetch_mode         fetch mode(self::FETCHMODE_XXX)
@@ -124,6 +135,21 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 	public function valid()
 	{
 		return $this->valid;
+	}
+
+	/**
+	 * close cursor
+	 *
+	 */
+	public function close()
+	{
+		if ( $this->statement ){
+			$result = $this->statement->closeCursor();
+			$this->statement = NULL;
+			if ( !$result ){
+				_throw( new Charcoal_DBDataSourceException("close cursor failed.") );
+			}
+		}
 	}
 }
 

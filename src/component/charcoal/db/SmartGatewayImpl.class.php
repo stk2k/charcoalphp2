@@ -207,6 +207,8 @@ class Charcoal_SmartGatewayImpl
 				$a[] = $row;
 			}
 
+			$this->data_source->free( $result );
+
 			return $a;
 		}
 	}
@@ -231,6 +233,8 @@ class Charcoal_SmartGatewayImpl
 			log_debug( "debug,smart_gateway,sql", "queryValue:$value" );
 			return $value;
 		}
+
+		$this->data_source->free( $result );
 
 		log_warning( "debug,smart_gateway,sql", "smart_gateway", "queryValue: no record" );
 
@@ -339,6 +343,8 @@ class Charcoal_SmartGatewayImpl
 			{
 				$rows[] = new Charcoal_HashMap( $row );
 			}
+
+			$this->data_source->free( $result );
 
 			return $rows;
 		}

@@ -612,7 +612,7 @@ class Charcoal_Framework
 	public static function run( $debug = NULL, $sandbox = NULL )
 	{
 		$th_run = Charcoal_Benchmark::start();
-		Charcoal_MemoryBenchmark::start();
+		$mh_run = Charcoal_MemoryBenchmark::start();
 
 //		Charcoal_ParamTrait::validateBoolean( 1, $debug, TRUE );
 //		Charcoal_ParamTrait::validateSandbox( 2, $sandbox, TRUE );
@@ -703,9 +703,13 @@ class Charcoal_Framework
 		log_debug( 'system, debug', sprintf("total framework process time: [%0.4f] msec",$timer_score) );
 
 		// memory usage
-		$memory_score = Charcoal_MemoryBenchmark::stop();
-		log_debug( 'system, debug', sprintf("total framework peak memory: [%d] bytes",$memory_score) );
+		list( $usage_1, $usage_2 ) = Charcoal_MemoryBenchmark::stop( $mh_run );
+		log_debug( 'system, debug', sprintf("used memory: [%d] bytes / [%d] bytes", $usage_1, $usage_2) );
 
+		// memory peak usage
+		$peak_usage_1 = Charcoal_MemoryUtil::convertSize( memory_get_peak_usage(true), Charcoal_EnumMemoryUnit::UNIT_B );
+		$peak_usage_2 = Charcoal_MemoryUtil::convertSize( memory_get_peak_usage(false), Charcoal_EnumMemoryUnit::UNIT_B );
+		log_debug( 'system, debug', sprintf("peak memory: [%d] bytes / [%d] bytes", $peak_usage_1, $peak_usage_2) );
 //Charcoal_Object::dump();
 
 		self::$loggers->terminate();
