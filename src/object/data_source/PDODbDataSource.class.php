@@ -29,6 +29,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 	private $exec_sql_stack;
 
+	private $num_rows;
+
 	/*
 	 *	コンストラクタ
 	 */
@@ -425,8 +427,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 			_throw( new Charcoal_DBDataSourceException( $msg ) );
 		}
 
-		$numRows = $stmt->rowCount();
-		log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows=$numRows)", __METHOD__ );
+		$this->num_rows = $stmt->rowCount();
+		log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows={$this->num_rows})", __METHOD__ );
 
 		// ログ
 		$elapse = Charcoal_Benchmark::stop( $timer_handle );
@@ -525,20 +527,14 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		return $result;
 	}
 
-	/*
-	 *    実行結果件数取得
+	/**
+	 *  returns count of rows which are affected by previous SQL(DELETE/INSERT/UPDATE)
+	 *  
+	 *  @return int         count of rows
 	 */
-	function numRows( $stmt )
+	function numRows()
 	{
-		return $stmt->rowCount();
-	}
-
-	/*
-	 *    create recordset object
-	 */
-	public function createRecordset( $result )
-	{
-		
+		return $this->num_rows;
 	}
 
 	/*

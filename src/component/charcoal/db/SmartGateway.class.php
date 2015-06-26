@@ -108,6 +108,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 		return $this->impl->getLastInsertId();
 	}
 
+	/**
+	 *  returns count of rows which are affected by previous SQL(DELETE/INSERT/UPDATE)
+	 *  
+	 *  @return int         count of rows
+	 */
+	public function numRows()
+	{
+		return $this->impl->numRows();
+	}
+
 	/*
 	 *   create recordset factory
 	 *
@@ -725,14 +735,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target    description about target model, alias, or joins
 	 *	@param int $data_id                          identify database entity
 	 */
-	public function destroyById( $query_target, $id ) 
+	public function deleteById( $query_target, $id ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->destroyById( $query_target, $id );
+			return $this->impl->deleteById( $query_target, $id );
 		}
 		catch ( Exception $e )
 		{
@@ -748,14 +758,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $field                  field name to query
 	 *	@param Charcoal_Scalar $value         field value to query
 	 */
-	public function destroyBy( $query_target, $field, $value )
+	public function deleteBy( $query_target, $field, $value )
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->destroyBy( $query_target, $field, $value );
+			return $this->impl->deleteBy( $query_target, $field, $value );
 		}
 		catch ( Exception $e )
 		{
@@ -770,14 +780,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target               description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria     criteria object
 	 */
-	public function destroyAll( $query_target, $criteria ) 
+	public function bulkDelete( $query_target, $criteria ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			return $this->impl->destroyAll( $query_target, $criteria );
+			return $this->impl->bulkDelete( $query_target, $criteria );
 		}
 		catch ( Exception $e )
 		{

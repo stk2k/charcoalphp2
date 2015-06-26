@@ -680,7 +680,7 @@ class Charcoal_Framework
 
 			self::$loggers->flush();
 		}
-		catch( BaseException $e )
+		catch( Throwable $e )
 		{
 			_catch( $e );
 

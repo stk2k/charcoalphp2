@@ -95,15 +95,12 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	 */
 	public function prepareExecute( $sql, $params = NULL, $driver_options = NULL );
 
-	/*
-	 *    実行結果件数取得
+	/**
+	 *  returns count of rows which are affected by previous SQL(DELETE/INSERT/UPDATE)
+	 *  
+	 *  @return int         count of rows
 	 */
-	function numRows( $result );
-
-	/*
-	 *    create recordset object
-	 */
-	public function createRecordset( $result );
+	function numRows();
 
 	/*
 	 *    フェッチ処理（連想配列で返却）

@@ -601,17 +601,21 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		}
 
 		$where_clause = $criteria->getWhere();
+		$order_by     = $criteria->getOrderBy();
 		$limit        = $criteria->getLimit();
-		$offset       = $criteria->getOffset();
+		$group_by     = $criteria->getGroupBy();
 
 		if ( !empty($where_clause) ){
 			$sql .= ' WHERE ' . $where_clause;
 		}
+		if ( !empty($group_by) ){
+			$sql .= ' GROUP BY ' . $group_by;
+		}
+		if ( !empty($order_by) ){
+			$sql .= ' ORDER BY ' . $order_by;
+		}
 		if ( !empty($limit) ){
 			$sql .= ' LIMIT ' . $limit;
-		}
-		if ( !empty($offset) ){
-			$sql .= ' OFFSET ' . $offset;
 		}
 	
 		return $sql;

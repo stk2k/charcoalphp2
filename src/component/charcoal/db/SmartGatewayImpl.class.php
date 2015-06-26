@@ -94,6 +94,16 @@ class Charcoal_SmartGatewayImpl
 	}
 
 	/**
+	 *  returns count of rows which are affected by previous SQL(DELETE/INSERT/UPDATE)
+	 *  
+	 *  @return int         count of rows
+	 */
+	public function numRows()
+	{
+		return $this->data_source->numRows();
+	}
+
+	/**
 	 *	get table model
 	 *	
 	 *	@param string $model_name       table model name
@@ -482,12 +492,12 @@ class Charcoal_SmartGatewayImpl
 	}
 
 	/**
-	 *	real implementation of Charcoal_SmartGateway::destroyById()
+	 *	real implementation of Charcoal_SmartGateway::deleteById()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param int|bool|float|string $data_id        primary key value of the entity
 	 */
-	public function destroyById( $query_target, $data_id ) 
+	public function deleteById( $query_target, $data_id ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateScalar( 2, $data_id );
@@ -513,13 +523,13 @@ class Charcoal_SmartGatewayImpl
 	}
 
 	/**
-	 *	real implementation of Charcoal_SmartGateway::destroyBy()
+	 *	real implementation of Charcoal_SmartGateway::deleteBy()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param string $field                         field name to query
 	 *	@param Charcoal_Scalar $value                field value to query
 	 */
-	public function destroyBy( $query_target, $field, $value )
+	public function deleteBy( $query_target, $field, $value )
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateString( 2, $field );
@@ -532,16 +542,16 @@ class Charcoal_SmartGatewayImpl
 
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
-		$this->destroyAll( $query_target, $criteria );
+		$this->bulkDelete( $query_target, $criteria );
 	}
 
 	/**
-	 *	real implementation of Charcoal_SmartGateway::destroyAll()
+	 *	real implementation of Charcoal_SmartGateway::bulkDelete()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria         criteria object
 	 */
-	public function destroyAll( $query_target, $criteria ) 
+	public function bulkDelete( $query_target, $criteria ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );
