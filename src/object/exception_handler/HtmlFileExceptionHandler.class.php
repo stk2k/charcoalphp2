@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_HtmlFileOutputExceptionHandler extends Charcoal_AbstractExceptionHandler
+class Charcoal_HtmlFileExceptionHandler extends Charcoal_AbstractExceptionHandler
 {
 	/**
 	 * execute exception handlers

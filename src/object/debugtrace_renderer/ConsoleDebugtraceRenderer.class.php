@@ -37,7 +37,7 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRend
 	{
 		Charcoal_ParamTrait::validateException( 1, $e );
 
-		echo $this->output( $e );
+		echo $this->output($e);
 
 		return TRUE;
 	}

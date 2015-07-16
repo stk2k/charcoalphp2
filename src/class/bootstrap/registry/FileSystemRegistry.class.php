@@ -43,7 +43,8 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 
 		// read cache data
 		$base_dir = 'config/' . CHARCOAL_PROJECT . '/' . CHARCOAL_APPLICATION . '/' . $type_name;
-		$base_dir = empty($obj_path->getRealPath()) ? $base_dir : $base_dir . '/' . $obj_path->getRealPath();
+		$real_path = $obj_path->getRealPath();
+		$base_dir = empty($real_path) ? $base_dir : $base_dir . '/' . $obj_path->getRealPath();
 		$cache_file = $obj_path->getObjectName() . '.config.php';
 		$cache_file_path = CHARCOAL_CACHE_DIR . '/' . $base_dir . '/' . $cache_file;
 		$cached_config = is_file($cache_file_path) && is_readable($cache_file_path) ? require( $cache_file_path ) : null;
@@ -60,16 +61,21 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 				// cache entry
 				$cache_exists = isset($cached_config['config'][$key]);
 
+				// if cache data does not exists, then load from file
+				if ( !$cache_exists ){
+					goto LOAD_CONFIG_FROM_FILE;
+				}
+
 				// read config file date
 				$config_date = $provider->getConfigDate( $key );
 
 				// if cache data exists and config file does not exist
-				if ( $cache_exists && $config_date === false ){
+				if ( $config_date === false ){
 					goto LOAD_CONFIG_FROM_FILE;
 				}
 
 				// if config file 
-				if ( $config_date !== false && $config_date > $cache_date ){
+				if ( $config_date > $cache_date ){
 					goto LOAD_CONFIG_FROM_FILE;
 				}
 

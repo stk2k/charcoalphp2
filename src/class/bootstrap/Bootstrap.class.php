@@ -235,14 +235,16 @@ class Charcoal_Bootstrap
 				'Charcoal_AbstractExceptionHandler'				=> 'object/exception_handler',
 				'Charcoal_HttpErrorHeaderExceptionHandler'		=> 'object/exception_handler',
 				'Charcoal_HttpErrorDocumentExceptionHandler'	=> 'object/exception_handler',
-				'Charcoal_HtmlFileOutputExceptionHandler'		=> 'object/exception_handler',
-				'Charcoal_ConsoleOutputExceptionHandler'		=> 'object/exception_handler',
+				'Charcoal_HtmlFileExceptionHandler'				=> 'object/exception_handler',
+				'Charcoal_ConsoleExceptionHandler'				=> 'object/exception_handler',
+				'Charcoal_StdErrorExceptionHandler'				=> 'object/exception_handler',
 
 				// debugtrace renderer classes
 				'Charcoal_AbstractDebugtraceRenderer'		=> 'object/debugtrace_renderer',
 				'Charcoal_HtmlDebugtraceRenderer'			=> 'object/debugtrace_renderer',
 				'Charcoal_ConsoleDebugtraceRenderer'		=> 'object/debugtrace_renderer',
 				'Charcoal_LogDebugtraceRenderer'			=> 'object/debugtrace_renderer',
+				'Charcoal_StdErrorDebugtraceRenderer'		=> 'object/debugtrace_renderer',
 
 				// debug classes
 				'Charcoal_Benchmark'				=> 'class/debug',
