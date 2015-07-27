@@ -52,7 +52,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 			// 外部キーの確認
 			if ( isset($annot_map['fk']) ){
 				$a_value = $annot_map['fk'];
-				$model_name = $a_value->getValue();
+				$model_name = s($a_value);
 				if ( !$model_name || $model_name->isEmpty() ){
 					_throw( new Charcoal_AnnotaionException( $class_name, $field, "@fk", "@fk annotation requires model name" ) );
 				}
@@ -70,10 +70,14 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 		$this->_annotaions = $annotaions;
 	}
 
-	/*
-	 *   アノテーションを取得
+	/**
+	 *  Get annotated values by specified field name
+	 *
+	 * @param Charcoal_String|string $field
+	 *
+	 * @return Charcoal_AnnotationValue[]|NULL
 	 */
-	public function getAnnotations( Charcoal_String $field )
+	public function getAnnotations( $field )
 	{
 		$field = us($field);
 
@@ -86,11 +90,19 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 		return $this->_annotaions[$field];
 	}
 
-	/*
-	 *   アノテーション値を取得
+	/**
+	 *  Get annotated value by specified field name
+	 *
+	 * @param Charcoal_String|string $field
+	 * @param Charcoal_String|string $annotation_key
+	 *
+	 * @return Charcoal_AnnotationValue|NULL
 	 */
-	public function getAnnotationValue( Charcoal_String $field, Charcoal_String $annotation_key )
+	public function getAnnotationValue( $field, $annotation_key )
 	{
+		Charcoal_ParamTrait::validateString( 1, $field );
+		Charcoal_ParamTrait::validateString( 2, $annotation_key );
+
 		$field = us($field);
 		$key   = us($annotation_key);
 
@@ -119,7 +131,11 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 	}
 
 	/**
-	 * フィールドが存在するか
+	 * test if field exists in this table model
+	 *
+	 * @param Charcoal_String|string  $field
+	 *
+	 * @return boolean      TRUE if the field exists, otherwise FALSE
 	 */
 	public function fieldExists( $field )
 	{
@@ -145,7 +161,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 
 		$field = s($field);
 
-		$annot = $this->getAnnotation( $field, s('default') );
+		$annot = $this->getAnnotationValue( $field, s('default') );
 
 		if ( !$annot ){
 			return NULL;
@@ -157,36 +173,16 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 		}
 		$value = us( $value );
 
-		// 特殊初期化処理
-		switch( $value ){
-		case 'this_year':
-		case 'date_Y':
-			$value = date('Y');		break;
-		case 'date_y':
-			$value = date('y');		break;
-		case 'date_m':
-			$value = date('m');		break;
-		case 'this_month':
-		case 'date_n':
-			$value = date('n');		break;
-		case 'date_d':
-			$value = date('d');		break;
-		case 'this_day':
-		case 'date_j':
-			$value = date('j');		break;
-		case 'today':
-			{
-				$format = $this->getAnnotationParameter( $field, s('default'), i(0), s('Y-m-d') );
-				$value = date(us($format));
-			}
-			break;
-		}
-
 		return $value == 'NULL' ? NULL : $value;
 	}
 
-	/*
-	 *	アノテーションをパース
+	/**
+	 *	parse annotations
+	 *
+	 * @param Charcoal_String|string $field
+	 * @param Charcoal_String|string $field_value
+	 *
+	 * @return array         annotation map
 	 */
 	private function parseAnnotation( $field, $field_value )
 	{
@@ -196,14 +192,14 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 
 		foreach( $phrase_list as $phrase ){
 			if ( strpos($phrase,'@') === 0 ){
+				$value = '';
+				$params = array();
 				// :までがアノテーション名
 				$phrase = substr($phrase,1);
 				$pos = strpos($phrase,':');
 				if ( $pos === false ){
 					// 値とパラメータはなし
 					$name = $phrase;
-					$value = '';
-					$params = array();
 				}
 				else{
 					// 値とパラメータを分ける
@@ -225,7 +221,7 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
 					}
 					else{
 						// アノテーションフォーマット例外
-						_throw( new Charcoal_AnnotaionException( $class_name, $field, $name, 'illegal format' ) );
+						_throw( new Charcoal_AnnotaionException( get_class($this), $field, $name, 'illegal format' ) );
 					}
 				}
 				// アノテーション追加

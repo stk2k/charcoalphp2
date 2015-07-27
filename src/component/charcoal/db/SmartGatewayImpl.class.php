@@ -107,6 +107,8 @@ class Charcoal_SmartGatewayImpl
 	 *	get table model
 	 *	
 	 *	@param string $model_name       table model name
+	 *
+	 * @return Charcoal_ITableModel
 	 */
 	private function getModel( $model_name )
 	{
@@ -118,7 +120,9 @@ class Charcoal_SmartGatewayImpl
 			return $this->model_cache[$model_name];
 		}
 
-		// create new instance
+		/**
+		 * @var Charcoal_ITableModel $model
+		 */
 		$model = $this->sandbox->createObject( $model_name, 'table_model' );
 
 		$model->setModelID( $model_name );
@@ -177,9 +181,9 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::execute()
 	 *	
-	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
-	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_String|string $sql              SQL statement(placeholders can be included)
+	 * @param Charcoal_HashMap|array $params           Parameter values for prepared statement
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
 	 */
 	public function execute( $sql, $params = NULL, $driver_options = NULL )
 	{
@@ -193,10 +197,12 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::query()
 	 *	
-	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
-	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
+	 * @param Charcoal_String|string $sql              SQL statement(placeholders can be included)
+	 * @param Charcoal_HashMap|array $params           Parameter values for prepared statement
 	 *	@param Charcoal_IRecordsetFactory $recordsetFactory
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return array|Charcoal_IRecordset
 	 */
 	public function query( $sql, $params = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
@@ -209,7 +215,7 @@ class Charcoal_SmartGatewayImpl
 
 		if ( $recordsetFactory )
 		{
-			return $recordsetFactory->createRecordset( $result, Charcoal_IRecordset::FETCHMODE_BOTH );
+			return $recordsetFactory->createRecordset( $result );
 		}
 		else{
 			$a = array();
@@ -226,9 +232,11 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::queryValue()
 	 *	
-	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
-	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_String|string $sql              SQL statement(placeholders can be included)
+	 * @param Charcoal_HashMap|array $params           Parameter values for prepared statement
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return mixed|NULL
 	 */
 	public function queryValue( $sql, $params = NULL, $driver_options = NULL )
 	{
@@ -259,7 +267,9 @@ class Charcoal_SmartGatewayImpl
 	 * @param Charcoal_SQLCriteria $criteria
 	 * @param Charcoal_String|string $fields
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return array|Charcoal_IRecordset
 	 */
 	public function find( $query_target, $options, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
@@ -339,13 +349,13 @@ class Charcoal_SmartGatewayImpl
 //			log_debug( "debug,smart_gateway,sql", "executed SQL: $sql" );
 
 		// 実行結果件数取得
-		$num_rows = $this->data_source->numRows( $result );
+		$num_rows = $this->data_source->numRows();
 
-//			log_debug( "debug,smart_gateway,sql", "num_rows: $num_rows" );
+		log_debug( "debug,smart_gateway,sql", "num_rows: $num_rows" );
 
 		if ( $recordsetFactory )
 		{
-			return $recordsetFactory->createRecordset( $result, Charcoal_IRecordset::FETCHMODE_BOTH );
+			return $recordsetFactory->createRecordset( $result );
 		}
 		else{
 			$rows = array();
@@ -367,6 +377,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *
+	 * @return Charcoal_DTO|NULL
 	 */
 	public function findFirst( $query_target, $criteria, $fields = NULL ) 
 	{
@@ -387,6 +399,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+	 *
+	 * @return Charcoal_DTO|NULL
 	 */
 	public function findFirstForUpdate( $query_target, $criteria, $fields = NULL ) 
 	{
@@ -408,7 +422,9 @@ class Charcoal_SmartGatewayImpl
 	 * @param Charcoal_SQLCriteria $criteria
 	 * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return array|Charcoal_IRecordset
 	 */
 	public function findAll( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
@@ -422,7 +438,9 @@ class Charcoal_SmartGatewayImpl
 	 * @param Charcoal_SQLCriteria $criteria
 	 * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return array|Charcoal_IRecordset
 	 */
 	public function findAllForUpdate( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
@@ -436,7 +454,9 @@ class Charcoal_SmartGatewayImpl
 	 * @param Charcoal_SQLCriteria $criteria
 	 * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return array|Charcoal_IRecordset
 	 */
 	public function findAllDistinct( $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL ) 
 	{
@@ -447,10 +467,13 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::findAllBy()
 	 *	
 	 * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 * @param Charcoal_SQLCriteria $criteria
+	 * @param string $field
+	 * @param mixed $value
 	 * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
-	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 * @param Charcoal_HashMap|array $driver_options   Driver options
+	 *
+	 * @return array|Charcoal_IRecordset
 	 */
 	public function findAllBy( $query_target, $field, $value, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
@@ -468,7 +491,9 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::findById()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int|bool|float|string $data_id        primary key value of the entity
+	 *	@param int|bool|float|string $id             primary key value of the entity
+	 *
+	 * @return array|NULL
 	 */
 	public function findById( $query_target, $id ) 
 	{
@@ -526,7 +551,7 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::deleteBy()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param string $field                         field name to query
+	 *	@param Charcoal_String|string $field         field name to query
 	 *	@param Charcoal_Scalar $value                field value to query
 	 */
 	public function deleteBy( $query_target, $field, $value )
@@ -577,6 +602,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields        comma-separated field list: like 'A,B,C...'
 	 *	@param Charcoal_String|string $comment       comment text
+	 *
+	 * @return mixed
 	 */
 	private  function execAggregateQuery( $aggregate_func, $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
@@ -620,7 +647,7 @@ class Charcoal_SmartGatewayImpl
 		$rows = $this->data_source->fetchArray( $result );
 
 		// result
-		$result = $rows[0] ? intval($rows[0]) : 0;
+		$result = $rows[0] ? $rows[0] : 0;
 
 		return $result;
 	}
@@ -632,6 +659,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 *	@param Charcoal_String|string $comment       comment text
+	 *
+	 * @return int
 	 */
 	public function count( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
@@ -648,7 +677,7 @@ class Charcoal_SmartGatewayImpl
 
 		log_debug( "debug,sql,smart_gateway", "smart_gateway", "COUNT result: $result" );
 
-		return $result;
+		return intval($result);
 	}
 
 	/**
@@ -658,6 +687,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 *	@param Charcoal_String|string $comment       comment text
+	 *
+	 * @return mixed
 	 */
 	public function max( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
@@ -680,6 +711,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 *	@param Charcoal_String|string $comment       comment text
+	 *
+	 * @return mixed
 	 */
 	public function min( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
@@ -702,6 +735,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_SQLCriteria $criteria         criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 *	@param Charcoal_String|string $comment        comment text
+	 *
+	 * @return mixed
 	 */
 	public function sum( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
@@ -724,6 +759,8 @@ class Charcoal_SmartGatewayImpl
 	 *	@param Charcoal_SQLCriteria $criteria         criteria object
 	 *	@param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
 	 *	@param Charcoal_String|string $comment        comment text
+	 *
+	 * @return mixed
 	 */
 	public function avg( $query_target, $criteria, $fields = NULL, $comment = NULL ) 
 	{
@@ -742,7 +779,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::createTable()
 	 *	
-	 *	@param string $model_name
+	 *	@param Charcoal_String|string $model_name
 	 *	@param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
 	 */
 	public function createTable( $model_name, $if_not_exists = false ) 
@@ -760,7 +797,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::dropTable()
 	 *	
-	 *	@param string $model_name
+	 *	@param Charcoal_String|string $model_name
 	 *	@param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth "DROP TABLE"
 	 */
 	public function dropTable( $model_name, $if_exists = false ) 
@@ -778,7 +815,7 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::truncateTable()
 	 *	
-	 *	@param string $model_name
+	 *	@param Charcoal_String|string $model_name
 	 */
 	public function truncateTable( $model_name ) 
 	{
@@ -795,10 +832,14 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::save()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target      description about target model, alias, or joins
-	 *	@param array $data                             associative array/HashMap/DTO object to insert
+	 *	@param Charcoal_DTO $data                      associative DTO object to insert
+	 *
+	 * @return int                    last inserted id
 	 */
 	public function save( $query_target, $data )
 	{
+		$new_id = 0;
+
 		try{
 			Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 			Charcoal_ParamTrait::validateHashMapOrDTO( 2, $data );
@@ -856,21 +897,23 @@ class Charcoal_SmartGatewayImpl
 			}
 
 			log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
-
-			return $new_id;
 		}
 		catch ( Exception $e )
 		{
 			_catch( $e );
 			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
 		}
+
+		return $new_id;
 	}
 
 	/**
 	 *	real implementation of Charcoal_SmartGateway::insert()
 	 *	
 	 *	@param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
-	 *	@param array $data                             associative array/HashMap/DTO object to insert
+	 *	@param Charcoal_DTO $data                             associative array/HashMap/DTO object to insert
+	 *
+	 * @return int                    last inserted id
 	 */
 	public function insert( $query_target, $data )
 	{
@@ -900,7 +943,7 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::bulkInsert()
 	 *	
 	 *	@param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
-	 *	@param array|CharcoalVector $data_set                 array of array or DTO value to insert
+	 *	@param array|Charcoal_Vector $data_set                 array of array or DTO value to insert
 	 */
 	public function bulkInsert( $query_target, $data_set )
 	{
@@ -913,25 +956,14 @@ class Charcoal_SmartGatewayImpl
 		list( $sql, $params ) = $this->sql_builder->buildBulkInsertSQL( $model, $alias, $data_set );
 
 		$this->data_source->prepareExecute( $sql, $params );
-
-		$sql = $this->sql_builder->buildLastIdSQL();
-		
-		$result = $this->data_source->prepareExecute( $sql );
-
-		$row = $this->data_source->fetchArray( $result );
-
-		$new_id = $row[0];
-		log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
-
-		return $new_id;
 	}
 
 	/**
 	 *	real implementation of Charcoal_SmartGateway::updateFields()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target description about target model, alias, or joins
-	 *	@param int $data_id                       identify database entity
-	 *	@param array $data                        associative array or HashMap object to update
+	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
+	 *	@param Charcoal_Integer|int $data_id          identify database entity
+	 *	@param Charcoal_HashMap|array $data           associative array or HashMap object to update
 	 */
 	public function updateFields( $query_target, $data_id, $data ) 
 	{
@@ -942,12 +974,7 @@ class Charcoal_SmartGatewayImpl
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
 
-		$dto = $model->createDTO();
-
-		$data = up($data);
-		foreach( $data as $field => $value ){
-			$dto->$field = $value;
-		}
+		$dto = $data instanceof Charcoal_DTO ? $data :  $model->createDTO( um($data) );
 
 //		log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
 
@@ -969,8 +996,8 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::updateFieldNow()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $data_id                          identify database entity
-	 *	@param string $field                         field name to update
+	 *	@param Charcoal_Integer|int $data_id                          identify database entity
+	 *	@param Charcoal_String|string $field                         field name to update
 	 */
 	public function updateFieldNow( $query_target, $data_id, $field ) 
 	{
@@ -1005,16 +1032,17 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::incrementField()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $data_id                          identify database entity
-	 *	@param string $field                         field name to increment
-	 *	@param int $increment_by                     amount of increment
+	 *	@param Charcoal_QueryTarget $query_target       description about target model, alias, or joins
+	 *	@param Charcoal_Integer|int $data_id            identify database entity
+	 *	@param Charcoal_String|string $field            field name to increment
+	 *	@param Charcoal_Integer|int $increment_by       amount of increment
 	 */
 	public function incrementField( $query_target, $data_id, $field, $increment_by = 1 ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateInteger( 2, $data_id );
 		Charcoal_ParamTrait::validateString( 3, $field );
+		Charcoal_ParamTrait::validateInteger( 4, $increment_by, TRUE );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
@@ -1043,16 +1071,17 @@ class Charcoal_SmartGatewayImpl
 	/**
 	 *	real implementation of Charcoal_SmartGateway::decrementField()
 	 *	
-	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $data_id                          identify database entity
-	 *	@param string $field                         field name to decrement
-	 *	@param int $decrement_by                     amount of decrement
+	 *	@param Charcoal_QueryTarget $query_target       description about target model, alias, or joins
+	 *	@param Charcoal_Integer|int $data_id            identify database entity
+	 *	@param Charcoal_String|string $field            field name to decrement
+	 *	@param Charcoal_Integer|int $decrement_by       amount of decrement
 	 */
 	public function decrementField( $query_target, $data_id, $field, $decrement_by = 1 ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateInteger( 2, $data_id );
 		Charcoal_ParamTrait::validateString( 3, $field );
+		Charcoal_ParamTrait::validateInteger( 4, $decrement_by, TRUE );
 
 		$model = $this->getModel( $query_target->getModelName() );
 		$alias = $query_target->getAlias();
@@ -1082,8 +1111,8 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::updateFieldNull()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $data_id                          identify database entity
-	 *	@param string $field                         field name to set null
+	 *	@param Charcoal_Integer|int $data_id         identify database entity
+	 *	@param Charcoal_String|string $field         field name to set null
 	 */
 	public function updateFieldNull( $query_target, $data_id, $field ) 
 	{
@@ -1119,8 +1148,8 @@ class Charcoal_SmartGatewayImpl
 	 *	real implementation of Charcoal_SmartGateway::updateField()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-	 *	@param int $data_id                          identify database entity
-	 *	@param string $field                         field name to update
+	 *	@param Charcoal_Integer|int $data_id         identify database entity
+	 *	@param Charcoal_String|string $field         field name to update
 	 *	@param Charcoal_Scalar $value                scalar primitive data to update
 	 */
 	public function updateField( $query_target, $data_id, $field, $value ) 
@@ -1160,7 +1189,7 @@ class Charcoal_SmartGatewayImpl
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria        criteria object
-	 *	@param array $data                           associative array or HashMap object to update
+	 *	@param Charcoal_HashMap|array $data      associative array or HashMap object to update
 	 */
 	public function updateAll( $query_target, $criteria, $data ) 
 	{
@@ -1173,7 +1202,7 @@ class Charcoal_SmartGatewayImpl
 
 		$dto = $model->createDTO( um($data) );
 
-		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $dto, $criteria );
+		list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $dto, $criteria );
 
 //		log_debug( "debug,smart_gateway,sql", "sql:$sql" );
 //		log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );

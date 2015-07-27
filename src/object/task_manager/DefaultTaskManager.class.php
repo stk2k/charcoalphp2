@@ -13,7 +13,10 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 {
 	const TAG = 'charcoal.object.default_task_manager';
 
+	/** @var Charcoal_Itask[] */
 	private $tasks;
+
+	/** @var Charcoal_EventQueue */
 	private $queue;
 
 	/**
@@ -25,63 +28,77 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 	{
 		parent::configure( $config );
 
-		$this->max_event_loop     = $config->getInteger( 'max_event_loop', i(1000) )->unbox();
+		$this->max_event_loop     = ui( $config->getInteger( 'max_event_loop', 1000 ) );
 
 		$this->tasks  = new Charcoal_Vector();
 		$this->queue  = new Charcoal_EventQueue();
 	}
 
-	/*
-	 * タスクを登録する
+	/**
+	 * refister task
+	 *
+	 * @param Charcoal_String|string $key
+	 * @param Charcoal_ITask $task
 	 */
-	public function registerTask( Charcoal_String $key, Charcoal_ITask $task )
+	public function registerTask( $key, $task )
 	{
-
 		$key = us( $key );
 		if ( isset($this->tasks[$key]) ){
-			log_warning( "system,event", "タスク[$key]は登録済みです。" );
+			log_warning( "system,event", "task[$key] is already registered." );
 			return;
 		}
 
-		// タスクを保存
+		// save task in the map
 		$this->tasks[$key] = $task;
 
 		log_debug( 'system,event', "registered task[$task] as [$key]" );
 	}
 
-	/*
-	 * タスクを登録を解除する
+	/**
+	 * unregister task
+	 *
+	 * @param Charcoal_String|string $key
 	 */
-	public function unregisterTask( Charcoal_String $key )
+	public function unregisterTask( $key )
 	{
-		$key = $key;
+		$key = us( $key );
 
-		// タスクを削除
+		// remove task from the map
 		unset( $this->tasks[$key] );
 	}
 
-	/*
-	 * タスクが登録されているか
+	/**
+	 * test if task is registered
+	 *
+	 * @param Charcoal_String|string $key
+	 *
+	 * @return boolean          TRUE if a task is registered, otherwise FALSE
 	 */
-	public function isTaskRegistered( Charcoal_String $key )
+	public function isTaskRegistered( $key )
 	{
-		$key = $key;
+		$key = us( $key );
 
 		return isset($this->tasks[$key]);
 	}
 
-	/*
-	 * タスクを取得する
+	/**
+	 * get task
+	 *
+	 * @param Charcoal_String|string $key
+	 *
+	 * @return Charcoal_ITask
+	 *
+	 * @throws Charcoal_TaskNotFoundException
 	 */
-	public function getTask( Charcoal_String $task_name )
+	public function getTask( $key )
 	{
-		$task_name = $task_name;
+		$key = us( $key );
 
-		if ( isset($this->tasks[$task_name]) ){
-			return $this->tasks[$task_name];
+		if ( isset($this->tasks[$key]) ){
+			return $this->tasks[$key];
 		}
 
-		throw new Charcoal_TaskNotFoundException( $task_name );
+		throw new Charcoal_TaskNotFoundException( $key );
 	}
 
 	/*
@@ -95,32 +112,36 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 	}
 
 	/**
-	 *   ステートフルタスクの保存を行う
+	 *   save statefull task
 	 *
+	 * @param Charcoal_Session $session
 	 */
-	public function saveStatefulTasks( Charcoal_Session $session )
+	public function saveStatefulTasks( $session )
 	{
 //print "saveStatefulTasks<br>";
 		foreach( $this->tasks as $task ){
 			if ( $task instanceof Charcoal_IStateful ){
+				/** @var Charcoal_ITask|Charcoal_IStateful $task */
 				$namespace = $task->getNameSpace();
-				$data_id = !$namespace->isEmpty() ? "task://" . us($namespace) . "/" . $task->getObjectPath() : "task://" . $task->getObjectPath();
-				$session->set( s($data_id), $task->serializeContents() );
+				$data_id = !empty($namespace) ? "task://{$namespace}/" . $task->getObjectPath() : "task://" . $task->getObjectPath();
+				$session->set( $data_id, $task->serializeContents() );
 			}
 		}
 	}
 
 	/**
-	 *   ステートフルタスクの復帰を行う
+	 *   restore stateful task
 	 *
+	 * @param Charcoal_Session $session
 	 */
-	public function restoreStatefulTasks( Charcoal_Session $session )
+	public function restoreStatefulTasks( $session )
 	{
 //print "restoreStatefulTasks<br>";
 		foreach( $this->tasks as $task ){
 			if ( $task instanceof Charcoal_IStateful ){
+				/** @var Charcoal_ITask|Charcoal_IStateful $task */
 				$namespace = $task->getNameSpace();
-				$data_id = !$namespace->isEmpty() ? "task://" . us($namespace) . "/" . $task->getObjectPath() : "task://" . $task->getObjectPath();
+				$data_id = !empty($namespace) ? "task://{$namespace}/" . $task->getObjectPath() : "task://" . $task->getObjectPath();
 				if ( isset($_SESSION[ $data_id ]) ){
 					$data = $_SESSION[ $data_id ];
 					$task->deserializeContents( unserialize($data) );
@@ -136,28 +157,34 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 	/*
 	 *  add an event to task manager
 	 *
+	 * @param Charcoal_IEvent $event
 	 */
-	public function pushEvent( Charcoal_IEvent $event )
+	public function pushEvent( $event )
 	{
 		// add an event to event queue
 		$this->queue->enqueue( $event );
-		log_debug( 'system,event', "event[" . $event . "] was enqueued." );
+		log_debug( 'system,event', "event[$event] was enqueued." );
 	}
 
 	/**
-	 *   イベント処理を行う
+	 *   process events
 	 *
+	 * @param Charcoal_IEventContext $context
+	 *
+	 * @return int
+	 *
+	 * @throws Charcoal_BusinessException|Charcoal_RuntimeException
 	 */
-	public function processEvents( Charcoal_IEventContext $context  )
+	public function processEvents( $context )
 	{
 		$debug = $this->getSandbox()->isDebug() || $context->getProcedure()->isDebugMode();
 
 		if ( $debug ) log_debug( 'system,event', "processEvents start." );
 
-		$procedure = $context->getProcedure();
-		$request   = $context->getRequest();
-		$sequence  = $context->getSequence();
-		$response  = $context->getResponse();
+//		$procedure = $context->getProcedure();
+//		$request   = $context->getRequest();
+//		$sequence  = $context->getSequence();
+//		$response  = $context->getResponse();
 
 		$max_event_loop = $this->max_event_loop;
 
@@ -179,9 +206,13 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 				// イベント一覧を優先度でソートする
 				$queue->sortByPriority();
 
-				// イベントを取得
+				/** @var Charcoal_IEvent $event */
 				$event      = $queue->dequeue();
+
+				/** @var string $event_name */
 				$event_name = $event->getObjectName();
+
+				/** @var Charcoal_ObjectPath $event_id */
 				$event_id   = $event->getObjectPath();
 
 				$delete_event = FALSE;
@@ -263,6 +294,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 					}
 
 					// result value handling
+					$result_str = NULL;
 					if ( $result === NULL ){
 						$result_str = 'NULL';
 					}

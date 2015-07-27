@@ -11,9 +11,9 @@
 class Charcoal_FrameworkVersion extends Charcoal_Object
 {
 	const VERSION_MAJOR     = 2;
-	const VERSION_MINOR     = 56;
-	const VERSION_REVISION  = 0;
-	const VERSION_BUILD     = 234;
+	const VERSION_MINOR     = 57;
+	const VERSION_REVISION  = 1;
+	const VERSION_BUILD     = 236;
 
 	const VERSION_PART_ALL       = 0xFFFF;
 	const VERSION_PART_MAJOR     = 0x0001;
@@ -42,7 +42,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
 	/**
 	 *	get major version
 	 *	
-	 *	@param int                     major version
+	 *	@return int                     major version
 	 */
 	public function getMajorVersion()
 	{
@@ -52,7 +52,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
 	/**
 	 *	get minor version
 	 *	
-	 *	@param int                     minor version
+	 *	@return int                     minor version
 	 */
 	public function getMinorVersion()
 	{
@@ -62,7 +62,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
 	/**
 	 *	get revision number
 	 *	
-	 *	@param int                     revision number
+	 *	@return int                     revision number
 	 */
 	public function getRevision()
 	{
@@ -72,7 +72,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
 	/**
 	 *	get build version
 	 *	
-	 *	@param int                     build version
+	 *	@return int                     build version
 	 */
 	public function getBuildNumber()
 	{
@@ -92,9 +92,11 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
 	/**
 	 *	get version info about framework
 	 *	
-	 *	@param Charcoal_Integer $version_part    integer value which classifies version's part
+	 *	@param Charcoal_Integer|int $version_part    integer value which classifies version's part
+	 *
+	 * @return string
 	 */
-	public static function getVersion( Charcoal_Integer $version_part = NULL )
+	public static function getVersion( $version_part = NULL )
 	{
 		$version_part = $version_part ? ui($version_part) : self::VERSION_PART_ALL;
 

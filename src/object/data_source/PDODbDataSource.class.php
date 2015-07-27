@@ -12,6 +12,8 @@
 class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 {
 	private $connected = false;
+
+	/** @var PDO */
 	private $connection;
 
 	private $backend;
@@ -299,6 +301,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 */
 	public function connect( $force = FALSE )
 	{
+		$DSN = NULL;
+
 		// 接続済みなら何もしない
 		if ( $this->connected && !$force ){
 			return;
@@ -320,7 +324,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 						'ujis' => 'ujis',
 						'sjis' => 'sjis',
 					);
-				$charset_db = isset($db_charset_map[$this->charset]) ? $db_charset_map[$this->charset] : NULL;
+				$charset_db = isset($db_charset_map[$charset]) ? $db_charset_map[$charset] : NULL;
 			}
 			$port = !empty($port) ? "port={$port};" : '';
 			$charset = $charset_db ? "charset={$charset_db};" : '';
@@ -354,7 +358,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 					case 'ujis':	$this->_query( s('SET NAMES `ujis`') );		break;
 					case 'sjis':	$this->_query( s('SET NAMES `sjis`') );		break;
 					default:
-						_throw( new DataSourceConfigException( s('charset'), s('INVALIDcharset_VALUE: ' . $charset) ) );
+						_throw( new Charcoal_DataSourceConfigException( 'charset', "invalid charset: $charset" ) );
 				}
 			}
 		}
@@ -392,6 +396,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
 	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
 	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 *
+	 * @return PDOStatement
 	 */
 	private function _prepareExecute( $sql, $params, $driver_options )
 	{
@@ -414,6 +420,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		log_debug( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", __METHOD__ );
 		log_debug( 'data_source,sql,debug', "[ID]$command_id [params]$params_disp", __METHOD__ );
 
+		/** @var PDOStatement $stmt */
 		$stmt = $this->connection->prepare( $sql, $driver_options );
 
 		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql, $params) );
@@ -498,12 +505,14 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
 	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
 	 * @param array|Charcoal_HashMap $driver_options   Driver options
+	 *
+	 * @return PDOStatement
 	 */
 	public function prepareExecute( $sql, $params = NULL, $driver_options = NULL )
 	{
-		try {
-			$result = null;
+		$result = null;
 
+		try {
 			// 接続処理
 			$this->connect();
 			
@@ -537,8 +546,12 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		return $this->num_rows;
 	}
 
-	/*
-	 *    フェッチ処理（連想配列で返却）
+	/**
+	 *  fetch records as associative array
+	 *
+	 * @param PDOStatement $stmt
+	 *
+	 * @return array
 	 */
 	public function fetchAssoc( $stmt )
 	{
@@ -546,8 +559,12 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 //		return $stmt->fetch(PDO::FETCH_LAZY);
 	}
 
-	/*
-	 *    フェッチ処理（配列で返却）
+	/**
+	 *  fetch records as arrays with numeric indexes
+	 *
+	 * @param PDOStatement $stmt
+	 *
+	 * @return array
 	 */
 	public function fetchArray( $stmt )
 	{
@@ -573,8 +590,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 	/**
 	 *   free result
-	 *   
-	 * @param mixed $result           query result
+	 *
+	 * @param PDOStatement $stmt
 	 * 
 	 * @return bool              TRUE if success, otherwise FALSE
 	 */
@@ -588,6 +605,8 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	 *   
 	 * @param integer $fetch_mode    fetch mode(defined at Charcoal_IRecordset::FETCHMODE_XXX)
 	 * @param array $options         fetch mode options
+	 *
+	 * @return Charcoal_PDORecordsetFactory
 	 */
 	public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL )
 	{

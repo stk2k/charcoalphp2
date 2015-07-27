@@ -21,15 +21,19 @@ class Charcoal_Sandbox
 	private $container;
 	private $environment;
 
+	/** @var Charcoal_IProperties  */
 	private $profile;
-	private $debug;
-	private $loaded;
 
-	private $factory;
-	private $config_provider;
+	/** @var bool  */
+	private $debug;
+
 
 	/**
 	 *  Constructor
+	 *
+	 * @param Charcoal_String|string $sandbox_name
+	 * @param boolean|NULL $debug
+	 * @param array $config
 	 */
 	public function __construct( $sandbox_name, $debug = NULL, $config = NULL )
 	{
@@ -55,14 +59,19 @@ class Charcoal_Sandbox
 	 */
 	private function getDefaultEnvironment()
 	{
+		$env = NULL;
 		switch( CHARCOAL_RUNMODE ){
 		case 'http':
-			return new Charcoal_HttpEnvironment();
+			$env = new Charcoal_HttpEnvironment();
+			break;
 		case 'shell':
-			return new Charcoal_ShellEnvironment();
+			$env = new Charcoal_ShellEnvironment();
+			break;
+		default:
+			_throw( new Charcoal_IllegalRunModeException( CHARCOAL_RUNMODE ) );
+			break;
 		}
-
-		_throw( new Charcoal_IllegalRunModeException( CHARCOAL_RUNMODE ) );
+		return $env;
 	}
 
 	/**
@@ -106,7 +115,9 @@ class Charcoal_Sandbox
 	}
 
 	/**
-	 * load
+	 * load sandbox
+	 *
+	 * @return Charcoal_SandboxProfile
 	 */
 	public function load()
 	{
@@ -217,6 +228,8 @@ class Charcoal_Sandbox
 //		Charcoal_ParamTrait::validateStringOrObject( 4, 'Charcoal_Interface', $interface, TRUE );
 //		Charcoal_ParamTrait::validateStringOrObject( 5, 'Charcoal_Class', $default_class, TRUE );
 
+		$object = NULL;
+
 		if ( is_string($obj_path) || $obj_path instanceof Charcoal_String ){
 			$obj_path = new Charcoal_ObjectPath( $obj_path );
 		}
@@ -236,6 +249,7 @@ class Charcoal_Sandbox
 			// get class name from configure file
 			$class_name = $config->getString( 'class_name' );
 
+			$klass = NULL;
 			if ( $class_name && !empty($class_name) ){
 				$klass = new Charcoal_Class( $class_name );
 			}
@@ -254,7 +268,7 @@ class Charcoal_Sandbox
 			// constructor args
 			$obj_name = $obj_path->getObjectName();
 
-			// create instance
+			/** @var Charcoal_CharcoalObject $object */
 			$object = $klass->newInstance( $args );
 
 			// confirm implementation of the instance
@@ -270,9 +284,6 @@ class Charcoal_Sandbox
 
 			// configure object
 			$object->configure( $config );
-
-			// return created instance
-			return $object;
 		}
 		catch ( Exception $e ) 
 		{
@@ -281,6 +292,7 @@ class Charcoal_Sandbox
 			// 上位にthrow
 			_throw( new Charcoal_CreateObjectException($obj_path, $type_name, $e) );
 		}
+			/** @noinspection PhpUndefinedClassInspection */
 		catch ( Throwable $e ) 
 		{
 			_catch( $e );
@@ -288,6 +300,9 @@ class Charcoal_Sandbox
 			// 上位にthrow
 			_throw( new Charcoal_CreateObjectException($obj_path, $type_name, $e) );
 		}
+
+		// return created instance
+		return $object;
 	}
 
 	/**
@@ -300,6 +315,8 @@ class Charcoal_Sandbox
 	public function createClassLoader( $obj_path )
 	{
 //		Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
+
+		$class_loader = NULL;
 
 		try{
 			$obj_path = is_string($obj_path) ? new Charcoal_ObjectPath( $obj_path ) : $obj_path;
@@ -321,17 +338,21 @@ class Charcoal_Sandbox
 			// ソースの取り込み
 			$source_path = $project_dir . '/app/' . CHARCOAL_APPLICATION . '/class/class_loader/' . $class_name . '.class.php';
 			if ( is_readable($source_path) ){
+				/** @noinspection PhpIncludeInspection */
 				include( $source_path );
 			}
 			else{
 				$source_path = $project_dir . '/class/class_loader/' . $class_name . '.class.php';
 				if ( is_readable($source_path) ){
+					/** @noinspection PhpIncludeInspection */
 					include( $source_path );
 				}
 			}
 
 			// クラスローダのインスタンス生成
 			$klass = new Charcoal_Class( $class_name );
+
+			/** @var Charcoal_IClassLoader $class_loader */
 			$class_loader = $klass->newInstance();
 
 			$class_loader->setSandbox( $this );
@@ -341,9 +362,7 @@ class Charcoal_Sandbox
 			$interface->validateImplements( $class_loader );
 
 	//		log_info( 'system', "factory", "クラスローダ[" . us($object_path) . "]を作成しました。" );
-			
-			// ロードしたクラスローダを返却
-			return $class_loader;
+
 		}
 		catch( Exception $ex )
 		{
@@ -351,6 +370,7 @@ class Charcoal_Sandbox
 
 			_throw( new Charcoal_CreateClassLoaderException( $obj_path, $ex ) );
 		}
+		return $class_loader;
 	}
 
 	/**
@@ -373,7 +393,7 @@ class Charcoal_Sandbox
 		// create class object
 		$klass = new Charcoal_Class( $class_name );
 
-		// 設定プロバイダのインスタンス生成
+		/** @var Charcoal_IConfigProvider $provider */
 		$provider = $klass->newInstance();
 
 		// set properties

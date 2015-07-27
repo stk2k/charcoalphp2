@@ -89,6 +89,7 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		$file_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/' . $class_path . '/' . $file_name;
 
 		if ( is_file($file_path) ){
+			/** @noinspection PhpIncludeInspection */
 			include( $file_path );
 			log_debug( "system,debug,include,class_loader", "class file loaded: [$file_path]", "class_loader" );
 			return TRUE;
@@ -100,6 +101,7 @@ abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implemen
 		$file_path = CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/app/' . CHARCOAL_APPLICATION . '/' . $class_path . '/' . $file_name;
 
 		if ( is_file($file_path) ){
+			/** @noinspection PhpIncludeInspection */
 			include( $file_path );
 			log_debug( "system,debug,include,class_loader", "class file loaded: [$file_path]", "class_loader");
 			return TRUE;

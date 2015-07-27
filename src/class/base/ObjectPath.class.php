@@ -113,16 +113,20 @@ class Charcoal_ObjectPath extends Charcoal_Object
 		return $this->_object_path_string;
 	}
 
-	/*
-	 * 仮想パスを取得
+	/**
+	 * get virtual path
+	 *
+	 * @return string        virtual path
 	 */
 	public function getVirtualPath()
 	{
 		return $this->_virtual_path;
 	}
 
-	/*
-	 * 実パスを取得
+	/**
+	 * get real path
+	 *
+	 * @return string        real path
 	 */
 	public function getRealPath()
 	{

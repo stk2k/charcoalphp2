@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-interface Charcoal_IClassLoader
+interface Charcoal_IClassLoader extends Charcoal_ICharcoalObject
 {
 	/*
 	 * クラスをロード

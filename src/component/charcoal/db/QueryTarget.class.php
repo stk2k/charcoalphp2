@@ -182,16 +182,20 @@ class Charcoal_QueryTarget extends Charcoal_Object
 //		log_debug( "debug, smart_gateway", "query_target_list: " . print_r($this,true) );
 	}
 
-	/*
+	/**
 	 *  model name
+	 *
+	 * @return string
 	 */
 	public function getModelName()
 	{
 		return $this->model_name;
 	}
 
-	/*
+	/**
 	 *  get alias
+	 *
+	 * @return string
 	 */
 	public function getAlias()
 	{
@@ -206,8 +210,10 @@ class Charcoal_QueryTarget extends Charcoal_Object
 		$this->alias = $alias;
 	}
 
-	/*
+	/**
 	 *  get joins
+	 *
+	 * @return Charcoal_QueryJoin[]
 	 */
 	public function getJoins()
 	{

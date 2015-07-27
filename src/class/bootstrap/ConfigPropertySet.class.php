@@ -15,10 +15,13 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 	/**
 	 *  Constructor
+	 *
+	 * @param Charcoal_IEnvironment $env
+	 * @param array $values
 	 */
 	public function __construct( $env, $values = NULL )
 	{
-		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
+//		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
 //		Charcoal_ParamTrait::validatRawArray( 2, $values, TRUE );
 
 		$this->env = $env;
@@ -36,6 +39,10 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
 
 	/**
 	 *  Get child section
+	 *
+	 * @param Charcoal_String|string $section
+	 *
+	 * @return Charcoal_ConfigPropertySet
 	 */
 	public function getSection( $section )
 	{

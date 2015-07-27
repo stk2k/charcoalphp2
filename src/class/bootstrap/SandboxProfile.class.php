@@ -15,6 +15,8 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 
 	/**
 	 *  Constructor
+	 *
+	 * @param Charcoal_Sandbox $sandbox
 	 */
 	public function __construct( $sandbox )
 	{
@@ -93,14 +95,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getString( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
+		$value = NULL;
 		try{
-			return parent::getString( $key, $default_value, $process_macro, $encoding );
+			$value = parent::getString( $key, $default_value, $process_macro, $encoding );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 	/**
@@ -115,14 +119,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getJson( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
 	{
+		$value = NULL;
 		try{
-			return parent::getJson( $key, $default_value, $process_macro, $encoding );
+			$value = parent::getJson( $key, $default_value, $process_macro, $encoding );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 	/**
@@ -136,14 +142,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
 	{
+		$value = NULL;
 		try{
-			return parent::getArray( $key, $default_value, $process_macro );
+			$value = parent::getArray( $key, $default_value, $process_macro );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 	/**
@@ -156,14 +164,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getBoolean( $key, $default_value = NULL )
 	{
+		$value = NULL;
 		try{
-			return parent::getBoolean( $key, $default_value );
+			$value = parent::getBoolean( $key, $default_value );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 	/**
@@ -176,14 +186,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getInteger( $key, $default_value = NULL )
 	{
+		$value = NULL;
 		try{
-			return parent::getInteger( $key, $default_value );
+			$value = parent::getInteger( $key, $default_value );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 	/**
@@ -196,14 +208,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getFloat( $key, $default_value = NULL )
 	{
+		$value = NULL;
 		try{
-			return parent::getFloat( $key, $default_value );
+			$value = parent::getFloat( $key, $default_value );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 	/**
@@ -216,14 +230,16 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
 	 */
 	public function getSize( $key, $default_value = NULL )
 	{
+		$value = NULL;
 		try{
-			return parent::getSize( $key, $default_value );
+			$value = parent::getSize( $key, $default_value );
 		}
 		catch( Exception $ex ){
 			_catch( $ex );
 
 			_throw( new Charcoal_ProfileConfigException( $key, __METHOD__ . '() failed.', $ex ) );
 		}
+		return $value;
 	}
 
 }

@@ -20,13 +20,13 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function __construct( $name, $value, $params )
 	{
-//		Charcoal_ParamTrait::validateString( 1, $name );
-//		Charcoal_ParamTrait::validateString( 2, $value );
-//		Charcoal_ParamTrait::validateVector( 3, $params );
+		Charcoal_ParamTrait::validateString( 1, $name );
+		Charcoal_ParamTrait::validateString( 2, $value );
+		Charcoal_ParamTrait::validateVector( 3, $params );
 
-		$this->name    = $name;
-		$this->value   = $value;
-		$this->params  = $params;
+		$this->name    = us($name);
+		$this->value   = us($value);
+		$this->params  = uv($params);
 	}
 
 	/*
@@ -61,11 +61,17 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 		return $this->params;
 	}
 
-	/*
-	 *	パラメータ値を取得
+	/**
+	 *	get parameter value
+	 *
+	 * @param Charcoal_Integer|int $index
+	 * @param Charcoal_String|string $defaultValue
+	 *
+	 * @return string
 	 */
-	public function getParameter( Charcoal_Integer $index, Charcoal_String $defaultValue = NULL )
+	public function getParameter( $index, $defaultValue = NULL )
 	{
+		/** @var int $idx */
 		$idx = ui( $index );
 		return isset($this->_params[ $idx ]) ? $this->_params[ $idx ] : $defaultValue;
 	}
@@ -77,8 +83,8 @@ class Charcoal_AnnotationValue extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		$str .= " [name]" . $this->name . " [value]" . $this->value;
-		$str .= " [params]" . explode(",",$this->params);
+		$str  = " [name]" . $this->name . " [value]" . $this->value;
+		$str .= " [params]" . implode(",",$this->params);
 		return $str;
 	}
 }

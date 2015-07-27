@@ -11,22 +11,33 @@
 
 interface Charcoal_ITaskManager extends Charcoal_ICharcoalObject
 {
-	/*
-	 * タスクを登録する
+	/**
+	 * refister task
+	 *
+	 * @param Charcoal_String|string $key
+	 * @param Charcoal_ITask $task
 	 */
-	public function registerTask( Charcoal_String $key, Charcoal_ITask $task );
+	public function registerTask( $key, $task );
 
-	/*
-	 * タスクを登録を解除する
+	/**
+	 * unregister task
+	 *
+	 * @param Charcoal_String|string $key
 	 */
-	public function unregisterTask( Charcoal_String $key );
+	public function unregisterTask( $key );
 
-	/*
-	 * タスクを取得する
+	/**
+	 * get task
+	 *
+	 * @param Charcoal_String|string $key
+	 *
+	 * @return Charcoal_ITask
+	 *
+	 * @throws Charcoal_TaskNotFoundException
 	 */
-	public function getTask( Charcoal_String $task_name );
+	public function getTask( $key );
 
-	/*
+	/**
 	 * Get event queue
 	 *
 	 * @return Charcoal_IEventQueue       event queue object
@@ -36,25 +47,34 @@ interface Charcoal_ITaskManager extends Charcoal_ICharcoalObject
 	/**
 	 *  add an event to task manager
 	 *
-	 */
-	public function pushEvent( Charcoal_IEvent $event );
-
-	/**
-	 *   イベント処理を行う
+	 * @param Charcoal_IEvent $event
 	 *
 	 */
-	public function processEvents( Charcoal_IEventContext $context );
+	public function pushEvent( $event );
 
 	/**
-	 *   ステートフルタスクの保存を行う
+	 *   process events
 	 *
+	 * @param Charcoal_IEventContext $context
+	 *
+	 * @return int
 	 */
-	public function saveStatefulTasks( Charcoal_Session $session );
+	public function processEvents( $context );
 
 	/**
-	 *   ステートフルタスクの復帰を行う
+	 *   save statefull task
+	 *
+	 * @param Charcoal_Session $session
 	 *
 	 */
-	public function restoreStatefulTasks( Charcoal_Session $session );
+	public function saveStatefulTasks( $session );
+
+	/**
+	 *   restore stateful task
+	 *
+	 * @param Charcoal_Session $session
+	 *
+	 */
+	public function restoreStatefulTasks( $session );
 }
 

@@ -47,7 +47,7 @@ class Charcoal_FrameworkExceptionStack extends Charcoal_Object
 	/*
 	 *  Add exception
 	 *
-	 * @param Exception Exception to add
+	 * @param Exception $e               Exception to add
 	 */
 	public static function push( Exception $e )
 	{
@@ -61,7 +61,7 @@ class Charcoal_FrameworkExceptionStack extends Charcoal_Object
 	/**
 	 *  Get top exception
 	 *
-	 * @return Charcoal_String
+	 * @return Exception             Exception
 	 */
 	public static function pop()
 	{

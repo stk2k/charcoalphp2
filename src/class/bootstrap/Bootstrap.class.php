@@ -57,8 +57,10 @@ class Charcoal_Bootstrap
 		return TRUE;	// Otherwise, ignore all errors
 	}
 
-	/*
+	/**
 	 *	Framework global exception handler
+	 *
+	 * @param Exception $e
 	 */
 	public static function onUnhandledException( $e )
 	{ 
@@ -99,13 +101,7 @@ class Charcoal_Bootstrap
 		while( $e = Charcoal_FrameworkExceptionStack::pop() )
 		{
 			// Delegate framework exception handling to handlers
-			$handled = Charcoal_Framework::handleException( $e );
-			$handled = b($handled);
-			if ( $handled->isFalse() )
-			{
-				// Forgot to handle exception?
-				Charcoal_Framework::renderExceptionFinally( $e );
-			}
+			Charcoal_Framework::handleException( $e );
 		}
 
 		Charcoal_Framework::$loggers->terminate();
@@ -117,7 +113,8 @@ class Charcoal_Bootstrap
 				'Charcoal_EnumCoreHookStage' 					=> 'constant',
 				'Charcoal_EnumMemoryUnit' 						=> 'constant',
 
-				// Basic interface classes	
+				// Basic interface classes
+				'Charcoal_IObject' 								=> 'interface',
 				'Charcoal_ICollection' 							=> 'interface',
 				'Charcoal_IProperties' 							=> 'interface',
 				'Charcoal_IClassLoader' 						=> 'interface',
@@ -125,7 +122,6 @@ class Charcoal_Bootstrap
 				'Charcoal_ICharcoalObject'						=> 'interface',
 				'Charcoal_IDebugtraceRenderer'					=> 'interface',
 				'Charcoal_IExceptionHandler'					=> 'interface',
-				'Charcoal_IDebugtraceRenderer'					=> 'interface',
 				'Charcoal_ILogger'								=> 'interface',
 				'Charcoal_IRegistry'							=> 'interface',
 				'Charcoal_ICodebase'							=> 'interface',
@@ -303,6 +299,9 @@ class Charcoal_Bootstrap
 	/**
 	 *	autoload function for bootstrap
 	 *
+	 * @param Charcoal_String|string $class_name
+	 *
+	 * @return boolean             TRUE if the class is loaded, otherwise FALSE
 	 */
 	public static function loadClass( $class_name )
 	{
@@ -321,6 +320,7 @@ class Charcoal_Bootstrap
 
 		if ( self::$debug )	echo "loading file[$class_path] for class: $class_name" . eol();
 
+		/** @noinspection PhpIncludeInspection */
 		include( $class_path );
 
 		return TRUE;
@@ -329,6 +329,7 @@ class Charcoal_Bootstrap
 	/**
 	 *	run bootstrap
 	 *
+	 * @param boolean $debug
 	 */
 	public static function run( $debug = FALSE )
 	{

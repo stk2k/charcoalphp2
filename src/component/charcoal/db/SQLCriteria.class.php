@@ -68,6 +68,9 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 
 	/**
 	 *  Add WHERE clause
+	 *
+	 * @param Charcoal_String|string $where
+	 * @param Charcoal_String|string $operator
 	 *  
 	 *  @return string       string data used after WHERE clause
 	 */
@@ -80,7 +83,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 			$operator = 'AND';
 		}
 
-		if ( $this->where && $this->where->isEmpty() ){
+		if ( !empty($this->where) ){
 			$this->where = "({$this->where}) {$operator} ({$where})";
 		}
 		else{
@@ -113,14 +116,14 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	/**
 	 *  Add multiple parameters
 	 *  
-	 *  @param array $params        array data to add
+	 *  @param Charcoal_Vector|array $params        array data to add
 	 */
 	public function addParams( $params )
 	{
 		Charcoal_ParamTrait::validateVector( 1, $params );
 
 		if ( $this->params ){
-			$this->params->addAll( $params );
+			$this->params = array_merge( $this->params, $params );
 		}
 		else{
 			$this->params = uv($params);
@@ -184,9 +187,9 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	/**
 	 *  Set OFFSET clause
 	 *  
-	 *  @param int $limit        OFFSET clause
+	 *  @param int $offset        OFFSET clause
 	 */
-	public function setOffset( Charcoal_Integer $offset )
+	public function setOffset( $offset )
 	{
 		Charcoal_ParamTrait::validateInteger( 1, $offset );
 
@@ -206,7 +209,7 @@ class Charcoal_SQLCriteria extends Charcoal_Object
 	/**
 	 *  Set GROUP BY clause
 	 *  
-	 *  @param string $limit        GROUP BY clause
+	 *  @param string $group_by        GROUP BY clause
 	 */
 	public function setGroupBy( $group_by )
 	{

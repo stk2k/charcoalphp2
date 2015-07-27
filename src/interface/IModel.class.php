@@ -12,8 +12,17 @@ interface Charcoal_IModel extends Charcoal_ICharcoalObject
 {
 	/**
 	 * モデルIDを取得
+	 *
+	 * @return string           model ID
 	 */
 	public function getModelID();
+
+	/**
+	 * モデルIDを設定
+	 *
+	 * @param string $model_id          model ID
+	 */
+	public function setModelID( $model_id );
 
 	/**
 	 *	get all field names

@@ -30,7 +30,7 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
 	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param array $data                        associative array or HashMap object to update
+	 *	@param Charcoal_DTO $data                 associative array or HashMap object to update
 	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
 	 *	@param array $override                    association field set which you want to override
 	 *	
@@ -43,7 +43,7 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	
 	 *	@param Charcoal_ITableModel $model        table model object related with th query
 	 *	@param string $alias                      table model alias which is specified by $model
-	 *	@param array $data                        associative array or HashMap object to insert
+	 *	@param Charcoal_DTO $data                 associative array or HashMap object to insert
 	 *	@param array $override                    association field set which you want to override
 	 *	
 	 *	@return array                             the first element means SQL, the second element means parameter values

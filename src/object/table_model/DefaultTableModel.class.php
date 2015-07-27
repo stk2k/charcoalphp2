@@ -21,7 +21,9 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
 	}
 
 	/**
-	 * モデルIDを設定
+	 * Set model id
+	 *
+	 * @param string $model_id
 	 */
 	public function setModelID( $model_id )
 	{
@@ -38,21 +40,25 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
 		return $this->_model_id;
 	}
 
-	/*
-	 *	テーブル名を取得
+	/**
+	 *	Returns table name
+	 *
+	 * @return string
 	 */
 	public function getTableName()
 	{
-		if ( property_exists($this,'___table_name') ){
-			return $this->___table_name;
+		if ( !property_exists($this,'___table_name') ){
+			_throw( new Charcoal_TableModelException( $this, s('___table_name property is not set') ) );
 		}
-		_throw( new Charcoal_TableModelException( $this, s('___table_name property is not set') ) );
+		return $this->___table_name;
 	}
 
 	/**
 	 *   validate primary key value
 	 *   
 	 *  @param Charcoal_DTO $dto         target record
+	 *
+	 * @return boolean         TRUE if primary key value id valid, otherwise FALSE
 	 */
 	public function validatePrimaryKeyValue( $dto )
 	{

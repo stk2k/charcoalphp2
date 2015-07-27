@@ -17,8 +17,12 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 	private $current;
 	private $key;
 
-	/*
-	 *	コンストラクタ
+	/**
+	 *	constructor
+	 *
+	 * @param PDOStatement $statement
+	 * @param int $fetch_mode
+	 * @param int $options
 	 */
 	public function __construct( $statement, $fetch_mode, $options )
 	{
@@ -47,6 +51,8 @@ class Charcoal_PDORecordset implements Charcoal_IRecordset
 	 *
 	 * @param integer $fetch_mode         fetch mode(self::FETCHMODE_XXX)
 	 * @param mixed $options        option parameters
+	 *
+	 * @return int
 	 */
 	private function setFetchMode( $fetch_mode, $options )
 	{

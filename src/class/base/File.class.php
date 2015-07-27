@@ -16,10 +16,10 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *	Construct object
 	 *
-	 * @param Charcoal_String $file_name    Name of the file or directory.
+	 * @param Charcoal_String|string $file_name    Name of the file or directory.
 	 * @param Charcoal_File $parent    Parent object
 	 */
-	public function __construct( $file_name, Charcoal_File $parent = NULL )
+	public function __construct( $file_name, $parent = NULL )
 	{
 //		Charcoal_ParamTrait::validateString( 1, $file_name );
 //		Charcoal_ParamTrait::validateFile( 2, $parent, TRUE );
@@ -34,7 +34,9 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Create file object
 	 *
-	 * @param Charcoal_String $file_name    Name of the file or directory.
+	 * @param Charcoal_String|string $file_name    Name of the file or directory.
+	 *
+	 * @return Charcoal_File
 	 */
 	public static function create( $file_name )
 	{
@@ -115,7 +117,7 @@ class Charcoal_File extends Charcoal_Object
 				if (is_dir("$path/$item")) {
 					self::removeDirectoryRecursive( "$path/$item" );
 				} else {
-					$ret = @unlink( "$path/$item" );
+					unlink( "$path/$item" );
 					//if ( CHARCOAL_RUNMODE != 'http' ) echo "unlink: $path/$item ret=$ret" . PHP_EOL;
 				}
 			}
@@ -203,7 +205,7 @@ class Charcoal_File extends Charcoal_Object
 	 */
 	public function getLastModified()
 	{
-		return getlastmod( $this->path );
+		return filemtime( $this->path );
 	}
 
 	/**
@@ -229,13 +231,13 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Name of the file or directory
 	 *
-	 * Charcoal_String $suffix       file suffix which is ignored.
+	 * @param Charcoal_String|string|NULL $suffix       file suffix which is ignored.
 	 *
 	 * @return Charcoal_String
 	 */
 	public function getName( $suffix = NULL )
 	{
-		$name = basename( $this->path, $suffix );
+		$name = $suffix ? basename( $this->path, $suffix ) : basename( $this->path );
 
 		return $name;
 	}
@@ -262,6 +264,8 @@ class Charcoal_File extends Charcoal_Object
 
 	/**
 	 *  Child of the file or directory
+	 *
+	 * @param Charcoal_String|string $file_or_dir_name
 	 *
 	 * @return Charcoal_File
 	 */
@@ -293,6 +297,8 @@ class Charcoal_File extends Charcoal_Object
 	/**
 	 *  Save string data as a file
 	 *
+	 * @param Charcoal_String|string $contents
+	 *
 	 * @return Charcoal_File
 	 */
 	public function putContents( $contents )
@@ -302,6 +308,8 @@ class Charcoal_File extends Charcoal_Object
 
 	/**
 	 *  Rename the file or directory
+	 *
+	 * @param Charcoal_File $new_file
 	 */
 	public function rename( $new_file )
 	{

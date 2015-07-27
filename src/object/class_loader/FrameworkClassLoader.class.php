@@ -122,6 +122,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_ComponentNotRegisteredException'		=> 'exception',
 				'Charcoal_ConfigException'						=> 'exception',
 				'Charcoal_ConfigFileNotFoundException'			=> 'exception',
+				'Charcoal_DataSourceConfigException'			=> 'exception',
 				'Charcoal_DBAutoCommitException'				=> 'exception',
 				'Charcoal_DBBeginTransactionException'			=> 'exception',
 				'Charcoal_DBCommitTransactionException'			=> 'exception',

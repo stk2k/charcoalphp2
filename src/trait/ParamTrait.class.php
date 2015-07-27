@@ -57,7 +57,7 @@ class Charcoal_ParamTrait
 	 *	@param string $type            type name to validate
 	 *	@param mixed $actual           data to validate
 	 *	
-	 *	@return string     If the test passes, it returns type name. Otherwise, returns FALSE.
+	 *	@return string|boolean     If the test passes, it returns type name. Otherwise, returns FALSE.
 	 */
 	private static function _testType( $type, $actual )
 	{
@@ -74,15 +74,13 @@ class Charcoal_ParamTrait
 		default:
 			return ( $actual instanceof $type ) ? $type : FALSE;
 		}
-
-		return FALSE;
 	}
 
 	/**
 	 *	validate a parameter
 	 *	
 	 *	@param int $key                parameter id
-	 *	@param string $types           type name to validate
+	 *	@param string $type            type name to validate
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
 	 *	
@@ -98,6 +96,7 @@ class Charcoal_ParamTrait
 		}
 		list( $file, $line ) = Charcoal_System::caller(2);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $type, $actual ) );
+		return '';
 	}
 
 	/**
@@ -107,17 +106,17 @@ class Charcoal_ParamTrait
 	 *	@param mixed $types            type list to validate
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
+	 *
+	 * @return void
 	 */
 	public static function validateTypes( $key, $types, $actual, $null_allowed = FALSE )
 	{
-		if ( $null_allowed && $actual === NULL )	return 'NULL';
+		if ( $null_allowed && $actual === NULL )	return;
 
 		foreach( $types as $type ){
 			$ret = self::_testType( $type, $actual );
 			if ( $ret ){
-				return $ret;
+				return;
 			}
 		}
 		list( $file, $line ) = Charcoal_System::caller(2);
@@ -130,12 +129,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateString( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING ), $actual, $null_allowed );
 	}
 
 	/**
@@ -144,12 +141,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateInteger( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_INTEGER, self::TYPE_O_INTEGER ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_INTEGER, self::TYPE_O_INTEGER ), $actual, $null_allowed );
 	}
 
 	/**
@@ -158,12 +153,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateFloat( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_FLOAT, self::TYPE_O_FLOAT ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_FLOAT, self::TYPE_O_FLOAT ), $actual, $null_allowed );
 	}
 
 	/**
@@ -172,12 +165,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateBoolean( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_BOOL, self::TYPE_O_BOOLEAN ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_BOOL, self::TYPE_O_BOOLEAN ), $actual, $null_allowed );
 	}
 
 	/**
@@ -186,12 +177,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateRawString( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_STRING, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_STRING, $actual, $null_allowed );
 	}
 
 	/**
@@ -200,12 +189,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateRawInteger( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_INTEGER, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_INTEGER, $actual, $null_allowed );
 	}
 
 	/**
@@ -214,12 +201,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateRawFloat( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_FLOAT, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_FLOAT, $actual, $null_allowed );
 	}
 
 	/**
@@ -228,12 +213,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateRawBool( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_BOOL, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_BOOL, $actual, $null_allowed );
 	}
 
 	/**
@@ -242,12 +225,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateRawArray( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_ARRAY, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_ARRAY, $actual, $null_allowed );
 	}
 
 	/**
@@ -256,12 +237,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateVector( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_VECTOR ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_VECTOR ), $actual, $null_allowed );
 	}
 
 	/**
@@ -270,12 +249,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateHashMap( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP ), $actual, $null_allowed );
 	}
 
 	/**
@@ -284,12 +261,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateHashMapOrDTO( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP, self::TYPE_O_DTO ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_HASHMAP, self::TYPE_O_DTO ), $actual, $null_allowed );
 	}
 
 	/**
@@ -298,12 +273,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateProperties( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_PROPERTIES ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_PROPERTIES ), $actual, $null_allowed );
 	}
 
 	/**
@@ -312,12 +285,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateObjectPath( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_O_OBJECTPATH, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_O_OBJECTPATH, $actual, $null_allowed );
 	}
 
 	/**
@@ -326,12 +297,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateConfig( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_O_CONFIG, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_O_CONFIG, $actual, $null_allowed );
 	}
 
 	/**
@@ -340,12 +309,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateException( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_O_EXCEPTION, self::TYPE_O_EXCEPTION2 ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_O_EXCEPTION, self::TYPE_O_EXCEPTION2 ), $actual, $null_allowed );
 	}
 
 	/**
@@ -354,12 +321,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateResource( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_RESOURCE, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_RESOURCE, $actual, $null_allowed );
 	}
 
 	/**
@@ -368,12 +333,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateRawObject( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_P_OBJECT, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_P_OBJECT, $actual, $null_allowed );
 	}
 
 	/**
@@ -382,12 +345,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateCharcoalObject( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_O_OBJECT, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_O_OBJECT, $actual, $null_allowed );
 	}
 
 	/**
@@ -396,12 +357,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateFile( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_O_FILE, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_O_FILE, $actual, $null_allowed );
 	}
 
 	/**
@@ -410,8 +369,6 @@ class Charcoal_ParamTrait
 	 *	@param int $key                parameter id
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateScalar( $key, $actual, $null_allowed = FALSE )
 	{
@@ -424,7 +381,7 @@ class Charcoal_ParamTrait
 						self::TYPE_O_STRING, self::TYPE_O_INTEGER, self::TYPE_O_FLOAT, self::TYPE_O_BOOLEAN,
 					);
 		}
-		return self::validateTypes( $key, $types, $actual, $null_allowed );
+		self::validateTypes( $key, $types, $actual, $null_allowed );
 	}
 
 	/**
@@ -434,27 +391,22 @@ class Charcoal_ParamTrait
 	 *	@param string $type            class or interface name for object
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateStringOrObject( $key, $type, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, $type ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, $type ), $actual, $null_allowed );
 	}
 
 	/**
 	 *	validate a parameter if its type is string or object path
 	 *	
 	 *	@param int $key                parameter id
-	 *	@param string $type            class or interface name for object
 	 *	@param mixed $actual           data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateStringOrObjectPath( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, self::TYPE_O_OBJECTPATH ), $actual, $null_allowed );
+		self::validateTypes( $key, array( self::TYPE_P_STRING, self::TYPE_O_STRING, self::TYPE_O_OBJECTPATH ), $actual, $null_allowed );
 	}
 
 	/**
@@ -463,12 +415,10 @@ class Charcoal_ParamTrait
 	 *	@param int $key                  parameter id
 	 *	@param mixed $actual             data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateSandbox( $key, $actual, $null_allowed = FALSE )
 	{
-		return self::validateType( $key, self::TYPE_F_SANDBOX, $actual, $null_allowed );
+		self::validateType( $key, self::TYPE_F_SANDBOX, $actual, $null_allowed );
 	}
 
 	/**
@@ -478,15 +428,13 @@ class Charcoal_ParamTrait
 	 *	@param string $class_name    class name of the object should extend from
 	 *	@param mixed $actual         data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateIsA( $key, $class_name, $actual, $null_allowed = FALSE )
 	{
-		if ( $null_allowed && $actual === NULL )	return 'NULL';
+		if ( $null_allowed && $actual === NULL )	return;
 
 		if ( $actual instanceof $class_name ){
-			return TRUE;
+			return;
 		}
 		list( $file, $line ) = Charcoal_System::caller(1);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $class_name, $actual ) );
@@ -499,15 +447,13 @@ class Charcoal_ParamTrait
 	 *	@param string $interface_name   interface name of the object should implement
 	 *	@param mixed $actual             data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
-	 *	@return string        passed type
 	 */
 	public static function validateImplements( $key, $interface_name, $actual, $null_allowed = FALSE )
 	{
-		if ( $null_allowed && $actual === NULL )	return 'NULL';
+		if ( $null_allowed && $actual === NULL )	return;
 
 		if ( $actual instanceof $interface_name ){
-			return TRUE;
+			return;
 		}
 		list( $file, $line ) = Charcoal_System::caller(1);
 		_throw( new Charcoal_ParameterException( $file, $line, $key, $interface_name, $actual ) );
@@ -518,7 +464,7 @@ class Charcoal_ParamTrait
 	 *	
 	 *	@param mixed $actual             data to validate
 	 *	@param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-	 *	
+	 *
 	 *	@return string        passed type
 	 */
 	public static function isString( $actual, $null_allowed = FALSE )
@@ -591,7 +537,7 @@ class Charcoal_ParamTrait
 		if ( self::_testType( self::TYPE_P_BOOL, $actual ) ){
 			return TRUE;
 		}
-		if ( self::_testType( self::TYPE_O_BOOL, $actual ) ){
+		if ( self::_testType( self::TYPE_O_BOOLEAN, $actual ) ){
 			return TRUE;
 		}
 		return FALSE;

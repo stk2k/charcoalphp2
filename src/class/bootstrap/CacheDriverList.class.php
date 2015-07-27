@@ -98,8 +98,6 @@ class Charcoal_CacheDriverList extends Charcoal_Object
 			else
 				$driver->set( $key, $value );
 		}
-
-		return $value;
 	}
 
 	/**

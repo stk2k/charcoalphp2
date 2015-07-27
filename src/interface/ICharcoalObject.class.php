@@ -8,20 +8,26 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-interface Charcoal_ICharcoalObject
+interface Charcoal_ICharcoalObject extends Charcoal_IObject
 {
 	/**
-	 *   オブジェクト名を取得
+	 *   get ovject name
+	 *
+	 * @return Charcoal_String|string
 	 */
 	public function getObjectName();
 
 	/**
-	 *   オブジェクトパスを取得
+	 *   get object path
+	 *
+	 * @return Charcoal_ObjectPath
 	 */
 	public function getObjectPath();
 
 	/**
-	 *   オブジェクトパスを設定
+	 *   set object path
+	 *
+	 * @param Charcoal_ObjectPath $obj_path
 	 */
 	public function setObjectPath( $obj_path );
 
@@ -32,5 +38,18 @@ interface Charcoal_ICharcoalObject
 	 */
 	public function configure( $config );
 
+	/**
+	 *   returns sandbox
+	 *
+	 * @return Charcoal_Sandbox           sandbox object
+	 */
+	public function getSandbox();
+
+	/**
+	 *   set sandbox
+	 *
+	 * @param Charcoal_Sandbox $sandbox          sandbox object
+	 */
+	public function setSandbox( $sandbox );
 }
 

@@ -14,7 +14,7 @@ class Charcoal_Queue extends Charcoal_Vector implements Charcoal_IQueue
 	/*
 	 * Take item from the queue
 	 *
-	 * @return mixed      item
+	 * @return Charcoal_IEvent      event
 	 */
 	public function dequeue()
 	{
@@ -24,7 +24,7 @@ class Charcoal_Queue extends Charcoal_Vector implements Charcoal_IQueue
 	/*
 	 * Add item to the queue
 	 *
-     * @param mixed $item       item to add
+     * @param Charcoal_IEvent $event       event to add
 	 */
 	public function enqueue( $item )
 	{

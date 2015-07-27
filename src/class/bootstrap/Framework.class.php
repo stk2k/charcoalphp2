@@ -28,20 +28,41 @@
 */
 class Charcoal_Framework
 {
+	/** @var Charcoal_Stack */
 	static $proc_stack;
+
+	/** @var string */
 	static $proc_path;
+
+	/** @var Charcoal_IRequest */
 	static $request;
+
+	/** @var int */
 	static $hook_stage;
+
+	/** @var string[] */
 	static $loaded_files;
+
+	/** @var Charcoal_ExceptionHandlerList */
 	static $exception_handlers;
+
+	/** @var Charcoal_DebugTraceRendererList */
 	static $debugtrace_renderers;
+
+	/** @var Charcoal_LoggerList */
 	static $loggers;
+
+	/** @var Charcoal_CoreHookList */
 	static $corehooks;
+
+	/** @var Charcoal_CacheDriverList */
 	static $cache_drivers;
 
 
 	/**
 	 *	load source file
+	 *
+	 * @param Charcoal_String|string $path         module file path to load
 	 */
 	public static function loadSourceFile( $path )
 	{
@@ -56,6 +77,7 @@ class Charcoal_Framework
 		}
 */
 
+		/** @noinspection PhpIncludeInspection */
 		include( $path );
 		self::$loaded_files[] = $path;
 		log_info( "system,debug,include","loaded source file: [$path]", 'framework' );
@@ -77,24 +99,13 @@ class Charcoal_Framework
 		return self::$proc_stack;
 	}
 
-	/*
-	 *	プロシージャをスタックに追加
+	/**
+	 *	push procedure
+	 *
+	 * @param Charcoal_IProcedure $procedure
 	 */
 	public static function pushProcedure( $procedure )
 	{
-//		Charcoal_ParamTrait::validateStringOrObject( 1, 'Charcoal_IProcedure', $procedure );
-
-		if ( is_string($procedure) || $procedure instanceof Charcoal_String ){
-			try{
-				$procedure = $sandbox->createObject( $procedure, 'procedure', array(), 'Charcoal_IProcedure' );
-			}
-			catch( Exception $e )
-			{
-				_catch( $e );
-				_throw( new Charcoal_ProcedureNotFoundException( $procedure, $e ) );
-			}
-		}
-
 		if ( !self::$proc_stack ){
 			self::$proc_stack = new Charcoal_Stack();
 		}
@@ -103,8 +114,10 @@ class Charcoal_Framework
 //		log_debug( 'system, debug', "pushed procedure[" . $procedure->getObjectPath() . "]." );
 	}
 
-	/*
-	 *	プロシージャをスタックから取得
+	/**
+	 *	pop procedure
+	 *
+	 * @return Charcoal_IProcedure|NULL
 	 */
 	public static function popProcedure()
 	{
@@ -169,7 +182,7 @@ class Charcoal_Framework
 	/**
 	 * execute exception handlers
 	 * 
-	 * @param Charcoal_CharcoalException $e     exception to handle
+	 * @param Exception $e     exception to handle
 	 * 
 	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
 	 */
@@ -200,9 +213,9 @@ class Charcoal_Framework
 	/**
 	 * set log level
 	 * 
-	 * @param string|Charcoal_String  $log_level     new log level
+	 * @param Charcoal_String|string  $log_level     new log level
 	 * 
-	 * @return returns old log level
+	 * @return Charcoal_String|string        old log level
 	 */
 	public static function setLogLevel( $log_level )
 	{
@@ -235,14 +248,13 @@ class Charcoal_Framework
 //		Charcoal_ParamTrait::validateString( 1, $key );
 //		Charcoal_ParamTrait::validateInteger( 3, $duration, TRUE );
 
-		return self::$cache_drivers->setCache( $key, $value, $duration );
+		self::$cache_drivers->setCache( $key, $value, $duration );
 	}
 
 	/**
 	 * Remove a cache data
 	 *
 	 * @param Charcoal_String $key         The key of the item to remove. Shell wildcards are accepted.
-	 * @param Charcoal_Boolean $regEx      specify regular expression in $key parameter, default is NULL which means FALSE.
 	 */
 	public static function deleteCache( $key )
 	{
@@ -251,8 +263,10 @@ class Charcoal_Framework
 		self::$cache_drivers->deleteCache( $key );
 	}
 
-	/*
-	 *	フレームワークの実行（実体）
+	/**
+	 *	execute framework main process
+	 *
+	 * @param Charcoal_Sandbox $sandbox
 	 */
 	private static function _run( $sandbox )
 	{
@@ -281,6 +295,7 @@ class Charcoal_Framework
 		//==================================================================
 		// load sandbox
 
+		$profile = NULL;
 		try{
 			$profile = $sandbox->load();
 		}
@@ -357,7 +372,7 @@ class Charcoal_Framework
 		// Requestパラメータの取得
 		//
 
-		// Requestオブジェクトを作成
+		/** @var Charcoal_IRequest $request */
 		$request = $sandbox->createObject( CHARCOAL_RUNMODE, 'request', array(), 'Charcoal_IRequest' );
 		self::$request = $request;
 //		log_debug( "debug,system","request object created: " . print_r($request,true), 'framework' );
@@ -468,6 +483,7 @@ class Charcoal_Framework
 		// register routers
 		$routing_rule = NULL;
 		if ( !empty($routing_rule_name) ) {
+			/** @var Charcoal_IRoutingRule $routing_rule */
 			$routing_rule = $sandbox->createObject( $routing_rule_name, 'routing_rule', array(), 'Charcoal_IRoutingRule' );
 		}
 
@@ -489,6 +505,7 @@ class Charcoal_Framework
 				foreach( $router_names as $router_name ){
 					if ( strlen($router_name) === 0 )    continue;
 
+					/** @var Charcoal_IRouter $router */
 					$router = $sandbox->createObject( $router_name, 'router', array(), 'Charcoal_IRouter' );
 
 					$res = $router->route( $request, $routing_rule );
@@ -511,7 +528,9 @@ class Charcoal_Framework
 		// プロシージャを作成
 		self::setHookStage( Charcoal_EnumCoreHookStage::BEFORE_CREATE_PROCEDURE, self::$proc_path );
 
+		$procedure = NULL;
 		try{
+			/** @var Charcoal_IProcedure $procedure */
 			$procedure = $sandbox->createObject( self::$proc_path, 'procedure', array(), 'Charcoal_IProcedure' );
 		}
 		catch( Exception $e )
@@ -533,7 +552,7 @@ class Charcoal_Framework
 			self::setHookStage( Charcoal_EnumCoreHookStage::PRE_PROCEDURE_FORWARD, $object_path );
 
 			// create target procedure
-			$procedure = $sandbox->createObject( $object_path->toString(), 'procedure', 'Charcoal_IProcedure' );
+			$procedure = $sandbox->createObject( $object_path, 'procedure', 'Charcoal_IProcedure' );
 //			log_debug( "debug,system","forward procedure created:" . $procedure, 'framework' );
 
 			self::setHookStage( Charcoal_EnumCoreHookStage::POST_PROCEDURE_FORWARD, $object_path );
@@ -607,7 +626,10 @@ class Charcoal_Framework
 	}
 
 	/**
-	 *	フレームワークを起動
+	 *	execute framework main code
+	 *
+	 * @param boolean $debug
+	 * @param Charcoal_Sandbox $sandbox
 	 */
 	public static function run( $debug = NULL, $sandbox = NULL )
 	{
@@ -671,7 +693,7 @@ class Charcoal_Framework
 			restore_error_handler();
 			restore_exception_handler();
 
-			$ret = self::handleException( $e );
+			self::handleException( $e );
 
 			// display debugtrace
 			if ( $debug || $sandbox->isDebug() ){
@@ -680,6 +702,7 @@ class Charcoal_Framework
 
 			self::$loggers->flush();
 		}
+		/** @noinspection PhpUndefinedClassInspection */
 		catch( Throwable $e )
 		{
 			_catch( $e );
@@ -688,7 +711,7 @@ class Charcoal_Framework
 			restore_error_handler();
 			restore_exception_handler();
 
-			$ret = self::handleException( $e );
+			self::handleException( $e );
 
 			// display debugtrace
 			if ( $debug || $sandbox->isDebug() ){

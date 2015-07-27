@@ -10,9 +10,16 @@
 */
 class Charcoal_CharcoalObject extends Charcoal_Object
 {
+	/** @var string */
 	private $obj_name;
+
+	/** @var Charcoal_ObjectPath */
 	private $obj_path;
+
+	/** @var string */
 	private $type_name;
+
+	/** @var Charcoal_Sandbox */
 	private $sandbox;
 
 	/**
@@ -70,7 +77,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	/**
 	 *   returns object path
 	 *
-	 * @return string           object path
+	 * @return Charcoal_ObjectPath           object path
 	 */
 	public function getObjectPath()
 	{
@@ -80,13 +87,13 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	/**
 	 *   set object path
 	 *
-	 * @param Charcoal_String $obj_path          object path
+	 * @param Charcoal_String|Charcoal_ObjectPath $obj_path          object path
 	 */
 	public function setObjectPath( $obj_path )
 	{
 //		Charcoal_ParamTrait::validateObjectPath( 1, $obj_path );
 
-		$this->obj_path = $obj_path;
+		$this->obj_path = $obj_path instanceof Charcoal_ObjectPath ? $obj_path : new Charcoal_ObjectPath($obj_path);
 	}
 
 	/**
@@ -114,7 +121,7 @@ class Charcoal_CharcoalObject extends Charcoal_Object
 	/**
 	 *   returns sandbox
 	 *
-	 * @return string           sandbox object
+	 * @return Charcoal_Sandbox           sandbox object
 	 */
 	public function getSandbox()
 	{

@@ -32,6 +32,13 @@ interface Charcoal_IEventContext
 	public function getEvent();
 
 	/**
+	 *	Set current event object
+	 *
+	 * @param Charcoal_IEvent $event   Event object to set
+	 */
+	public function setEvent( $event );
+
+	/**
 	 *	Get current sequence object
 	 *
 	 *	@return Charcoal_IEvent
@@ -43,7 +50,7 @@ interface Charcoal_IEventContext
 	/**
 	 *	Get current response object
      *
-     * @return Charcoal_Response
+     * @return Charcoal_IResponse
 	 */
 	public function getResponse();
 
@@ -77,7 +84,7 @@ interface Charcoal_IEventContext
 	 *	@param array $args             constructor arguments
 	 *	@param array $config           object configuration parameters
 	 *
-	 * @return Charcoal_ChacoalObject        object instance
+	 * @return Charcoal_CharcoalObject        object instance
 	 */
 	public function createObject( $obj_path, $type_name, $args = array(), $config = NULL );
 
@@ -88,7 +95,7 @@ interface Charcoal_IEventContext
 	 *	@param array $args             constructor arguments
 	 *	@param array $config           object configuration parameters
 	 *
-	 * @return Charcoal_ChacoalObject        object instance
+	 * @return Charcoal_CharcoalObject        object instance
 	 */
 	public function createEvent( $obj_path, $args = array(), $config = NULL );
 
@@ -131,10 +138,10 @@ interface Charcoal_IEventContext
 	/**
 	 * Get framework/project/application path
 	 *
-	 * @param Charcoal_String $virtual_path		  virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
-	 * @param Charcoal_Object $value				 cache data to save
+	 * @param Charcoal_String|string $virtual_path        virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_String|string $filename            file path
 	 *
-	 * @return Charcoal_String		full path string
+	 * @return Charcoal_File         file object
 	 *
 	 * [macro keyword sample]
 	 *
@@ -153,10 +160,10 @@ interface Charcoal_IEventContext
 	/**
 	 * Get framework/project/application file
 	 *
-	 * @param Charcoal_String $virtual_path		  virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
-	 * @param Charcoal_Object $value				 cache data to save
+	 * @param Charcoal_String|string $virtual_path        virtual path including macro key like '%BASE_DIR%', '%WEBAPP_DIR%', etc.
+	 * @param Charcoal_String|string $filename            file path
 	 *
-	 * @return Charcoal_File		file object
+	 * @return Charcoal_File         file object
 	 *
 	 * [macro keyword sample]
 	 *
@@ -175,15 +182,16 @@ interface Charcoal_IEventContext
 	/**
 	 * load another module
 	 *
-	 * @param CharcCharcoal_ObjectPath $module_path      module path to load
+	 * @param Charcoal_ObjectPath $module_path      module path to load
 	 */
 	public function loadModule( $module_path );
 
 	/**
 	 *  add an event to task manager
 	 *
+	 * @param Charcoal_IEvent $event
 	 */
-	public function pushEvent( Charcoal_IEvent $event );
+	public function pushEvent( $event );
 
 }
 

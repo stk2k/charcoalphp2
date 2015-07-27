@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-interface Charcoal_IConfigProvider
+interface Charcoal_IConfigProvider extends Charcoal_ICharcoalObject
 {
 	/**
 	 * set options
