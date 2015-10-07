@@ -270,7 +270,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements C
 				'Charcoal_SmartGateway'						=> 'component/charcoal/db',
 				'Charcoal_SmartGatewayImpl'					=> 'component/charcoal/db',
 				'Charcoal_SQLCriteria'						=> 'component/charcoal/db',
-				'Charcoal_ExecutedSQL'						=> 'component/charcoal/db',
+				'Charcoal_SQLHistory'						=> 'component/charcoal/db',
 				'Charcoal_PagedSQLCriteria'					=> 'component/charcoal/db',
 				'Charcoal_QueryJoin'						=> 'component/charcoal/db',
 				'Charcoal_QueryTarget'						=> 'component/charcoal/db',

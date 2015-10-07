@@ -52,6 +52,8 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "recordset_find":
 		case "nested_recordset_query":
 		case "nested_recordset_find":
+		case "delete_by_id":
+		case "delete_by_ids":
 			return TRUE;
 		}
 		return FALSE;
@@ -667,6 +669,41 @@ SQL;
 		case "nested_recordset_find":
 			return TRUE;
 
+		case "delete_by_id":
+
+			$this->gw->deleteById( 'blog_category', 1 );
+
+			$sql_history = $this->gw->popSQLHistory();
+			$sql = $sql_history->getSQL();
+			$params = $sql_history->getParams();
+
+			echo 'sql:' . $sql . PHP_EOL;
+			echo 'params:' . implode( ',', $params ) . PHP_EOL;
+
+			$criteria = new Charcoal_SQLCriteria( '' );
+
+			$cnt = $this->gw->count( 'blog_category', $criteria );
+			echo 'cnt:' . $cnt . PHP_EOL;
+
+			return TRUE;
+
+		case "delete_by_ids":
+
+			$this->gw->deleteByIds( 'blog_category', array(1,3) );
+
+			$sql_history = $this->gw->popSQLHistory();
+			$sql = $sql_history->getSQL();
+			$params = $sql_history->getParams();
+
+			echo 'sql:' . $sql . PHP_EOL;
+			echo 'params:' . implode( ',', $params ) . PHP_EOL;
+
+			$criteria = new Charcoal_SQLCriteria( '' );
+
+			$cnt = $this->gw->count( 'blog_category', $criteria );
+			echo 'cnt:' . $cnt . PHP_EOL;
+
+			return TRUE;
 
 		}
 

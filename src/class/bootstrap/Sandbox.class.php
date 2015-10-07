@@ -27,6 +27,8 @@ class Charcoal_Sandbox
 	/** @var bool  */
 	private $debug;
 
+	/** @var Charcoal_IConfigProvider */
+	private $config_provider;
 
 	/**
 	 *  Constructor

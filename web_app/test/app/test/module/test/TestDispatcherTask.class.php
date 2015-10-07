@@ -37,6 +37,8 @@ class TestDispatcherTask extends Charcoal_Task
 	 * 
 	 * @param Exception $e                        exception to handle
 	 * @param Charcoal_EventContext $context      event context
+	 *
+	 * @return boolean
 	 */
 	public function handleException( $e, $context )
 	{
@@ -62,6 +64,8 @@ class TestDispatcherTask extends Charcoal_Task
 	 * process event
 	 *
 	 * @param Charcoal_IEventContext $context   event context
+	 *
+	 * @return Charcoal_Boolean|bool
 	 */
 	public function processEvent( $context )
 	{
@@ -106,14 +110,14 @@ class TestDispatcherTask extends Charcoal_Task
 			log_debug( "debug,scenario", "actions: $actions" );
 
 			if ( empty($target) ){
-				echo "'target' is not found at section[$section]" . eol();
-				log_error( "debug,error,scenario", "'target' is not found at section[$section]" );
-				return TRUE;
+				echo "[WARNING] 'target' is not found at section[$section]" . eol();
+				log_warning( "debug, scenario", "'target' is not found at section[$section]" );
+				continue;
 			}
 			if ( empty($actions) ){
-				echo "'actions' is not found at section[$section]" . eol();
-				log_error( "debug,error,scenario", "'actions' is not found at section[$section]" );
-				return TRUE;
+				echo "[WARNING] 'actions' is not found at section[$section]" . eol();
+				log_warning( "debug, scenario", "'actions' is not found at section[$section]" );
+				continue;
 			}
 
 			$target_path = new Charcoal_ObjectPath( $target );
@@ -122,6 +126,7 @@ class TestDispatcherTask extends Charcoal_Task
 			log_info( "debug,scenario", "loaded module: $module_path" );
 
 			$event_args = array( $section, $target, $actions );
+			/** @var Charcoal_IEvent $event */
 			$event = $context->createEvent( 'test', $event_args );
 			$context->pushEvent( $event );
 			log_debug( "debug,scenario", "event_args: " . print_r($event_args,true) );

@@ -43,7 +43,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 			_throw( new Charcoal_DBDataSourceException( 'sql builder is not specified.' ) );
 		}
 
+		/** @var Charcoal_IDataSource $ds */
 		$ds = $this->getSandbox()->createObject( $data_source, 'data_source', array(), 'Charcoal_IDataSource' );
+
+		/** @var Charcoal_ISQLBuilder $builder */
 		$builder = $this->getSandbox()->createObject( $sql_builder, 'sql_builder', array(), 'Charcoal_ISQLBuilder' );
 
 		$this->impl = new Charcoal_SmartGatewayImpl( $this->getSandbox(), $ds, $builder );
@@ -78,23 +81,25 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	}
 
 	/**
-	 *	get last exectuted SQL
+	 *	get last SQL history
 	 *	
-	 *	@return Charcoal_ExecutedSQL       executed SQL
+	 *	@param bool|Charcoal_Boolean $throw   If TRUE, throws Charcoal_StackEmptyException when executed SQL stack is empty.
+	 *	
+	 *	@return Charcoal_SQLHistory       executed SQL
 	 */
-	public function popExecutedSQL()
+	public function popSQLHistory( $throw = FALSE )
 	{
-		return $this->impl->popExecutedSQL();
+		return $this->impl->popSQLHistory( $throw );
 	}
 
 	/**
-	 *	get all exectuted SQLs
+	 *	get all SQL histories
 	 *	
-	 *	@return array       executed SQLs
+	 *	@return array       array of Charcoal_SQLHistory object
 	 */
-	public function getAllExecutedSQL()
+	public function getAllSQLHistories()
 	{
-		return $this->impl->getAllExecutedSQL();
+		return $this->impl->getAllSQLHistories();
 	}
 
 	/**
@@ -794,6 +799,28 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	}
 
 	/**
+	 *	Remove records by primary keys
+	 *	
+	 *	@param string $query_target    description about target model, alias, or joins
+	 *	@param array|Charcoal_Vector $data_ids       array of primary key values for the entity
+	 */
+	public function deleteByIds( $query_target, $ids ) 
+	{
+		try{
+			if ( !($query_target instanceof Charcoal_QueryTarget) ){
+				$query_target = new Charcoal_QueryTarget( $query_target );
+			}
+
+			$this->impl->deleteByIds( $query_target, $ids );
+		}
+		catch ( Exception $e )
+		{
+			_catch( $e );
+			_throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+		}
+	}
+
+	/**
 	 *	Remove all records by specified field
 	 *	
 	 *	@param string $query_target           description about target model, alias, or joins
@@ -822,14 +849,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 *	@param string $query_target               description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria     criteria object
 	 */
-	public function bulkDelete( $query_target, $criteria ) 
+	public function deleteAll( $query_target, $criteria ) 
 	{
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
 			}
 
-			$this->impl->bulkDelete( $query_target, $criteria );
+			$this->impl->deleteAll( $query_target, $criteria );
 		}
 		catch ( Exception $e )
 		{

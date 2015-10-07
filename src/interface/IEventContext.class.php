@@ -182,7 +182,7 @@ interface Charcoal_IEventContext
 	/**
 	 * load another module
 	 *
-	 * @param Charcoal_ObjectPath $module_path      module path to load
+	 * @param Charcoal_ObjectPath|Charcoal_String|string $module_path      module path to load
 	 */
 	public function loadModule( $module_path );
 

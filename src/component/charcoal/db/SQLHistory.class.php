@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-class Charcoal_ExecutedSQL extends Charcoal_Object
+class Charcoal_SQLHistory extends Charcoal_Object
 {
 	private $sql;
 	private $params;

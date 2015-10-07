@@ -29,7 +29,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 	private $command_id;
 
-	private $exec_sql_stack;
+	private $sql_histories;
 
 	private $num_rows;
 
@@ -44,7 +44,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		$this->connection 	= null;
 		$this->command_id 	= 0;
 
-		$this->exec_sql_stack = new Charcoal_Stack();
+		$this->sql_histories = new Charcoal_Stack();
 	}
 
 	/**
@@ -117,19 +117,19 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	}
 
 	/**
-	 *	get last exectuted SQL
+	 *	get last SQL history
 	 *	
 	 *	@param bool|Charcoal_Boolean $throw   If TRUE, throws Charcoal_StackEmptyException when executed SQL stack is empty.
 	 *	
-	 *	@return Charcoal_ExecutedSQL       executed SQL
+	 *	@return Charcoal_SQLHistory       executed SQL
 	 */
-	public function popExecutedSQL( $throw = FALSE )
+	public function popSQLHistory( $throw = FALSE )
 	{
 		$throw = b($throw);
 
 		$item = NULL;
 		try{
-			$item = $this->exec_sql_stack->pop();
+			$item = $this->sql_histories->pop();
 		}
 		catch( Charcoal_StackEmptyException $ex ){
 
@@ -144,13 +144,13 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 	}
 
 	/**
-	 *	get all exectuted SQLs
+	 *	get all SQL histories
 	 *	
-	 *	@return array       executed SQLs
+	 *	@return array       array of Charcoal_SQLHistory object
 	 */
-	public function getAllExecutedSQL()
+	public function getAllSQLHistories()
 	{
-		return $this->exec_sql_stack->getAll();
+		return $this->sql_histories->getAll();
 	}
 
 	/*
@@ -423,7 +423,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		/** @var PDOStatement $stmt */
 		$stmt = $this->connection->prepare( $sql, $driver_options );
 
-		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql, $params) );
+		$this->sql_histories->push( new Charcoal_SQLHistory($sql, $params) );
 
 		$success = $stmt->execute( $params );
 
@@ -457,7 +457,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
 		log_info( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", __METHOD__ );
 
-		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
+		$this->sql_histories->push( new Charcoal_SQLHistory($sql) );
 
 		$stmt = $this->connection->query( $sql );
 
@@ -474,7 +474,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		// 接続処理
 		$this->connect();
 
-		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
+		$this->sql_histories->push( new Charcoal_SQLHistory($sql) );
 
 		// SQLを実行して結果セットを得る
 		$stmt = $this->_query( $sql );
@@ -493,7 +493,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 		// 接続処理
 		$this->connect();
 
-		$this->exec_sql_stack->push( new Charcoal_ExecutedSQL($sql) );
+		$this->sql_histories->push( new Charcoal_SQLHistory($sql) );
 
 		// SQLを実行
 		$this->_query( $sql );

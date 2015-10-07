@@ -56,23 +56,25 @@ class Charcoal_SmartGatewayImpl
 	}
 
 	/**
-	 *	get last exectuted SQL
+	 *	get last SQL history
 	 *	
-	 *	@return Charcoal_ExecutedSQL       executed SQL
+	 *	@param bool|Charcoal_Boolean $throw   If TRUE, throws Charcoal_StackEmptyException when executed SQL stack is empty.
+	 *	
+	 *	@return Charcoal_SQLHistory       executed SQL
 	 */
-	public function popExecutedSQL()
+	public function popSQLHistory( $throw = FALSE )
 	{
-		return $this->data_source->popExecutedSQL();
+		return $this->data_source->popSQLHistory( $throw );
 	}
 
 	/**
-	 *	get all exectuted SQLs
+	 *	get all SQL histories
 	 *	
-	 *	@return array       executed SQLs
+	 *	@return array       array of Charcoal_SQLHistory object
 	 */
-	public function getAllExecutedSQL()
+	public function getAllSQLHistories()
 	{
-		return $this->data_source->getAllExecutedSQL();
+		return $this->data_source->getAllSQLHistories();
 	}
 
 	/**
@@ -548,6 +550,40 @@ class Charcoal_SmartGatewayImpl
 	}
 
 	/**
+	 *	real implementation of Charcoal_SmartGateway::deleteByIds()
+	 *	
+	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+	 *	@param array|Charcoal_Vector $data_ids       array of primary key values for the entity
+	 */
+	public function deleteByIds( $query_target, $data_ids ) 
+	{
+		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
+		Charcoal_ParamTrait::validateVector( 2, $data_ids );
+
+		$model = $this->getModel( $query_target->getModelName() );
+		$alias = $query_target->getAlias();
+
+		$pk = us($model->getPrimaryKey());
+
+		$placeholders = array();
+		$params = array();
+		foreach( $data_ids as $id ){
+			$placeholders[] = '?';
+			$params[] = $id;
+		}
+		$where = us($pk) . ' in (' . implode(',',$placeholders) . ')';
+
+		$criteria = new Charcoal_SQLCriteria( $where, $params );
+
+		$sql = $this->sql_builder->buildDeleteSQL( $model, $alias, $criteria );
+
+///			log_debug( "debug,smart_gateway,sql", "sql:$sql" );
+//			log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+
+		$this->execute( $sql, $params );
+	}
+
+	/**
 	 *	real implementation of Charcoal_SmartGateway::deleteBy()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
@@ -567,16 +603,16 @@ class Charcoal_SmartGatewayImpl
 
 		$criteria = new Charcoal_SQLCriteria( $where, $params );
 
-		$this->bulkDelete( $query_target, $criteria );
+		$this->deleteAll( $query_target, $criteria );
 	}
 
 	/**
-	 *	real implementation of Charcoal_SmartGateway::bulkDelete()
+	 *	real implementation of Charcoal_SmartGateway::deleteAll()
 	 *	
 	 *	@param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
 	 *	@param Charcoal_SQLCriteria $criteria         criteria object
 	 */
-	public function bulkDelete( $query_target, $criteria ) 
+	public function deleteAll( $query_target, $criteria ) 
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_QueryTarget', $query_target );
 		Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_SQLCriteria', $criteria );

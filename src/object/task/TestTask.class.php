@@ -36,26 +36,39 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 
 	/**
 	 * check if action will be processed
+	 *
+	 * @param Charcoal_String|string $action
 	 */
 	public abstract function isValidAction( $action );
 
 	/**
-	 * セットアップ
+	 * setup tests
+	 *
+	 * @param Charcoal_String|string $action
+	 * @param Charcoal_IEventContext $context
 	 */
 	public abstract function setUp( $action, $context );
 
 	/**
-	 * クリーンアップ
+	 * clean up tests
+	 *
+	 * @param Charcoal_String|string $action
+	 * @param Charcoal_IEventContext $context
 	 */
 	public abstract function cleanUp( $action, $context );
 
 	/**
-	 * テスト
+	 * do tests
+	 *
+	 * @param Charcoal_String|string $action
+	 * @param Charcoal_IEventContext $context
 	 */
 	public abstract function test( $action, $context );
 
 	/**
 	 * Set expected exception class name
+	 *
+	 * @param Exception $expected_exception
 	 */
 	public function setExpectedException( $expected_exception )
 	{
@@ -63,7 +76,13 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	}
 
 	/**
-	 * アサートメッセージ
+	 * output messages of value1 and value2
+	 *
+	 * @param Charcoal_String|string $result
+	 * @param Charcoal_String|string $value1_title
+	 * @param Charcoal_String|string $value2_title
+	 * @param mixed $value1
+	 * @param mixed $value2
 	 */
 	public function message2( $result, $value1_title, $value2_title, $value1, $value2 )
 	{
@@ -82,11 +101,13 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	}
 	public function messageNeedleHaystack( $result, $needle, $haystack )
 	{
-		$this->message2( $result, "Needle", "Haystack", $expected, $actual );
+		$this->message2( $result, "Needle", "Haystack", $needle, $haystack );
 	}
 
 	/**
-	 * assert
+	 * assert if NULL
+	 *
+	 * @param mixed $actual
 	 */
 	public function assertNull( $actual )
 	{
@@ -95,6 +116,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Null", "=== NULL", $actual );
 		}
 	}
+
+	/**
+	 * assert if NOT NULL
+	 *
+	 * @param mixed $actual
+	 */
 	public function assertNotNull( $actual )
 	{
 		$this->tests ++;
@@ -102,6 +129,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Not Null", "=== NULL", $actual );
 		}
 	}
+
+	/**
+	 * assert if empty
+	 *
+	 * @param mixed $actual
+	 */
 	public function assertEmpty( $actual )
 	{
 		$this->tests ++;
@@ -109,6 +142,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Empty", "''", $actual );
 		}
 	}
+
+	/**
+	 * assert if NOT empty
+	 *
+	 * @param mixed $actual
+	 */
 	public function assertNotEmpty( $actual )
 	{
 		$this->tests ++;
@@ -116,6 +155,13 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Not Empty", "''", $actual );
 		}
 	}
+
+	/**
+	 * assert if equal
+	 *
+	 * @param mixed $expected
+	 * @param mixed $actual
+	 */
 	public function assertEquals( $expected, $actual )
 	{
 		$this->tests ++;
@@ -124,6 +170,13 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Not Equal", "== $expected", $actual );
 		}
 	}
+
+	/**
+	 * assert if NOT equal
+	 *
+	 * @param mixed $expected
+	 * @param mixed $actual
+	 */
 	public function assertNotEquals( $expected, $actual )
 	{
 		$this->tests ++;
@@ -132,6 +185,13 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Equal", "!= $expected", $actual );
 		}
 	}
+
+	/**
+	 * assert if same
+	 *
+	 * @param mixed $expected
+	 * @param mixed $actual
+	 */
 	public function assertSame( $expected, $actual )
 	{
 		$this->tests ++;
@@ -140,6 +200,13 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Not Same", "=== $expected", $actual );
 		}
 	}
+
+	/**
+	 * assert if NOT same
+	 *
+	 * @param mixed $expected
+	 * @param mixed $actual
+	 */
 	public function assertNotSame( $expected, $actual )
 	{
 		$this->tests ++;
@@ -148,6 +215,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Same", "!== $expected", $actual );
 		}
 	}
+
+	/**
+	 * assert if FALSE
+	 *
+	 * @param mixed $actual
+	 */
 	public function assertFalse( $actual )
 	{
 		$this->tests ++;
@@ -155,6 +228,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Not FALSE", "=== FALSE", $actual );
 		}
 	}
+
+	/**
+	 * assert if TRUE
+	 *
+	 * @param mixed $actual
+	 */
 	public function assertTrue( $actual )
 	{
 		$this->tests ++;
@@ -162,10 +241,17 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 			$this->messageExpectedActual( "Not TRUE", "=== TRUE", $actual );
 		}
 	}
+
+	/**
+	 * assert if TRUE
+	 *
+	 * @param mixed $needle
+	 * @param array $haystack
+	 */
 	public function assertCotains( $needle, $haystack )
 	{
 		$this->tests ++;
-		if ( $actual !== TRUE ){
+		if ( in_array($needle, $haystack) ){
 			$this->messageNeedleHaystack( "Not Contains", $needle, $haystack );
 		}
 	}
@@ -174,9 +260,12 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 	 * Process events
 	 *
 	 * @param Charcoal_IEventContext $context   event context
+	 *
+	 * @return Charcoal_Boolean|bool
 	 */
 	public function processEvent( $context )
 	{
+		/** @var Charcoal_TestEvent $event */
 		$event   = $context->getEvent();
 
 		$is_debug = $context->isDebug();
@@ -257,7 +346,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 					if ( $this->expected_exception != get_class($e) ){
 						$expected = $this->expected_exception;
 						$actual = get_class($e);
-						$this->message2( $result, "Expected", "Actual", $expected, $actual );
+						$this->message2( get_class($e), "Expected", "Actual", $expected, $actual );
 					}
 				}
 				else{

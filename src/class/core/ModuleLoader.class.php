@@ -17,6 +17,8 @@ class Charcoal_ModuleLoader
 	 *  check if module is already loaded
 	 *  
 	 *  @param $module_path      object path of module to check
+	 *
+	 * @return Charcoal_Boolean|bool
 	 */
 	public static function isLoaded( $module_path )
 	{
@@ -56,13 +58,14 @@ class Charcoal_ModuleLoader
 				return;
 			}
 
-			// create module object
+			/** @var Charcoal_IModule $module */
+			/** @var Charcoal_Sandbox $sandbox */
 			$module = $sandbox->createObject( $module_path, 'module', array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
 
 			// load module tasks
 			$loaded_tasks = $module->loadTasks( $task_manager );
 
-			// load module events
+			// load module events source code
 			$loaded_events = $module->loadEvents( $task_manager );
 
 			// if no tasks or events are loaded, you maybe passed a wrong module path

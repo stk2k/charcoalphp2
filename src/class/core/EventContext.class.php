@@ -11,12 +11,25 @@
 
 class Charcoal_EventContext implements Charcoal_IEventContext
 {
+	/** @var Charcoal_IProcedure */
 	private $procedure;
+
+	/** @var Charcoal_IRequest */
 	private $request;
-	private $event;
-	private $sequence;
+
+	/** @var Charcoal_IResponse */
 	private $response;
+
+	/** @var Charcoal_IEvent */
+	private $event;
+
+	/** @var Charcoal_ISequence */
+	private $sequence;
+
+	/** @var Charcoal_Sandbox  */
 	private $sandbox;
+
+	/** @var  Charcoal_ITaskManager */
 	private $task_manager;
 
 	/**
@@ -428,7 +441,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	/**
 	 * load another module
 	 *
-	 * @param CharcCharcoal_ObjectPath $module_path      module path to load
+	 * @param Charcoal_ObjectPath|Charcoal_String|string $module_path      module path to load
 	 */
 	public function loadModule( $module_path )
 	{
@@ -442,7 +455,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	 * 
 	 * @param string|Charcoal_String  $log_level     new log level
 	 * 
-	 * @return returns old log level
+	 * @return string                 old log level
 	 */
 	public static function setLogLevel( $log_level )
 	{
@@ -452,8 +465,9 @@ class Charcoal_EventContext implements Charcoal_IEventContext
 	/**
 	 *  add an event to task manager
 	 *
+	 * @param Charcoal_IEvent $event
 	 */
-	public function pushEvent( Charcoal_IEvent $event )
+	public function pushEvent( $event )
 	{
 		$this->task_manager->pushEvent( $event );
 	}

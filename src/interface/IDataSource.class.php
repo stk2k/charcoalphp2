@@ -135,20 +135,20 @@ interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
 	public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL );
 
 	/**
-	 *	get last exectuted SQL
-	 *
+	 *	get last SQL history
+	 *	
 	 *	@param bool|Charcoal_Boolean $throw   If TRUE, throws Charcoal_StackEmptyException when executed SQL stack is empty.
-	 *
-	 *	@return Charcoal_ExecutedSQL       executed SQL
+	 *	
+	 *	@return Charcoal_SQLHistory       executed SQL
 	 */
-	public function popExecutedSQL( $throw = FALSE );
+	public function popSQLHistory( $throw = FALSE );
 
 
 	/**
-	 *	get all exectuted SQLs
-	 *
-	 *	@return array       executed SQLs
+	 *	get all SQL histories
+	 *	
+	 *	@return array       array of Charcoal_SQLHistory object
 	 */
-	public function getAllExecutedSQL();
+	public function getAllSQLHistories();
 }
 
