@@ -19,7 +19,7 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildCreateTableSQL( Charcoal_ITableModel $model, $if_not_exists = false )
+	public  function buildCreateTableSQL( $model, $if_not_exists = false )
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 		Charcoal_ParamTrait::validateBoolean( 2, $if_not_exists );
@@ -80,6 +80,7 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 
 			$table_name = $model->getTableName();
 			$if_not_exists = ub($if_not_exists) ? 'IF NOT EXISTS' : '';
+
 			$sql = "CREATE TABLE $if_not_exists `$table_name` (\n $SQL_field_list \n ,PRIMARY KEY( $SQL_pk_list ) )";
 
 			return $sql;

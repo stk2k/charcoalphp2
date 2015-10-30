@@ -54,7 +54,7 @@ class Charcoal_SQLHistory extends Charcoal_Object
 	 */
 	public function toString()
 	{
-		return $this->sql;
+		return '[sql]' . $this->sql . ' [params]' . implode( ',', $this->params );
 	}
 }
 

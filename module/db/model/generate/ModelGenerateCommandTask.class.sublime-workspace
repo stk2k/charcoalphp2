@@ -1,0 +1,971 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ht",
+				"htmlspecialchars"
+			],
+			[
+				"de",
+				"delete〔function〕"
+			],
+			[
+				"findBy",
+				"findByIterationIdAndCrawlUrlHash〔function〕"
+			],
+			[
+				"iteration",
+				"$iteration_list〔variable〕"
+			],
+			[
+				"ite",
+				"iteration_list"
+			],
+			[
+				"mb_con",
+				"mb_convert_encoding〔function〕"
+			],
+			[
+				"mb_convert",
+				"mb_convert_encoding"
+			],
+			[
+				"dete",
+				"$detected〔variable〕"
+			],
+			[
+				"update",
+				"updateTaskStatus〔function〕"
+			],
+			[
+				"upda",
+				"updateTaskField〔function〕"
+			],
+			[
+				"updateTa",
+				"updateTaskFieldNow〔function〕"
+			],
+			[
+				"output",
+				"output_task_id"
+			],
+			[
+				"get",
+				"getName〔function〕"
+			],
+			[
+				"output_file",
+				"$output_file_list〔variable〕"
+			],
+			[
+				"mb_conver",
+				"mb_convert_encoding〔function〕"
+			],
+			[
+				"findUd",
+				"findByIdForUpdate"
+			],
+			[
+				"ob_end",
+				"ob_end_flush〔function〕"
+			],
+			[
+				"strto",
+				"strtolower"
+			],
+			[
+				"ob_en",
+				"ob_end_flush"
+			],
+			[
+				"process",
+				"process_type"
+			],
+			[
+				"comm",
+				"comamnd_list"
+			],
+			[
+				"parse",
+				"parse_url"
+			],
+			[
+				"in",
+				"inheritParentSettings〔function〕"
+			],
+			[
+				"job",
+				"job_iteration_id"
+			],
+			[
+				"stat",
+				"status"
+			],
+			[
+				"save",
+				"saveHTML  (function)"
+			],
+			[
+				"craw",
+				"crawl_result"
+			],
+			[
+				"create",
+				"createCommand"
+			],
+			[
+				"find",
+				"findByKey  (function)"
+			],
+			[
+				"jo",
+				"job_group_id"
+			],
+			[
+				"default",
+				"default_value"
+			],
+			[
+				"cac",
+				"cache_driver  (variable)"
+			],
+			[
+				"tidy",
+				"tidy_node  (variable)"
+			],
+			[
+				"pa",
+				"parser  (variable)"
+			],
+			[
+				"getA",
+				"getApplicationPath  (function)"
+			],
+			[
+				"getTra",
+				"getTracks"
+			],
+			[
+				"Route",
+				"RouteManager  (class)"
+			],
+			[
+				"is",
+				"isAlreadyMovedTrack  (function)"
+			],
+			[
+				"bbs_user",
+				"bbs_user_hash"
+			],
+			[
+				"getOb",
+				"getObjectPath  (function)"
+			],
+			[
+				"offs",
+				"offsetSet  (function)"
+			],
+			[
+				"defin",
+				"defined"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"system_bra",
+				"system_brand_list"
+			],
+			[
+				"h",
+				"header"
+			],
+			[
+				"arra",
+				"array_chunk"
+			],
+			[
+				"config",
+				"configure"
+			],
+			[
+				"clea",
+				"clear_buffer"
+			],
+			[
+				"cle",
+				"clear_buffer"
+			],
+			[
+				"con",
+				"conditions"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"last_filter": "install",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"mark",
+				"Markdown Preview: Python Markdown: Preview in Browser"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"remoe",
+				"Emmet: Remove Tag"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"php",
+				"Set Syntax: PHP"
+			],
+			[
+				"CSS",
+				"Set Syntax: CSS"
+			],
+			[
+				"min",
+				"View: Toggle Minimap"
+			],
+			[
+				"view",
+				"View: Toggle Side Bar"
+			],
+			[
+				"snippet: try",
+				"Snippet: Wrap in try { … } catch (…) { … }"
+			],
+			[
+				"hello",
+				"Snippet: hello"
+			],
+			[
+				"side",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"sideba",
+				"View: Toggle Side Bar"
+			],
+			[
+				"snippet:",
+				"Snippet: <?php if (…) ?> … <?php else ?> … <?php endif ?>"
+			],
+			[
+				"snipe",
+				"Snippet: hello"
+			],
+			[
+				"PHP",
+				"Set Syntax: PHP"
+			],
+			[
+				":w",
+				":w - Save"
+			]
+		],
+		"width": 400.0
+	},
+	"console":
+	{
+		"height": 243.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib.request,os,hashlib; h = ‘7183a2d3e96f11eeadd761d777e62404e330c659d4bb41d3bdf022e94cab3cd0’; pf = 'Package Control.sublime-package’; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/’ + pf.replace(’ ’, ’%20’)).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install’ % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb’ ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/N/honeybee/web_app/honeybee/app/cron/module/expired_domain/expired_domain_task.task.ini",
+		"/N/honeybee/web_app/honeybee/class/service/OutputTaskService.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/job_eraser/JobEraserTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/crawler/CrawlerTask.class.php",
+		"/N/honeybee/web_app/honeybee/class/service/JobGroupService.class.php",
+		"/N/honeybee/web_app/honeybee/class/constant/EnumCrawlType.class.php",
+		"/N/honeybee/web_app/honeybee/class/service/JobService.class.php",
+		"/N/honeybee/web_app/honeybee/class/constant/EnumOutputDataType.class.php",
+		"/C/Users/stk2k/AppData/Roaming/Sublime Text 3/Packages/GotoDocumentation/Default (Windows).sublime-keymap",
+		"/C/Users/stk2k/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/stk2k/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/N/honeybee/web_app/honeybee/class/constant/EnumJobType.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/expired_subdomain/expired_subdomain_task.task.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/module/expired_subdomain/ExpiredSubdomainTask.class.php",
+		"/N/honeybee/web_app/honeybee/class/table_model/JobGroupsTableModel.class.php",
+		"/C/Users/stk2k/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/N/honeybee/web_app/honeybee/class/dto/JobGroupsListingDTO.class.php",
+		"/N/honeybee/web_app/honeybee/class/dto/JobGroupsTableDTO.class.php",
+		"/N/honeybee/web_app/honeybee/class/constant/EnumWorkerProcessType.class.php",
+		"/N/honeybee/web_app/honeybee/class/table_model/JobsTableModel.class.php",
+		"/C/Users/stk2k/AppData/Roaming/Sublime Text 2/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/N/honeybee/web_app/honeybee/app/cron/module/job_scheduler/JobSchedulerTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/config/profile/tk2-207-13104.vs.sakura.ne.jp.profile.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/module/output/OutputTask.class.php",
+		"/N/honeybee/web_app/honeybee/class/service/JobEraserTaskService.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/fast_crawler/FastCrawlerTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/fast_parser/FastParserTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/keeper/KeeperTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/kicker/KickerTask.class.php",
+		"/C/Users/stk2k/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/xampp/htdocs/test/app.php",
+		"/C/xampp/htdocs/test/config/services.php",
+		"/C/xampp/htdocs/test/public/index.php",
+		"/C/xampp/htdocs/test/config/config.php",
+		"/C/xampp/htdocs/test/config/loader.php",
+		"/C/xampp/htdocs/test/models/Cars.php",
+		"/C/xampp/phpMyAdmin/config.inc.php",
+		"/C/xampp/php/php.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/class/parser/ParserUtil.class.php",
+		"/C/temp/test/config/config.php",
+		"/C/temp/test/config/loader.php",
+		"/C/temp/test/config/services.php",
+		"/C/Users/stk2k/Desktop/phalconeye_v.0.4.1/public/requirements.php",
+		"/D/temp/fz3temp-1/challenge_document.php",
+		"/C/xampp/htdocs/phalconeye/.htaccess",
+		"/C/temp/test/public/index.php",
+		"/C/temp/test/views/index.phtml",
+		"/N/honeybee/web_app/honeybee/app/cron/module/crawler/procedure.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/module/parser/procedure.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/module/fast_parser/procedure.ini",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-16-28_022ae10a176aef57d8ebb26a9e0d193ccdd14212_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-14-34_687c05e290abc685f48e2ed2ad68d08562413510_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-13-47_bf324fce3b2abb159cb60d95ce79d30d67291c11_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-11-21_51b50b4119367d59833596f959549773e032e37f_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-12-46_b79571cc9b4e14b9dbbf7c90ad04935db678a6f3_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-10-45_676dc64e7b6743361105924236fb6f1dcff624df_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-09-31_0e0781d75710f29c2772332d22e146790df53147_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-08-10_bce905a8b87963cb0515aca29184fa3d8f155228_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-07-54_cef7d688edfa71c83b3174b05fc33d0897a1bd0f_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-06-47_f3423aaa2379e469fa227d44fe4c349fcf1f92c8_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-05-54_cd582fa39e35f9be7e525ec47c93928595d02bff_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-04-55_e77c643fc7dec2ad9a76e4446b87f596c9d553b9_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-05-39_573edeef10b218e140c5efece7d8930c6510323f_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-04-39_22f0487984f417e4173744e2567ffa752fb7a5cc_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-04-03_8df3cc62fb850b5b474c7586061667d6c025a682_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-02-49_3bff96f4306cdc2dc3dbd3234173ec9d51f8d670_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-00-35_4a8a48ff8dbaa0995e7aa56c310480324275a468_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-02-31_a7f88408e96447e514fded02f88ef9351ca9ae8e_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_16-00-19_316f9316ee30d92c4860936265cbd478e71d74b9_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-59-40_c60c3157392207ee58cc2f126393635cad4e6fee_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-59-17_a73afa7178cc2c9fa168ed9e496e4c12a30214ff_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-55-59_62937cee72b23db55ef131d71be1ad9656bbd412_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-55-19_006c488b40e666f75730186363268d73f2b64874_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-54-34_9e1ef098bff02b5c00ede637106393fc76a43e34_http_request_@_crawler.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-53-57_e805115390f48a11ebf7f3836dda4f3dc5ddf9f2_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-48-28_c43b6292069627c919fb7274d60c7e01e64df18e_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-44-45_558c6e19419411db93b6dc577b423dce317b3b77_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-42-02_3dea2adec01a99fd8c364ae7d864b7d3abb308fb_parser_@_parser.log",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-45-39_7b47da09294a38dd3cc4c2284a2eb24f9c7c972e_http_request_@_crawler.log",
+		"/N/honeybee/web_app/honeybee/app/cron/module/parser/ParserTask.class.php",
+		"/D/Backup/Sazysoft/株式会社アクセラ/DB/SQL/clear.sql",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-28-38_71b2ad1bbed181b8fa24922957902368d0481402_error_@_crawler.log",
+		"/N/honeybee/web_app/honeybee/class/table_model/IterationsTableModel.class.php",
+		"/N/honeybee/web_app/honeybee/class/dto/JobsTableDTO.class.php",
+		"/N/honeybee/web_app/honeybee/class/dto/JobsListingDTO.class.php",
+		"/N/honeybee/logs/cron/2015/10/21/2015-10-21_15-39-59_6594bd61ace10d5d9ea7e50a9f5a6a33bbce4d43_http_request_@_crawler.log",
+		"/N/honeybee/web_app/honeybee/class/dto/IterationsTableDTO.class.php",
+		"/N/honeybee/web_app/honeybee/class/dto/IterationsListingDTO.class.php",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/module/jobs/add/JobAddTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/templates/jobs/job_tab_output.tpl",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/templates/jobs/job_add.tpl",
+		"/N/honeybee/public_html/_admin/js/screen/jobs/job_add.js",
+		"/N/honeybee/public_html/_admin/js/screen/jobs/job_edit.js",
+		"/N/honeybee/web_app/honeybee/app/admin_api/module/jobs/start/JobStartTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/admin_api/module/jobs/update/JobUpdateTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/admin_api/module/jobs/add/JobAddTask.class.php",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/templates/jobs/job_tab_excluded_paths.tpl",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/templates/jobs/job_edit.tpl",
+		"/N/honeybee/public_html/_admin/css/admin.css",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/templates/jobs/job_tab_crawl_log.tpl",
+		"/N/honeybee/web_app/honeybee/app/admin_pc/templates/jobs/job_tab_basic_info.tpl",
+		"/N/honeybee/public_html/_admin/js/functions.js",
+		"/N/honeybee/web_app/honeybee/class/service/IterationService.class.php",
+		"/M/apache/logs/error.log",
+		"/C/temp/test.php",
+		"/M/apache/conf/extra/httpd-ssl.conf",
+		"/C/xampp/php/cast.php",
+		"/N/honeybee/logs/cron/2015/10/09/2015-10-09_20-41-39_da35bd02a879a9eeaafc947e5ca687987722a5c9_error_@_output.log",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/BackLinksOutputCommand.class.php",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/AbstractHoneybeeCommand.class.php",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/SiteLinkSummaryOutputCommand.class.php",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/OutofDateLinksOutputCommand.class.php",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/InternalPageListOutputCommand.class.php",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/ExternalErrorUrlsOutputCommand.class.php",
+		"/N/honeybee/web_app/honeybee/class/component/honeybee/command/output/AllLinksOutputCommand.class.php",
+		"/N/honeybee/logs/cron/2015/10/09/2015-10-09_15-56-04_682d3f912bca91fe9f1b896e3a7214673590d52f_error_@_output.log",
+		"/N/honeybee/logs/cron/2015/10/09/2015-10-09_15-56-03_c24c08ddba0c0e00f8e907f16de14d958137e10e_error_@_output.log",
+		"/N/honeybee/web_app/honeybee/app/cron/config/profile/honeybee.sazysoft.net.profile.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/module/job_scheduler/procedure.ini",
+		"/N/honeybee/logs/cron/2015/10/09/2015-10-09_15-53-08_f339d76031ff745cd9fdf37b2d2d227395f25adf_job_scheduler_@_job_scheduler.log",
+		"/N/honeybee/logs/cron/2015/10/09/2015-10-09_15-37-40_6d704e8aab32be1aa8d3ac9d6c463d6e7471318e_sql_@_job_scheduler.log",
+		"/N/honeybee/web_app/honeybee/class/service/HtmlLinkService.class.php",
+		"/N/honeybee/logs/cron/2015/10/09/2015-10-09_15-47-42_c9083fa0dc622e5a5ae68f1118768d7b8e9fda3f_sql_@_job_scheduler.log",
+		"/N/honeybee/web_app/honeybee/app/cron/class/job_scheduler/AnalysisJobScheduler.class.php",
+		"/N/honeybee/web_app/honeybee/class/service/FastHtmlFileService.class.php",
+		"/N/honeybee/web_app/honeybee/class/service/HtmlFileService.class.php",
+		"/N/honeybee/web_app/honeybee/app/cron/module/output/procedure.ini",
+		"/N/honeybee/web_app/honeybee/app/cron/class/job_scheduler/AbstractJobScheduler.class.php"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"N:\\honeybee\\web_app",
+			"C:\\xampp\\htdocs\\test",
+			"N:\\honeybee\\public_html",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\",
+			"N:\\honeybee\\web_app",
+			"M:\\apache\\conf",
+			"N:\\honeybee\\web_app\\",
+			"N:\\honeybee\\web_app\\honeybee\\class\\service",
+			"N:\\honeybee\\web_app\\honeybee\\app",
+			"N:\\honeybee\\web_app\\",
+			"N:\\honeybee\\web_app\\honeybee\\class\\service",
+			"N:\\honeybee\\web_app",
+			"C:\\tmp\\hanbai_ver0.05",
+			"C:\\temp\\IwatayaIrodori_ver.0.0.6",
+			"N:\\honeybee\\logs\\cron",
+			"N:\\honeybee\\web_app",
+			"C:\\temp\\php-src",
+			"N:\\honeybee\\web_app",
+			"C:\\xampp\\htdocs\\pico\\plugins\\pico_editor",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\ext_lib\\gooana\\share",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\public_html",
+			"N:\\honeybee\\web_app\\honeybee",
+			"C:\\temp\\Ray.Di",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\cache",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\ext_lib\\Smarty",
+			"T:\\charcoal",
+			"N:\\honeybee\\ext_lib",
+			"N:\\honeybee",
+			"C:\\temp\\Ray.Di",
+			"C:\\temp\\BEAR.Sunday",
+			"N:\\honeybee\\web_app\\honeybee",
+			"C:\\temp\\BEAR.Sunday",
+			"N:\\honeybee\\web_app\\honeybee",
+			"C:\\temp\\php-src",
+			"C:\\temp\\php-src\\Zend",
+			"",
+			"N:\\honeybee\\logs\\cron\\2015",
+			"N:\\honeybee\\public_html\\_admin\\css",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\logs\\cron\\2015\\03\\20",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\logs\\cron",
+			"N:\\honeybee\\web_app,T:\\charcoal\\src",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\vendor\\guzzlehttp",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\logs\\cron",
+			"N:\\honeybee\\web_app\\honeybee",
+			"M:\\apache\\conf",
+			"N:\\honeybee\\web_app,N:\\honeybee\\public_html\\_admin\\js\\screen",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\vendor\\guzzlehttp",
+			"N:\\honeybee\\web_app,N:\\honeybee\\public_html\\_admin\\js\\screen",
+			"N:\\honeybee\\web_app,N:\\honeybee\\public_html\\_admin\\js",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\logs\\cron\\2015\\02\\25",
+			"N:\\honeybee\\web_app,N:\\honeybee\\public_html\\_admin\\js,N:\\honeybee\\vendor",
+			"N:\\honeybee\\web_app,N:\\honeybee\\public_html\\_admin\\js",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\web_app\\honeybee\\app\\admin_pc\\templates",
+			"M:\\apache\\conf",
+			"N:\\honeybee\\public_html\\_admin\\js,N:\\honeybee\\web_app",
+			"N:\\honeybee\\public_html\\_admin\\js",
+			"N:\\honeybee\\logs\\cron\\2015\\02\\15",
+			"D:\\Backup\\Sazysoft\\株式会社アクセラ\\テスト",
+			"N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\public_html\\_admin\\js",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\vendor,C:\\temp\\print_o\\src",
+			"N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\vendor",
+			"N:\\honeybee\\web_app\\honeybee",
+			"M:\\apache\\conf",
+			"N:\\honeybee\\public_html\\_admin\\js,N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\logs\\cron",
+			"N:\\honeybee\\public_html\\_admin\\js,N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\public_html\\_admin\\js,N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\logs\\cron",
+			"N:\\honeybee\\public_html\\_admin\\js,N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\web_app\\honeybee\\app\\admin_pc\\templates",
+			"C:\\temp\\SlickGrid",
+			"N:\\honeybee\\public_html\\_admin\\jqGrid",
+			"Z:\\new\\asyura3.com\\web_app",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\public_html\\_admin\\css",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\public_html",
+			"D:\\Backup",
+			"N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\public_html\\_admin\\js\\screen,N:\\honeybee\\public_html\\_admin\\css",
+			"N:\\honeybee\\web_app\\honeybee,N:\\honeybee\\public_html\\_admin\\js\\screen",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\web_app",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src,N:\\honeybee\\vendor\\guzzlehttp\\streams\\src",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src",
+			"N:\\honeybee\\web_app\\honeybee",
+			"N:\\honeybee\\vendor\\guzzlehttp\\guzzle\\src",
+			"C:\\xampp\\php\\vendor",
+			"N:\\honeybee\\web_app",
+			"P:\\",
+			"N:\\honeybee\\web_app\\honeybee\\app",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\public_html",
+			"N:\\honeybee\\public_html,N:\\honeybee\\web_app\\honeybee",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\web_app,N:\\honeybee\\public_html",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\web_app",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\public_html\\_admin\\js\\screen",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\public_html,D:\\Backup\\projects\\keyeye\\keyeye_korea2\\public_html\\_admin\\css",
+			"D:\\Backup\\projects\\keyeye\\keyeye_korea2\\public_html",
+			"N:\\honeybee\\web_app\\honeybee\\",
+			"N:\\honeybee\\web_app\\honeybee\\app\\admin_pc\\templates",
+			"M:\\mysql",
+			"M:\\apache\\conf",
+			"M:\\",
+			"T:\\charcoal\\src",
+			"T:\\charcoal",
+			"T:\\charcoal\\src",
+			"T:\\charcoal\\config\\",
+			"T:\\charcoal\\config\\logger",
+			"T:\\charcoal\\src",
+			"T:\\xampp_yii\\htdocs\\framework,T:\\xampp_ci\\htdocs\\system,T:\\xampp_cake\\htdocs\\lib,C:\\temp\\ZendFramework-2.3.1\\library\\Zend",
+			"T:\\xampp_yii\\htdocs\\framework,T:\\xampp_ci\\htdocs\\system,T:\\xampp_cake\\htdocs\\lib",
+			"T:\\xampp_cake\\htdocs\\lib\\Cake"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"OutputTaskService::add",
+			"EXTERNAL_ERROR_URLS",
+			"getList",
+			"JobGroupService::",
+			"JobGroupService::getList",
+			"JOB_ERASER_",
+			"job_eraser",
+			"　　　　",
+			"Micro",
+			"Access denied",
+			"excluded path included:",
+			"excluded_paths:",
+			"honeybee.sazysoft.net",
+			"/page1.html",
+			"excluded_paths:",
+			"exluded_paths",
+			"jquey-1.10.1.js",
+			"jquey-ui.js",
+			"w2ui-1.4.2.js",
+			"crawl_depth",
+			"force_url_lower_case",
+			"ParserUtil::isInternalLink",
+			"crawl_depth",
+			"max_link_depth",
+			"100",
+			"kkadmin_query_output_data_types",
+			"kkadmin_update_start_url_auto",
+			"example.com",
+			"subdomain_traffic",
+			"__FILE__ . '(' . __LINE__ . ')', __FILE__ . '(' . __LINE__ . ')'",
+			"query",
+			"updateTaskField",
+			"query(",
+			"updateTaskField(",
+			"queryValue(",
+			"query(",
+			"queryValue",
+			"scheduler_fetch_interval",
+			"getSetting(",
+			"$scheduler_fetch_crawler",
+			"fetchNextLinksForUpdate",
+			"CrawlerQueueService.class.php(222)",
+			"processCommands",
+			"$gw->query(",
+			"$gw->execute(",
+			"$gw->updateFieldNull( ",
+			"updateFieldNull(",
+			"gw->",
+			"$gw->",
+			"$gw->decrementField( ",
+			"$gw->incrementField( ",
+			"$gw->updateFieldNow( ",
+			"$gw->",
+			"$gw->deleteAll( ",
+			"$gw->",
+			"$gw->deleteByIds( ",
+			"$gw->deleteBy( ",
+			"$gw->deleteById( ",
+			"$gw->updateField( ",
+			"$gw->save( ",
+			"$gw->findFirst( ",
+			"$gw->findAllForUpdate( ",
+			"$gw->findFirstForUpdate( ",
+			"$gw->findAll( ",
+			"$gw->count( ",
+			"$gw->count( __FILE__ . '(' . __LINE__ . ')'",
+			"$gw->count( ",
+			"$gw->",
+			"fetchCommandListForUpdate",
+			"deleteAll",
+			"bulkDelete",
+			"fetchCommandListForUpdate(",
+			"fetchCommandList(",
+			"ParserQueueService::dequeueList",
+			"dequeueList",
+			"last_queued_date",
+			"crawler_queue_id",
+			"ParserQueueService::add",
+			"KEEPER_SCHEDULER_PING_LIMIT",
+			"JobService::incrementField",
+			"JobService::inrementField",
+			"JobService::decr",
+			"KEEPER_FAST_PARSER_FORK_COMMAND",
+			"CrawlerQueueService::add",
+			"ParserQueueService::add",
+			"$added",
+			"ParserQueueService::add",
+			"FastCrawlerQueueService::add",
+			"FastParserQueueService::addAll",
+			"FastParserQueueService::add",
+			"job_id",
+			"crawl_url_hash",
+			"->subdomain = ",
+			"$subdomain = ",
+			"command_list",
+			"$command_list",
+			"error_subdomain",
+			"ErrorSubdomain",
+			"tactile_random0",
+			"robo1500pj/salesperson/talk/tactile_random0",
+			"xdebug",
+			"deleted fast_html_file:",
+			"DELETE FROM fast_html_files",
+			"0.0.5",
+			"queueParserCommands",
+			"scheduler_fparser_queue_max",
+			"last_access_date:",
+			"update subdomains",
+			"    ",
+			"result.data",
+			"kkadmin_find_list",
+			"    ",
+			"findById",
+			"processed_html_files:",
+			"task added by trigger",
+			"called triggerOutput:",
+			"Directory not exists",
+			"called triggerOutput",
+			"OutputTaskService::add(",
+			"processed_html_files",
+			"$iteration_id",
+			"if ( !$job ){",
+			"JobService::",
+			"$output_file_url",
+			"$output_file_base_url",
+			"OUTPUT_FILE_BASE_URL",
+			"max_lines_per_file",
+			"getMaxLinesPerFile"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"EXPIRED_DOMAIN_",
+			"expired_domain",
+			"	",
+			"$gw->updateFieldNull( self::sqlComment(), ",
+			"$gw->decrementField( self::sqlComment(), ",
+			"$gw->incrementField( self::sqlComment(), ",
+			"$gw->updateFieldNow( self::sqlComment(), ",
+			"$gw->deleteAll( self::sqlComment(), ",
+			"$gw->deleteByIds( self::sqlComment(), ",
+			"$gw->deleteBy( self::sqlComment(), ",
+			"$gw->deleteById( self::sqlComment(), ",
+			"$gw->updateField( self::sqlComment(), ",
+			"$gw->save( self::sqlComment(), ",
+			"$gw->findFirst( self::sqlComment(), ",
+			"$gw->findAllForUpdate( self::sqlComment(), ",
+			"$gw->findFirstForUpdate( self::sqlComment(), ",
+			"$gw->findAll( self::sqlComment(), ",
+			"$gw->count( self::sqlComment()",
+			"$gw->count( __FILE__ . '(' . __LINE__ . ')', ",
+			"deleteAll",
+			"external_subdomain",
+			"ExternalSubdomain",
+			"	",
+			"data",
+			"	",
+			"/www/",
+			"findByIterationIdAndEffectiveUrlHash(",
+			"findByIterationIdAndEffectiveUrl(",
+			"findByIterationIdAndUrlHash(",
+			"findByIterationIdAndUrl(",
+			"ExternalErrorUrlsTableDTO",
+			"'external_error_urls'",
+			"$job_eraser_delete_size",
+			"JOB_ERASER_DELETE_SIZE",
+			"INTERVAL -1 HOUR",
+			"delete",
+			"'job_eraser'",
+			"job_eraser_task_id",
+			"JobEraserTasksTableDTO",
+			"'job_eraser_tasks'",
+			"	",
+			"\\t",
+			"'fast_crawler'",
+			"max_content_length",
+			"readbuffer_size",
+			"processed_html_links",
+			"processed_html_files",
+			"'fast_crawler_queue'",
+			", self::TAG )",
+			"queueParserCommands",
+			"queueCrawlerCommands",
+			"fast_crawler",
+			"gast_crawler",
+			"$this->ping( $gw, ",
+			"$tid = $this->getTimeID();",
+			"updateTaskStatus",
+			"output_file",
+			"OutputFile",
+			"output_task_id",
+			"'output_tasks'",
+			"self::TAG",
+			", self:TAG",
+			"'fast_html_files'",
+			"FastHtmlFileService",
+			"fast_html_file_service",
+			"/usr/local/php-7/bin/php",
+			"'bench'",
+			"Charcoal_RuntimeException",
+			"watchdog_loop_wait",
+			"watchdog_loop_count",
+			"watchdog_loop_wait",
+			"watchdog_loop_count",
+			"WATCHDOG_",
+			"watchdog",
+			"performance_log",
+			"PerformanceLog",
+			"	",
+			"'worker_logs'",
+			"worker_log",
+			"WorkerLog",
+			"log_debug( 'parser, benchmark',",
+			"//log_debug(",
+			"log_debug",
+			"job-dialog ",
+			"shouldRetryStatus",
+			"log_level         = E",
+			"log_loggers       = error, sql, debug, response",
+			"'debug'",
+			"",
+			"\";",
+			"分析URL",
+			"",
+			"result.total",
+			"$tid",
+			"$this->tid",
+			"$tid",
+			"	",
+			"$status_code",
+			"status_code",
+			"$request",
+			"    ",
+			"'html_link_progress'",
+			"'html_file_progress'",
+			"@SQL_MODE",
+			"$resource",
+			"'http_retry'",
+			"HtmlLinksTableDTO",
+			"ParserQueue",
+			"parser_queue",
+			"ParserQueue",
+			"Parser",
+			"Crawler",
+			"crawler_",
+			"Crawler",
+			"\"",
+			"",
+			"keeper",
+			"GlobalSettingService::getBoolean",
+			"GlobalSettingService::getNumber",
+			"iteration",
+			"iteration_id",
+			"'job_iterations'",
+			"'parser'",
+			"parser_fetch_commands",
+			"'html_queue'",
+			"crawler",
+			"Crawler",
+			"'worker_processes'"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ModelGenerateCommandTask.class.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": false,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"default",
+				"src/objects/task_managers/DefaultTaskManager.class.php"
+			],
+			[
+				"smartgateway.class.php",
+				"src/components/charcoal/db/SmartGateway.class.php"
+			],
+			[
+				"smartgateway",
+				"src/components/charcoal/db/SmartGateway.class.php"
+			],
+			[
+				"smartgate",
+				"src/components/charcoal/db/SmartGateway.class.php"
+			],
+			[
+				"smartgatewa",
+				"src/components/charcoal/db/SmartGateway.class.php"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"/T/charcoal_sublime/charcoalphp.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 249.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

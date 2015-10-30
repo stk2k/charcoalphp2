@@ -33,41 +33,41 @@ class Charcoal_PreparedContext extends Charcoal_AbstractWrapperContext
 	/**
 	 *  get count of records
 	 */
-	public function count()
+	public function count( $comment = '' )
 	{
-		return $this->getContext()->count();
+		return $this->getContext()->count( $comment );
 	}
 
 	/**
 	 *  get max of records
 	 */
-	public function max()
+	public function max( $comment = '' )
 	{
-		return $this->getContext()->max();
+		return $this->getContext()->max( $comment );
 	}
 
 	/**
 	 *  get min of records
 	 */
-	public function min()
+	public function min( $comment = '' )
 	{
-		return $this->getContext()->min();
+		return $this->getContext()->min( $comment );
 	}
 
 	/**
 	 *  get sum of records
 	 */
-	public function sum()
+	public function sum( $comment = '' )
 	{
-		return $this->getContext()->sum();
+		return $this->getContext()->sum( $comment );
 	}
 
 	/**
 	 *  get avg of records
 	 */
-	public function avg()
+	public function avg( $comment = '' )
 	{
-		return $this->getContext()->avg();
+		return $this->getContext()->avg( $comment );
 	}
 
 	/**
@@ -75,9 +75,9 @@ class Charcoal_PreparedContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_ResultContext    result context
 	 */
-	public function findFirst()
+	public function findFirst( $comment = '' )
 	{
-		return $this->getContext()->findFirst();
+		return $this->getContext()->findFirst( $comment );
 	}
 
 	/**
@@ -85,9 +85,9 @@ class Charcoal_PreparedContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_ResultContext    result context
 	 */
-	public function findAll()
+	public function findAll( $comment = '' )
 	{
-		return $this->getContext()->findAll();
+		return $this->getContext()->findAll( $comment );
 	}
 
 	/**
@@ -95,9 +95,9 @@ class Charcoal_PreparedContext extends Charcoal_AbstractWrapperContext
 	 *
 	 * @return Charcoal_ResultContext    result context
 	 */
-	public function findAllForUpdate()
+	public function findAllForUpdate( $comment = '' )
 	{
-		return $this->getContext()->findAllForUpdate();
+		return $this->getContext()->findAllForUpdate( $comment );
 	}
 
 

@@ -101,14 +101,21 @@ class TestDispatcherTask extends Charcoal_Task
 			return TRUE;
 		}
 
-		foreach( $scenario_data as $section => $data ){
-
+		foreach( $scenario_data as $section => $data )
+		{
 			$target = isset($data['target']) ? $data['target'] : NULL;
 			$actions = isset($data['actions']) ? $data['actions'] : NULL;
+			$enabled = isset($data['enabled']) ? $data['enabled'] : TRUE;
 
 			log_debug( "debug,scenario", "target: $target" );
 			log_debug( "debug,scenario", "actions: $actions" );
+			log_debug( "debug,scenario", "enabled: $enabled" );
 
+			if ( in_array(strtolower($enabled),array('0','false','no')) ){
+				echo "section[$section] is DISABLED. will skip." . eol();
+				log_warning( "debug, scenario", "section[$section] is DISABLED." );
+				continue;
+			}
 			if ( empty($target) ){
 				echo "[WARNING] 'target' is not found at section[$section]" . eol();
 				log_warning( "debug, scenario", "'target' is not found at section[$section]" );
