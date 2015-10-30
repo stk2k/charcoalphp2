@@ -11,6 +11,8 @@
 
 class Charcoal_EnumQueryOption extends Charcoal_Enum
 {
+	const NO_OPTIONS    = 0x00000000;	// No options
+
 	const FOR_UPDATE    = 0x00000001;	// SELECT ... FOR UPDATE
 	const DISTINCT      = 0x00000002;	// SELECT DISTINCT ...
 }

@@ -114,7 +114,7 @@ class DmlTestTask extends Charcoal_TestTask
 
 			$this->assertEquals( 1, $rows );
 
-			$gw->truncateTable('test');
+			$gw->truncateTable( __FILE__ . '(' . __LINE__ . ')', 'test' );
 
 			$rows = $this->countTableRows('test');
 
@@ -142,7 +142,7 @@ class DmlTestTask extends Charcoal_TestTask
 					new Charcoal_DTO( ['name' => 'melon', 'price' => 1800 ] ),
 				);
 
-			$gw->bulkInsert('test', $data_set);
+			$gw->insertAll( __FILE__ . '(' . __LINE__ . ')', 'test', $data_set );
 
 			// テーブルの行数は5になっているはず
 			$this->assertEquals( 5, $this->countTableRows('test'));

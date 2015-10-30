@@ -100,10 +100,10 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 		case "nested_recordset_find":
 
 			// truncate all tables
-			$this->gw->execute( "TRUNCATE blogs" );
-			$this->gw->execute( "TRUNCATE blog_category" );
-			$this->gw->execute( "TRUNCATE posts" );
-			$this->gw->execute( "TRUNCATE comments" );
+			$this->gw->execute( "", "TRUNCATE blogs" );
+			$this->gw->execute( "", "TRUNCATE blog_category" );
+			$this->gw->execute( "", "TRUNCATE posts" );
+			$this->gw->execute( "", "TRUNCATE comments" );
 
 			// blogs entries
 			$sql = <<< SQL
@@ -111,7 +111,7 @@ INSERT INTO `blogs` (`blog_id`, `blog_category_id`, `blog_name`, `post_total`) V
 (1, 1, 'my blog', 2),
 (2, 2, 'another blog', 1);
 SQL;
-			$this->gw->execute( $sql );
+			$this->gw->execute( "", $sql );
 
 			$this->blog_name_expected = array(
 					1 => 'my blog',
@@ -126,7 +126,7 @@ INSERT INTO `blog_category` (`blog_category_id`, `blog_category_name`) VALUES
 (3, 'Job'),
 (4, 'Diary');
 SQL;
-			$this->gw->execute( $sql );
+			$this->gw->execute( "", $sql );
 
 			$this->category_name_expected = array(
 				1 => 'Books',
@@ -142,7 +142,7 @@ INSERT INTO `posts` (`post_id`, `blog_id`, `post_title`, `post_body`, `post_user
 (2, 1, 'Hiyas', 'My second blog post!', 'stk2k', 11),
 (3, 2, 'How does it work?', 'My third blog post!', 'stk2k', 5);
 SQL;
-			$this->gw->execute( $sql );
+			$this->gw->execute( "", $sql );
 
 			// comments entries
 			$sql = <<< SQL
@@ -151,7 +151,7 @@ INSERT INTO `comments` (`comment_id`, `post_id`, `comment_title`, `comment_body`
 (2, 1, 'bear''s comment', 'Bear comes here', 'bear'),
 (3, 2, 'fox''s comment', 'Fox will be back', 'fox');
 SQL;
-			$this->gw->execute( $sql );
+			$this->gw->execute( "", $sql );
 
 		}
 
@@ -186,26 +186,26 @@ SQL;
 				);
 
 			$this->gw->autoCommit( b(TRUE) );
-			$this->gw->execute( "TRUNCATE posts" );
+			$this->gw->execute( "commit #1", "TRUNCATE posts" );
 			foreach( $data as $row ){
-				$this->gw->execute( "INSERT INTO posts(blog_id,post_title,post_body,post_user) values(?,?,?,?)", $row );
+				$this->gw->execute( "commit #2", "INSERT INTO posts(blog_id,post_title,post_body,post_user) values(?,?,?,?)", $row );
 			}
 
 			$this->gw->autoCommit( b(FALSE) );
 			$this->gw->beginTrans();
 
-			$result = $this->gw->query( "SELECT * FROM posts WHERE post_id=1");
+			$result = $this->gw->query( "commit #3", "SELECT * FROM posts WHERE post_id=1");
 			$post_user = $result[0]['post_user'];
 
 			// デフォルトコネクションで更新
-			$this->gw->execute( "UPDATE posts set post_user = 'hoge' where post_id = 1" );
+			$this->gw->execute( "commit #4", "UPDATE posts set post_user = 'hoge' where post_id = 1" );
 
-			$result2 = $this->gw->query( "SELECT * FROM posts WHERE post_id=1");
+			$result2 = $this->gw->query( "commit #5", "SELECT * FROM posts WHERE post_id=1");
 			$post_user2 = $result2[0]['post_user'];
 
 			// commit前に違うコネクションで確認
 			$this->gw->setDataSource( $another_ds );
-			$result3 = $this->gw->query( "SELECT * FROM posts WHERE post_id=1");
+			$result3 = $this->gw->query( "commit #6", "SELECT * FROM posts WHERE post_id=1");
 			$post_user3 = $result3[0]['post_user'];
 
 			$this->gw->setDataSource( $default_ds );
@@ -213,7 +213,7 @@ SQL;
 
 			// commit後に違うコネクションで確認
 			$this->gw->setDataSource( $another_ds );
-			$result4 = $this->gw->query( "SELECT * FROM posts WHERE post_id=1");
+			$result4 = $this->gw->query( "commit #7", "SELECT * FROM posts WHERE post_id=1");
 			$post_user4 = $result4[0]['post_user'];
 
 			$this->assertEquals( $post_user, $post_user3 );
@@ -222,7 +222,7 @@ SQL;
 
 		case "query":
 			$sql = "SELECT * FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql );
+			$result = $this->gw->query( "query #1", $sql );
 
 			foreach( $result as $row ){
 				$blog_name = $row['blog_name'];
@@ -237,7 +237,7 @@ SQL;
 		case "select":
 			$where = "blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs', $criteria );
+			$result = $this->gw->findAll( "select #1", 'blogs', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -252,7 +252,7 @@ SQL;
 		case "select_alias":
 			$where = "b.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs as b', $criteria );
+			$result = $this->gw->findAll( "select_alias #1", 'blogs as b', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -267,7 +267,7 @@ SQL;
 		case "select_alias_forupdate":
 			$where = "blog_name like ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array("My First Blog") );
-			$result = $this->gw->findAllForUpdate( 'blogs as b', $criteria );
+			$result = $this->gw->findAllForUpdate( "select_alias_forupdate #1", 'blogs as b', $criteria );
 
 			foreach( $result as $row ){
 				print print_r($row,true) . PHP_EOL;
@@ -278,7 +278,7 @@ SQL;
 		case "inner_join":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
+			$result = $this->gw->findAll( "inner_join #1", 'blogs + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -294,7 +294,7 @@ SQL;
 		case "left_join":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs (+ posts on "blogs.blog_id = posts.blog_id"', $criteria );
+			$result = $this->gw->findAll( "left_join #1", 'blogs (+ posts on "blogs.blog_id = posts.blog_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -310,7 +310,7 @@ SQL;
 		case "right_join":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs +) posts on "blogs.blog_id = posts.blog_id"', $criteria );
+			$result = $this->gw->findAll( "right_join #1", 'blogs +) posts on "blogs.blog_id = posts.blog_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -327,7 +327,7 @@ SQL;
 		case "inner_join_alias":
 			$where = "b.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs as b + posts as p on "b.blog_id = p.blog_id"', $criteria );
+			$result = $this->gw->findAll( "inner_join_alias #1", 'blogs as b + posts as p on "b.blog_id = p.blog_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -343,7 +343,7 @@ SQL;
 		case "inner_join_multi":
 			$where = "blogs.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs  + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
+			$result = $this->gw->findAll( "inner_join_multi #1", 'blogs  + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -359,7 +359,7 @@ SQL;
 		case "inner_join_multi_alias":
 			$where = "b.blog_id = ?";
 			$criteria = new Charcoal_SQLCriteria( $where, array(1) );
-			$result = $this->gw->findAll( 'blogs as b + posts as p on "b.blog_id = p.blog_id" + comments as c on "p.post_id = c.post_id"', $criteria );
+			$result = $this->gw->findAll( "inner_join_multi_alias #1", 'blogs as b + posts as p on "b.blog_id = p.blog_id" + comments as c on "p.post_id = c.post_id"', $criteria );
 
 			foreach( $result as $row ){
 				$blog_name = $row->blog_name;
@@ -375,7 +375,7 @@ SQL;
 		case "count":
 
 			$criteria = new Charcoal_SQLCriteria();
-			$result = $this->gw->count( 'posts', $criteria, '*' );
+			$result = $this->gw->count( "count #1", 'posts', $criteria, '*' );
 
 			echo "result:" . $result . eol();
 
@@ -387,7 +387,7 @@ SQL;
 		case "max":
 
 			$criteria = new Charcoal_SQLCriteria();
-			$result = $this->gw->max( 'posts', $criteria, 'favorite' );
+			$result = $this->gw->max( "max #1", 'posts', $criteria, 'favorite' );
 
 			echo "result:" . $result . eol();
 
@@ -398,7 +398,7 @@ SQL;
 		case "min":
 
 			$criteria = new Charcoal_SQLCriteria();
-			$result = $this->gw->min( 'posts', $criteria, 'favorite' );
+			$result = $this->gw->min( "min #1", 'posts', $criteria, 'favorite' );
 
 			echo "result:" . $result . eol();
 
@@ -410,7 +410,7 @@ SQL;
 		case "avg":
 
 			$criteria = new Charcoal_SQLCriteria();
-			$result = $this->gw->avg( 'posts', $criteria, 'favorite' );
+			$result = $this->gw->avg( "avg #1", 'posts', $criteria, 'favorite' );
 
 			echo "result:" . $result . eol();
 
@@ -421,7 +421,7 @@ SQL;
 		case "count_alias":
 
 			$criteria = new Charcoal_SQLCriteria();
-			$result = $this->gw->count( 'posts as p', $criteria, '*' );
+			$result = $this->gw->count( "count_alias #1",'posts as p', $criteria, '*' );
 
 			echo "result:" . $result . eol();
 
@@ -432,7 +432,7 @@ SQL;
 		case "max_alias":
 
 			$criteria = new Charcoal_SQLCriteria();
-			$result = $this->gw->max( 'posts as p + comments as c on "p.post_id = c.post_id"', $criteria, 'favorite' );
+			$result = $this->gw->max( "max_alias #1",'posts as p + comments as c on "p.post_id = c.post_id"', $criteria, 'favorite' );
 
 			echo "result:" . $result . eol();
 
@@ -445,7 +445,7 @@ SQL;
 			$criteria = new Charcoal_SQLCriteria();
 			$criteria->setOrderBy( 'favorite' );
 
-			$result = $this->gw->findFirst( 'posts', $criteria );
+			$result = $this->gw->findFirst( "find_first #1",'posts', $criteria );
 
 			echo "result:" . $result->post_title . eol();
 
@@ -455,15 +455,15 @@ SQL;
 
 		case "find_by_id":
 
-			$result = $this->gw->findAll( 'posts', new Charcoal_SQLCriteria() );
+			$result = $this->gw->findAll( "find_by_id #1",'posts', new Charcoal_SQLCriteria() );
 
 			foreach ($result as $row) {
 				$blog_id = $row['blog_id'];
-				$blog = $this->gw->findById( 'blogs', $blog_id  );
+				$blog = $this->gw->findById( "find_by_id #2",'blogs', $blog_id  );
 				$this->assertEquals( $this->blog_name_expected[$blog_id], $blog['blog_name'] );
 
 				$blog_category_id = $blog['blog_category_id'];
-				$category = $this->gw->findById( 'blog_category', $blog_category_id  );
+				$category = $this->gw->findById( "find_by_id #3",'blog_category', $blog_category_id  );
 				$this->assertEquals( $this->category_name_expected[$blog_category_id], $category['blog_category_name'] );
 			}
 
@@ -476,21 +476,29 @@ SQL;
 			$dto->post_body = 'New Post Body';
 			$dto->user = 'Ichiro';
 
-			$count = $this->gw->count( 'posts', new Charcoal_SQLCriteria() );
+			$count = $this->gw->count( "save #1",'posts', new Charcoal_SQLCriteria(), NULL, 'save #1' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
+
 			echo "count(before save):" . $count . eol();
 			$this->assertEquals( 3, $count );
 
-			$new_id = $this->gw->save( "posts", $dto );
+			$new_id = $this->gw->save( "save #2","posts", $dto, 'save #2' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			$criteria = new Charcoal_SQLCriteria();
 			$criteria->setWhere( "post_id = ?" );
 			$criteria->setParams( array($new_id) );
 
-			$new_record = $this->gw->findFirst( 'posts', $criteria );
+			$new_record = $this->gw->findFirst( "save #3",'posts', $criteria );
 
-			echo "new_record:" . print_r($new_record,true) . eol();
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
-			$count = $this->gw->count( 'posts', new Charcoal_SQLCriteria() );
+			$count = $this->gw->count( "save #4",'posts', new Charcoal_SQLCriteria() );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
+
 			echo "count(after save):" . $count . eol();
 			$this->assertEquals( 4, $count );
 			$this->assertEquals( 'New Post', $new_record->post_title );
@@ -510,7 +518,9 @@ SQL;
 						->limit(i(5))
 						->offset(i(0))
 						->prepareExecute()
-						->findFirst()->result();
+						->findFirst( "fluent_api #1" )->result();
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 //			echo print_r($rs,true) . eol();
 
@@ -525,7 +535,9 @@ SQL;
 			$rsfactory1 = $this->gw->createRecordsetFactory();		// fetch mode: FETCHMODE_BOTH
 			
 			$sql = "SELECT * FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql, NULL, $rsfactory1 );
+			$result = $this->gw->query( "recordset_query #1", $sql, NULL, $rsfactory1, NULL, 'recordset_query #1' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			foreach( $result as $row ){
 				$this->assertEquals( $this->blog_name_expected[$row['blog_id']], $row['blog_name'] );
@@ -534,7 +546,9 @@ SQL;
 			$rsfactory2 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_ASSOC );
 			
 			$sql = "SELECT * FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql, NULL, $rsfactory2 );
+			$result = $this->gw->query( "recordset_query #2", $sql, NULL, $rsfactory2, NULL, 'recordset_query #2' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			foreach( $result as $row ){
 				$this->assertEquals( $this->blog_name_expected[$row['blog_id']], $row['blog_name'] );
@@ -543,7 +557,9 @@ SQL;
 			$rsfactory3 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_NUM );
 			
 			$sql = "SELECT blog_id, blog_name, post_total FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql, NULL, $rsfactory3 );
+			$result = $this->gw->query( "recordset_query #3", $sql, NULL, $rsfactory3, NULL, 'recordset_query #3' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			foreach( $result as $row ){
 				$this->assertEquals( $this->blog_name_expected[$row[0]], $row[1] );
@@ -557,7 +573,9 @@ SQL;
 			$rsfactory1 = $this->gw->createRecordsetFactory();		// fetch mode: FETCHMODE_ASSOC
 			
 			$sql = "SELECT * FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql, NULL, $rsfactory1 );
+			$result = $this->gw->query( "recordset_find #1", $sql, NULL, $rsfactory1, NULL, 'recordset_find #1' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			foreach( $result as $row ){
 				$this->assertEquals( $this->blog_name_expected[$row['blog_id']], $row['blog_name'] );
@@ -566,7 +584,9 @@ SQL;
 			$rsfactory2 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_ASSOC );
 			
 			$sql = "SELECT * FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql, NULL, $rsfactory2 );
+			$result = $this->gw->query( "recordset_find #2", $sql, NULL, $rsfactory2, NULL, 'recordset_find #2' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			foreach( $result as $row ){
 				$this->assertEquals( $this->blog_name_expected[$row['blog_id']], $row['blog_name'] );
@@ -575,7 +595,9 @@ SQL;
 			$rsfactory3 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_NUM );
 			
 			$sql = "SELECT blog_id, blog_name, post_total FROM blogs WHERE blog_id = 1";
-			$result = $this->gw->query( $sql, NULL, $rsfactory3 );
+			$result = $this->gw->query( "recordset_find #3", $sql, NULL, $rsfactory3, NULL, 'recordset_find #3' );
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			foreach( $result as $row ){
 				$this->assertEquals( $this->blog_name_expected[$row[0]], $row[1] );
@@ -671,37 +693,31 @@ SQL;
 
 		case "delete_by_id":
 
-			$this->gw->deleteById( 'blog_category', 1 );
+			$this->gw->deleteById( "delete_by_id #1", 'blog_category', 1 );
 
-			$sql_history = $this->gw->popSQLHistory();
-			$sql = $sql_history->getSQL();
-			$params = $sql_history->getParams();
-
-			echo 'sql:' . $sql . PHP_EOL;
-			echo 'params:' . implode( ',', $params ) . PHP_EOL;
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			$criteria = new Charcoal_SQLCriteria( '' );
 
-			$cnt = $this->gw->count( 'blog_category', $criteria );
+			$cnt = $this->gw->count( "delete_by_id #2", 'blog_category', $criteria );
 			echo 'cnt:' . $cnt . PHP_EOL;
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			return TRUE;
 
 		case "delete_by_ids":
 
-			$this->gw->deleteByIds( 'blog_category', array(1,3) );
+			$this->gw->deleteByIds( "delete_by_ids #1", 'blog_category', array(1,3) );
 
-			$sql_history = $this->gw->popSQLHistory();
-			$sql = $sql_history->getSQL();
-			$params = $sql_history->getParams();
-
-			echo 'sql:' . $sql . PHP_EOL;
-			echo 'params:' . implode( ',', $params ) . PHP_EOL;
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			$criteria = new Charcoal_SQLCriteria( '' );
 
-			$cnt = $this->gw->count( 'blog_category', $criteria );
+			$cnt = $this->gw->count( "delete_by_ids #2", 'blog_category', $criteria );
 			echo 'cnt:' . $cnt . PHP_EOL;
+
+			echo $this->gw->popSQLHistory() . PHP_EOL;
 
 			return TRUE;
 

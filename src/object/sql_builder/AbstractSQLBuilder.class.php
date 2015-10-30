@@ -262,7 +262,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 			$SQL_set    = implode( ',', $SQL_set );
 			$table      = $model->getTableName();
 
-			$sql = "update " . us($table) . " set " . us($SQL_set) . " WHERE " . us($SQL_WHERE);
+			$sql = "UPDATE " . us($table) . " SET " . us($SQL_set) . " WHERE " . us($SQL_WHERE);
 
 			return array( $sql, $SQL_params );
 		}
@@ -350,7 +350,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 			$table = $model->getTableName();
 
-			$sql = "insert into " . us($table) . "(" . us($SQL_field_list) . ") values(" . us($SQL_value_list) . ")";
+			$sql = "INSERT INTO " . us($table) . "(" . us($SQL_field_list) . ") VALUES(" . us($SQL_value_list) . ")";
 
 			return array( $sql, $SQL_params );
 		}
@@ -465,7 +465,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 			$table = $model->getTableName();
 
-			$sql = "insert into " . us($table) . "(" . us($SQL_field_list) . ") values";
+			$sql = "INSERT INTO " . us($table) . "(" . us($SQL_field_list) . ") VALUES";
 			$values = array();
 			foreach( $SQL_value_list as $line ){
 				$SQL_value_list = implode( ',', $line );
@@ -490,11 +490,10 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
 	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
 	 *	@param array $fields                      list of fields which will be returned in query result
-	 *	@param Charcoal_String|string $comment    comment text
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL, $comment = NULL )
+	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL )
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 		Charcoal_ParamTrait::validateString( 2, $alias, TRUE );
@@ -502,7 +501,6 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
 		Charcoal_ParamTrait::validateVector( 5, $joins );
 		Charcoal_ParamTrait::validateVector( 6, $fields, TRUE );
-		Charcoal_ParamTrait::validateString( 7, $comment, TRUE );
 
 		$table_name = $model->getTableName();
 
@@ -520,8 +518,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 
 		$fields = v($fields)->join(",");
 
-		$sql = $comment ? "/* $comment */" : '';
-		$sql .= "SELECT $func($fields) FROM " . us($table_name);
+		$sql = "SELECT $func($fields) FROM " . us($table_name);
 
 		if ( $alias && !empty($alias) ){
 			$sql .= ' AS ' . $alias;
@@ -629,7 +626,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildDropTableSQL( Charcoal_ITableModel $model, $if_exists = false )
+	public  function buildDropTableSQL( $model, $if_exists = false )
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 		Charcoal_ParamTrait::validateBoolean( 2, $if_exists );
@@ -650,7 +647,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildTruncateTableSQL( Charcoal_ITableModel $model )
+	public  function buildTruncateTableSQL( $model )
 	{
 		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ITableModel', $model );
 
@@ -659,6 +656,32 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalObject imple
 		$sql = "TRUNCATE TABLE `$table_name`";
 
 		return $sql;
+	}
+
+	/**
+	 *	add RDBMS-specific comment after the specified SQL
+	 *	
+	 *	@param string|Charcoal_String             SQL
+	 *	@param string|Charcoal_String $comment    comment text
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function appendComment( $sql, $comment )
+	{
+		return "$sql /* $comment */";
+	}
+
+	/**
+	 *	add RDBMS-specific comment before the specified SQL
+	 *	
+	 *	@param string|Charcoal_String             SQL
+	 *	@param string|Charcoal_String $comment    comment text
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function prependComment( $sql, $comment )
+	{
+		return "/* $comment */ $sql";
 	}
 }
 

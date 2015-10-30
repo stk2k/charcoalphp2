@@ -48,7 +48,7 @@ class ModelGenerateTask extends Charcoal_Task
 		// Genarate  table model file
 		//=======================================
 
-		$colmn_attr_list = $gw->query( 'SHOW COLUMNS FROM ' . $table );
+		$colmn_attr_list = $gw->query( __FILE__ . '(' . __LINE__ . ')', 'SHOW COLUMNS FROM ' . $table );
 
 		$lines = NULL;
 
@@ -66,7 +66,7 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = "{";
 		$lines[] = "    public \$___table_name      = '{$table}';";
 		$lines[] = "";
-	
+
 		foreach( $colmn_attr_list as $colmn_attr ){
 			$field     = $colmn_attr['Field'];
 			$type      = $colmn_attr['Type'];
@@ -122,7 +122,7 @@ class ModelGenerateTask extends Charcoal_Task
 		$lines[] = " */";
 		$lines[] = "class {$table_dto_class_name} extends Charcoal_TableDTO";
 		$lines[] = "{";
-	
+
 		foreach( $colmn_attr_list as $colmn_attr ){
 			$field     = $colmn_attr['Field'];
 			$type      = $colmn_attr['Type'];

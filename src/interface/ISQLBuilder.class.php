@@ -71,11 +71,10 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	@param Charcoal_SQLCriteria $criteria     criteria which should be used in WHERE clause
 	 *	@param array $joins                       list of join(list of Charcoal_QueryJoin object)
 	 *	@param array $fields                      list of fields which will be returned in query result
-	 *	@param Charcoal_String|string $comment    comment text
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL, $comment = NULL );
+	public  function buildAggregateSQL( $model, $alias, $aggregate_func, $criteria, $joins, $fields = NULL );
 
 	/**
 	 *	Generate RDBMS-specific SQL for DELETE
@@ -90,7 +89,7 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 
 	/**
 	 *	Generate RDBMS-specific SQL for LAST_INSERT_ID
-	 *	
+	 *
 	 *	@return string                            SQL
 	 */
 	public  function buildLastIdSQL();
@@ -103,7 +102,7 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildCreateTableSQL( Charcoal_ITableModel $model, $if_not_exists = false );
+	public  function buildCreateTableSQL( $model, $if_not_exists = false );
 
 	/**
 	 *	Generate RDBMS-specific SQL for DROP TABLE
@@ -113,7 +112,7 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildDropTableSQL( Charcoal_ITableModel $model, $if_exists = false );
+	public  function buildDropTableSQL( $model, $if_exists = false );
 
 	/**
 	 *	Generate RDBMS-specific SQL for TRUNCATE TABLE
@@ -122,6 +121,26 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
 	 *	
 	 *	@return string                            SQL
 	 */
-	public  function buildTruncateTableSQL( Charcoal_ITableModel $model );
+	public  function buildTruncateTableSQL( $model );
+
+	/**
+	 *	add RDBMS-specific comment after the specified SQL
+	 *	
+	 *	@param string|Charcoal_String             SQL
+	 *	@param string|Charcoal_String $comment    comment text
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function appendComment( $sql, $comment );
+
+	/**
+	 *	add RDBMS-specific comment before the specified SQL
+	 *	
+	 *	@param string|Charcoal_String             SQL
+	 *	@param string|Charcoal_String $comment    comment text
+	 *	
+	 *	@return string                            SQL
+	 */
+	public  function prependComment( $sql, $comment );
 }
 

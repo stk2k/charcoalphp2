@@ -96,41 +96,41 @@ class Charcoal_QueryContext extends Charcoal_Object
 	/**
 	 *  get count of records
 	 */
-	public function count()
+	public function count( $comment = '' )
 	{
-		return $this->_gw->count( $this->_query_target->toString(), $this->_criteria, $this->_fields );
+		return $this->_gw->count( $comment, $this->_query_target->toString(), $this->_criteria, $this->_fields );
 	}
 
 	/**
 	 *  get max of records
 	 */
-	public function max()
+	public function max( $comment = '' )
 	{
-		return $this->_gw->max( $this->_query_target, $this->_criteria, $this->_fields );
+		return $this->_gw->max( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
 	 *  get min of records
 	 */
-	public function min()
+	public function min( $comment = '' )
 	{
-		return $this->_gw->min( $this->_query_target, $this->_criteria, $this->_fields );
+		return $this->_gw->min( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
 	 *  get sum of records
 	 */
-	public function sum()
+	public function sum( $comment = '' )
 	{
-		return $this->_gw->sum( $this->_query_target, $this->_criteria, $this->_fields );
+		return $this->_gw->sum( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
 	 *  get avg of records
 	 */
-	public function avg()
+	public function avg( $comment = '' )
 	{
-		return $this->_gw->avg( $this->_query_target, $this->_criteria, $this->_fields );
+		return $this->_gw->avg( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 	}
 
 	/**
@@ -138,9 +138,9 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 *
 	 * @return Charcoal_ResultContext    result context
 	 */
-	public function findFirst()
+	public function findFirst( $comment = '' )
 	{
-		$this->_resultset = $this->_gw->findFirst( $this->_query_target, $this->_criteria, $this->_fields );
+		$this->_resultset = $this->_gw->findFirst( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 
 		return new Charcoal_ResultContext( $this );
 	}
@@ -150,9 +150,9 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 *
 	 * @return Charcoal_ResultContext    result context
 	 */
-	public function findAll()
+	public function findAll( $comment = '' )
 	{
-		$this->_resultset = $this->_gw->findAll( $this->_query_target, $this->_criteria, $this->_fields );
+		$this->_resultset = $this->_gw->findAll( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 
 		return new Charcoal_ResultContext( $this );
 	}
@@ -162,9 +162,9 @@ class Charcoal_QueryContext extends Charcoal_Object
 	 *
 	 * @return Charcoal_ResultContext    result context
 	 */
-	public function findAllForUpdate()
+	public function findAllForUpdate( $comment = '' )
 	{
-		$this->_resultset = $this->_gw->findAllForUpdate( $this->_query_target, $this->_criteria, $this->_fields );
+		$this->_resultset = $this->_gw->findAllForUpdate( $comment, $this->_query_target, $this->_criteria, $this->_fields );
 
 		return new Charcoal_ResultContext( $this );
 	}
