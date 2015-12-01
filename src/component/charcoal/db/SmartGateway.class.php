@@ -200,13 +200,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update all records matched by criteria
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target              description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria    criteria object
 	 * @param array $data                       associative array or HashMap object to update
 	 */
 	public function updateAll( $comment, $query_target, $criteria, $data )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -224,7 +228,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update field by value
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target        description about target model, alias, or joins
 	 * @param int $data_id                identify database entity
 	 * @param Charcoal_String|string      $field
@@ -232,6 +236,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function updateField( $comment, $query_target, $data_id, $field, $value )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -249,13 +257,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update field by current time
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target    description about target model, alias, or joins
 	 * @param int $data_id            identify database entity
 	 * @param string $field           field name to update
 	 */
 	public function updateFieldNow( $comment, $query_target, $data_id, $field )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -273,7 +285,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	increment field value
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target    description about target model, alias, or joins
 	 * @param int $data_id            identify database entity
 	 * @param string $field           field name to increment
@@ -281,6 +293,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function incrementField( $comment, $query_target, $data_id, $field, $increment_by = 1 )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -298,7 +314,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	decrement field value
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target    description about target model, alias, or joins
 	 * @param int $data_id            identify database entity
 	 * @param string $field           field name to decrement
@@ -306,6 +322,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function decrementField( $comment, $query_target, $data_id, $field, $decrement_by = 1 )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -323,13 +343,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update field by null
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target    description about target model, alias, or joins
 	 * @param int $data_id            identify database entity
 	 * @param string $field           field name to set null
 	 */
 	public function updateFieldNull( $comment, $query_target, $data_id, $field )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -347,13 +371,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	update record with multiple fields
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string $query_target    description about target model, alias, or joins
 	 * @param int $data_id            identify database entity
 	 * @param array $data             associative array or HashMap object to update
 	 */
 	public function updateFields( $comment, $query_target, $data_id, $data )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -371,7 +399,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	insert DTO into specified table
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
 	 * @param array $data                                    associative array/HashMap/DTO object to insert
 	 *
@@ -380,6 +408,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function insert( $comment, $query_target, $data )
 	{
 		$new_id = 0;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -398,12 +431,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	bulk insert
 	 *
-	 * @param Charcoal_String|string $comment                comment text
+	 * @param Charcoal_String|string|NULL $comment                comment text
 	 * @param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
 	 * @param array|Charcoal_Vector $data_set                array of array or DTO value to insert
 	 */
 	public function insertAll( $comment, $query_target, $data_set )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -421,7 +458,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	insert or update DTO into specified table
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param string $query_target                     description about target model, alias, or joins
 	 * @param array|ArrayAccess $data                  associative array/HashMap/DTO object to update
 	 *
@@ -430,6 +467,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function save( $comment, $query_target, $data )
 	{
 		$new_id = 0;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -448,13 +490,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute command query(INSERT/DELETE/UPDATE)
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
 	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
 	 * @param array|Charcoal_HashMap $driver_options   Driver options
 	 */
 	public function execute( $comment, $sql, $params = NULL, $driver_options = NULL )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			$this->impl->execute( $comment, $sql, $params, $driver_options );
 		}
@@ -471,13 +517,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
 	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
 	 * @param array|Charcoal_HashMap $driver_options   Driver options
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 *
 	 * @return mixed|NULL
 	 */
 	public function queryValue( $comment, $sql, $params = NULL, $driver_options = NULL )
 	{
 		$value = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			$value = $this->impl->queryValue( $comment, $sql, $params, $driver_options );
 		}
@@ -492,7 +543,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	execute a query with parameters
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $sql              SQL statement(placeholders can be included)
 	 * @param array|Charcoal_HashMap $params           Parameter values for prepared statement
 	 * @param Charcoal_IRecordsetFactory $recordsetFactory
@@ -503,6 +554,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function query( $comment, $sql, $params = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			$result = $this->impl->query( $comment, $sql, $params, $recordsetFactory, $driver_options );
 		}
@@ -546,7 +602,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select first record
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
 	 * @param string|Charcoal_String $fields          comma separated field list to output
@@ -558,6 +614,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findFirst( $comment, $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -576,7 +637,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select first record for updating
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
 	 * @param string|Charcoal_String $fields          comma separated field list to output
@@ -588,6 +649,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findFirstForUpdate( $comment, $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -606,7 +672,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
 	 * @param string|Charcoal_String $fields          comma separated field list to output
@@ -618,6 +684,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findAll( $comment, $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -636,7 +707,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records for updating
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
 	 * @param string|Charcoal_String $fields          comma separated field list to output
@@ -648,6 +719,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findAllForUpdate( $comment, $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -666,7 +742,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select unique record
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria          criteria for result set
 	 * @param string|Charcoal_String $fields          comma separated field list to output
@@ -678,6 +754,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findAllDistinct( $comment, $query_target, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -696,7 +777,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select all records by field value
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string|Charcoal_String $query_target    description about target model, alias, or joins
 	 * @param string|Charcoal_String $field           field name to restrict records
 	 * @param mixed $value                            field value to restrict records
@@ -709,6 +790,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findAllBy( $comment, $query_target, $field, $value, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -727,7 +813,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Select a record by primary key
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string $query_target    description about target model, alias, or joins
 	 * @param array $id
 	 *
@@ -736,6 +822,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function findById( $comment, $query_target, $id )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -754,12 +845,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove a record by primary key
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string $query_target                  description about target model, alias, or joins
 	 * @param int $id                               identify database entity
 	 */
 	public function deleteById( $comment, $query_target, $id )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -777,12 +872,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove records by primary keys
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string $query_target                  description about target model, alias, or joins
 	 * @param array|Charcoal_Vector $data_ids       array of primary key values for the entity
 	 */
 	public function deleteByIds( $comment, $query_target, $ids )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -800,13 +899,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove all records by specified field
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string $query_target           description about target model, alias, or joins
 	 * @param string $field                  field name to query
 	 * @param mixed $value                   field value to query
 	 */
 	public function deleteBy( $comment, $query_target, $field, $value )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -824,12 +927,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Remove all records
 	 *
-	 * @param Charcoal_String|string $comment       comment text
+	 * @param Charcoal_String|string|NULL $comment       comment text
 	 * @param string $query_target               description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria     criteria object
 	 */
 	public function deleteAll( $comment, $query_target, $criteria )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -847,7 +954,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply COUNT aggregate function to specified table
 	 *
-	 * @param Charcoal_String|string $comment           comment text
+	 * @param Charcoal_String|string|NULL $comment           comment text
 	 * @param Charcoal_String|string $query_target      description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria            criteria object
 	 * @param Charcoal_String|string $fields            fields to be included result set
@@ -857,6 +964,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function count( $comment, $query_target, $criteria, $fields = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -875,7 +987,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply MAX aggregate function to specified table
 	 *
-	 * @param Charcoal_String|string $comment         comment text
+	 * @param Charcoal_String|string|NULL $comment         comment text
 	 * @param Charcoal_String|string $query_target    description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria          criteria object
 	 * @param Charcoal_String|string $fields          fields to be included result set
@@ -885,6 +997,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function max( $comment, $query_target, $criteria, $fields = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -903,7 +1020,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply MIN aggregate function to specified table
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param Charcoal_String|string $query_target     description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria           criteria object
 	 * @param Charcoal_String|string $fields           fields to be included result set
@@ -913,6 +1030,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function min( $comment, $query_target, $criteria, $fields = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -931,7 +1053,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply SUM aggregate function to specified table
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param Charcoal_String|string $query_target     description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria           criteria object
 	 * @param Charcoal_String|string $fields           fields to be included result set
@@ -941,6 +1063,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function sum( $comment, $query_target, $criteria, $fields = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -959,7 +1086,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	apply AVG aggregate function to specified table
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param Charcoal_String|string $query_target     description about target model, alias, or joins
 	 * @param Charcoal_SQLCriteria $criteria           criteria object
 	 * @param Charcoal_String|string $fields           fields to be included result set
@@ -969,6 +1096,11 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	public function avg( $comment, $query_target, $criteria, $fields = NULL )
 	{
 		$result = NULL;
+
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			if ( !($query_target instanceof Charcoal_QueryTarget) ){
 				$query_target = new Charcoal_QueryTarget( $query_target );
@@ -987,7 +1119,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Execute CREATE TABLE sql
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param string $model_name
 	 * @param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
 	 *
@@ -995,6 +1127,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function createTable( $comment, $model_name, $if_not_exists = false )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			$this->impl->createTable( $comment, $model_name, $if_not_exists );
 		}
@@ -1010,7 +1146,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Execute DROP TABLE sql
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param string $model_name
 	 * @param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth
 	 *
@@ -1018,6 +1154,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	 */
 	public function dropTable( $comment, $model_name, $if_exists = false )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			$this->impl->dropTable( $comment, $model_name, $if_exists );
 		}
@@ -1033,13 +1173,17 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 	/**
 	 *	Execute TRUNCATE TABLE sql
 	 *
-	 * @param Charcoal_String|string $comment          comment text
+	 * @param Charcoal_String|string|NULL $comment          comment text
 	 * @param string $model_name
 	 *
 	 * @return Charcoal_TableContext
 	 */
 	public function truncateTable( $comment, $model_name )
 	{
+		if ( $comment === NULL ){
+			list( $file, $line ) = Charcoal_System::caller(0);
+			$comment = basename($file) . '(' . $line . ')';
+		}
 		try{
 			$this->impl->truncateTable( $comment, $model_name );
 		}
