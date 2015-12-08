@@ -10,10 +10,10 @@
 */
 interface Charcoal_IEvent extends Charcoal_ICharcoalObject
 {
-	/**
-	 * 実行優先度を取得する
-	 */
-	public function getPriority();
+    /**
+     * 実行優先度を取得する
+     */
+    public function getPriority();
 
 }
 

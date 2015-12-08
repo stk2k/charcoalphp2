@@ -11,10 +11,10 @@
 
 class Charcoal_BenchmarkException extends Charcoal_RuntimeException
 {
-	public function __construct( $message, $prev = NULL )
-	{
-		parent::__construct( "benchmark failed: [$message]", $prev );
-	}
+    public function __construct( $message, $prev = NULL )
+    {
+        parent::__construct( "benchmark failed: [$message]", $prev );
+    }
 
 }
 

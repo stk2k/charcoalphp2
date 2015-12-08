@@ -11,9 +11,9 @@
 interface Charcoal_IValidator extends Charcoal_ICharcoalObject
 {
 
-	/**
-	 * 変数値をバリデートする
-	 */
-	public function validate( $value );
+    /**
+     * 変数値をバリデートする
+     */
+    public function validate( $value );
 }
 

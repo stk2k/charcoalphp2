@@ -11,9 +11,9 @@
 
 class Charcoal_RoutingRuleConfigException extends Charcoal_ConfigException
 {
-	public function __construct( $entry, $message = NULL, $prev = NULL )
-	{
-		parent::__construct( "[entry]$entry [message]$message", $prev );
-	}
+    public function __construct( $entry, $message = NULL, $prev = NULL )
+    {
+        parent::__construct( "[entry]$entry [message]$message", $prev );
+    }
 }
 

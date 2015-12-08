@@ -11,9 +11,9 @@
 
 class Charcoal_ComponentLoadingException extends Charcoal_RuntimeException
 {
-	public function __construct( $component_name, $prev = NULL )
-	{
-		parent::__construct( "component loading failed: $component_name", $prev );
-	}
+    public function __construct( $component_name, $prev = NULL )
+    {
+        parent::__construct( "component loading failed: $component_name", $prev );
+    }
 }
 

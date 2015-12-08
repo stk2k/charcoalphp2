@@ -11,9 +11,9 @@
 
 class Charcoal_IllegalRunModeException extends Charcoal_RuntimeException
 {
-	public function __construct( $run_mode, $prev = NULL )
-	{
-		parent::__construct( "Illegal run mode: [$run_mode]", $prev );
-	}
+    public function __construct( $run_mode, $prev = NULL )
+    {
+        parent::__construct( "Illegal run mode: [$run_mode]", $prev );
+    }
 }
 

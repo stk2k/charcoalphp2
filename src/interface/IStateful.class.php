@@ -10,19 +10,19 @@
 */
 interface Charcoal_IStateful
 {
-	/**
-	 * オブジェクトの内容を初期化する
-	 */
-	public function initContents();
+    /**
+     * オブジェクトの内容を初期化する
+     */
+    public function initContents();
 
-	/**
-	 * オブジェクトの内容をシリアライズする
-	 */
-	public function serializeContents();
+    /**
+     * オブジェクトの内容をシリアライズする
+     */
+    public function serializeContents();
 
-	/**
-	 * オブジェクトの内容をデシリアライズする
-	 */
-	public function deserializeContents( $serialize_data );
+    /**
+     * オブジェクトの内容をデシリアライズする
+     */
+    public function deserializeContents( $serialize_data );
 }
 

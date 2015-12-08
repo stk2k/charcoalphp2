@@ -10,12 +10,12 @@
 */
 class Charcoal_StripTagsResponseFilter extends Charcoal_AbstractResponseFilter
 {
-	/**
-	 * セットされた値を加工する
-	 */
-	public function apply( $value )
-	{
-		return Charcoal_System::stripTags( $value );
-	}
+    /**
+     * セットされた値を加工する
+     */
+    public function apply( $value )
+    {
+        return Charcoal_System::stripTags( $value );
+    }
 }
 

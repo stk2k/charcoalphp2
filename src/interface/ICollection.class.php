@@ -10,24 +10,24 @@
 */
 interface Charcoal_ICollection
 {
-	/**
-	 *	Get all values with keys
-	 *
-	 * @return array
-	 */
-	public function getAll();
+    /**
+     *    Get all values with keys
+     *
+     * @return array
+     */
+    public function getAll();
 
-	/**
-	 *	Remove all elements
-	 */
-	public function clear();
+    /**
+     *    Remove all elements
+     */
+    public function clear();
 
-	/**
-	 *	Applies a callback to all elements
-	 *
-	 * @return array
-	 */
-	public function map( $callable );
+    /**
+     *    Applies a callback to all elements
+     *
+     * @return array
+     */
+    public function map( $callable );
 
 }
 

@@ -11,9 +11,9 @@
 
 class EnumPDFCellNextPos extends Charcoal_Enum
 {
-	const RIGHT              = 0;		// 右
-	const NEXT_LINE_HEAD     = 1;		// 次の行の先頭
-	const BELOW              = 2;		// 次の行
+    const RIGHT              = 0;        // 右
+    const NEXT_LINE_HEAD     = 1;        // 次の行の先頭
+    const BELOW              = 2;        // 次の行
 
 }
 

@@ -14,7 +14,7 @@ class CommentTableModel extends Charcoal_DefaultTableModel
 {
     public $___table_name      = 'comments';
 
-	public $post            = '@relation @target:posts @linkage:inner[post_id] @extract:field';
+    public $post            = '@relation @target:posts @linkage:inner[post_id] @extract:field';
 
     public $comment_id      = '@field @type:int(11) @pk @insert:no @update:no @serial';
     public $post_id         = '@field @type:int(11) @insert:value @update:value @fk:posts';
@@ -22,11 +22,11 @@ class CommentTableModel extends Charcoal_DefaultTableModel
     public $comment_body    = '@field @type:text @insert:value @update:value';
     public $comment_user    = '@field @type:vachar(255) @insert:value @update:value';
 
-	// returns model's own DTO
+    // returns model's own DTO
     public function createDTO( $values = array() )
     {
         return new CommentTableDTO( $values );
     }
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

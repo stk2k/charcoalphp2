@@ -11,43 +11,43 @@
 
 class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
 {
-	private $url;
+    private $url;
 
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct( $url )
-	{
-		Charcoal_ParamTrait::validateString( 1, $url );
+    /*
+     *    コンストラクタ
+     */
+    public function __construct( $url )
+    {
+        Charcoal_ParamTrait::validateString( 1, $url );
 
-		parent::__construct( p(array()) );
+        parent::__construct( p(array()) );
 
-		$this->url = $url;
-	}
+        $this->url = $url;
+    }
 
-	/**
-	 *	リダイレクト先URLを取得
-	 */
-	public function getURL()
-	{
-		return $this->url;
-	}
+    /**
+     *    リダイレクト先URLを取得
+     */
+    public function getURL()
+    {
+        return $this->url;
+    }
 
-	/**
-	 *	リダイレクト時のURLを取得
-	 */
-	public function makeRedirectURL()
-	{
-		return $this->url;
-	}
+    /**
+     *    リダイレクト時のURLを取得
+     */
+    public function makeRedirectURL()
+    {
+        return $this->url;
+    }
 
-	/*
-	 *	文字列化
-	 */
-	public function toString()
-	{
-		return "[RedirectWebPage:" . us($this->_obj_path->getPathString()) . "]";
-	}
+    /*
+     *    文字列化
+     */
+    public function toString()
+    {
+        return "[RedirectWebPage:" . us($this->_obj_path->getPathString()) . "]";
+    }
 }
 
 

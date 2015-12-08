@@ -11,10 +11,10 @@
 
 class EnumPDFFontStyle extends Charcoal_Enum
 {
-	const NOTHING          = 0x0000;
-	const BOLD             = 0x0001;
-	const ITALIC           = 0x0002;
-	const UNDERLINE        = 0x0004;
+    const NOTHING          = 0x0000;
+    const BOLD             = 0x0001;
+    const ITALIC           = 0x0002;
+    const UNDERLINE        = 0x0004;
 
 }
 

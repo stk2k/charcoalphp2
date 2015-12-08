@@ -10,11 +10,11 @@
 */
 interface Charcoal_ICodebase
 {
-	/**
-	 * get class source
-	 * 
-	 * @param Charcoal_String $path         virtual path of the class
-	 */
-	public function getClassSource( $path );
+    /**
+     * get class source
+     *
+     * @param Charcoal_String $path         virtual path of the class
+     */
+    public function getClassSource( $path );
 }
 

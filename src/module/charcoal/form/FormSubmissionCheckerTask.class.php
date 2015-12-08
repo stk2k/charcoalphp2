@@ -13,48 +13,48 @@
 
 class Charcoal_FormSubmissionChekerTask extends Charcoal_Task implements Charcoal_ITask
 {
-	/*
-	 *	construct object
-	 */
-	public function __construct()
-	{
-	}
+    /*
+     *    construct object
+     */
+    public function __construct()
+    {
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
-	}
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
+    }
 
-	/**
-	 * Process events
-	 *
-	 * @param Charcoal_IEventContext $context   event context
-	 */
-	public function processEvent( $context )
-	{
-		$request   = $context->getRequest();
-		$response  = $context->getResponse();
-		$sequence  = $context->getSequence();
-		$procedure = $context->getProcedure();
-		$event     = $context->getEvent();
+    /**
+     * Process events
+     *
+     * @param Charcoal_IEventContext $context   event context
+     */
+    public function processEvent( $context )
+    {
+        $request   = $context->getRequest();
+        $response  = $context->getResponse();
+        $sequence  = $context->getSequence();
+        $procedure = $context->getProcedure();
+        $event     = $context->getEvent();
 
-		// form token component
-		$form_token = $context->getComponent( s('form_token@:charcoal:form') );
+        // form token component
+        $form_token = $context->getComponent( s('form_token@:charcoal:form') );
 
-		if ( $event instanceof Charcoal_SetupEvent ){
-			$form_token->setupForm( $sequence, $response );
-			return b(TRUE);
-		}
-		elseif ( $event instanceof Charcoal_AuthTokenEvent ){
-			return $form_token->checkToken( $sequence, $request );
-		}
+        if ( $event instanceof Charcoal_SetupEvent ){
+            $form_token->setupForm( $sequence, $response );
+            return b(TRUE);
+        }
+        elseif ( $event instanceof Charcoal_AuthTokenEvent ){
+            return $form_token->checkToken( $sequence, $request );
+        }
 
-		return b(FALSE);
-	}
+        return b(FALSE);
+    }
 }
 

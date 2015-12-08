@@ -12,226 +12,226 @@ require_once( 'Smarty/Smarty.class.php' );
 
 class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITask
 {
-	const TAG = 'smarty_renderer_task';
+    const TAG = 'smarty_renderer_task';
 
-	private $template_files;
-	private $smarty;
-	private $debug_mode;
+    private $template_files;
+    private $smarty;
+    private $debug_mode;
 
-	/**
-	 *	Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     *    Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->template_files = array();
-		$this->smarty = new Smarty();
-	}
+        $this->template_files = array();
+        $this->smarty = new Smarty();
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-		$this->debug_mode					= ub( $config->getBoolean( 'debug_mode', FALSE ) );
+        $this->debug_mode                    = ub( $config->getBoolean( 'debug_mode', FALSE ) );
 
-		$this->smarty->caching 				= 0;	//$config->getBoolean( 'caching' )->unbox();
-		$this->smarty->compile_check 		= ub( $config->getBoolean( 'compile_check', FALSE ) );
-		$this->smarty->template_dir 		= us( $config->getString( 'template_dir', '', TRUE ) );
-		$this->smarty->compile_dir 			= us( $config->getString( 'compile_dir', '', TRUE ) );
-		$this->smarty->config_dir 			= us( $config->getString( 'config_dir', '', TRUE ) );
-		$this->smarty->cache_dir 			= us( $config->getString( 'cache_dir', '', TRUE ) );
-		$this->smarty->left_delimiter 		= us( $config->getString( 'left_delimiter', '{', FALSE ) );
-		$this->smarty->right_delimiter 		= us( $config->getString( 'right_delimiter', '}', FALSE ) );
-//		$this->smarty->default_modifiers 	= $config->getArray( 'default_modifiers', array() )->unbox();
+        $this->smarty->caching                 = 0;    //$config->getBoolean( 'caching' )->unbox();
+        $this->smarty->compile_check         = ub( $config->getBoolean( 'compile_check', FALSE ) );
+        $this->smarty->template_dir         = us( $config->getString( 'template_dir', '', TRUE ) );
+        $this->smarty->compile_dir             = us( $config->getString( 'compile_dir', '', TRUE ) );
+        $this->smarty->config_dir             = us( $config->getString( 'config_dir', '', TRUE ) );
+        $this->smarty->cache_dir             = us( $config->getString( 'cache_dir', '', TRUE ) );
+        $this->smarty->left_delimiter         = us( $config->getString( 'left_delimiter', '{', FALSE ) );
+        $this->smarty->right_delimiter         = us( $config->getString( 'right_delimiter', '}', FALSE ) );
+//        $this->smarty->default_modifiers     = $config->getArray( 'default_modifiers', array() )->unbox();
 
-		$this->smarty->plugins_dir = uv( $config->getArray( 'plugins_dir', array(), TRUE ) );
+        $this->smarty->plugins_dir = uv( $config->getArray( 'plugins_dir', array(), TRUE ) );
 
-		$this->smarty->plugins_dir	= empty($this->smarty->plugins_dir) ? 'plugins' : $this->smarty->plugins_dir;
+        $this->smarty->plugins_dir    = empty($this->smarty->plugins_dir) ? 'plugins' : $this->smarty->plugins_dir;
 
-		if ( $this->debug_mode )
-		{
-			$smarty_options = array(
-					'caching' => $this->smarty->caching,
-					'compile_check' => $this->smarty->compile_check,
-					'template_dir' => $this->smarty->template_dir,
-					'compile_dir' => $this->smarty->compile_dir,
-					'config_dir' => $this->smarty->config_dir,
-					'cache_dir' => $this->smarty->cache_dir,
-					'default_modifiers' => $this->smarty->default_modifiers,
-					'plugins_dir' => $this->smarty->plugins_dir,
-					'left_delimiter' => $this->smarty->left_delimiter,
-					'right_delimiter' => $this->smarty->right_delimiter,
-				);
+        if ( $this->debug_mode )
+        {
+            $smarty_options = array(
+                    'caching' => $this->smarty->caching,
+                    'compile_check' => $this->smarty->compile_check,
+                    'template_dir' => $this->smarty->template_dir,
+                    'compile_dir' => $this->smarty->compile_dir,
+                    'config_dir' => $this->smarty->config_dir,
+                    'cache_dir' => $this->smarty->cache_dir,
+                    'default_modifiers' => $this->smarty->default_modifiers,
+                    'plugins_dir' => $this->smarty->plugins_dir,
+                    'left_delimiter' => $this->smarty->left_delimiter,
+                    'right_delimiter' => $this->smarty->right_delimiter,
+                );
 
-			ad( $smarty_options );
+            ad( $smarty_options );
 
-			foreach( $smarty_options as $key => $value ){
-				log_debug( 'system, debug, smarty', "smarty option: [$key]=" . Charcoal_System::toString($value) );
-			}
-		}
-	}
+            foreach( $smarty_options as $key => $value ){
+                log_debug( 'system, debug, smarty', "smarty option: [$key]=" . Charcoal_System::toString($value) );
+            }
+        }
+    }
 
-	/**
-	 * Process events
-	 *
-	 * @param Charcoal_IEventContext $context   event context
-	 */
-	public function processEvent( $context )
-	{
-		$event    = $context->getEvent();
-		$response = $context->getResponse();
-		$sequence = $context->getSequence();
+    /**
+     * Process events
+     *
+     * @param Charcoal_IEventContext $context   event context
+     */
+    public function processEvent( $context )
+    {
+        $event    = $context->getEvent();
+        $response = $context->getResponse();
+        $sequence = $context->getSequence();
 
-		// output response headers
-//		$response->flushHeaders();
+        // output response headers
+//        $response->flushHeaders();
 
-		// retrieve layout
-		$layout = $event->getLayout();
+        // retrieve layout
+        $layout = $event->getLayout();
 
-//		log_info( "system,renderer", "renderer", "Rendering by smarty. Layout:" . print_r($layout,true) );
+//        log_info( "system,renderer", "renderer", "Rendering by smarty. Layout:" . print_r($layout,true) );
 
-//		log_info( "smarty", "caching=" . $this->smarty->caching );
-//		log_info( "smarty", "template_dir=" . $this->smarty->template_dir );
-//		log_info( "smarty", "compile_dir=" . $this->smarty->compile_dir );
-//		log_info( "smarty", "config_dir=" . $this->smarty->config_dir );
-//		log_info( "smarty", "cache_dir=" . $this->smarty->cache_dir );
+//        log_info( "smarty", "caching=" . $this->smarty->caching );
+//        log_info( "smarty", "template_dir=" . $this->smarty->template_dir );
+//        log_info( "smarty", "compile_dir=" . $this->smarty->compile_dir );
+//        log_info( "smarty", "config_dir=" . $this->smarty->config_dir );
+//        log_info( "smarty", "cache_dir=" . $this->smarty->cache_dir );
 
-		$error_handler_old = NULL;
+        $error_handler_old = NULL;
 
-		try{
-			$charcoal = array();
+        try{
+            $charcoal = array();
 
-			// page redirection
-			if ( $layout instanceof Charcoal_IRedirectLayout ){
-	
-				$url = $layout->makeRedirectURL();
+            // page redirection
+            if ( $layout instanceof Charcoal_IRedirectLayout ){
 
-				$response->redirect( s($url) );
+                $url = $layout->makeRedirectURL();
 
-//				log_info( "system,renderer", "renderer", "Redirected to: $url" );
-			}
-			elseif ( $event instanceof Charcoal_URLRedirectEvent ){
-	
-				$url = $event->getURL();
+                $response->redirect( s($url) );
 
-				$response->redirect( s($url) );
+//                log_info( "system,renderer", "renderer", "Redirected to: $url" );
+            }
+            elseif ( $event instanceof Charcoal_URLRedirectEvent ){
 
-//				log_info( "system,renderer", "renderer", "Redirected to: $url" );
-			}
-			elseif ( $event instanceof Charcoal_RenderLayoutEvent ){
+                $url = $event->getURL();
 
-				// Page information
-				$page_info = $layout->getAttribute( s('page_info') );
-				log_info( "smarty","page_info=" . print_r($page_info,true) );
+                $response->redirect( s($url) );
 
-				// Profile information
-				$profile_config = $this->getSandbox()->getProfile()->getAll();
-				if ( $profile_config && is_array($profile_config) ){
-					foreach( $profile_config as $key => $value ){
-						$charcoal['profile'][$key] = $value;
-					}
-				}
+//                log_info( "system,renderer", "renderer", "Redirected to: $url" );
+            }
+            elseif ( $event instanceof Charcoal_RenderLayoutEvent ){
 
-				// Cookie information
-				if ( $response instanceof Charcoal_HttpResponse ){
-					$cookies = $response->getCookies();
-					if ( $cookies && is_array($cookies) ){
-						foreach( $cookies as $key => $value ){
-							$charcoal['cookie'][$key] = $value;
-						}
-					}
-				}
+                // Page information
+                $page_info = $layout->getAttribute( s('page_info') );
+                log_info( "smarty","page_info=" . print_r($page_info,true) );
 
-				$smarty = $this->smarty;
+                // Profile information
+                $profile_config = $this->getSandbox()->getProfile()->getAll();
+                if ( $profile_config && is_array($profile_config) ){
+                    foreach( $profile_config as $key => $value ){
+                        $charcoal['profile'][$key] = $value;
+                    }
+                }
 
-				// Assign variables
-				if ( $page_info && is_array($page_info) ){
-					foreach( $page_info as $key => $value ){
-						$smarty->assign( $key, $value );
-					}
-				}
+                // Cookie information
+                if ( $response instanceof Charcoal_HttpResponse ){
+                    $cookies = $response->getCookies();
+                    if ( $cookies && is_array($cookies) ){
+                        foreach( $cookies as $key => $value ){
+                            $charcoal['cookie'][$key] = $value;
+                        }
+                    }
+                }
 
-				// Sequence data
-				$charcoal['sequence'] = $sequence;
+                $smarty = $this->smarty;
 
-				// Request ID and reauest path
-				$charcoal['request']['id']   = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
-				$charcoal['request']['path'] = $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
+                // Assign variables
+                if ( $page_info && is_array($page_info) ){
+                    foreach( $page_info as $key => $value ){
+                        $smarty->assign( $key, $value );
+                    }
+                }
 
-				// Assign all
-				$smarty->assign( 'charcoal', $charcoal );
+                // Sequence data
+                $charcoal['sequence'] = $sequence;
 
-				// Assign all layout values
-				$layout_values = $event->getValues();
-				if ( !$layout_values ){
-					// If layout values are not set, response values will be used instead.
-					$layout_values = $response->getAll();
-				}
-				foreach( $layout_values as $key => $value ){
-					$smarty->assign( $key, $value );
-				}
+                // Request ID and reauest path
+                $charcoal['request']['id']   = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
+                $charcoal['request']['path'] = $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
 
-				$smarty->assign( '_smarty', $smarty );
+                // Assign all
+                $smarty->assign( 'charcoal', $charcoal );
 
-				// render template
-				$template = $layout->getAttribute( s('layout') );
+                // Assign all layout values
+                $layout_values = $event->getValues();
+                if ( !$layout_values ){
+                    // If layout values are not set, response values will be used instead.
+                    $layout_values = $response->getAll();
+                }
+                foreach( $layout_values as $key => $value ){
+                    $smarty->assign( $key, $value );
+                }
 
-				// set smarty error_reporting flags
-				$this->smarty->error_reporting = E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~(8192 /*= E_DEPRECATED */);
+                $smarty->assign( '_smarty', $smarty );
 
-				// rewrite error handler
-				$error_handler_old = set_error_handler( array($this,"onUnhandledError") );
+                // render template
+                $template = $layout->getAttribute( s('layout') );
 
-				// compile and output template
-				log_info( "smarty","template=$template" );
-				$html = $smarty->fetch( $template );
-				log_info( "smarty","html=$html" );
+                // set smarty error_reporting flags
+                $this->smarty->error_reporting = E_ALL & ~E_STRICT & ~E_WARNING & ~E_NOTICE & ~(8192 /*= E_DEPRECATED */);
 
-				// output to rendering target
-				$render_target = $event->getRenderTarget();
-				if ( $render_target ){
-					$render_target->render( $html );
-					log_debug( "system,renderer", "Rendered by render target: " . get_class($render_target), self::TAG );
-				}
-				else{
-					echo $html;
-					log_debug( "system,renderer", "Output by echo.", self::TAG );
-				}
-			}
-		}
-		catch ( Exception $ex )
-		{
-			_catch( $ex );
+                // rewrite error handler
+                $error_handler_old = set_error_handler( array($this,"onUnhandledError") );
 
-			_throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
-		}
+                // compile and output template
+                log_info( "smarty","template=$template" );
+                $html = $smarty->fetch( $template );
+                log_info( "smarty","html=$html" );
 
-		if ( $error_handler_old ){
-			set_error_handler( $error_handler_old );			
-		}
+                // output to rendering target
+                $render_target = $event->getRenderTarget();
+                if ( $render_target ){
+                    $render_target->render( $html );
+                    log_debug( "system,renderer", "Rendered by render target: " . get_class($render_target), self::TAG );
+                }
+                else{
+                    echo $html;
+                    log_debug( "system,renderer", "Output by echo.", self::TAG );
+                }
+            }
+        }
+        catch ( Exception $ex )
+        {
+            _catch( $ex );
 
-		return b(TRUE);
-	}
+            _throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
+        }
 
-	/*
-	 *	smarty error handler
-	 */
-	public static function onUnhandledError( $errno, $errstr, $errfile, $errline )
-	{ 
-		$flags_handled = error_reporting() ;
-		if ( Charcoal_System::isBitSet( $errno, $flags_handled, Charcoal_System::BITTEST_MODE_ANY ) )
-		{
-			$errno_disp = Charcoal_System::phpErrorString( $errno );
-			echo "smarty error [errno]$errno($errno_disp) [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
-		}
-		return TRUE;	// Otherwise, ignore all errors
-	}
+        if ( $error_handler_old ){
+            set_error_handler( $error_handler_old );
+        }
+
+        return b(TRUE);
+    }
+
+    /*
+     *    smarty error handler
+     */
+    public static function onUnhandledError( $errno, $errstr, $errfile, $errline )
+    {
+        $flags_handled = error_reporting() ;
+        if ( Charcoal_System::isBitSet( $errno, $flags_handled, Charcoal_System::BITTEST_MODE_ANY ) )
+        {
+            $errno_disp = Charcoal_System::phpErrorString( $errno );
+            echo "smarty error [errno]$errno($errno_disp) [errstr]$errstr [errfile]$errfile [errline]$errline" . eol();
+        }
+        return TRUE;    // Otherwise, ignore all errors
+    }
 
 }
 

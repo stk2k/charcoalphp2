@@ -10,270 +10,270 @@
 */
 class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
 {
-	private $use_session;
-	private $sequence;
-	private $layout_manager;
+    private $use_session;
+    private $sequence;
+    private $layout_manager;
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-		$this->use_session         = $config->getBoolean( 'use_session', TRUE );
-		$this->sequence            = $config->getString( 'sequence', '' );
-		$layout_manager            = $config->getString( 'layout_manager' );
+        $this->use_session         = $config->getBoolean( 'use_session', TRUE );
+        $this->sequence            = $config->getString( 'sequence', '' );
+        $layout_manager            = $config->getString( 'layout_manager' );
 
-		$this->setLayoutManager( $layout_manager );
+        $this->setLayoutManager( $layout_manager );
 
-		if ( $this->getSandbox()->isDebug() )
-		{
-			log_info( "system,config", "procedure", "use_session:" . $this->use_session );
-			log_info( "system,config", "procedure", "sequence:" . $this->sequence );
-			log_info( "system,config", "procedure", "layout_manager:" . $this->layout_manager );
-		}
-	}
+        if ( $this->getSandbox()->isDebug() )
+        {
+            log_info( "system,config", "procedure", "use_session:" . $this->use_session );
+            log_info( "system,config", "procedure", "sequence:" . $this->sequence );
+            log_info( "system,config", "procedure", "layout_manager:" . $this->layout_manager );
+        }
+    }
 
-	/*
-	 * レイアウトマネージャを取得
-	 */
-	public function getLayoutManager()
-	{
-		return $this->layout_manager;
-	}
+    /*
+     * レイアウトマネージャを取得
+     */
+    public function getLayoutManager()
+    {
+        return $this->layout_manager;
+    }
 
-	/*
-	 * レイアウトマネージャを設定
-	 */
-	public function setLayoutManager( $layout_manager )
-	{
-		if ( $layout_manager === NULL  || $layout_manager instanceof Charcoal_ILayoutManager )
-		{
-			$this->layout_manager = $layout_manager;
-		}
-		elseif ( is_string($layout_manager) || $layout_manager instanceof Charcoal_String )
-		{
-			$layout_manager = s($layout_manager);
-			if ( $layout_manager->isEmpty() ){
-				$this->layout_manager = NULL;
-			}
-			else{
-				try{
-					$this->layout_manager = $this->getSandbox()->createObject( $layout_manager, 'layout_manager' );
-				}
-				catch( Exception $e ){
-					_catch( $e );
+    /*
+     * レイアウトマネージャを設定
+     */
+    public function setLayoutManager( $layout_manager )
+    {
+        if ( $layout_manager === NULL  || $layout_manager instanceof Charcoal_ILayoutManager )
+        {
+            $this->layout_manager = $layout_manager;
+        }
+        elseif ( is_string($layout_manager) || $layout_manager instanceof Charcoal_String )
+        {
+            $layout_manager = s($layout_manager);
+            if ( $layout_manager->isEmpty() ){
+                $this->layout_manager = NULL;
+            }
+            else{
+                try{
+                    $this->layout_manager = $this->getSandbox()->createObject( $layout_manager, 'layout_manager' );
+                }
+                catch( Exception $e ){
+                    _catch( $e );
 
-					_throw( new Charcoal_LayoutManagerCreationException( $layout_manager, $e ) );
-				}
-			}
-		}
-	}
+                    _throw( new Charcoal_LayoutManagerCreationException( $layout_manager, $e ) );
+                }
+            }
+        }
+    }
 
-	/*
-	 * プロシージャを実行する
-	 */
-	public function execute( $request, $response, $session = NULL )
-	{
-		$timer_handle = Charcoal_Benchmark::start();
+    /*
+     * プロシージャを実行する
+     */
+    public function execute( $request, $response, $session = NULL )
+    {
+        $timer_handle = Charcoal_Benchmark::start();
 
-//		Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IRequest', $request );
-//		Charcoal_ParamTrait::validateImplements( 2, 'Charcoal_IResponse', $response );
-//		Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_Session', $session, TRUE );
+//        Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IRequest', $request );
+//        Charcoal_ParamTrait::validateImplements( 2, 'Charcoal_IResponse', $response );
+//        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_Session', $session, TRUE );
 
-		$proc_path = $this->getObjectPath();
-		$proc_name = $proc_path->toString();
+        $proc_path = $this->getObjectPath();
+        $proc_name = $proc_path->toString();
 
-//		log_info( "system", "procedure",  "プロシージャ[$proc_name]を実行します。" );
+//        log_info( "system", "procedure",  "プロシージャ[$proc_name]を実行します。" );
 
-		//=======================================
-		// タスクマネージャの作成
-		//
+        //=======================================
+        // タスクマネージャの作成
+        //
 
-		// タスクマネージャを作成
-		$task_manager_name = $this->task_manager;
-		$task_manager = $this->getSandbox()->createObject( $task_manager_name, 'task_manager' );
+        // タスクマネージャを作成
+        $task_manager_name = $this->task_manager;
+        $task_manager = $this->getSandbox()->createObject( $task_manager_name, 'task_manager' );
 
-//		log_info( "system", "procedure", "タスクマネージャ[$task_manager_name]を作成しました。" );
+//        log_info( "system", "procedure", "タスクマネージャ[$task_manager_name]を作成しました。" );
 
-		//=======================================
-		// modules以下にクラスファイルがあればロードする
-		//
+        //=======================================
+        // modules以下にクラスファイルがあればロードする
+        //
 
-//		log_info( "system", "procedure", 'loading module at procedure path:' . $proc_path );
-		Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $proc_path, $task_manager );
-//		log_info( "system", "procedure", 'loaded module at procedure path:' . $proc_path );
+//        log_info( "system", "procedure", 'loading module at procedure path:' . $proc_path );
+        Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $proc_path, $task_manager );
+//        log_info( "system", "procedure", 'loaded module at procedure path:' . $proc_path );
 
-		//=======================================
-		// 追加モジュールのロード
-		//
+        //=======================================
+        // 追加モジュールのロード
+        //
 
-		if ( $this->modules ) {
-//			log_info( "system", "procedure", 'loading additional modules: ' . $this->modules . " of procedure: " . $proc_path );
+        if ( $this->modules ) {
+//            log_info( "system", "procedure", 'loading additional modules: ' . $this->modules . " of procedure: " . $proc_path );
 
-			foreach( $this->modules as $module_name ) {
-				if ( strlen($module_name) === 0 )    continue;
-				// load module
-				Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $module_name, $task_manager );
-			}
-	
-//			log_info( "system", "procedure", 'loaded additional modules.' );
-		}
+            foreach( $this->modules as $module_name ) {
+                if ( strlen($module_name) === 0 )    continue;
+                // load module
+                Charcoal_ModuleLoader::loadModule( $this->getSandbox(), $module_name, $task_manager );
+            }
 
-		//=======================================
-		// ステートフルタスクの復帰
-		//
+//            log_info( "system", "procedure", 'loaded additional modules.' );
+        }
 
-		$use_session = b( $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' ) );
+        //=======================================
+        // ステートフルタスクの復帰
+        //
 
-		if ( $use_session->isTrue() ){
-//			log_info( "system", "procedure", 'ステートフルタスクの復元を開始します。' );
+        $use_session = b( $this->getSandbox()->getProfile()->getBoolean( 'USE_SESSION' ) );
 
-			$task_manager->restoreStatefulTasks( $session );
+        if ( $use_session->isTrue() ){
+//            log_info( "system", "procedure", 'ステートフルタスクの復元を開始します。' );
 
-//			log_info( "system", "procedure", 'ステートフルタスクを復元しました。' );
-		}
+            $task_manager->restoreStatefulTasks( $session );
 
-		//=======================================
-		// シーケンスの復帰
-		//
+//            log_info( "system", "procedure", 'ステートフルタスクを復元しました。' );
+        }
 
-		$sequence = NULL;
-		$globalsequence = NULL;
-		$localsequence = NULL;
+        //=======================================
+        // シーケンスの復帰
+        //
 
-		if ( $use_session->isTrue() ){
+        $sequence = NULL;
+        $globalsequence = NULL;
+        $localsequence = NULL;
 
-			$seq_name = us($this->sequence);
-			$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
+        if ( $use_session->isTrue() ){
 
-			// restore global sequence
-//			log_info( "system,sequence", "sequence", "starting restoring global sequence." );
+            $seq_name = us($this->sequence);
+            $seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
 
-			$data_id = 'sequence://global';
-			$global_seq = NULL;
-			if ( isset($_SESSION[ $data_id ]) ){
-				$data = $_SESSION[ $data_id ];
-				$data = unserialize( $data );
-				if ( $data instanceof Charcoal_Sequence ){
-					$global_seq = $data;
-//					log_info( "debug,sequence", "sequence", "restored global sequence:" . print_r($globalsequence,true) );
-				}
-			}
+            // restore global sequence
+//            log_info( "system,sequence", "sequence", "starting restoring global sequence." );
 
-			// restore local sequence
-//			log_info( "system,sequence", "sequence", "starting restoring local sequence." );
+            $data_id = 'sequence://global';
+            $global_seq = NULL;
+            if ( isset($_SESSION[ $data_id ]) ){
+                $data = $_SESSION[ $data_id ];
+                $data = unserialize( $data );
+                if ( $data instanceof Charcoal_Sequence ){
+                    $global_seq = $data;
+//                    log_info( "debug,sequence", "sequence", "restored global sequence:" . print_r($globalsequence,true) );
+                }
+            }
 
-			// 復元
-			$data_id = 'sequence://' . $seq_name;
-			$local_seq = NULL;
-			if ( isset($_SESSION[ $data_id ]) ){
-				$data = $_SESSION[ $data_id ];
+            // restore local sequence
+//            log_info( "system,sequence", "sequence", "starting restoring local sequence." );
 
-				$data = unserialize( $data );
-				if ( $data instanceof Charcoal_Sequence ){
-					$local_seq = $data;
-//					log_info( "debug,sequence",  "restored local sequence:" . print_r($localsequence,true) );
-				}
-			}
+            // 復元
+            $data_id = 'sequence://' . $seq_name;
+            $local_seq = NULL;
+            if ( isset($_SESSION[ $data_id ]) ){
+                $data = $_SESSION[ $data_id ];
 
-			// merge global and local sequence
-			$global_seq = $global_seq ? $global_seq : new Charcoal_Sequence();
-			$local_seq  = $local_seq ? $local_seq : new Charcoal_Sequence();
+                $data = unserialize( $data );
+                if ( $data instanceof Charcoal_Sequence ){
+                    $local_seq = $data;
+//                    log_info( "debug,sequence",  "restored local sequence:" . print_r($localsequence,true) );
+                }
+            }
 
-			$sequence = new Charcoal_SequenceHolder( $global_seq, $local_seq );
-		}
+            // merge global and local sequence
+            $global_seq = $global_seq ? $global_seq : new Charcoal_Sequence();
+            $local_seq  = $local_seq ? $local_seq : new Charcoal_Sequence();
 
-		//=======================================
-		// create system event(request event)
-		//
+            $sequence = new Charcoal_SequenceHolder( $global_seq, $local_seq );
+        }
 
-//		log_info( "system,debug,event", 'creating reqyest event.', 'event' );
+        //=======================================
+        // create system event(request event)
+        //
 
-		// create request event
-		$event = $this->getSandbox()->createEvent( 'request', array($request) );
-		$task_manager->pushEvent( $event );
+//        log_info( "system,debug,event", 'creating reqyest event.', 'event' );
 
-//		log_info( "system,debug,event", 'pushed reqyest event to the event queue.', 'event' );
+        // create request event
+        $event = $this->getSandbox()->createEvent( 'request', array($request) );
+        $task_manager->pushEvent( $event );
 
-		//=======================================
-		// ユーザイベントの作成
-		//
-//		log_info( "system", "procedure", 'ユーザイベントの作成処理を開始します。' );
+//        log_info( "system,debug,event", 'pushed reqyest event to the event queue.', 'event' );
 
-		$event_list = array();
+        //=======================================
+        // ユーザイベントの作成
+        //
+//        log_info( "system", "procedure", 'ユーザイベントの作成処理を開始します。' );
 
-		if ( $this->events )
-		{
-			foreach( $this->events as $event_name )
-			{
-				if ( strlen($event_name) === 0 )    continue;
+        $event_list = array();
 
-				$event = $this->getSandbox()->createEvent( $event_name );
-				$task_manager->pushEvent( $event );
-			}
-		}
+        if ( $this->events )
+        {
+            foreach( $this->events as $event_name )
+            {
+                if ( strlen($event_name) === 0 )    continue;
 
-		//=======================================
-		// イベント処理
-		//
+                $event = $this->getSandbox()->createEvent( $event_name );
+                $task_manager->pushEvent( $event );
+            }
+        }
 
-//		log_info( "system", "procedure", "タスクマネージャによるイベント処理を開始します。" );
+        //=======================================
+        // イベント処理
+        //
 
-		$context = new Charcoal_EventContext( $this->getSandbox() );
+//        log_info( "system", "procedure", "タスクマネージャによるイベント処理を開始します。" );
 
-		$context->setProcedure( $this );
-		$context->setRequest( $request );
-		$context->setSequence( $sequence );
-		$context->setResponse( $response );
-		$context->setTaskManager( $task_manager );
+        $context = new Charcoal_EventContext( $this->getSandbox() );
 
-		$exit_code = $task_manager->processEvents( $context );
-		if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){
-//			log_info( "system", "procedure", "異常な終了コードを検知しました。(" . gettype($exit_code) . ")。タスクマネージャは終了コードとして整数値のみ返却することができます。" );
-			_throw( new Charcoal_BadExitCodeException( $exit_code ) );
-		}
+        $context->setProcedure( $this );
+        $context->setRequest( $request );
+        $context->setSequence( $sequence );
+        $context->setResponse( $response );
+        $context->setTaskManager( $task_manager );
 
-//		log_info( "system", "procedure", "タスクマネージャによるイベント処理が完了しました。終了コード($exit_code)" );
+        $exit_code = $task_manager->processEvents( $context );
+        if ( !is_int($exit_code) && !($exit_code instanceof Charcoal_Integer) ){
+//            log_info( "system", "procedure", "異常な終了コードを検知しました。(" . gettype($exit_code) . ")。タスクマネージャは終了コードとして整数値のみ返却することができます。" );
+            _throw( new Charcoal_BadExitCodeException( $exit_code ) );
+        }
 
-		//=======================================
-		// 終了処理
-		//
+//        log_info( "system", "procedure", "タスクマネージャによるイベント処理が完了しました。終了コード($exit_code)" );
 
-		if ( $use_session->isTrue() ){
+        //=======================================
+        // 終了処理
+        //
 
-			$seq_name = us($this->sequence);
-			$seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
+        if ( $use_session->isTrue() ){
 
-			// globalシーケンスの保存
-			$data_id = 'sequence://global';
-			$session->set( s($data_id), $global_seq );
+            $seq_name = us($this->sequence);
+            $seq_name = strlen($seq_name) > 0 ? $seq_name : 'local';
 
-//			log_info( "debug,sequence",  "globalsequence:" . print_r($globalsequence,true) );
-//			log_info( "system,sequence", "globalシーケンスを保存しました。" );
+            // globalシーケンスの保存
+            $data_id = 'sequence://global';
+            $session->set( s($data_id), $global_seq );
 
-			// localシーケンスの保存
-			$data_id = 'sequence://' . $seq_name;
-			$session->set( s($data_id), $local_seq );
+//            log_info( "debug,sequence",  "globalsequence:" . print_r($globalsequence,true) );
+//            log_info( "system,sequence", "globalシーケンスを保存しました。" );
 
-//			log_info( "debug,sequence",  "localsequence:" . print_r($localsequence,true) );
-//			log_info( "system,sequence", "localシーケンス[$seq_name]を保存しました。" );
-		}
+            // localシーケンスの保存
+            $data_id = 'sequence://' . $seq_name;
+            $session->set( s($data_id), $local_seq );
 
-		// セッション情報の保存
-		if ( $use_session->isTrue() )
-		{
-			// ステートフルタスクの保存
-			$task_manager->saveStatefulTasks( $session );
-		}
+//            log_info( "debug,sequence",  "localsequence:" . print_r($localsequence,true) );
+//            log_info( "system,sequence", "localシーケンス[$seq_name]を保存しました。" );
+        }
 
-		$score = Charcoal_Benchmark::stop( $timer_handle );
-		log_debug( 'system, debug', "procedure execute method end: [$score] msec" );
+        // セッション情報の保存
+        if ( $use_session->isTrue() )
+        {
+            // ステートフルタスクの保存
+            $task_manager->saveStatefulTasks( $session );
+        }
 
-//		log_info( "system", "procedure", "プロシージャ[$proc_name]を実行しました。" );
-	}
+        $score = Charcoal_Benchmark::stop( $timer_handle );
+        log_debug( 'system, debug', "procedure execute method end: [$score] msec" );
+
+//        log_info( "system", "procedure", "プロシージャ[$proc_name]を実行しました。" );
+    }
 }
 

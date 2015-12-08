@@ -11,24 +11,24 @@
 
 class Charcoal_RequestEvent extends Charcoal_SystemEvent 
 {
-	private $request;
+    private $request;
 
-	/**
-	 *	constructor
-	 */
-	public function __construct( Charcoal_IRequest $request )
-	{
-		parent::__construct();
+    /**
+     *    constructor
+     */
+    public function __construct( Charcoal_IRequest $request )
+    {
+        parent::__construct();
 
-		$this->request = $request;
-	}
+        $this->request = $request;
+    }
 
-	/**
-	 *	get requeet object
-	 */
-	public function getRequest()
-	{
-		return $this->request;
-	}
+    /**
+     *    get requeet object
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
 }
 

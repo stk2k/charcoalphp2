@@ -11,65 +11,65 @@
 
 function show_with_children( $node, $level = 0 )
 {
-	echo str_repeat( '  ', $level ) . $node->getName() . '=' . $node->getValue() . PHP_EOL;
-	if ( $node->hasChildren() ){
-		foreach( $node->getChildren() as $child ){
-			show_with_children( $child, $level + 1 );
-		}
-	}
+    echo str_repeat( '  ', $level ) . $node->getName() . '=' . $node->getValue() . PHP_EOL;
+    if ( $node->hasChildren() ){
+        foreach( $node->getChildren() as $child ){
+            show_with_children( $child, $level + 1 );
+        }
+    }
 }
 
 class TidyTestTask extends Charcoal_TestTask
 {
-	/**
-	 * check if action will be processed
-	 */
-	public function isValidAction( $action )
-	{
-		switch( $action ){
-		case "parse_string":
-			return TRUE;
-		}
-		return FALSE;
-	}
+    /**
+     * check if action will be processed
+     */
+    public function isValidAction( $action )
+    {
+        switch( $action ){
+        case "parse_string":
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
 
-	}
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		echo "action:$action" . PHP_EOL;
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        echo "action:$action" . PHP_EOL;
 
-		$request   = $context->getRequest();
+        $request   = $context->getRequest();
 
-		$action = us($action);
+        $action = us($action);
 
-		// Tidy
-		$tidy = $context->getComponent( 'tidy@:html:repair:tidy' );
+        // Tidy
+        $tidy = $context->getComponent( 'tidy@:html:repair:tidy' );
 
-		$config = new Charcoal_Config();
+        $config = new Charcoal_Config();
 
-		$config->set( 'encoding', 'utf8' );
+        $config->set( 'encoding', 'utf8' );
 
-		$tidy->configure( $config );
+        $tidy->configure( $config );
 
-		switch( $action ){
-		case "parse_string":
+        switch( $action ){
+        case "parse_string":
 
 $html1 = <<< HTMLDATA1
 <html>
@@ -84,16 +84,16 @@ $html1 = <<< HTMLDATA1
   </company>
 HTMLDATA1;
 
-			$tidy->parseString( $html1 );
+            $tidy->parseString( $html1 );
 
-			show_with_children( $tidy->root() );
+            show_with_children( $tidy->root() );
 
-			return TRUE;
+            return TRUE;
 
-		}
+        }
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
 }
 

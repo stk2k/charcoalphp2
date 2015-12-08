@@ -11,30 +11,30 @@
 
 class Charcoal_QdmailException extends Charcoal_RuntimeException
 {
-	private $stack;
+    private $stack;
 
-	/***
-	 *	コンストラクタ
-	 **/
-	public function __construct( Qdmail $qdmail, Exception $previous = NULL )
-	{
-		$this->stack = $qdmail->errorStatment();
+    /***
+     *    コンストラクタ
+     **/
+    public function __construct( Qdmail $qdmail, Exception $previous = NULL )
+    {
+        $this->stack = $qdmail->errorStatment();
 
-		$msg = "Qdmail error:" . print_r($this->stack,true);
-		if ( $previous ) parent::__construct( s($msg), $previous ); else parent::__construct( s($msg) );
+        $msg = "Qdmail error:" . print_r($this->stack,true);
+        if ( $previous ) parent::__construct( s($msg), $previous ); else parent::__construct( s($msg) );
 
-		foreach( $this->stack as $item ){
-			log_error( "mail", $item );
-		}
-	}
+        foreach( $this->stack as $item ){
+            log_error( "mail", $item );
+        }
+    }
 
-	/***
-	 *	エラースタック
-	 **/
-	public function getStack()
-	{
-		return $this->stack;
-	}
+    /***
+     *    エラースタック
+     **/
+    public function getStack()
+    {
+        return $this->stack;
+    }
 
 }
 

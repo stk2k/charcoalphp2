@@ -11,41 +11,41 @@
 
 class Charcoal_CallHistory extends Charcoal_Object
 {
-	private $_args;
+    private $_args;
 
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct( $args )
-	{
-		parent::__construct();
+    /*
+     *    コンストラクタ
+     */
+    public function __construct( $args )
+    {
+        parent::__construct();
 
-		$this->_args = $args;
-	}
+        $this->_args = $args;
+    }
 
-	/*
-	 *	引数の数を取得
-	 */
-	public function getArgCount()
-	{
-		return count($this->_args);
-	}
+    /*
+     *    引数の数を取得
+     */
+    public function getArgCount()
+    {
+        return count($this->_args);
+    }
 
-	/*
-	 *	n番目のの引数を取得
-	 */
-	public function getArg( $no )
-	{
-		return $this->_args[ $no ];
-	}
+    /*
+     *    n番目のの引数を取得
+     */
+    public function getArg( $no )
+    {
+        return $this->_args[ $no ];
+    }
 
 
-	/*
-	 *	文字列化
-	 */
-	public function toString()
-	{
-		return Charcoal_System::implodeArray( ',', $this->_args );
-	}
+    /*
+     *    文字列化
+     */
+    public function toString()
+    {
+        return Charcoal_System::implodeArray( ',', $this->_args );
+    }
 }
 

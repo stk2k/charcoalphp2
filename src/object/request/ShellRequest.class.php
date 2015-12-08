@@ -11,25 +11,25 @@
 
 class Charcoal_ShellRequest extends Charcoal_AbstractRequest
 {
-	/*
-	 *    コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /*
+     *    コンストラクタ
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$argv = $_SERVER[ 'argv' ];
-		$this->values  = Charcoal_CommandLineUtil::parseParams( $argv );
-	}
+        $argv = $_SERVER[ 'argv' ];
+        $this->values  = Charcoal_CommandLineUtil::parseParams( $argv );
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
-	}
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
+    }
 }
 

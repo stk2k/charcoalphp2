@@ -15,129 +15,129 @@ require_once( 'feedcreator/feedcreator.class.php' );
 
 class Charcoal_FeedCreatorComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
-	const DEFAULT_FORMAT = 'RSS1.0';
+    const DEFAULT_FORMAT = 'RSS1.0';
 
-	private $creator;
+    private $creator;
 
-	/**
-	 *  Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     *  Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->creator = new UniversalFeedCreator();
-	}
+        $this->creator = new UniversalFeedCreator();
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
-	}
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
+    }
 
-	/**
-	 * add feed item
-	 *
-	 * @return Charcoal_FeedCreatorFeedItem       new feed item
-	 */
-	public function addItem( $data = array() )
-	{
-		Charcoal_ParamTrait::validateHashMap( 1, $data );
+    /**
+     * add feed item
+     *
+     * @return Charcoal_FeedCreatorFeedItem       new feed item
+     */
+    public function addItem( $data = array() )
+    {
+        Charcoal_ParamTrait::validateHashMap( 1, $data );
 
-		$item = new Charcoal_FeedCreatorFeedItem( $this, $data );
+        $item = new Charcoal_FeedCreatorFeedItem( $this, $data );
 
-		$this->creator->addItem( $item->getRawItem() );
+        $this->creator->addItem( $item->getRawItem() );
 
-		return $item;
-	}
+        return $item;
+    }
 
-	/**
-	 * set title
-	 *
-	 * @param Charcoal_String|string $title       title of the feed
-	 */
-	public function setTitle( $title )
-	{
-		Charcoal_ParamTrait::validateString( 1, $title, TRUE );
+    /**
+     * set title
+     *
+     * @param Charcoal_String|string $title       title of the feed
+     */
+    public function setTitle( $title )
+    {
+        Charcoal_ParamTrait::validateString( 1, $title, TRUE );
 
-		$this->creator->title = us($title);
+        $this->creator->title = us($title);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * set link
-	 *
-	 * @param Charcoal_String|string $link       link of the feed
-	 */
-	public function setLink( $link )
-	{
-		Charcoal_ParamTrait::validateString( 1, $link, TRUE );
+    /**
+     * set link
+     *
+     * @param Charcoal_String|string $link       link of the feed
+     */
+    public function setLink( $link )
+    {
+        Charcoal_ParamTrait::validateString( 1, $link, TRUE );
 
-		$this->creator->link = us($link);
+        $this->creator->link = us($link);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * set description
-	 *
-	 * @param Charcoal_String|string $description       description of the feed
-	 */
-	public function setDescription( $description )
-	{
-		Charcoal_ParamTrait::validateString( 1, $description, TRUE );
+    /**
+     * set description
+     *
+     * @param Charcoal_String|string $description       description of the feed
+     */
+    public function setDescription( $description )
+    {
+        Charcoal_ParamTrait::validateString( 1, $description, TRUE );
 
-		$this->creator->description = us($description);
+        $this->creator->description = us($description);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * set syndication URL
-	 *
-	 * @param Charcoal_String|string $syndicationURL       syndication URL of the feed
-	 */
-	public function setSyndicationURL( $syndicationURL )
-	{
-		Charcoal_ParamTrait::validateString( 1, $syndicationURL, TRUE );
+    /**
+     * set syndication URL
+     *
+     * @param Charcoal_String|string $syndicationURL       syndication URL of the feed
+     */
+    public function setSyndicationURL( $syndicationURL )
+    {
+        Charcoal_ParamTrait::validateString( 1, $syndicationURL, TRUE );
 
-		$this->creator->syndicationURL = us($syndicationURL);
+        $this->creator->syndicationURL = us($syndicationURL);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * generate feed and save to file
-	 * 
-	 * @param Charcoal_String|string $filename       file name for the feed
-	 * @param Charcoal_String|string $format         format name of the feed
-	 */
-	public function saveFeed( $filename, $format = self::DEFAULT_FORMAT )
-	{
-		Charcoal_ParamTrait::validateString( 1, $filename );
-		Charcoal_ParamTrait::validateString( 2, $format );
+    /**
+     * generate feed and save to file
+     *
+     * @param Charcoal_String|string $filename       file name for the feed
+     * @param Charcoal_String|string $format         format name of the feed
+     */
+    public function saveFeed( $filename, $format = self::DEFAULT_FORMAT )
+    {
+        Charcoal_ParamTrait::validateString( 1, $filename );
+        Charcoal_ParamTrait::validateString( 2, $format );
 
-		$this->creator->saveFeed( us($format), us($filename), false );
-	}
+        $this->creator->saveFeed( us($format), us($filename), false );
+    }
 
-	/**
-	 * generate feed and output to the buffer
-	 * 
-	 * @param Charcoal_String|string $format         format name of the feed
-	 */
-	public function outputFeed( $format = self::DEFAULT_FORMAT )
-	{
-		Charcoal_ParamTrait::validateString( 1, $format );
+    /**
+     * generate feed and output to the buffer
+     *
+     * @param Charcoal_String|string $format         format name of the feed
+     */
+    public function outputFeed( $format = self::DEFAULT_FORMAT )
+    {
+        Charcoal_ParamTrait::validateString( 1, $format );
 
-		echo 'outputFeed' . PHP_EOL;
+        echo 'outputFeed' . PHP_EOL;
 
-		$this->creator->outputFeed( us($format) );
-	}
+        $this->creator->outputFeed( us($format) );
+    }
 
 }
 

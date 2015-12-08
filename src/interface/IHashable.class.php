@@ -11,9 +11,9 @@
 interface Charcoal_IHashable
 {
 
-	/**
-	 * Get hash value
-	 */
-	public function hash();
+    /**
+     * Get hash value
+     */
+    public function hash();
 }
 

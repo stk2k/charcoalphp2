@@ -11,24 +11,24 @@
 
 class Charcoal_CreateObjectException extends Charcoal_RuntimeException
 {
-	private $obj_path;
+    private $obj_path;
 
-	public function __construct( $obj_path, $type_name, $prev = NULL )
-	{
-		$this->obj_path = $obj_path;
+    public function __construct( $obj_path, $type_name, $prev = NULL )
+    {
+        $this->obj_path = $obj_path;
 
-		$path_string = $obj_path->getObjectPathString();
+        $path_string = $obj_path->getObjectPathString();
 
-		parent::__construct( "Failed to create object: obj_path=[$path_string] type_name=[$type_name]", $prev );
-	}
+        parent::__construct( "Failed to create object: obj_path=[$path_string] type_name=[$type_name]", $prev );
+    }
 
-	/**
-	 *  get object path
-	 */
-	public function getObjectPath()
-	{
-		return $this->obj_path;
-	}
+    /**
+     *  get object path
+     */
+    public function getObjectPath()
+    {
+        return $this->obj_path;
+    }
 
 }
 

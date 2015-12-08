@@ -11,12 +11,12 @@
 
 class EnumPDFTextAlign extends Charcoal_Enum
 {
-	const LEFT                 = 0;
-	const TOP                  = 1;
-	const RIGHT                = 2;
-	const BOTTOM               = 3;
-	const CENTER               = 4;
-	const JUSTIFY              = 5;
+    const LEFT                 = 0;
+    const TOP                  = 1;
+    const RIGHT                = 2;
+    const BOTTOM               = 3;
+    const CENTER               = 4;
+    const JUSTIFY              = 5;
 
 }
 

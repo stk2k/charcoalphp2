@@ -11,16 +11,16 @@
 
 class Charcoal_Config extends Charcoal_ConfigPropertySet
 {
-	/**
-	 *  Constructor
-	 *
-	 * @param Charcoal_IEnvironment $env
-	 * @param array $values
-	 */
-	public function __construct( $env, $values = NULL )
-	{
-//		Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
-		
-		parent::__construct( $env, $values );
-	}
+    /**
+     *  Constructor
+     *
+     * @param Charcoal_IEnvironment $env
+     * @param array $values
+     */
+    public function __construct( $env, $values = NULL )
+    {
+//        Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_IEnvironment', $env );
+
+        parent::__construct( $env, $values );
+    }
 }

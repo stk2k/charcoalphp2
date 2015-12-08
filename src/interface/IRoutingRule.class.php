@@ -10,19 +10,19 @@
 */
 interface Charcoal_IRoutingRule extends Charcoal_ICharcoalObject
 {
-	/*
-	 *  Get all keys
-	 *
-	 * @return array  
-	 */
-	public function getKeys();
+    /*
+     *  Get all keys
+     *
+     * @return array
+     */
+    public function getKeys();
 
-	/*
-	 *  Get procedure path associated with a pattern
-	 *
-	 * @return string  
-	 */
-	public function getProcPath( Charcoal_String $pattern );
+    /*
+     *  Get procedure path associated with a pattern
+     *
+     * @return string
+     */
+    public function getProcPath( Charcoal_String $pattern );
 
 }
 

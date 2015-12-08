@@ -11,10 +11,10 @@
 
 class Charcoal_ComponentNotRegisteredException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_String $component_name, $prev = NULL )
-	{
-		parent::__construct( "[component name]$component_name", $prev );
-	}
+    public function __construct( Charcoal_String $component_name, $prev = NULL )
+    {
+        parent::__construct( "[component name]$component_name", $prev );
+    }
 
 }
 

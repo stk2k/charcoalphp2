@@ -10,12 +10,12 @@
 */
 interface Charcoal_ICoreHook extends Charcoal_ICharcoalObject
 {
-	/**
-	 * process core hook message
-	 * 
-	 * @param int $hook_stage      hook stage
-	 * @param mixed $data          additional data
-	 */
-	public function processMessage( $hook_stage, $data );
+    /**
+     * process core hook message
+     *
+     * @param int $hook_stage      hook stage
+     * @param mixed $data          additional data
+     */
+    public function processMessage( $hook_stage, $data );
 }
 

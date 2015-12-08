@@ -11,8 +11,8 @@
 
 class Charcoal_EnumSQLJoinType extends Charcoal_Enum
 {
-	const INNER_JOIN      = 1;	// INNER JOIN
-	const LEFT_JOIN       = 2;	// LEFT JOIN
-	const RIGHT_JOIN      = 3;	// RIGHT JOIN
+    const INNER_JOIN      = 1;    // INNER JOIN
+    const LEFT_JOIN       = 2;    // LEFT JOIN
+    const RIGHT_JOIN      = 3;    // RIGHT JOIN
 }
 

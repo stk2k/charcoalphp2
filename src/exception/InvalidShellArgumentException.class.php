@@ -11,30 +11,30 @@
 
 class Charcoal_InvalidShellArgumentException extends Charcoal_RuntimeException
 {
-	private $argument;
-	private $option_name;
+    private $argument;
+    private $option_name;
 
-	public function __construct( $argument, $option_name, $prev = NULL )
-	{
-		Charcoal_ParamTrait::validateString( 1, $argument );
-		Charcoal_ParamTrait::validateString( 2, $option_name );
-		Charcoal_ParamTrait::validateException( 3, $prev, TRUE );
+    public function __construct( $argument, $option_name, $prev = NULL )
+    {
+        Charcoal_ParamTrait::validateString( 1, $argument );
+        Charcoal_ParamTrait::validateString( 2, $option_name );
+        Charcoal_ParamTrait::validateException( 3, $prev, TRUE );
 
-		$this->argument = $argument;
-		$this->option_name = $option_name;
+        $this->argument = $argument;
+        $this->option_name = $option_name;
 
-		parent::__construct( "Invalid argument for -$option_name: $argument", $prev );
-	}
+        parent::__construct( "Invalid argument for -$option_name: $argument", $prev );
+    }
 
-	public function getArgument()
-	{
-		return $this->argument;
-	}
+    public function getArgument()
+    {
+        return $this->argument;
+    }
 
-	public function getOptionName()
-	{
-		return $this->option_name;
-	}
+    public function getOptionName()
+    {
+        return $this->option_name;
+    }
 
 }
 

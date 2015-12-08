@@ -10,21 +10,21 @@
 */
 class Charcoal_GroupByContext extends Charcoal_AbstractWrapperContext
 {
-	/**
-	 *  Constructor
-	 */
-	public function __construct( $context )
-	{
-		parent::__construct( $context );
-	}
+    /**
+     *  Constructor
+     */
+    public function __construct( $context )
+    {
+        parent::__construct( $context );
+    }
 
-	/**
-	 *  switch to prepared context 
-	 */
-	public function prepareExecute()
-	{
-		return new Charcoal_PreparedContext( $this->getContext() );
-	}
+    /**
+     *  switch to prepared context
+     */
+    public function prepareExecute()
+    {
+        return new Charcoal_PreparedContext( $this->getContext() );
+    }
 
 
 }

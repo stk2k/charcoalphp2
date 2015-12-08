@@ -11,12 +11,12 @@
 
 class Charcoal_ExtensionNotLoadedException extends Charcoal_RuntimeException
 {
-	public function __construct( $extension, $prev = NULL )
-	{
-		$msg = 'extension[' . $extension . '] is not loaded!';
-		log_error( 'system,debug,error', $msg, 'extension' );
+    public function __construct( $extension, $prev = NULL )
+    {
+        $msg = 'extension[' . $extension . '] is not loaded!';
+        log_error( 'system,debug,error', $msg, 'extension' );
 
-		parent::__construct( $msg, $prev );
-	}
+        parent::__construct( $msg, $prev );
+    }
 }
 

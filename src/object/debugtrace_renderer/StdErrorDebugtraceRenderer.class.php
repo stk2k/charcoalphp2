@@ -11,36 +11,36 @@
 
 class Charcoal_StdErrorDebugtraceRenderer extends Charcoal_ConsoleDebugtraceRenderer
 {
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-	}
+    /*
+     *    コンストラクタ
+     */
+    public function __construct()
+    {
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-	}
+    }
 
-	/**
-	 * Render debug trace
-	 *
-	 */
-	public function render( $e )
-	{
-		Charcoal_ParamTrait::validateException( 1, $e );
+    /**
+     * Render debug trace
+     *
+     */
+    public function render( $e )
+    {
+        Charcoal_ParamTrait::validateException( 1, $e );
 
-		fputs( STDERR, $this->output($e) );
+        fputs( STDERR, $this->output($e) );
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 
 }
 

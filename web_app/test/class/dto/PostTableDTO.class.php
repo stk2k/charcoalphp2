@@ -7,19 +7,19 @@
  *   
  *   PHP version 5
  *   
- *   @author	 CharcoalPHP Development Team
+ *   @author     CharcoalPHP Development Team
  *   @copyright  2008 - 2013 CharcoalPHP Development Team
  */
 class PostTableDTO extends Charcoal_TableDTO
 {
-	public $comments;
+    public $comments;
 
-	public $post_id;
-	public $blog_id;
-	public $post_title;
-	public $post_body;
-	public $post_user;
-	public $favorite;
+    public $post_id;
+    public $blog_id;
+    public $post_title;
+    public $post_body;
+    public $post_user;
+    public $favorite;
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

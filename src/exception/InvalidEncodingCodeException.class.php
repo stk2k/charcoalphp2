@@ -11,10 +11,10 @@
 
 class Charcoal_InvalidEncodingCodeException extends Charcoal_RuntimeException
 {
-	public function __construct( $encoding, $prev = NULL )
-	{
-		 parent::__construct( "Invalid encoding type: $encoding", $prev );
-	}
+    public function __construct( $encoding, $prev = NULL )
+    {
+         parent::__construct( "Invalid encoding type: $encoding", $prev );
+    }
 }
 
 

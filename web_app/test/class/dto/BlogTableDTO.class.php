@@ -21,4 +21,4 @@ class BlogTableDTO extends Charcoal_TableDTO
     public $post_total;
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

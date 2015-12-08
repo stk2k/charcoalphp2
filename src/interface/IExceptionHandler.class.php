@@ -10,13 +10,13 @@
 */
 interface Charcoal_IExceptionHandler
 {
-	/**
-	 * handle an exception
-	 * 
-	 * @param Exception $e     exception to handle
-	 * 
-	 * @return boolean        TRUE means the exception is handled, otherwise FALSE
-	 */
-	public function handleException( $e );
+    /**
+     * handle an exception
+     *
+     * @param Exception $e     exception to handle
+     *
+     * @return boolean        TRUE means the exception is handled, otherwise FALSE
+     */
+    public function handleException( $e );
 }
 

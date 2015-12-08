@@ -11,12 +11,12 @@
 
 class EnumPDFFontFamily extends Charcoal_Enum
 {
-	const KOZMIN            = 0;
-	const GOTHIC            = 1;
-	const PGOTHIC           = 2;
-	const UIGOTHIC          = 3;
-	const MINCHO            = 4;
-	const PMINCHO           = 5;
+    const KOZMIN            = 0;
+    const GOTHIC            = 1;
+    const PGOTHIC           = 2;
+    const UIGOTHIC          = 3;
+    const MINCHO            = 4;
+    const PMINCHO           = 5;
 
 }
 

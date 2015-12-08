@@ -11,10 +11,10 @@
 
 class Charcoal_StackEmptyException extends Charcoal_RuntimeException
 {
-	public function __construct( $stack, $prev = NULL )
-	{
-		parent::__construct( "stack is empty: $stack", $prev );
-	}
+    public function __construct( $stack, $prev = NULL )
+    {
+        parent::__construct( "stack is empty: $stack", $prev );
+    }
 
 }
 

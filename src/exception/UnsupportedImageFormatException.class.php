@@ -11,9 +11,9 @@
 
 class Charcoal_UnsupportedImageFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $url, $prev = NULL )
-	{
-		parent::__construct( "[$url] is not suitable for URI", $prev );
-	}
+    public function __construct( $url, $prev = NULL )
+    {
+        parent::__construct( "[$url] is not suitable for URI", $prev );
+    }
 }
 

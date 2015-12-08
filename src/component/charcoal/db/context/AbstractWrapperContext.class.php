@@ -10,25 +10,25 @@
 */
 class Charcoal_AbstractWrapperContext extends Charcoal_Object
 {
-	private $_context;
+    private $_context;
 
-	/**
-	 *  Constructor
-	 */
-	public function __construct( Charcoal_QueryContext $context )
-	{
-		$this->_context = $context;
-	}
+    /**
+     *  Constructor
+     */
+    public function __construct( Charcoal_QueryContext $context )
+    {
+        $this->_context = $context;
+    }
 
-	/**
-	 *  get wrapped context
-	 *
-	 * @return Charcoal_QueryContext    wrapped context
-	 */
-	public function getContext()
-	{
-		return $this->_context;
-	}
+    /**
+     *  get wrapped context
+     *
+     * @return Charcoal_QueryContext    wrapped context
+     */
+    public function getContext()
+    {
+        return $this->_context;
+    }
 
 }
 

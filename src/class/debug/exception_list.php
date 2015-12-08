@@ -133,17 +133,17 @@ $details = NULL;
 $level = 0;
 while( !Charcoal_ExceptionStack::isEmpty() )
 {
-	list( $e, $file, $line ) = Charcoal_ExceptionStack::pop();
-	$src = new Charcoal_PhpSourceInfo( $file, $line );
-	$class_name  = get_class($e);
-	$message     = $e->getMessage();
+    list( $e, $file, $line ) = Charcoal_ExceptionStack::pop();
+    $src = new Charcoal_PhpSourceInfo( $file, $line );
+    $class_name  = get_class($e);
+    $message     = $e->getMessage();
 
-	if ( $e instanceof Charcoal_CharcoalException ){
-		$backtrace = $e->getBackTrace();
-		$details = $backtrace->build();
-	}
+    if ( $e instanceof Charcoal_CharcoalException ){
+        $backtrace = $e->getBackTrace();
+        $details = $backtrace->build();
+    }
 
-	$html =<<< HTML
+    $html =<<< HTML
 <div class="backtrace_row">
 
   <table class="backtrace_row_detail">
@@ -179,16 +179,16 @@ while( !Charcoal_ExceptionStack::isEmpty() )
 
 HTML;
 
-	$html = str_replace( '[LEVEL]', $level, $html );
-	$html = str_replace( '[CLASS_NAME]', $class_name, $html );
-	$html = str_replace( '[MESSAGE]', $message, $html );
-	$html = str_replace( '[FILE]', $file, $html );
-	$html = str_replace( '[LINE]', $line, $html );
-	$html = str_replace( '[SOURCE]', $src->toString(), $html );
+    $html = str_replace( '[LEVEL]', $level, $html );
+    $html = str_replace( '[CLASS_NAME]', $class_name, $html );
+    $html = str_replace( '[MESSAGE]', $message, $html );
+    $html = str_replace( '[FILE]', $file, $html );
+    $html = str_replace( '[LINE]', $line, $html );
+    $html = str_replace( '[SOURCE]', $src->toString(), $html );
 
-	echo $html;
+    echo $html;
 
-	$level ++;
+    $level ++;
 }
 echo '</div>' . PHP_EOL;
 
@@ -203,16 +203,16 @@ echo '</div>' . PHP_EOL;
 
 <?php
 if ( $details && is_array($details) ){
-	foreach( $details as $level => $trace )
-	{
-		$spec = $trace->getSpec();
-		$hist = $trace->getHistory();
-		$src  = $trace->getSource();
+    foreach( $details as $level => $trace )
+    {
+        $spec = $trace->getSpec();
+        $hist = $trace->getHistory();
+        $src  = $trace->getSource();
 
-		$file = $src->getFile();
-		$line = $src->getLine();
+        $file = $src->getFile();
+        $line = $src->getLine();
 
-		$html =<<< HTML
+        $html =<<< HTML
 <div class="backtrace_row">
 
   <table class="backtrace_row_detail">
@@ -248,16 +248,16 @@ if ( $details && is_array($details) ){
 
 HTML;
 
-		$html = str_replace( '[LEVEL]', $level, $html );
-		$html = str_replace( '[SPEC]', $spec->toString(), $html );
-		$html = str_replace( '[HISTORY]', $hist->toString(), $html );
-		$html = str_replace( '[FILE]', $file, $html );
-		$html = str_replace( '[LINE]', $line, $html );
-		$html = str_replace( '[SOURCE]', $src->toString(), $html );
+        $html = str_replace( '[LEVEL]', $level, $html );
+        $html = str_replace( '[SPEC]', $spec->toString(), $html );
+        $html = str_replace( '[HISTORY]', $hist->toString(), $html );
+        $html = str_replace( '[FILE]', $file, $html );
+        $html = str_replace( '[LINE]', $line, $html );
+        $html = str_replace( '[SOURCE]', $src->toString(), $html );
 
-		echo $html;
+        echo $html;
 
-	}
+    }
 }
 ?>
 

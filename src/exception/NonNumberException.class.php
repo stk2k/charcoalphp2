@@ -11,10 +11,10 @@
 
 class Charcoal_NonNumberException extends Charcoal_RuntimeException
 {
-	public function __construct( $value, $prev = NULL )
-	{
-		parent::__construct( "can't convert to number object: $value", $prev );
-	}
+    public function __construct( $value, $prev = NULL )
+    {
+        parent::__construct( "can't convert to number object: $value", $prev );
+    }
 }
 
 

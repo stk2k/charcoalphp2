@@ -10,16 +10,16 @@
 */
 interface Charcoal_IContainer
 {
-	/**
-	 * get component
-	 * 
-	 * @param Charcoal_String $key         key of the class
-	 */
-	public function getComponent( $key );
+    /**
+     * get component
+     *
+     * @param Charcoal_String $key         key of the class
+     */
+    public function getComponent( $key );
 
-	/**
-	 * destruct instance
-	 */
-	public function terminate();
+    /**
+     * destruct instance
+     */
+    public function terminate();
 }
 

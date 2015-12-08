@@ -11,15 +11,15 @@
 
 class Charcoal_FilePermissionException extends Charcoal_RuntimeException
 {
-	const READ_PERMISSION     = 'r';
-	const WRITE_PERMISSION    = 'w';
-	const EXECUTE_PERMISSION  = 'x';
+    const READ_PERMISSION     = 'r';
+    const WRITE_PERMISSION    = 'w';
+    const EXECUTE_PERMISSION  = 'x';
 
-	public function __construct( $path, $needed = NULL, $prev = NULL )
-	{
-		$perm = file_exists($path) ? substr(sprintf('%o', fileperms($path)), -4) : '---';
-		parent::__construct( "file permission is not enough: $path perm=[$perm] needed=[$needed]", $prev );
-	}
+    public function __construct( $path, $needed = NULL, $prev = NULL )
+    {
+        $perm = file_exists($path) ? substr(sprintf('%o', fileperms($path)), -4) : '---';
+        parent::__construct( "file permission is not enough: $path perm=[$perm] needed=[$needed]", $prev );
+    }
 }
 
 

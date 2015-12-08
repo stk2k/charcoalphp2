@@ -10,32 +10,32 @@
 */
 class Charcoal_QueryTargetElement extends Charcoal_Object
 {
-	private $type;
-	private $string;
+    private $type;
+    private $string;
 
-	/*
-	 *  Constructor
-	 */
-	public function __construct( $type, $string = NULL )
-	{
-		$this->type   = ui($type);
-		$this->string = us($string);
-	}
+    /*
+     *  Constructor
+     */
+    public function __construct( $type, $string = NULL )
+    {
+        $this->type   = ui($type);
+        $this->string = us($string);
+    }
 
-	/*
-	 *  query target type
-	 */
-	public function getType()
-	{
-		return $this->type;
-	}
+    /*
+     *  query target type
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
-	/*
-	 *  string data
-	 */
-	public function getString()
-	{
-		return $this->string;
-	}
+    /*
+     *  string data
+     */
+    public function getString()
+    {
+        return $this->string;
+    }
 }
 

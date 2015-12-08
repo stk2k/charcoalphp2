@@ -11,10 +11,10 @@
 
 class Charcoal_SQLBuilderException extends Charcoal_DBException
 {
-	public function __construct( $message, $prev = NULL )
-	{
-		parent::__construct( "SQL builder failed: $message", $prev );
-	}
+    public function __construct( $message, $prev = NULL )
+    {
+        parent::__construct( "SQL builder failed: $message", $prev );
+    }
 }
 
 

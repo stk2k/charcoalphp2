@@ -11,13 +11,13 @@
 
 class Charcoal_BadExitCodeException extends Charcoal_RuntimeException
 {
-	public function __construct( $exit_code, $prev = NULL )
-	{
-		$exit_code = Charcoal_System::toString( $exit_code );
-		$type = gettype($exit_code);
+    public function __construct( $exit_code, $prev = NULL )
+    {
+        $exit_code = Charcoal_System::toString( $exit_code );
+        $type = gettype($exit_code);
 
-		parent::__construct( "Bad exit code: [$exit_code]($type)", $prev );
-	}
+        parent::__construct( "Bad exit code: [$exit_code]($type)", $prev );
+    }
 }
 
 

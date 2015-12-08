@@ -11,25 +11,25 @@
 
 interface Charcoal_ILogger extends Charcoal_ICharcoalObject
 {
-	/*
-	 * write header message
-	 */
-	public function writeHeader();
+    /*
+     * write header message
+     */
+    public function writeHeader();
 
-	/*
-	 * write footer message
-	 */
-	public function writeFooter();
+    /*
+     * write footer message
+     */
+    public function writeFooter();
 
-	/*
-	 * write one message
-	 */
-	public function writeln( Charcoal_LogMessage $message );
+    /*
+     * write one message
+     */
+    public function writeln( Charcoal_LogMessage $message );
 
-	/**
-	 * destruct instance
-	 */
-	public function terminate();
+    /**
+     * destruct instance
+     */
+    public function terminate();
 
 }
 

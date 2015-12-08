@@ -10,66 +10,66 @@
 */
 class FrameworkTestTask extends Charcoal_TestTask
 {
-	/**
-	 * check if action will be processed
-	 */
-	public function isValidAction( $action )
-	{
-		switch( $action ){
-		case "push_procedure":
-			return TRUE;
-		}
-		return FALSE;
-	}
+    /**
+     * check if action will be processed
+     */
+    public function isValidAction( $action )
+    {
+        switch( $action ){
+        case "push_procedure":
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
-	}
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		$action = us($action);
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        $action = us($action);
 
-		switch( $action ){
-		case "push_procedure":
+        switch( $action ){
+        case "push_procedure":
 
-			$proc = new Charcoal_HttpProcedure();
-			$proc_id = $proc->hash();
+            $proc = new Charcoal_HttpProcedure();
+            $proc_id = $proc->hash();
 
-			Charcoal_Framework::pushProcedure( $proc );
+            Charcoal_Framework::pushProcedure( $proc );
 
-			$stack = Charcoal_Framework::getProcedureStack();
-			$this->assertEquals( 1, $stack->count() );
+            $stack = Charcoal_Framework::getProcedureStack();
+            $this->assertEquals( 1, $stack->count() );
 
-			$top_proc = $stack->pop();
-			$this->assertEquals( 0, $stack->count() );
+            $top_proc = $stack->pop();
+            $this->assertEquals( 0, $stack->count() );
 
-			$top_proc_id = $top_proc->hash();
+            $top_proc_id = $top_proc->hash();
 
-//			echo "proc_id:$proc_id" . eol();
-//			echo "top_proc_id:$top_proc_id" . eol();
+//            echo "proc_id:$proc_id" . eol();
+//            echo "top_proc_id:$top_proc_id" . eol();
 
-			$this->assertEquals( $proc_id, $top_proc_id );
-			
-			return TRUE;
+            $this->assertEquals( $proc_id, $top_proc_id );
 
-		}
+            return TRUE;
 
-		return FALSE;
-	}
+        }
+
+        return FALSE;
+    }
 
 }
 

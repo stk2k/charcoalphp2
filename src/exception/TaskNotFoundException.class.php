@@ -11,10 +11,10 @@
 
 class Charcoal_TaskNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( $task, $prev = NULL )
-	{
-		parent::__construct( "task not found: $task", $prev );
-	}
+    public function __construct( $task, $prev = NULL )
+    {
+        parent::__construct( "task not found: $task", $prev );
+    }
 }
 
 

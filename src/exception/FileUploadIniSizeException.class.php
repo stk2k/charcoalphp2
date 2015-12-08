@@ -11,9 +11,9 @@
 
 class Charcoal_FileUploadIniSizeException extends Charcoal_RuntimeException
 {
-	public function __construct( $path, $prev = NULL )
-	{
-		parent::__construct( "File upload failed(UPLOAD_ERR_INI_SIZE): $path", $prev );
-	}
+    public function __construct( $path, $prev = NULL )
+    {
+        parent::__construct( "File upload failed(UPLOAD_ERR_INI_SIZE): $path", $prev );
+    }
 }
 

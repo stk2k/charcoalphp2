@@ -10,108 +10,108 @@
 */
 class Charcoal_CharcoalRendererTask extends Charcoal_Task implements Charcoal_ITask
 {
-	/**
-	 * Process events
-	 *
-	 * @param Charcoal_IEventContext $context   event context
-	 */
-	public function processEvent( $context )
-	{
-		$event    = $context->getEvent();
-		$response = $context->getResponse();
-		$sequence = $context->getSequence();
+    /**
+     * Process events
+     *
+     * @param Charcoal_IEventContext $context   event context
+     */
+    public function processEvent( $context )
+    {
+        $event    = $context->getEvent();
+        $response = $context->getResponse();
+        $sequence = $context->getSequence();
 
-		// output response headers
-		$response->flushHeaders();
+        // output response headers
+        $response->flushHeaders();
 
-		// retrieve layout
-		$layout = $event->getLayout();
+        // retrieve layout
+        $layout = $event->getLayout();
 
-//		log_info( "system,renderer", "Rendering by smarty. Layout:" . print_r($layout,true) );
+//        log_info( "system,renderer", "Rendering by smarty. Layout:" . print_r($layout,true) );
 
-		try{
-			$charcoal = array();
+        try{
+            $charcoal = array();
 
-			// page redirection
-			if ( $layout instanceof Charcoal_IRedirectLayout ){
-	
-				$url = $layout->makeRedirectURL();
+            // page redirection
+            if ( $layout instanceof Charcoal_IRedirectLayout ){
 
-				$response->redirect( s($url) );
+                $url = $layout->makeRedirectURL();
 
-//				log_info( "system,renderer", "renderer", "Redirected to: $url" );
-			}
-			elseif ( $event instanceof Charcoal_URLRedirectEvent ){
-	
-				$url = $event->getURL();
+                $response->redirect( s($url) );
 
-				$response->redirect( s($url) );
+//                log_info( "system,renderer", "renderer", "Redirected to: $url" );
+            }
+            elseif ( $event instanceof Charcoal_URLRedirectEvent ){
 
-//				log_info( "system,renderer", "renderer", "Redirected to: $url" );
-			}
-			else{
+                $url = $event->getURL();
 
-				// Page information
-				$page_info = $layout->getAttribute( s('page_info') );
+                $response->redirect( s($url) );
 
-				// Profile information
-				$profile_config = Charcoal_Profile::getConfig();
-				if ( $profile_config && is_array($profile_config) ){
-					foreach( $profile_config as $key => $value ){
-						$charcoal['profile'][$key] = $value;
-					}
-				}
+//                log_info( "system,renderer", "renderer", "Redirected to: $url" );
+            }
+            else{
 
-				// Cookie information
-				$cookies = $response->getCookies();
-				if ( $cookies && is_array($cookies) ){
-					foreach( $cookies as $key => $value ){
-						$charcoal['cookie'][$key] = $value;
-					}
-				}
+                // Page information
+                $page_info = $layout->getAttribute( s('page_info') );
 
-				// Assign variables
-				if ( $page_info && is_array($page_info) ){
-					foreach( $page_info as $key => $value ){
-						$$key = $value;
-					}
-				}
+                // Profile information
+                $profile_config = Charcoal_Profile::getConfig();
+                if ( $profile_config && is_array($profile_config) ){
+                    foreach( $profile_config as $key => $value ){
+                        $charcoal['profile'][$key] = $value;
+                    }
+                }
 
-				// Sequence data
-				$charcoal['sequence'] = $sequence;
+                // Cookie information
+                $cookies = $response->getCookies();
+                if ( $cookies && is_array($cookies) ){
+                    foreach( $cookies as $key => $value ){
+                        $charcoal['cookie'][$key] = $value;
+                    }
+                }
 
-				// Request ID and reauest path
-				$charcoal['request']['id']   = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
-				$charcoal['request']['path'] = $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
+                // Assign variables
+                if ( $page_info && is_array($page_info) ){
+                    foreach( $page_info as $key => $value ){
+                        $$key = $value;
+                    }
+                }
 
-				// Assign all
-				//$charcoal = $charcoal;
+                // Sequence data
+                $charcoal['sequence'] = $sequence;
 
-				// Assign all response values
-				$keys = $response->getKeys();
-				foreach( $keys as $key ){
-					$value = $response->get( s($key) );
-					$smarty->assign( $key, $value );
-				}
+                // Request ID and reauest path
+                $charcoal['request']['id']   = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
+                $charcoal['request']['path'] = $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
 
-				// render template
-				$template = $layout->getAttribute( s('layout') );
+                // Assign all
+                //$charcoal = $charcoal;
 
-//				log_info( "smarty", "template=$template" );
-				$html = $smarty->fetch( $template );
-//				log_info( "smarty", "html=$html" );
+                // Assign all response values
+                $keys = $response->getKeys();
+                foreach( $keys as $key ){
+                    $value = $response->get( s($key) );
+                    $smarty->assign( $key, $value );
+                }
 
-				echo $html;
-			}
-		}
-		catch ( Exception $ex )
-		{
-			_catch( $ex );
+                // render template
+                $template = $layout->getAttribute( s('layout') );
 
-			_throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
-		}
+//                log_info( "smarty", "template=$template" );
+                $html = $smarty->fetch( $template );
+//                log_info( "smarty", "html=$html" );
 
-		return b(TRUE);
-	}
+                echo $html;
+            }
+        }
+        catch ( Exception $ex )
+        {
+            _catch( $ex );
+
+            _throw( new Charcoal_SmartyRendererTaskException( "rendering failed", $ex ) );
+        }
+
+        return b(TRUE);
+    }
 }
 

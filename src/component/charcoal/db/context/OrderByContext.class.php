@@ -10,53 +10,53 @@
 */
 class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 {
-	/**
-	 *  Constructor
-	 */
-	public function __construct( $context )
-	{
-		parent::__construct( $context );
-	}
+    /**
+     *  Constructor
+     */
+    public function __construct( $context )
+    {
+        parent::__construct( $context );
+    }
 
-	/**
-	 *  switch to prepared context 
-	 */
-	public function prepareExecute()
-	{
-		return new Charcoal_PreparedContext( $this->getContext() );
-	}
+    /**
+     *  switch to prepared context
+     */
+    public function prepareExecute()
+    {
+        return new Charcoal_PreparedContext( $this->getContext() );
+    }
 
-	/**
-	 *  switch to limit context 
-	 *  
-	 *  @param integer $limit       integer data used after LIMIT clause
-	 */
-	public function limit( $limit )
-	{
-		$this->getContext()->getCriteria()->setLimit( $limit );
+    /**
+     *  switch to limit context
+     *
+     *  @param integer $limit       integer data used after LIMIT clause
+     */
+    public function limit( $limit )
+    {
+        $this->getContext()->getCriteria()->setLimit( $limit );
 
-		return new Charcoal_LimitContext( $this->getContext() );
-	}
+        return new Charcoal_LimitContext( $this->getContext() );
+    }
 
-	/**
-	 *  switch to offset context 
-	 */
-	public function offset( $offset )
-	{
-		$this->getContext()->getCriteria()->setOffset( $offset );
+    /**
+     *  switch to offset context
+     */
+    public function offset( $offset )
+    {
+        $this->getContext()->getCriteria()->setOffset( $offset );
 
-		return new Charcoal_OffsetContext( $this->getContext() );
-	}
+        return new Charcoal_OffsetContext( $this->getContext() );
+    }
 
-	/**
-	 *  switch to group by context 
-	 */
-	public function groupBy( $group_by )
-	{
-		$this->getContext()->getCriteria()->setGroupBy( $group_by );
+    /**
+     *  switch to group by context
+     */
+    public function groupBy( $group_by )
+    {
+        $this->getContext()->getCriteria()->setGroupBy( $group_by );
 
-		return new Charcoal_GroupByContext( $this->getContext() );
-	}
+        return new Charcoal_GroupByContext( $this->getContext() );
+    }
 
 
 }

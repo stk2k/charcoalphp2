@@ -11,12 +11,12 @@
 
 class Charcoal_ScreenLogger extends Charcoal_AbstractLogger implements Charcoal_ILogger
 {
-	/*
-	 * write header message
-	 */
-	public function writeHeader()
-	{
-		$html = <<< HTML_STYLE
+    /*
+     * write header message
+     */
+    public function writeHeader()
+    {
+        $html = <<< HTML_STYLE
 <style type="text/css">
   .charcoal {
     font-family: 'Verdana';
@@ -73,59 +73,59 @@ class Charcoal_ScreenLogger extends Charcoal_AbstractLogger implements Charcoal_
 </style>
 HTML_STYLE;
 
-		$html .= '<div class="charcoal">' . PHP_EOL;
-		$html .= '<table border="0" cellpadding="0" cellspacing="0">' . PHP_EOL;
-		$html .= '<tr>' . PHP_EOL;
-		$html .= '	<th><div class="value">TimeStamp</div></th>' . PHP_EOL;
-		$html .= '	<th><div class="value">Level</div></th>' . PHP_EOL;
-		$html .= '	<th><div class="value">Tag</div></th>' . PHP_EOL;
-		$html .= '	<th><div class="value">Message</div></th>' . PHP_EOL;
-		$html .= '	<th><div class="value">File(Line)</div></th>' . PHP_EOL;
-		$html .= '</tr>' . PHP_EOL;
+        $html .= '<div class="charcoal">' . PHP_EOL;
+        $html .= '<table border="0" cellpadding="0" cellspacing="0">' . PHP_EOL;
+        $html .= '<tr>' . PHP_EOL;
+        $html .= '    <th><div class="value">TimeStamp</div></th>' . PHP_EOL;
+        $html .= '    <th><div class="value">Level</div></th>' . PHP_EOL;
+        $html .= '    <th><div class="value">Tag</div></th>' . PHP_EOL;
+        $html .= '    <th><div class="value">Message</div></th>' . PHP_EOL;
+        $html .= '    <th><div class="value">File(Line)</div></th>' . PHP_EOL;
+        $html .= '</tr>' . PHP_EOL;
 
-		echo $html;
-	}
+        echo $html;
+    }
 
-	/*
-	 * write footer message
-	 */
-	public function writeFooter()
-	{
-		echo '</table></div>' . PHP_EOL;
-	}
+    /*
+     * write footer message
+     */
+    public function writeFooter()
+    {
+        echo '</table></div>' . PHP_EOL;
+    }
 
-	/*
-	 * write one message
-	 */
-	public function writeln( Charcoal_LogMessage $msg )
-	{
-		$timestamp = date("Y-m-d H:i:s");
-		$level     = $msg->getLevel();
-		$tag       = $msg->getTag();
-		$message   = $msg->getMessage();
-		$file      = $msg->getFile();
-		$line      = $msg->getLine();
+    /*
+     * write one message
+     */
+    public function writeln( Charcoal_LogMessage $msg )
+    {
+        $timestamp = date("Y-m-d H:i:s");
+        $level     = $msg->getLevel();
+        $tag       = $msg->getTag();
+        $message   = $msg->getMessage();
+        $file      = $msg->getFile();
+        $line      = $msg->getLine();
 
-		$level_class_def = array(
-				"T" => "level_t",
-				"I" => "level_i",
-				"D" => "level_d",
-				"W" => "level_w",
-				"E" => "level_e",
-				"F" => "level_f",
-			);
+        $level_class_def = array(
+                "T" => "level_t",
+                "I" => "level_i",
+                "D" => "level_d",
+                "W" => "level_w",
+                "E" => "level_e",
+                "F" => "level_f",
+            );
 
-		$td_class = isset($level_class_def[us($level)]) ? $level_class_def[us($level)] : NULL;
+        $td_class = isset($level_class_def[us($level)]) ? $level_class_def[us($level)] : NULL;
 
-		$html  = '<tr>' . PHP_EOL;
-		$html .= '	<td class="' . $td_class . '"><div class="value center">' . $timestamp . '</div></td>' . PHP_EOL;
-		$html .= '	<td class="' . $td_class . '"><div class="value center">' . $level . '</div></td>' . PHP_EOL;
-		$html .= '	<td class="' . $td_class . '"><div class="value center">' . $tag . '</div></td>' . PHP_EOL;
-		$html .= '	<td class="' . $td_class . '"><div class="value">' . $message . '</div></td>' . PHP_EOL;
-		$html .= '	<td class="' . $td_class . '"><div class="value">' . $file . '(' . $line . ')</div></td>' . PHP_EOL;
-		$html .= '</tr>' . PHP_EOL;
+        $html  = '<tr>' . PHP_EOL;
+        $html .= '    <td class="' . $td_class . '"><div class="value center">' . $timestamp . '</div></td>' . PHP_EOL;
+        $html .= '    <td class="' . $td_class . '"><div class="value center">' . $level . '</div></td>' . PHP_EOL;
+        $html .= '    <td class="' . $td_class . '"><div class="value center">' . $tag . '</div></td>' . PHP_EOL;
+        $html .= '    <td class="' . $td_class . '"><div class="value">' . $message . '</div></td>' . PHP_EOL;
+        $html .= '    <td class="' . $td_class . '"><div class="value">' . $file . '(' . $line . ')</div></td>' . PHP_EOL;
+        $html .= '</tr>' . PHP_EOL;
 
-		echo $html;
-	}
+        echo $html;
+    }
 }
 

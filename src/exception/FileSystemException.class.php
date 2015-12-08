@@ -11,10 +11,10 @@
 
 class Charcoal_FileSystemException extends Charcoal_RuntimeException
 {
-	public function __construct( $operation, $reason = NULL, $prev = NULL )
-	{
-		parent::__construct( "file system operation failed: [operation]$operation [reason]$reason", $prev );
-	}
+    public function __construct( $operation, $reason = NULL, $prev = NULL )
+    {
+        parent::__construct( "file system operation failed: [operation]$operation [reason]$reason", $prev );
+    }
 }
 
 

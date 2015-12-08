@@ -11,18 +11,18 @@
 
 class Charcoal_SetupEvent extends Charcoal_SystemEvent implements Charcoal_IEvent
 {
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-		$config->set( s('priority'), Charcoal_EnumEventPriority::SYSTEM );
+        $config->set( s('priority'), Charcoal_EnumEventPriority::SYSTEM );
 
-		parent::configure( $config );
-	}
+        parent::configure( $config );
+    }
 }
 

@@ -11,21 +11,21 @@
 
 class Charcoal_HttpStatusException extends Charcoal_BusinessException
 {
-	private $status;
+    private $status;
 
-	public function __construct( $status, $prev = NULL )
-	{
-		$this->status = $status;
+    public function __construct( $status, $prev = NULL )
+    {
+        $this->status = $status;
 
-		parent::__construct( "HTTP status error: status=[$status]", $prev );
-	}
+        parent::__construct( "HTTP status error: status=[$status]", $prev );
+    }
 
-	/**
-	 *  HTTP status code
-	 */
-	function getStatusCode()
-	{
-		return $this->status;
-	}
+    /**
+     *  HTTP status code
+     */
+    function getStatusCode()
+    {
+        return $this->status;
+    }
 }
 

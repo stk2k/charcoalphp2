@@ -11,9 +11,9 @@
 
 class Charcoal_TestDataNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( $test_data, $prev = NULL )
-	{
-		parent::__construct( "Test data not found: [$test_data]", $prev );
-	}
+    public function __construct( $test_data, $prev = NULL )
+    {
+        parent::__construct( "Test data not found: [$test_data]", $prev );
+    }
 }
 

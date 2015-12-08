@@ -10,10 +10,10 @@
 */
 class Charcoal_ClassNameEmptyException extends Charcoal_RuntimeException
 {
-	public function __construct( $object_name, $prev = NULL )
-	{
-		parent::__construct( "Class name is required: object_name=[$object_name]", $prev );
-	}
+    public function __construct( $object_name, $prev = NULL )
+    {
+        parent::__construct( "Class name is required: object_name=[$object_name]", $prev );
+    }
 
 
 }

@@ -11,10 +11,10 @@
 
 class Charcoal_ProcessEventAtTaskManagerException extends Charcoal_RuntimeException
 {
-	public function __construct( $prev = NULL )
-	{
-		parent::__construct( 'Event processing failed at task manager.', $prev );
-	}
+    public function __construct( $prev = NULL )
+    {
+        parent::__construct( 'Event processing failed at task manager.', $prev );
+    }
 
 }
 

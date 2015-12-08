@@ -11,17 +11,17 @@
 
 class HelloTask extends Charcoal_Task
 {
-	/**
-	 * process event
-	 *
-	 * @param Charcoal_IEventContext $context   event context
-	 */
-	public function processEvent( $context )
-	{
-		// show message
-		echo "Hello, World!<br />";
+    /**
+     * process event
+     *
+     * @param Charcoal_IEventContext $context   event context
+     */
+    public function processEvent( $context )
+    {
+        // show message
+        echo "Hello, World!<br />";
 
-		// return TRUE if processing the procedure success.
-		return TRUE;
-	}
+        // return TRUE if processing the procedure success.
+        return TRUE;
+    }
 }

@@ -10,18 +10,18 @@
 */
 interface Charcoal_IObject
 {
-	/*
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function __toString();
+    /*
+     *  String expression of this object
+     *
+     * @return string
+     */
+    public function __toString();
 
-	/*
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function toString();
+    /*
+     *  String expression of this object
+     *
+     * @return string
+     */
+    public function toString();
 }
 

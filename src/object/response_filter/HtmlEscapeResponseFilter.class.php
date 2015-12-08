@@ -10,12 +10,12 @@
 */
 class Charcoal_HtmlEscapeResponseFilter extends Charcoal_AbstractResponseFilter
 {
-	/**
-	 * セットされた値を加工する
-	 */
-	public function apply( $value )
-	{
-		return Charcoal_System::escape( $value );
-	}
+    /**
+     * セットされた値を加工する
+     */
+    public function apply( $value )
+    {
+        return Charcoal_System::escape( $value );
+    }
 }
 

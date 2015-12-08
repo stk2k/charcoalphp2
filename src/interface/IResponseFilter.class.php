@@ -10,9 +10,9 @@
 */
 interface Charcoal_IResponseFilter extends Charcoal_ICharcoalObject
 {
-	/**
-	 * セットされた値を加工する
-	 */
-	public function apply( $value );
+    /**
+     * セットされた値を加工する
+     */
+    public function apply( $value );
 }
 

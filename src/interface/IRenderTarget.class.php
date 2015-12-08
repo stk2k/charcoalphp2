@@ -11,12 +11,12 @@
 interface Charcoal_IRenderTarget
 {
 
-	/**
-	 *	render buffer
-	 *
-	 * @param Charcoal_String|string $buffer    rendering data
-	 */
-	public function render( $buffer );
+    /**
+     *    render buffer
+     *
+     * @param Charcoal_String|string $buffer    rendering data
+     */
+    public function render( $buffer );
 
 }
 

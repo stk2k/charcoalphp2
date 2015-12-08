@@ -11,9 +11,9 @@
 
 class Charcoal_ClassLoaderConfigException extends Charcoal_ConfigException
 {
-	public function __construct( $object_path, $entry, $message = NULL, $prev = NULL )
-	{
-		parent::__construct( "[object_path]$object_path [entry]$entry [message]$message", $prev );
-	}
+    public function __construct( $object_path, $entry, $message = NULL, $prev = NULL )
+    {
+        parent::__construct( "[object_path]$object_path [entry]$entry [message]$message", $prev );
+    }
 }
 

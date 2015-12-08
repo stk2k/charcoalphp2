@@ -11,10 +11,10 @@
 
 class Charcoal_RenderTargetException extends Charcoal_RuntimeException
 {
-	public function __construct( $reason = NULL, $prev = NULL )
-	{
-		parent::__construct( "rendering target failed: $reason", $prev );
-	}
+    public function __construct( $reason = NULL, $prev = NULL )
+    {
+        parent::__construct( "rendering target failed: $reason", $prev );
+    }
 }
 
 

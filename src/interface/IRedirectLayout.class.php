@@ -11,10 +11,10 @@
 interface Charcoal_IRedirectLayout
 {
 
-	/**
-	 *	リダイレクト時のURLを取得
-	 */
-	public function makeRedirectURL();
+    /**
+     *    リダイレクト時のURLを取得
+     */
+    public function makeRedirectURL();
 
 }
 

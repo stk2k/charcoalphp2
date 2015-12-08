@@ -11,12 +11,12 @@
 
 class Charcoal_FileNotReadableException extends Charcoal_RuntimeException
 {
-	public function __construct( $path, Exception $prev = NULL )
-	{
-//		Charcoal_ParamTrait::validateString( 1, $path );
+    public function __construct( $path, Exception $prev = NULL )
+    {
+//        Charcoal_ParamTrait::validateString( 1, $path );
 
-		parent::__construct( "File[$path] is not readable.", $prev );
-	}
+        parent::__construct( "File[$path] is not readable.", $prev );
+    }
 }
 
 

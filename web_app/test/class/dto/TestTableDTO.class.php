@@ -17,4 +17,4 @@ class TestTableDTO extends Charcoal_TableDTO
     public $price;
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

@@ -11,9 +11,9 @@
 
 class Charcoal_LayoutManagerCreationException extends Charcoal_RuntimeException
 {
-	public function __construct( $layout_manager, $prev = NULL )
-	{
-		parent::__construct( "Failed to create layout manager: [$layout_manager]", $prev );
-	}
+    public function __construct( $layout_manager, $prev = NULL )
+    {
+        parent::__construct( "Failed to create layout manager: [$layout_manager]", $prev );
+    }
 }
 

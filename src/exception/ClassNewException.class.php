@@ -10,12 +10,12 @@
 */
 class Charcoal_ClassNewException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_Class $klass, Charcoal_Vector $args, $prev = NULL )
-	{
-		$class_name = $klass->getClassName();
+    public function __construct( Charcoal_Class $klass, Charcoal_Vector $args, $prev = NULL )
+    {
+        $class_name = $klass->getClassName();
 
-		parent::__construct( "[class_name]$class_name [args]$args", $prev );
-	}
+        parent::__construct( "[class_name]$class_name [args]$args", $prev );
+    }
 
 
 }

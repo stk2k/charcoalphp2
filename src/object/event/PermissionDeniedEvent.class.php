@@ -11,13 +11,13 @@
 
 class Charcoal_PermissionDeniedEvent extends Charcoal_UserEvent implements Charcoal_IEvent
 {
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /*
+     *    コンストラクタ
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
 
 }

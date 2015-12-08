@@ -11,24 +11,24 @@
 
 class Charcoal_SQLUtil
 {
-	/**
-	 *	プレースホルダーのリストを作成
-	 *
-	 */
-	public static function makePlaceHolderList( Charcoal_Vector $values )
-	{
-		$values = uv($values);
+    /**
+     *    プレースホルダーのリストを作成
+     *
+     */
+    public static function makePlaceHolderList( Charcoal_Vector $values )
+    {
+        $values = uv($values);
 
-		$str = "";
-		foreach( $values as $value ){
-			if ( strlen($str) > 0 ){
-				$str .= ",";
-			}
-			$str .= "?";
-		}
+        $str = "";
+        foreach( $values as $value ){
+            if ( strlen($str) > 0 ){
+                $str .= ",";
+            }
+            $str .= "?";
+        }
 
-		return $str;
-	}
+        return $str;
+    }
 
 }
 

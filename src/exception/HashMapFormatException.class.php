@@ -11,12 +11,12 @@
 
 class Charcoal_HashMapFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $value, $prev = NULL )
-	{
-		$value = Charcoal_System::toString( $value );
+    public function __construct( $value, $prev = NULL )
+    {
+        $value = Charcoal_System::toString( $value );
 
-		parent::__construct( "must be an HASHMAP value: $value(" . gettype($value) . ")", $prev );
-	}
+        parent::__construct( "must be an HASHMAP value: $value(" . gettype($value) . ")", $prev );
+    }
 
 }
 

@@ -11,10 +11,10 @@
 
 class Charcoal_StringFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $key, $prev = NULL )
-	{
-		parent::__construct( "must be an STRING value for key[$key]", $prev );
-	}
+    public function __construct( $key, $prev = NULL )
+    {
+        parent::__construct( "must be an STRING value for key[$key]", $prev );
+    }
 
 }
 

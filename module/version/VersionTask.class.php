@@ -11,19 +11,19 @@
 
 class VersionTask extends Charcoal_Task
 {
-	/**
-	 * Process events
-	 *
-	 * @param Charcoal_IEventContext $context   event context
-	 */
-	public function processEvent( $context )
-	{
-		$version = Charcoal_Framework::getVersion()->toString();
-		$this_year = date('Y');
+    /**
+     * Process events
+     *
+     * @param Charcoal_IEventContext $context   event context
+     */
+    public function processEvent( $context )
+    {
+        $version = Charcoal_Framework::getVersion()->toString();
+        $this_year = date('Y');
 
-		echo "CharcoalPHP {$version}." . PHP_EOL;
-		echo "Copyright (c)2008-$this_year CharcoalPHP team." . PHP_EOL;
+        echo "CharcoalPHP {$version}." . PHP_EOL;
+        echo "Copyright (c)2008-$this_year CharcoalPHP team." . PHP_EOL;
 
-		return b(true);
-	}
+        return b(true);
+    }
 }

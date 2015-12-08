@@ -11,9 +11,9 @@
 
 class Charcoal_FileUploadNoFileException extends Charcoal_RuntimeException
 {
-	public function __construct( $path, $prev = NULL )
-	{
-		parent::__construct( "File upload failed(UPLOAD_ERR_NO_FILE): $path", $prev );
-	}
+    public function __construct( $path, $prev = NULL )
+    {
+        parent::__construct( "File upload failed(UPLOAD_ERR_NO_FILE): $path", $prev );
+    }
 }
 

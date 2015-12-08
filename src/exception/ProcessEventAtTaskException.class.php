@@ -11,11 +11,11 @@
 
 class Charcoal_ProcessEventAtTaskException extends Charcoal_RuntimeException
 {
-	public function __construct( $event, $task, $result, $message, $prev = NULL )
-	{
-		$result = print_r($result, true);
-		parent::__construct( "Event processing failed at task. [event]$event [task]$task [result]$result [message]$message", $prev );
-	}
+    public function __construct( $event, $task, $result, $message, $prev = NULL )
+    {
+        $result = print_r($result, true);
+        parent::__construct( "Event processing failed at task. [event]$event [task]$task [result]$result [message]$message", $prev );
+    }
 
 }
 

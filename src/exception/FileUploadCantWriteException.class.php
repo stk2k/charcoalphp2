@@ -11,9 +11,9 @@
 
 class Charcoal_FileUploadCantWriteException extends Charcoal_RuntimeException
 {
-	public function __construct( $path, $prev = NULL )
-	{
-		parent::__construct( "File upload failed(UPLOAD_ERR_CANT_WRITE): $path", $prev );
-	}
+    public function __construct( $path, $prev = NULL )
+    {
+        parent::__construct( "File upload failed(UPLOAD_ERR_CANT_WRITE): $path", $prev );
+    }
 }
 

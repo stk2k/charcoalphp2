@@ -11,8 +11,8 @@
 
 class EnumPDFOrientation extends Charcoal_Enum
 {
-	const PORTRAIT             = 0;		// 縦
-	const LANDSCAPE            = 1;		// 横
+    const PORTRAIT             = 0;        // 縦
+    const LANDSCAPE            = 1;        // 横
 
 }
 

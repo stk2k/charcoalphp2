@@ -11,12 +11,12 @@
 
 class Charcoal_ShellResponse extends Charcoal_AbstractResponse
 {
-	/**
-	 *	Construct object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     *    Construct object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 }
 

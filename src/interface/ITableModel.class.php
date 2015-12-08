@@ -11,21 +11,21 @@
 
 interface Charcoal_ITableModel extends Charcoal_IModel
 {
-	/*
-	 *   テーブル名を取得
-	 */
-	public function getTableName();
+    /*
+     *   テーブル名を取得
+     */
+    public function getTableName();
 
-	/*
-	 *   プライマリキーフィールド名を取得
-	 */
-	public function getPrimaryKey();
+    /*
+     *   プライマリキーフィールド名を取得
+     */
+    public function getPrimaryKey();
 
-	/**
-	 *   check if new record
-	 *   
-	 *  @param Charcoal_DTO $dto         target record
-	 */
-	public function validatePrimaryKeyValue( $dto );
+    /**
+     *   check if new record
+     *
+     *  @param Charcoal_DTO $dto         target record
+     */
+    public function validatePrimaryKeyValue( $dto );
 }
 

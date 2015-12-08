@@ -11,10 +11,10 @@
 
 interface Charcoal_IClassLoader extends Charcoal_ICharcoalObject
 {
-	/*
-	 * クラスをロード
-	 */
-	public function loadClass( $class_name );
+    /*
+     * クラスをロード
+     */
+    public function loadClass( $class_name );
 
 }
 

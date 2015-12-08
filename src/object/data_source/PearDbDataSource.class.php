@@ -10,581 +10,581 @@
 */
 class Charcoal_PearDbDataSource extends Charcoal_AbstractDataSource
 {
-	private $_connected = false;
-	private $_connection;
+    private $_connected = false;
+    private $_connection;
 
-	private $_backend;
-	private $_user;
-	private $_password;
-	private $_db_name;
-	private $_server;
-	private $_charset;
-	private $_autocommit;
+    private $_backend;
+    private $_user;
+    private $_password;
+    private $_db_name;
+    private $_server;
+    private $_charset;
+    private $_autocommit;
 
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /*
+     *    コンストラクタ
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->_connected 	= false;
-		$this->_connection 	= null;
-	}
+        $this->_connected     = false;
+        $this->_connection     = null;
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-		$this->_backend    = $config->getString( 'backend', '' );
-		$this->_user       = $config->getString( 'user', '' );
-		$this->_password   = $config->getString( 'password', '' );
-		$this->_db_name    = $config->getString( 'db_name', '' );
-		$this->_server     = $config->getString( 'server', '' );
-		$this->_charset    = $config->getString( 'charset', '' );
-		$this->_autocommit = $config->getBoolean( 'autocommit', FALSE );
+        $this->_backend    = $config->getString( 'backend', '' );
+        $this->_user       = $config->getString( 'user', '' );
+        $this->_password   = $config->getString( 'password', '' );
+        $this->_db_name    = $config->getString( 'db_name', '' );
+        $this->_server     = $config->getString( 'server', '' );
+        $this->_charset    = $config->getString( 'charset', '' );
+        $this->_autocommit = $config->getBoolean( 'autocommit', FALSE );
 
-		if ( $this->getSandbox()->isDebug() )
-		{
-			log_debug( "db", "[PearDbDataSource]backend=" . $this->_backend );
-			log_debug( "db", "[PearDbDataSource]user=" . $this->_user );
-			log_debug( "db", "[PearDbDataSource]password=" . $this->_password );
-			log_debug( "db", "[PearDbDataSource]db_name=" . $this->_db_name );
-			log_debug( "db", "[PearDbDataSource]server=" . $this->_server );
-			log_debug( "db", "[PearDbDataSource]charset=" . $this->_charset );
-			log_debug( "db", "[PearDbDataSource]autocommit=" . $this->_autocommit );
-		}
-	}
+        if ( $this->getSandbox()->isDebug() )
+        {
+            log_debug( "db", "[PearDbDataSource]backend=" . $this->_backend );
+            log_debug( "db", "[PearDbDataSource]user=" . $this->_user );
+            log_debug( "db", "[PearDbDataSource]password=" . $this->_password );
+            log_debug( "db", "[PearDbDataSource]db_name=" . $this->_db_name );
+            log_debug( "db", "[PearDbDataSource]server=" . $this->_server );
+            log_debug( "db", "[PearDbDataSource]charset=" . $this->_charset );
+            log_debug( "db", "[PearDbDataSource]autocommit=" . $this->_autocommit );
+        }
+    }
 
-	/*
-	 *    接続済みか
-	 */
-	public function isConnected()
-	{
-		return $this->_connected;
-	}
+    /*
+     *    接続済みか
+     */
+    public function isConnected()
+    {
+        return $this->_connected;
+    }
 
-	/*
-	 *    バックエンドを取得
-	 */
-	public function getBackend()
-	{
-		return $this->_backend;
-	}
+    /*
+     *    バックエンドを取得
+     */
+    public function getBackend()
+    {
+        return $this->_backend;
+    }
 
-	/*
-	 *    バックエンドを設定
-	 */
-	protected function setBackend( Charcoal_String $backend )
-	{
-		$this->_backend = $backend;
-	}
+    /*
+     *    バックエンドを設定
+     */
+    protected function setBackend( Charcoal_String $backend )
+    {
+        $this->_backend = $backend;
+    }
 
-	/*
-	 *    接続先サーバを取得
-	 */
-	public function getServer()
-	{
-		return $this->_server;
-	}
+    /*
+     *    接続先サーバを取得
+     */
+    public function getServer()
+    {
+        return $this->_server;
+    }
 
-	/*
-	 *    バックエンドを設定
-	 */
-	protected function setServer( Charcoal_String $server )
-	{
-		$this->_server = $server;
-	}
+    /*
+     *    バックエンドを設定
+     */
+    protected function setServer( Charcoal_String $server )
+    {
+        $this->_server = $server;
+    }
 
-	/*
-	 *    接続ユーザ名を取得
-	 */
-	public function getUser()
-	{
-		return $this->_user;
-	}
+    /*
+     *    接続ユーザ名を取得
+     */
+    public function getUser()
+    {
+        return $this->_user;
+    }
 
-	/*
-	 *    接続ユーザ名を設定
-	 */
-	protected function setUser( Charcoal_String $user )
-	{
-		$this->_user = $user;
-	}
+    /*
+     *    接続ユーザ名を設定
+     */
+    protected function setUser( Charcoal_String $user )
+    {
+        $this->_user = $user;
+    }
 
-	/*
-	 *    接続パスワードを取得
-	 */
-	public function getPassword()
-	{
-		return $this->_password;
-	}
+    /*
+     *    接続パスワードを取得
+     */
+    public function getPassword()
+    {
+        return $this->_password;
+    }
 
-	/*
-	 *    接続パスワードを設定
-	 */
-	protected function setPassword( Charcoal_String $password )
-	{
-		$this->_password = $password;
-	}
+    /*
+     *    接続パスワードを設定
+     */
+    protected function setPassword( Charcoal_String $password )
+    {
+        $this->_password = $password;
+    }
 
-	/*
-	 *    接続先データベース名を取得
-	 */
-	public function getDatabaseName()
-	{
-		return $this->_db_name;
-	}
+    /*
+     *    接続先データベース名を取得
+     */
+    public function getDatabaseName()
+    {
+        return $this->_db_name;
+    }
 
-	/*
-	 *    接続先データベース名を設定
-	 */
-	protected function setDatabaseName( Charcoal_String $db_name )
-	{
-		$this->_db_name = $db_name;
-	}
+    /*
+     *    接続先データベース名を設定
+     */
+    protected function setDatabaseName( Charcoal_String $db_name )
+    {
+        $this->_db_name = $db_name;
+    }
 
-	/*
-	 *    接続時の文字コードを取得
-	 */
-	public function getCharacterSet()
-	{
-		return $this->_charset;
-	}
+    /*
+     *    接続時の文字コードを取得
+     */
+    public function getCharacterSet()
+    {
+        return $this->_charset;
+    }
 
-	/*
-	 *    接続時の文字コードを設定
-	 */
-	protected function setCharacterSet( Charcoal_String $charset )
-	{
-		$this->_charset = $charset;
-	}
+    /*
+     *    接続時の文字コードを設定
+     */
+    protected function setCharacterSet( Charcoal_String $charset )
+    {
+        $this->_charset = $charset;
+    }
 
-	/*
-	 *    接続時のオートコミットを取得
-	 */
-	public function getAutoCommit()
-	{
-		return $this->_charset;
-	}
+    /*
+     *    接続時のオートコミットを取得
+     */
+    public function getAutoCommit()
+    {
+        return $this->_charset;
+    }
 
-	/*
-	 *    接続時のオートコミットを設定
-	 */
-	protected function setAutoCommit( Charcoal_Boolean $autocommit )
-	{
-		$this->_autocommit = $autocommit;
-	}
+    /*
+     *    接続時のオートコミットを設定
+     */
+    protected function setAutoCommit( Charcoal_Boolean $autocommit )
+    {
+        $this->_autocommit = $autocommit;
+    }
 
-	/*
-	 *    自動コミット機能をON/OFF
-	 */
-	public function autoCommit( Charcoal_Boolean $onoff = NULL )
-	{
-		if ( $onoff === NULL ){
-			$onoff = b(TRUE);
-		}
+    /*
+     *    自動コミット機能をON/OFF
+     */
+    public function autoCommit( Charcoal_Boolean $onoff = NULL )
+    {
+        if ( $onoff === NULL ){
+            $onoff = b(TRUE);
+        }
 
-		try {
-			// 接続処理
-			$this->connect();
-		
-			$this->_connection->autoCommit( $onoff->isTrue() );
-			
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
-		}
-	}
+        try {
+            // 接続処理
+            $this->connect();
 
-	/*
-	 *   ランザクションを開始
-	 *
-	 *   PEAR:DBにbeginTransに相当する関数がないのでautoAommit(FALSE)で代用
-	 */
-	public function beginTrans()
-	{
-		try {
-			// 接続処理
-			$this->connect();
+            $this->_connection->autoCommit( $onoff->isTrue() );
 
-			$this->_connection->autoCommit( FALSE );
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
-		}
-	}
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
+            _throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
+        }
+    }
 
-	/*
-	 *    コミットを発行
-	 */
-	public function commitTrans()
-	{
-		try {
-			// 接続処理
-			$this->connect();
+    /*
+     *   ランザクションを開始
+     *
+     *   PEAR:DBにbeginTransに相当する関数がないのでautoAommit(FALSE)で代用
+     */
+    public function beginTrans()
+    {
+        try {
+            // 接続処理
+            $this->connect();
 
-			$this->_connection->commit();
-			
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
-		}
-	}
+            $this->_connection->autoCommit( FALSE );
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
+            _throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
+        }
+    }
 
-	/*
-	 *    ロールバックを発行
-	 */
-	public function rollbackTrans()
-	{
-		try {
-			// 接続処理
-			$this->connect();
+    /*
+     *    コミットを発行
+     */
+    public function commitTrans()
+    {
+        try {
+            // 接続処理
+            $this->connect();
 
-			$this->_connection->rollback();
-			
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
-			_throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
-		}
-	}
+            $this->_connection->commit();
 
-	/*
-	 *    接続
-	 */
-	public function connect( $force = FALSE )
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
+            _throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
+        }
+    }
 
-		// 接続済みなら何もしない
-		if ( $this->_connected && !$force ){
-			return;
-		}
+    /*
+     *    ロールバックを発行
+     */
+    public function rollbackTrans()
+    {
+        try {
+            // 接続処理
+            $this->connect();
 
-		$timer_handle = Charcoal_Benchmark::start();
+            $this->_connection->rollback();
 
-		$backend   = $this->_backend;
-		$user      = $this->_user;
-		$password  = $this->_password;
-		$db_name   = $this->_db_name;
-		$server    = $this->_server;
-		$charset   = $this->_charset;
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
+            _throw( new Charcoal_DBDataSourceException( __METHOD__." Failed.", $e ) );
+        }
+    }
 
-		require_once( 'DB.php' );
+    /*
+     *    接続
+     */
+    public function connect( $force = FALSE )
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		$DSN = array(
-		    'phptype'  => $backend->getValue(),
-		    'username' => $user->getValue(),
-		    'password' => $password->getValue(),
-		    'hostspec' => $server->getValue(),
-		    'database' => $db_name->getValue(),
-		);
-		$DSN = v($DSN);
+        // 接続済みなら何もしない
+        if ( $this->_connected && !$force ){
+            return;
+        }
 
-		$db_string = nl2br($DSN->toString());
+        $timer_handle = Charcoal_Benchmark::start();
 
-		try{
-			log_info( "debug,sql,data_source", "data_source", "connecting database: DSN=[$db_string]" );
+        $backend   = $this->_backend;
+        $user      = $this->_user;
+        $password  = $this->_password;
+        $db_name   = $this->_db_name;
+        $server    = $this->_server;
+        $charset   = $this->_charset;
 
-			$db = DB::connect( $DSN->toArray() );
-			
-			if ( DB::isError($db) ){
-				$msg = 'message=[' . DB::errorMessage($db) . "] DSN=[$db_string]";
-				log_error( "debug,sql,data_source,error", "data_source", $msg );
-				_throw( new Charcoal_DBException( $msg ) );
-			}
-		
-			log_info( "debug,sql,data_source", "data_source", "connected database: DSN=[$db_string]" );
+        require_once( 'DB.php' );
 
-			$this->_connection = $db;
-			$this->_connected = true;
+        $DSN = array(
+            'phptype'  => $backend->getValue(),
+            'username' => $user->getValue(),
+            'password' => $password->getValue(),
+            'hostspec' => $server->getValue(),
+            'database' => $db_name->getValue(),
+        );
+        $DSN = v($DSN);
 
-			// 文字化け対策
-			$charset = $this->_charset;
-			if ( !$charset->isEmpty() ){
-				$charset = $charset->getValue();
-				switch( strtolower($charset) ){
-				case 'utf8':	$this->_query( s('SET NAMES `utf8`') );		break;
-				case 'ujis':	$this->_query( s('SET NAMES `ujis`') );		break;
-				case 'sjis':	$this->_query( s('SET NAMES `sjis`') );		break;
-				default:
-					_throw( new DataSourceConfigException( s('charset'), s('INVALID_CHARSET_VALUE: ' . $charset) ) );
-				}
-		//		$this->_query( "set character set $charset" );
-			}
+        $db_string = nl2br($DSN->toString());
 
-			// 自動コミット
-			$autocommit = $this->_autocommit;
-			$this->_connection->autoCommit( $autocommit->isTrue() );
-			log_info( "debug,sql,data_source", "data_source", "autocommit: [$autocommit]" );
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
+        try{
+            log_info( "debug,sql,data_source", "data_source", "connecting database: DSN=[$db_string]" );
 
-			$msg  = __METHOD__ . " failed: [db_string]$db_string";
+            $db = DB::connect( $DSN->toArray() );
 
-			_throw( new Charcoal_DBDataSourceException( $msg ) );
-		}
+            if ( DB::isError($db) ){
+                $msg = 'message=[' . DB::errorMessage($db) . "] DSN=[$db_string]";
+                log_error( "debug,sql,data_source,error", "data_source", $msg );
+                _throw( new Charcoal_DBException( $msg ) );
+            }
 
-		// ログ
-		$elapse = Charcoal_Benchmark::stop( $timer_handle );
-		log_debug( "debug,sql,data_source", "data_source", "connect() end. time=[$elapse]sec.");
-	}
+            log_info( "debug,sql,data_source", "data_source", "connected database: DSN=[$db_string]" );
 
-	/*
-	 *    接続を閉じる
-	 */
-	public function disconnect()
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+            $this->_connection = $db;
+            $this->_connected = true;
 
-		// 接続していないなら何もしない
-		if ( !$this->_connected ){
-			return;
-		}
+            // 文字化け対策
+            $charset = $this->_charset;
+            if ( !$charset->isEmpty() ){
+                $charset = $charset->getValue();
+                switch( strtolower($charset) ){
+                case 'utf8':    $this->_query( s('SET NAMES `utf8`') );        break;
+                case 'ujis':    $this->_query( s('SET NAMES `ujis`') );        break;
+                case 'sjis':    $this->_query( s('SET NAMES `sjis`') );        break;
+                default:
+                    _throw( new DataSourceConfigException( s('charset'), s('INVALID_CHARSET_VALUE: ' . $charset) ) );
+                }
+        //        $this->_query( "set character set $charset" );
+            }
 
-		// 切断
-		$this->_connection->disconnect();
+            // 自動コミット
+            $autocommit = $this->_autocommit;
+            $this->_connection->autoCommit( $autocommit->isTrue() );
+            log_info( "debug,sql,data_source", "data_source", "autocommit: [$autocommit]" );
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
 
-		$this->_connected = FALSE;
-	}
+            $msg  = __METHOD__ . " failed: [db_string]$db_string";
 
-	/*
-	 *    パラメータをログ文字列コードに変換するコールバック
-	 */
-	private function logString( $param )
-	{
-		$db_code = Profile::getString( s('DB_CODE') );
-		$log_code = Profile::getString( s('LOG_CODE') );
+            _throw( new Charcoal_DBDataSourceException( $msg ) );
+        }
 
-		return mb_convert_encoding( $param, $log_code, $db_code );
-	}
+        // ログ
+        $elapse = Charcoal_Benchmark::stop( $timer_handle );
+        log_debug( "debug,sql,data_source", "data_source", "connect() end. time=[$elapse]sec.");
+    }
 
-	/*
-	 *    プリペアドステートメントの発行
-	 */
-	private function _prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
-	{
-		$timer_handle = Charcoal_Benchmark::start();
+    /*
+     *    接続を閉じる
+     */
+    public function disconnect()
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        // 接続していないなら何もしない
+        if ( !$this->_connected ){
+            return;
+        }
 
-		$sql = $sql->getValue();
+        // 切断
+        $this->_connection->disconnect();
+
+        $this->_connected = FALSE;
+    }
+
+    /*
+     *    パラメータをログ文字列コードに変換するコールバック
+     */
+    private function logString( $param )
+    {
+        $db_code = Profile::getString( s('DB_CODE') );
+        $log_code = Profile::getString( s('LOG_CODE') );
+
+        return mb_convert_encoding( $param, $log_code, $db_code );
+    }
+
+    /*
+     *    プリペアドステートメントの発行
+     */
+    private function _prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
+    {
+        $timer_handle = Charcoal_Benchmark::start();
+
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
+        $sql = $sql->getValue();
 
 //print "SQL:$sql start<BR>";
-		$conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'DB', 'PHP' );
-		$log_params = $conv->convertArray( v($params) );
-		$log_message = "[SQL]" . $sql . ($params ? " [params]" . implode(",",$log_params) :'');
-		log_debug( "sql,debug", $log_message );
+        $conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'DB', 'PHP' );
+        $log_params = $conv->convertArray( v($params) );
+        $log_message = "[SQL]" . $sql . ($params ? " [params]" . implode(",",$log_params) :'');
+        log_debug( "sql,debug", $log_message );
 
 //print "SQL:$sql<BR>";
 /*
-		for( $i=0; $i<count($params); $i++ ){
-			$p1 = $params[$i];
-			if ( is_string($p1) ){
-				$params[$i] = $p1;
-			}
-		}
+        for( $i=0; $i<count($params); $i++ ){
+            $p1 = $params[$i];
+            if ( is_string($p1) ){
+                $params[$i] = $p1;
+            }
+        }
 */
 
-		$stmt = $this->_connection->prepareExecute($sql);
-	
-		if ( DB::isError($stmt) ){
-			$msg = $stmt->getMessage() . "(" . $stmt->getCode() . ")";
-			log_error( "system", $msg );
-			log_error( "sql,debug", "...FAILED: $msg" );
-			_throw( new Charcoal_DBDataSourceException( $msg ) );
-		}
+        $stmt = $this->_connection->prepareExecute($sql);
 
-		$params = $params ? $params->toArray() : array();
+        if ( DB::isError($stmt) ){
+            $msg = $stmt->getMessage() . "(" . $stmt->getCode() . ")";
+            log_error( "system", $msg );
+            log_error( "sql,debug", "...FAILED: $msg" );
+            _throw( new Charcoal_DBDataSourceException( $msg ) );
+        }
 
-		$result = $this->_connection->execute($stmt, $params);
-		
-		if ( DB::isError($result) ){
-			$msg = $result->getMessage();
-			log_error( "system", $msg );
-			log_error( "sql,debug", "...FAILED: $msg" );
-			_throw( new Charcoal_DBDataSourceException( $msg ) );
-		}
+        $params = $params ? $params->toArray() : array();
 
-		if ( is_object($result) ){
-			$numRows = $result->numRows();
-			log_debug( "sql,debug", "...success(numRows=$numRows)" );
-		}
-		else{
-			$numRows = null;
-			log_debug( "sql,debug", "...success($result)" );
-		}
+        $result = $this->_connection->execute($stmt, $params);
 
-		// ログ
-		$elapse = Charcoal_Benchmark::stop( $timer_handle );
-		log_debug( 'sql,debug', "prepareExecute() end. time=[$elapse]sec.");
+        if ( DB::isError($result) ){
+            $msg = $result->getMessage();
+            log_error( "system", $msg );
+            log_error( "sql,debug", "...FAILED: $msg" );
+            _throw( new Charcoal_DBDataSourceException( $msg ) );
+        }
 
-		return $result;
-	}
+        if ( is_object($result) ){
+            $numRows = $result->numRows();
+            log_debug( "sql,debug", "...success(numRows=$numRows)" );
+        }
+        else{
+            $numRows = null;
+            log_debug( "sql,debug", "...success($result)" );
+        }
 
-	/*
-	 *    SQLをそのまま発行
-	 */
-	private function _query( Charcoal_String $sql )
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        // ログ
+        $elapse = Charcoal_Benchmark::stop( $timer_handle );
+        log_debug( 'sql,debug', "prepareExecute() end. time=[$elapse]sec.");
 
-		$sql = $sql->getValue();
+        return $result;
+    }
 
-		log_info( "sql", "[SQL]" . $sql );
+    /*
+     *    SQLをそのまま発行
+     */
+    private function _query( Charcoal_String $sql )
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		$result = $this->_connection->query( $sql );
-			
-		if ( DB::isError($result) ){
-			$msg = $result->getMessage() . " [SQL]" . $sql;
-			_throw( new Charcoal_DBDataSourceException( $msg ) );
-		}
+        $sql = $sql->getValue();
 
-		return $result;
-	}
+        log_info( "sql", "[SQL]" . $sql );
 
-	/*
-	 *    SQLをそのまま発行（結果セットあり）
-	 */
-	public function query( Charcoal_String $sql )
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        $result = $this->_connection->query( $sql );
 
-		// 接続処理
-		$this->connect();
+        if ( DB::isError($result) ){
+            $msg = $result->getMessage() . " [SQL]" . $sql;
+            _throw( new Charcoal_DBDataSourceException( $msg ) );
+        }
 
-		$timer_handle = Charcoal_Benchmark::start();
+        return $result;
+    }
 
-		// SQLを実行して結果セットを得る
-		$resultset = $this->_query( $sql );
+    /*
+     *    SQLをそのまま発行（結果セットあり）
+     */
+    public function query( Charcoal_String $sql )
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		// ログ
-		$elapse = Charcoal_Benchmark::stop( $timer_handle );
-		log_debug( 'sql', "query() end. time=[$elapse]sec.");
+        // 接続処理
+        $this->connect();
 
-		// 結果セットを返却
-		return $resultset;
-	}
+        $timer_handle = Charcoal_Benchmark::start();
 
-	/*
-	 *    SQLをそのまま発行（結果セットなし）
-	 */
-	public function execute( Charcoal_String $sql )
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        // SQLを実行して結果セットを得る
+        $resultset = $this->_query( $sql );
 
-		// 接続処理
-		$this->connect();
+        // ログ
+        $elapse = Charcoal_Benchmark::stop( $timer_handle );
+        log_debug( 'sql', "query() end. time=[$elapse]sec.");
 
-		$start = Benchmark::nowTime();
+        // 結果セットを返却
+        return $resultset;
+    }
 
-		// SQLを実行
-		$this->_query( $sql );
+    /*
+     *    SQLをそのまま発行（結果セットなし）
+     */
+    public function execute( Charcoal_String $sql )
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		// ログ
-		$now = Benchmark::nowTime();
-		$elapse = round( $now - $start, 4 );
-		log_debug( 'sql', "execute() end. time=[$elapse]sec.");
-	}
+        // 接続処理
+        $this->connect();
 
-	/*
-	 *    プリペアドステートメントの発行
-	 */
-	public function prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        $start = Benchmark::nowTime();
 
-		$result = null;
+        // SQLを実行
+        $this->_query( $sql );
 
-		// 接続処理
-		$this->connect();
-		
-		try {
-			// statementの実行
-			$result = $this->_prepareExecute( $sql, $params );
-		}
-		catch ( Exception $e )
-		{
-			_catch( $e );
+        // ログ
+        $now = Benchmark::nowTime();
+        $elapse = round( $now - $start, 4 );
+        log_debug( 'sql', "execute() end. time=[$elapse]sec.");
+    }
 
-			_throw( new Charcoal_DBDataSourceException( __METHOD__ . " failed: [SQL]$sql [params]$params", $e ) );
-		}
+    /*
+     *    プリペアドステートメントの発行
+     */
+    public function prepareExecute( Charcoal_String $sql, Charcoal_Vector $params = NULL )
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		return $result;
-	}
+        $result = null;
 
-	/*
-	 *    実行結果件数取得
-	 */
-	function numRows( $result )
-	{
-		return $result->numRows();
-	}
+        // 接続処理
+        $this->connect();
 
-	/*
-	 *    フェッチ処理（連想配列で返却）
-	 */
-	public function fetchAssoc( $result )
-	{
-		Charcoal_ParamTrait::validateResource( 1, $result );
+        try {
+            // statementの実行
+            $result = $this->_prepareExecute( $sql, $params );
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
 
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+            _throw( new Charcoal_DBDataSourceException( __METHOD__ . " failed: [SQL]$sql [params]$params", $e ) );
+        }
 
-		if ( !is_object($result) ){
-			_throw( new Charcoal_NonObjectException( $result ) );
-		}
-		return $result->fetchRow(DB_FETCHMODE_ASSOC);
-	}
+        return $result;
+    }
 
-	/*
-	 *    フェッチ処理（配列で返却）
-	 */
-	public function fetchArray( $result )
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+    /*
+     *    実行結果件数取得
+     */
+    function numRows( $result )
+    {
+        return $result->numRows();
+    }
 
-		if ( $result === NULL ){
-			_throw( new NullPointerException() );
-		}
-		if ( !is_object($result) ){
-			_throw( new NonObjectException( $result ) );
-		}
-		return $result->fetchRow(DB_FETCHMODE_ORDERED);
-	}
+    /*
+     *    フェッチ処理（連想配列で返却）
+     */
+    public function fetchAssoc( $result )
+    {
+        Charcoal_ParamTrait::validateResource( 1, $result );
 
-	/*
-	 *   最後に実行されたAUTO_INCREMENT値を取得
-	 */
-	public function getLastInsertId()
-	{
-		$flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		$sql  = 'select LAST_INSERT_ID()';
+        if ( !is_object($result) ){
+            _throw( new Charcoal_NonObjectException( $result ) );
+        }
+        return $result->fetchRow(DB_FETCHMODE_ASSOC);
+    }
 
-		$result = $this->prepareExecute( $sql, NULL );
+    /*
+     *    フェッチ処理（配列で返却）
+     */
+    public function fetchArray( $result )
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
 
-		if ( $row = $this->fetchArray($result) ){
-			$val = $row[0];
-			return $val;
-		}
+        if ( $result === NULL ){
+            _throw( new NullPointerException() );
+        }
+        if ( !is_object($result) ){
+            _throw( new NonObjectException( $result ) );
+        }
+        return $result->fetchRow(DB_FETCHMODE_ORDERED);
+    }
 
-		return -1;
-	}
+    /*
+     *   最後に実行されたAUTO_INCREMENT値を取得
+     */
+    public function getLastInsertId()
+    {
+        $flag = new Charcoal_ErrorReportingSwitcher(0,E_DEPRECATED);
+
+        $sql  = 'select LAST_INSERT_ID()';
+
+        $result = $this->prepareExecute( $sql, NULL );
+
+        if ( $row = $this->fetchArray($result) ){
+            $val = $row[0];
+            return $val;
+        }
+
+        return -1;
+    }
 
 }
 

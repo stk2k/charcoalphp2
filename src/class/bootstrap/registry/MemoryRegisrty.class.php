@@ -11,32 +11,32 @@
 
 class Charcoal_MemoryRegistry extends Charcoal_AbstractRegistry
 {
-	private $sandbox;
+    private $sandbox;
 
-	/**
-	 *  Constructor
-	 */
-	public function __construct( $sandbox )
-	{
-//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+    /**
+     *  Constructor
+     */
+    public function __construct( $sandbox )
+    {
+//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
-		$this->sandbox = $sandbox;
+        $this->sandbox = $sandbox;
 
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
-	/**
-	 * get configuration data by key
-	 * 
-	 * @param string $key      registry data id
-	 *
-	 * @return array           configuration data
-	 */
-	public function get( $key )
-	{
-		// 'key' parameter is regarded as memory path(accessed by 'php://{memory-path}') in this class
-		
-	}
+    /**
+     * get configuration data by key
+     *
+     * @param string $key      registry data id
+     *
+     * @return array           configuration data
+     */
+    public function get( $key )
+    {
+        // 'key' parameter is regarded as memory path(accessed by 'php://{memory-path}') in this class
+
+    }
 
 }
 

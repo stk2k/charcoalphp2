@@ -15,57 +15,57 @@ class Foo
 
 class ClassTestTask extends Charcoal_TestTask
 {
-	/**
-	 * check if action will be processed
-	 */
-	public function isValidAction( $action )
-	{
-		switch( $action ){
-		case "new_instance":
-			log_debug( "debug,event", "action is valid: $action" );
-			return TRUE;
-		}
-		log_debug( "debug,event", "action is invalid: $action" );
-		return FALSE;
-	}
+    /**
+     * check if action will be processed
+     */
+    public function isValidAction( $action )
+    {
+        switch( $action ){
+        case "new_instance":
+            log_debug( "debug,event", "action is valid: $action" );
+            return TRUE;
+        }
+        log_debug( "debug,event", "action is invalid: $action" );
+        return FALSE;
+    }
 
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
 
-	}
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		$action = us($action);
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        $action = us($action);
 
-		log_debug( "debug,event", "action:$action" );
+        log_debug( "debug,event", "action:$action" );
 
-		switch( $action ){
-		case "new_instance":
-			$klass = new Charcoal_Class( s('Foo') );
+        switch( $action ){
+        case "new_instance":
+            $klass = new Charcoal_Class( s('Foo') );
 
-			$object = $klass->newInstance();
+            $object = $klass->newInstance();
 
-			$this->assertEquals( "Foo", get_class($object) );
+            $this->assertEquals( "Foo", get_class($object) );
 
-			return TRUE;
-		}
+            return TRUE;
+        }
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
 }
 

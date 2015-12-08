@@ -11,10 +11,10 @@
 
 class Charcoal_IntegerFormatException extends Charcoal_RuntimeException
 {
-	public function __construct( $value, $prev = NULL )
-	{
-		$value = Charcoal_System::toString( $value );
-		parent::__construct( "must be an INTEGER value: $value(" . gettype($value) . ")", $prev );
-	}
+    public function __construct( $value, $prev = NULL )
+    {
+        $value = Charcoal_System::toString( $value );
+        parent::__construct( "must be an INTEGER value: $value(" . gettype($value) . ")", $prev );
+    }
 }
 

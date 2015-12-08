@@ -11,20 +11,20 @@
 
 class Charcoal_PHPErrorException extends Charcoal_LogicException
 {
-	public $errno;
-	public $errstr;
-	public $errfile;
-	public $errline;
+    public $errno;
+    public $errstr;
+    public $errfile;
+    public $errline;
 
-	public function __construct( $errno, $errstr, $errfile, $errline, $prev = NULL )
-	{
-		$errno = Charcoal_System::phpErrorString( $errno );
-		parent::__construct( "PHP Error([$errno]$errstr [file]$errfile [line]$errline", $prev );
+    public function __construct( $errno, $errstr, $errfile, $errline, $prev = NULL )
+    {
+        $errno = Charcoal_System::phpErrorString( $errno );
+        parent::__construct( "PHP Error([$errno]$errstr [file]$errfile [line]$errline", $prev );
 
-		$this->errno   = $errno;
-		$this->errstr  = $errstr;
-		$this->errfile = $errfile;
-		$this->errline = $errline;
-	}
+        $this->errno   = $errno;
+        $this->errstr  = $errstr;
+        $this->errfile = $errfile;
+        $this->errline = $errline;
+    }
 }
 

@@ -10,63 +10,63 @@
 */
 class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
 {
-	const TAG = 'array_routing_rule';
+    const TAG = 'array_routing_rule';
 
-	private $proc_paths;
+    private $proc_paths;
 
-	/*
-	 * Construct object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /*
+     * Construct object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-		$rules_section = $config->getSection( 'routing rules' );
+        $rules_section = $config->getSection( 'routing rules' );
 
-		$patterns = $rules_section->getKeys();
+        $patterns = $rules_section->getKeys();
 
-		foreach( $patterns as $pattern ){
-			$proc_path = $rules_section->getString( $pattern );
-			if ( $proc_path === NULL ){
-				_throw( new Charcoal_RoutingRuleConfigException( $pattern, 'can not be NULL' ) );
-			}
-			$this->proc_paths[$pattern] = us($proc_path);
-		}
-			
-		log_info( 'system,debug,router', "proc_paths:" . print_r($this->proc_paths,true), self::TAG );
-	}
+        foreach( $patterns as $pattern ){
+            $proc_path = $rules_section->getString( $pattern );
+            if ( $proc_path === NULL ){
+                _throw( new Charcoal_RoutingRuleConfigException( $pattern, 'can not be NULL' ) );
+            }
+            $this->proc_paths[$pattern] = us($proc_path);
+        }
 
-	/*
-	 *  Get all keys
-	 *
-	 * @return array  
-	 */
-	public function getKeys()
-	{
-		return array_keys( $this->proc_paths );
-	}
+        log_info( 'system,debug,router', "proc_paths:" . print_r($this->proc_paths,true), self::TAG );
+    }
 
-	/*
-	 *  Get procedure path associated with a pattern
-	 *
-	 * @return string
-	 */
-	public function getProcPath( Charcoal_String $pattern )
-	{
-		$pattern = us($pattern);
+    /*
+     *  Get all keys
+     *
+     * @return array
+     */
+    public function getKeys()
+    {
+        return array_keys( $this->proc_paths );
+    }
 
-		return isset($this->proc_paths[$pattern]) ? $this->proc_paths[$pattern] : NULL;
-	}
+    /*
+     *  Get procedure path associated with a pattern
+     *
+     * @return string
+     */
+    public function getProcPath( Charcoal_String $pattern )
+    {
+        $pattern = us($pattern);
+
+        return isset($this->proc_paths[$pattern]) ? $this->proc_paths[$pattern] : NULL;
+    }
 
 }
 

@@ -18,11 +18,11 @@ switch($host)
 {
 case "localhost":
 default:
-	define( 'CHARCOAL_PROFILE', 'localhost' );
-	define( 'CHARCOAL_BASE_DIR',  dirname(dirname(dirname(dirname(__FILE__)))) );
-	define( 'CHARCOAL_HOME', CHARCOAL_BASE_DIR . '/charcoal' );
-	define( 'CHARCOAL_WEBAPP_DIR', CHARCOAL_BASE_DIR . "/charcoal/sample/web_app" );
-	break;
+    define( 'CHARCOAL_PROFILE', 'localhost' );
+    define( 'CHARCOAL_BASE_DIR',  dirname(dirname(dirname(dirname(__FILE__)))) );
+    define( 'CHARCOAL_HOME', CHARCOAL_BASE_DIR . '/charcoal' );
+    define( 'CHARCOAL_WEBAPP_DIR', CHARCOAL_BASE_DIR . "/charcoal/sample/web_app" );
+    break;
 }
 
 define( 'CHARCOAL_PROJECT', "charcoal" );

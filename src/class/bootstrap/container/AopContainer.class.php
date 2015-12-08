@@ -11,29 +11,29 @@
 
 class Charcoal_AopContainer extends Charcoal_AbstractContainer
 {
-	private $sandbox;
+    private $sandbox;
 
-	/**
-	 *  Constructor
-	 */
-	public function __construct( $sandbox )
-	{
-//		Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
+    /**
+     *  Constructor
+     */
+    public function __construct( $sandbox )
+    {
+//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
 
-		$this->sandbox = $sandbox;
+        $this->sandbox = $sandbox;
 
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
-	/**
-	 * get class source
-	 * 
-	 * @param Charcoal_String $path         virtual path of the class
-	 */
-	public function getClassSource( $path )
-	{
+    /**
+     * get class source
+     *
+     * @param Charcoal_String $path         virtual path of the class
+     */
+    public function getClassSource( $path )
+    {
 
-	}
+    }
 
 }
 

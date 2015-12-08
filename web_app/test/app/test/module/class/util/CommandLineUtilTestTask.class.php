@@ -11,86 +11,86 @@
 
 class CommandLineUtilTestTask extends Charcoal_TestTask
 {
-	/**
-	 * check if action will be processed
-	 */
-	public function isValidAction( $action )
-	{
-		switch( $action ){
-		case "split_params1":
-		case "split_params2":
-		case "split_params3":
-			return TRUE;
-		}
-		return FALSE;
-	}
+    /**
+     * check if action will be processed
+     */
+    public function isValidAction( $action )
+    {
+        switch( $action ){
+        case "split_params1":
+        case "split_params2":
+        case "split_params3":
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
 
-	}
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		$action = us($action);
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        $action = us($action);
 
-		switch( $action ){
-		case "split_params1":
+        switch( $action ){
+        case "split_params1":
 
-			$args_commandline = "foo bar baz";
+            $args_commandline = "foo bar baz";
 
-			$actual = Charcoal_CommandLineUtil::splitParams( s($args_commandline) );
+            $actual = Charcoal_CommandLineUtil::splitParams( s($args_commandline) );
 
-			$extected = array( "foo", "bar", "baz" );
+            $extected = array( "foo", "bar", "baz" );
 
-			$this->assertEquals( $extected, $actual );
+            $this->assertEquals( $extected, $actual );
 
-			return TRUE;
+            return TRUE;
 
-		case "split_params2":
+        case "split_params2":
 
-			$args_commandline = "foo\\'s bar\\'s 'baz'";
+            $args_commandline = "foo\\'s bar\\'s 'baz'";
 
-			$actual = Charcoal_CommandLineUtil::splitParams( s($args_commandline) );
+            $actual = Charcoal_CommandLineUtil::splitParams( s($args_commandline) );
 
-			$extected = array( "foo's", "bar's", "baz" );
+            $extected = array( "foo's", "bar's", "baz" );
 
-			$this->assertEquals( $extected, $actual );
+            $this->assertEquals( $extected, $actual );
 
-			return TRUE;
+            return TRUE;
 
 
-		case "split_params3":
+        case "split_params3":
 
-			$args_commandline = "'Teacher\\'s Voice' \"Teacher\\'s Voice\" 'Teacher\\\"s Voice'";
+            $args_commandline = "'Teacher\\'s Voice' \"Teacher\\'s Voice\" 'Teacher\\\"s Voice'";
 
-			$actual = Charcoal_CommandLineUtil::splitParams( s($args_commandline) );
+            $actual = Charcoal_CommandLineUtil::splitParams( s($args_commandline) );
 
 print_r($actual);
 
 
-			$extected = array( "Teacher's Voice", "Teacher's Voice", "Teacher\"s Voice" );
+            $extected = array( "Teacher's Voice", "Teacher's Voice", "Teacher\"s Voice" );
 
-			$this->assertEquals( $extected, $actual );
+            $this->assertEquals( $extected, $actual );
 
-			return TRUE;
-		}
+            return TRUE;
+        }
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
 }
 

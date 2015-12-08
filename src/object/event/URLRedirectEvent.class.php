@@ -11,44 +11,44 @@
 
 class Charcoal_URLRedirectEvent extends Charcoal_SystemEvent 
 {
-	private $_url;
+    private $_url;
 
-	/**
-	 *	Construct object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     *    Construct object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 *	Set URL
-	 *
-	 * @param string  URL
-	 */
-	public function setURL( Charcoal_String $url )
-	{
-		$this->_url = us($url);
-	}
+    /**
+     *    Set URL
+     *
+     * @param string  URL
+     */
+    public function setURL( Charcoal_String $url )
+    {
+        $this->_url = us($url);
+    }
 
-	/**
-	 *	Get URL
-	 *
-	 * @return string
-	 */
-	public function getURL()
-	{
-		return $this->_url;
-	}
+    /**
+     *    Get URL
+     *
+     * @return string
+     */
+    public function getURL()
+    {
+        return $this->_url;
+    }
 
-	/*
-	 *  String expression of this object
-	 *
-	 * @return string
-	 */
-	public function toString()
-	{
-		return '[class=' . get_class($this) . ' hash=' . $this->hash() . ' url=' . $this->_url . ' priority=' . $this->getPriority() . ']';
-	}
+    /*
+     *  String expression of this object
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return '[class=' . get_class($this) . ' hash=' . $this->hash() . ' url=' . $this->_url . ' priority=' . $this->getPriority() . ']';
+    }
 }
 

@@ -11,9 +11,9 @@
 
 class Charcoal_RoutingRuleSyntaxErrorException extends Charcoal_ConfigException
 {
-	public function __construct( $rule, $message = NULL, $prev = NULL )
-	{
-		parent::__construct( "[rule]$rule [message]$message", $prev );
-	}
+    public function __construct( $rule, $message = NULL, $prev = NULL )
+    {
+        parent::__construct( "[rule]$rule [message]$message", $prev );
+    }
 }
 

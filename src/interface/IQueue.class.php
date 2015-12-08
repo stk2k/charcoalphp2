@@ -10,19 +10,19 @@
 */
 interface Charcoal_IQueue
 {
-	/*
-	 * Take item from the queue
-	 *
-	 * @return mixed      item
-	 */
-	public function dequeue();
+    /*
+     * Take item from the queue
+     *
+     * @return mixed      item
+     */
+    public function dequeue();
 
-	/*
-	 * Add item to the queue
-	 *
+    /*
+     * Add item to the queue
+     *
      * @param mixed $item       item to add
-	 */
-	public function enqueue( $item );
-	
+     */
+    public function enqueue( $item );
+
 }
 

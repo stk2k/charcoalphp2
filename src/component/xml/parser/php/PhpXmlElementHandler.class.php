@@ -11,14 +11,14 @@
 
 interface Charcoal_PhpXmlElementHandler
 {
-	/**
-	*　will be callbacked when a XML element is found
-	*/
-	public function onXmlElementEnd( PhpXmlElement $element );
+    /**
+    *　will be callbacked when a XML element is found
+    */
+    public function onXmlElementEnd( PhpXmlElement $element );
 
-	/**
-	*　will be callbacked when a XML element is found
-	*/
-	public function onXmlElementStart( PhpXmlElement $element );
+    /**
+    *　will be callbacked when a XML element is found
+    */
+    public function onXmlElementStart( PhpXmlElement $element );
 }
 

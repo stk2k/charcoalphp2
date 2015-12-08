@@ -11,88 +11,88 @@
 
 abstract class Charcoal_Collection extends Charcoal_Object implements Countable, Charcoal_IUnboxable, IteratorAggregate
 {
-	protected $values;
+    protected $values;
 
-	/*
-	 *	コンストラクタ
-	 */
-	public function __construct( $values = array() )
-	{
-		parent::__construct();
+    /*
+     *    コンストラクタ
+     */
+    public function __construct( $values = array() )
+    {
+        parent::__construct();
 
-		if ( $values ){
-			if ( is_array($values) ){
-				$this->values = $values;
-			}
-			else{
-				_throw( new NonArrayException($values) );
-			}
-		}
-		else{
-			$this->values = array();
-		}
-	}
+        if ( $values ){
+            if ( is_array($values) ){
+                $this->values = $values;
+            }
+            else{
+                _throw( new NonArrayException($values) );
+            }
+        }
+        else{
+            $this->values = array();
+        }
+    }
 
-	/*
-	 *	要素数を取得
-	 */
-	public function count()
-	{
-		return count( $this->values );
-	}
+    /*
+     *    要素数を取得
+     */
+    public function count()
+    {
+        return count( $this->values );
+    }
 
-	/*
-	 *	要素数を取得
-	 */
-	public function size()
-	{
-		return count( $this->values );
-	}
+    /*
+     *    要素数を取得
+     */
+    public function size()
+    {
+        return count( $this->values );
+    }
 
-	/**
-	 *	unbox primitive value
-	 */
-	public function unbox()
-	{
-		return $this->values;
-	}
+    /**
+     *    unbox primitive value
+     */
+    public function unbox()
+    {
+        return $this->values;
+    }
 
-	/**
-	 *	Remove all elements
-	 */
-	public function clear()
-	{
-		$this->values = array();
-	}
+    /**
+     *    Remove all elements
+     */
+    public function clear()
+    {
+        $this->values = array();
+    }
 
-	/**
-	 *	Get all values with keys
-	 *
-	 * @return array
-	 */
-	public function getAll()
-	{
-		return $this->values;
-	}
+    /**
+     *    Get all values with keys
+     *
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->values;
+    }
 
-	/**
-	 *	IteratorAggregate interface: valid() implementation
-	 */
-	public function getIterator()
-	{
-		return new ArrayIterator( $this->values );
-	}
+    /**
+     *    IteratorAggregate interface: valid() implementation
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator( $this->values );
+    }
 
-	/**
-	 *	Applies a callback to all elements
-	 *
-	 * @return array
-	 */
-	public function map( $callable )
-	{
-		$this->values = array_map( $callable, $this->values );
-		return $this;
-	}
+    /**
+     *    Applies a callback to all elements
+     *
+     * @return array
+     */
+    public function map( $callable )
+    {
+        $this->values = array_map( $callable, $this->values );
+        return $this;
+    }
 
 }
 

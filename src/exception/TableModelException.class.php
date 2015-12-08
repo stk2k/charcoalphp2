@@ -11,14 +11,14 @@
 
 class Charcoal_TableModelException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_ITableModel $model, Charcoal_String $message, Exception $previous = NULL )
-	{
-		$msg  = " [table model]" . get_class($model);
-		if ( $message ){
-			$msg .= " [message]$message";
-		}
+    public function __construct( Charcoal_ITableModel $model, Charcoal_String $message, Exception $previous = NULL )
+    {
+        $msg  = " [table model]" . get_class($model);
+        if ( $message ){
+            $msg .= " [message]$message";
+        }
 
-		if ( $previous ) parent::__construct( s($msg), $previous ); else parent::__construct( s($msg) );
-	}
+        if ( $previous ) parent::__construct( s($msg), $previous ); else parent::__construct( s($msg) );
+    }
 }
 

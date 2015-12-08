@@ -10,50 +10,50 @@
 */
 class Charcoal_SimpleTokenGenerator extends Charcoal_AbstractTokenGenerator
 {
-	private $algorithm;
+    private $algorithm;
 
-	/*
-	 * コンストラクタ
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /*
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-	/**
-	 * Initialize instance
-	 *
-	 * @param Charcoal_Config $config   configuration data
-	 */
-	public function configure( $config )
-	{
-		parent::configure( $config );
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        parent::configure( $config );
 
-		$this->algorithm  = $config->getString( 'algorithm', 'sha1' );
+        $this->algorithm  = $config->getString( 'algorithm', 'sha1' );
 
-		log_debug( "debug", "token algorithm: {$this->algorithm}" );
-	}
+        log_debug( "debug", "token algorithm: {$this->algorithm}" );
+    }
 
-	/**
-	 * generate a token
-	 */
-	public function generateToken()
-	{
-		$algorithm = us($this->algorithm);
+    /**
+     * generate a token
+     */
+    public function generateToken()
+    {
+        $algorithm = us($this->algorithm);
 
-		$token = '';
-		switch( $algorithm )
-		{
-		case 'sha1':
-			$token = Charcoal_System::hash( 'sha1' );
-			break;
-		case 'md5':
-			$token = Charcoal_System::hash( 'md5' );
-			break;
-		}
+        $token = '';
+        switch( $algorithm )
+        {
+        case 'sha1':
+            $token = Charcoal_System::hash( 'sha1' );
+            break;
+        case 'md5':
+            $token = Charcoal_System::hash( 'md5' );
+            break;
+        }
 
-		return $token;
-	}
+        return $token;
+    }
 
 
 }

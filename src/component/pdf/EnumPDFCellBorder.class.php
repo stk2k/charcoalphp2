@@ -11,12 +11,12 @@
 
 class EnumPDFCellBorder extends Charcoal_Enum
 {
-	const ALL               = 0xffff;		// LEFT | TOP | RIGHT | BOTTOM
-	const NOTHING           = 0x0000;		// 
-	const LEFT              = 0x0001;		// LEFT
-	const TOP               = 0x0002;		// TOP
-	const RIGHT             = 0x0004;		// RIGHT
-	const BOTTOM            = 0x0008;		// BOTTOM
+    const ALL               = 0xffff;        // LEFT | TOP | RIGHT | BOTTOM
+    const NOTHING           = 0x0000;        //
+    const LEFT              = 0x0001;        // LEFT
+    const TOP               = 0x0002;        // TOP
+    const RIGHT             = 0x0004;        // RIGHT
+    const BOTTOM            = 0x0008;        // BOTTOM
 
 }
 

@@ -12,10 +12,10 @@
 
 class Charcoal_PhpSourceParserException extends Charcoal_RuntimeException 
 {
-	public function __construct( $err_code, $message, Exception $prev = NULL )
-	{
-		parent::__construct( "[code]$err_code [message]$message", $prev );
-	}
+    public function __construct( $err_code, $message, Exception $prev = NULL )
+    {
+        parent::__construct( "[code]$err_code [message]$message", $prev );
+    }
 
 }
 

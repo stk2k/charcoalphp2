@@ -11,10 +11,10 @@
 
 class Charcoal_NotSupportedOperationException extends Charcoal_RuntimeException
 {
-	public function __construct( $operation, $prev = NULL )
-	{
-		parent::__construct( "not supported operation: $operation", $prev );
-	}
+    public function __construct( $operation, $prev = NULL )
+    {
+        parent::__construct( "not supported operation: $operation", $prev );
+    }
 }
 
 

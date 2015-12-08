@@ -17,11 +17,11 @@ class BlogCategoryTableModel extends Charcoal_DefaultTableModel
     public $blog_category_id    = '@field @type:int(11) @pk @insert:no @update:no @serial';
     public $blog_category_name  = '@field @type:vachar(255) @insert:value @update:value';
 
-	// returns model's own DTO
+    // returns model's own DTO
     public function createDTO( $values = array() )
     {
         return new BlogCategoryTableDTO( $values );
     }
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

@@ -11,8 +11,8 @@
 
 class EnumPDFPaperSize extends Charcoal_Enum
 {
-	const A3                   = 0;		// A3
-	const A4                   = 1;		// A4
+    const A3                   = 0;        // A3
+    const A4                   = 1;        // A4
 
 }
 

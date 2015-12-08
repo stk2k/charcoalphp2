@@ -11,15 +11,15 @@
 
 class Charcoal_ArrayEnvironment extends Charcoal_AbstractEnvironment
 {
-	/**
-	 *  Constructor
-	 */
-	public function __construct( $values = array() )
-	{
-		$this->values = $values;
+    /**
+     *  Constructor
+     */
+    public function __construct( $values = array() )
+    {
+        $this->values = $values;
 
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
 }
 

@@ -18,11 +18,11 @@ class TestTableModel extends Charcoal_DefaultTableModel
     public $name                          = '@field @type:text @insert:value @update:value';
     public $price                         = '@field @type:int(11) @insert:value @update:value';
 
-	// returns model's own DTO
+    // returns model's own DTO
     public function createDTO( $values = array() )
     {
         return new TestTableDTO( $values );
     }
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

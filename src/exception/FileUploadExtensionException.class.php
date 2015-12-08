@@ -11,10 +11,10 @@
 
 class Charcoal_FileUploadExtensionException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_UploadedFile $file, $prev = NULL )
-	{
-		parent::__construct( "File upload failed(UPLOAD_ERR_EXTENSION): $path", $prev );
-	}
+    public function __construct( Charcoal_UploadedFile $file, $prev = NULL )
+    {
+        parent::__construct( "File upload failed(UPLOAD_ERR_EXTENSION): $path", $prev );
+    }
 
 }
 

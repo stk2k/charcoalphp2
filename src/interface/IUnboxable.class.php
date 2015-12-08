@@ -10,9 +10,9 @@
 */
 interface Charcoal_IUnboxable
 {
-	/**
-	 *	unbox primitive value
-	 */
-	public function unbox();
+    /**
+     *    unbox primitive value
+     */
+    public function unbox();
 }
 

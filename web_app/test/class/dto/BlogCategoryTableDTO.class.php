@@ -16,4 +16,4 @@ class BlogCategoryTableDTO extends Charcoal_TableDTO
     public $blog_category_name;
 }
 
-return __FILE__;	// end of file
+return __FILE__;    // end of file

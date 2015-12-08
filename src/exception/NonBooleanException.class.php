@@ -11,10 +11,10 @@
 
 class Charcoal_NonBooleanException extends Charcoal_RuntimeException
 {
-	public function __construct( $value, $prev = NULL )
-	{
-		parent::__construct( "can't convert to boolean object: $value", $prev );
-	}
+    public function __construct( $value, $prev = NULL )
+    {
+        parent::__construct( "can't convert to boolean object: $value", $prev );
+    }
 }
 
 

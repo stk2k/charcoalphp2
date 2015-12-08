@@ -11,66 +11,66 @@
 
 class SimplePieTestTask extends Charcoal_TestTask
 {
-	/**
-	 * check if action will be processed
-	 */
-	public function isValidAction( $action )
-	{
-		switch( $action ){
-		case "get_feed":
-			return TRUE;
-		}
-		return FALSE;
-	}
+    /**
+     * check if action will be processed
+     */
+    public function isValidAction( $action )
+    {
+        switch( $action ){
+        case "get_feed":
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
 
-	}
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		$request   = $context->getRequest();
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        $request   = $context->getRequest();
 
-		$action = us($action);
+        $action = us($action);
 
-		// SimplePie
-		$simplepie = $context->getComponent( 'simplepie@:rss:simplepie' );
+        // SimplePie
+        $simplepie = $context->getComponent( 'simplepie@:rss:simplepie' );
 
-		$config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
+        $config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
 
-		$config->set( 'enable_cahche', true );
-		$config->set( 'cache_dir', CHARCOAL_CACHE_DIR . '/simplepie' );
-		$config->set( 'duration', 1800 );
+        $config->set( 'enable_cahche', true );
+        $config->set( 'cache_dir', CHARCOAL_CACHE_DIR . '/simplepie' );
+        $config->set( 'duration', 1800 );
 
-		$simplepie->configure( $config );
+        $simplepie->configure( $config );
 
-		switch( $action ){
-		// Send mail
-		case "get_feed":
-			//$feed      = $simplepie->getFeed( 'http://charcoalphp.org/test/rss/index.xml' );
-			$feed      = $simplepie->getFeed( 'http://1000mg.jp/feed' );
+        switch( $action ){
+        // Send mail
+        case "get_feed":
+            //$feed      = $simplepie->getFeed( 'http://charcoalphp.org/test/rss/index.xml' );
+            $feed      = $simplepie->getFeed( 'http://1000mg.jp/feed' );
 
-			ad( $feed );
-			
-			return TRUE;
-		}
+            ad( $feed );
 
-		return FALSE;
-	}
+            return TRUE;
+        }
+
+        return FALSE;
+    }
 
 }
 

@@ -11,10 +11,10 @@
 
 class Charcoal_FileOpenException extends Charcoal_RuntimeException
 {
-	public function __construct( $path, $prev = NULL )
-	{
-		parent::__construct( "File[$path] could not be opened.", $prev );
-	}
+    public function __construct( $path, $prev = NULL )
+    {
+        parent::__construct( "File[$path] could not be opened.", $prev );
+    }
 }
 
 

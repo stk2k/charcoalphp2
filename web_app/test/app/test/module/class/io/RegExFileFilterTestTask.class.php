@@ -10,98 +10,98 @@
 */
 class RegExFileFilterTestTask extends Charcoal_TestTask
 {
-	/**
-	 * check if action will be processed
-	 */
-	public function isValidAction( $action )
-	{
-		switch( $action ){
-		case "no_regex":
-		case "simple_regex":
-		case "complexed_regex":
+    /**
+     * check if action will be processed
+     */
+    public function isValidAction( $action )
+    {
+        switch( $action ){
+        case "no_regex":
+        case "simple_regex":
+        case "complexed_regex":
 
-			return TRUE;
-		}
-		return FALSE;
-	}
+            return TRUE;
+        }
+        return FALSE;
+    }
 
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
-	}
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		$action = us($action);
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        $action = us($action);
 
-		$test_data_dir = $context->getFile( '%APPLICATION_DIR%/test_data/class/io' );
+        $test_data_dir = $context->getFile( '%APPLICATION_DIR%/test_data/class/io' );
 
-		if ( !is_dir($test_data_dir) ){
-			_throw( new Charcoal_TestDataNotFoundException('directory: ' . $test_data_dir) );
-		}
+        if ( !is_dir($test_data_dir) ){
+            _throw( new Charcoal_TestDataNotFoundException('directory: ' . $test_data_dir) );
+        }
 
-		switch( $action ){
-		case "no_regex":
+        switch( $action ){
+        case "no_regex":
 
-			$filter = new Charcoal_RegExFileFilter( '/sample_file1\.txt/' );
+            $filter = new Charcoal_RegExFileFilter( '/sample_file1\.txt/' );
 
-			$files = $test_data_dir->listFiles( $filter );
+            $files = $test_data_dir->listFiles( $filter );
 
-			$files_found = array();
-			if ( is_array($files) ){
-				foreach( $files as $file ){
-					$files_found[] = $file->getName();
-				}
-			}
+            $files_found = array();
+            if ( is_array($files) ){
+                foreach( $files as $file ){
+                    $files_found[] = $file->getName();
+                }
+            }
 
-			$expected = array( 'sample_file1.txt' );
+            $expected = array( 'sample_file1.txt' );
 
-			$this->assertEquals( 'array', gettype($files) );
-			$this->assertEquals( 1, count($files) );
-			$this->assertEquals( array(), array_diff($files_found, $expected) );
+            $this->assertEquals( 'array', gettype($files) );
+            $this->assertEquals( 1, count($files) );
+            $this->assertEquals( array(), array_diff($files_found, $expected) );
 
-			return TRUE;
+            return TRUE;
 
-		case "simple_regex":
+        case "simple_regex":
 
-			$filter = new Charcoal_RegExFileFilter( s('/sample_file[123]\.txt/') );
+            $filter = new Charcoal_RegExFileFilter( s('/sample_file[123]\.txt/') );
 
-			$files = $test_data_dir->listFiles( $filter );
+            $files = $test_data_dir->listFiles( $filter );
 
-			$files_found = array();
-			foreach( $files as $file ){
-				$files_found[] = $file->getName();
-			}
+            $files_found = array();
+            foreach( $files as $file ){
+                $files_found[] = $file->getName();
+            }
 
-			$expected = array( 'sample_file1.txt', 'sample_file2.txt', 'sample_file3.txt' );
+            $expected = array( 'sample_file1.txt', 'sample_file2.txt', 'sample_file3.txt' );
 
-			$this->assertEquals( 'array', gettype($files) );
-			$this->assertEquals( 3, count($files) );
-			$this->assertEquals( array(), array_diff($files_found, $expected) );
+            $this->assertEquals( 'array', gettype($files) );
+            $this->assertEquals( 3, count($files) );
+            $this->assertEquals( array(), array_diff($files_found, $expected) );
 
-			return TRUE;
+            return TRUE;
 
-			return TRUE;
+            return TRUE;
 
-		case "complexed_regex":
+        case "complexed_regex":
 
-			return TRUE;
-		}
+            return TRUE;
+        }
 
-		return FALSE;
-	}
+        return FALSE;
+    }
 
 }
 

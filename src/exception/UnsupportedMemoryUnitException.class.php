@@ -11,9 +11,9 @@
 
 class Charcoal_UnsupportedMemoryUnitException extends Charcoal_RuntimeException
 {
-	public function __construct( $unit, $prev = NULL )
-	{
-		parent::__construct( "[$unit] is not supported", $prev );
-	}
+    public function __construct( $unit, $prev = NULL )
+    {
+        parent::__construct( "[$unit] is not supported", $prev );
+    }
 }
 

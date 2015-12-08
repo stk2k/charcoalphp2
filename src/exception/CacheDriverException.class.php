@@ -11,10 +11,10 @@
 
 class Charcoal_CacheDriverException extends Charcoal_RuntimeException
 {
-	public function __construct( $driver_type, $message, $prev = NULL )
-	{
-		parent::__construct( "driver_type=[$driver_type] message=[$message]", $prev );
-	}
+    public function __construct( $driver_type, $message, $prev = NULL )
+    {
+        parent::__construct( "driver_type=[$driver_type] message=[$message]", $prev );
+    }
 
 }
 

@@ -11,12 +11,12 @@
 
 class Charcoal_InterfaceNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( $interface_name, $prev = NULL )
-	{
-//		Charcoal_ParamTrait::validateString( 1, $interface_name );
+    public function __construct( $interface_name, $prev = NULL )
+    {
+//        Charcoal_ParamTrait::validateString( 1, $interface_name );
 
-		parent::__construct( "Interface not found: interface_name=[$interface_name]", $prev );
-	}
+        parent::__construct( "Interface not found: interface_name=[$interface_name]", $prev );
+    }
 
 }
 

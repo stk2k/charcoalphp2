@@ -11,44 +11,44 @@
 
 class TransformerTestTask extends Charcoal_TestTask
 {
-	/**
-	 * setup test
-	 */
-	public function setUp( $action, $context )
-	{
+    /**
+     * setup test
+     */
+    public function setUp( $action, $context )
+    {
 
-	}
+    }
 
-	/**
-	 * clean up test
-	 */
-	public function cleanUp( $action, $context )
-	{
-	}
+    /**
+     * clean up test
+     */
+    public function cleanUp( $action, $context )
+    {
+    }
 
-	/**
-	 * execute tests
-	 */
-	public function test( $action, $context )
-	{
-		$action = us($action);
+    /**
+     * execute tests
+     */
+    public function test( $action, $context )
+    {
+        $action = us($action);
 
-		switch( $action ){
-		case "simple_transform":
-			// create simple transformer
-			$tr = Charcoal_Factory::createObject( s('simple'), s('transformer') );
+        switch( $action ){
+        case "simple_transform":
+            // create simple transformer
+            $tr = Charcoal_Factory::createObject( s('simple'), s('transformer') );
 
-			$a = new DTO( v(array("foo"=>"bar")) );
-			$b = new DTO();
+            $a = new DTO( v(array("foo"=>"bar")) );
+            $b = new DTO();
 
-			$tr->transform( $a, $b );
+            $tr->transform( $a, $b );
 
-			$this->assertEquals( "bar", $a->foo );
-			$this->assertEquals( "bar", $b->foo );
+            $this->assertEquals( "bar", $a->foo );
+            $this->assertEquals( "bar", $b->foo );
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
 }
 

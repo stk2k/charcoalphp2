@@ -11,10 +11,10 @@
 
 class Charcoal_LogicException extends Charcoal_CharcoalException
 {
-	public function __construct( $msg, $prev = NULL )
-	{
-		parent::__construct( $msg, $prev );
-	}
+    public function __construct( $msg, $prev = NULL )
+    {
+        parent::__construct( $msg, $prev );
+    }
 
 }
 

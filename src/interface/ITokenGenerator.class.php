@@ -11,9 +11,9 @@
 interface Charcoal_ITokenGenerator extends Charcoal_ICharcoalObject
 {
 
-	/**
-	 * generate a token
-	 */
-	public function generateToken();
+    /**
+     * generate a token
+     */
+    public function generateToken();
 }
 

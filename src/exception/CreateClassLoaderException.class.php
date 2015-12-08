@@ -11,21 +11,21 @@
 
 class Charcoal_CreateClassLoaderException extends Charcoal_RuntimeException
 {
-	private $object_path;
+    private $object_path;
 
-	public function __construct( $object_path, $prev = NULL )
-	{
-		$this->object_path = $object_path;
+    public function __construct( $object_path, $prev = NULL )
+    {
+        $this->object_path = $object_path;
 
-		parent::__construct( "[object_path]$object_path", $prev );
-	}
+        parent::__construct( "[object_path]$object_path", $prev );
+    }
 
-	/**
-	 *	get object path of failed class loader
-	 */
-	public function getClassLoaderPath()
-	{
-		return $this->object_path;
-	}
+    /**
+     *    get object path of failed class loader
+     */
+    public function getClassLoaderPath()
+    {
+        return $this->object_path;
+    }
 }
 

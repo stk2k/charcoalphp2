@@ -11,13 +11,13 @@
 
 class ThumbnailComponentException extends Charcoal_RuntimeException
 {
-	/***
-	 *	コンストラクタ
-	 **/
-	public function __construct( Charcoal_String $message, Exception $previous = NULL )
-	{
-		if ( $previous )	parent::__construct( s($message), $previous );	else	parent::__construct( s($message) );
-	}
+    /***
+     *    コンストラクタ
+     **/
+    public function __construct( Charcoal_String $message, Exception $previous = NULL )
+    {
+        if ( $previous )    parent::__construct( s($message), $previous );    else    parent::__construct( s($message) );
+    }
 }
 
 return __FILE__;

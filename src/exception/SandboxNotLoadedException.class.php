@@ -11,9 +11,9 @@
 
 class Charcoal_SandboxNotLoadedException extends Charcoal_RuntimeException
 {
-	public function __construct( $file, $line, $prev = NULL )
-	{
-		parent::__construct( "Sandbox is not ready at $file($line)", $prev );
-	}
+    public function __construct( $file, $line, $prev = NULL )
+    {
+        parent::__construct( "Sandbox is not ready at $file($line)", $prev );
+    }
 }
 

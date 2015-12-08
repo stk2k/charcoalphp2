@@ -10,12 +10,12 @@
 */
 interface Charcoal_IFileFilter
 {
-	/**
-	 * Check if the filter select the specified file.
-	 *
-	 * @param Charcoal_File $file         Target fileto be tested.
-	 */
-	public function accept( Charcoal_File $file );
+    /**
+     * Check if the filter select the specified file.
+     *
+     * @param Charcoal_File $file         Target fileto be tested.
+     */
+    public function accept( Charcoal_File $file );
 
 }
 

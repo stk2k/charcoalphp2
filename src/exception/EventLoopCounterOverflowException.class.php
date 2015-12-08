@@ -11,9 +11,9 @@
 
 class Charcoal_EventLoopCounterOverflowException extends Charcoal_RuntimeException
 {
-	public function __construct( $max, $prev = NULL )
-	{
-		parent::__construct( "event-loop counter exceeded max:$max", $prev );
-	}
+    public function __construct( $max, $prev = NULL )
+    {
+        parent::__construct( "event-loop counter exceeded max:$max", $prev );
+    }
 }
 

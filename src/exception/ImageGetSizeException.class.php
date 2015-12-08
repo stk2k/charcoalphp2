@@ -11,10 +11,10 @@
 
 class Charcoal_ImageGetSizeException extends Charcoal_RuntimeException
 {
-	public function __construct( Charcoal_File $file, $prev = NULL )
-	{
-		parent::__construct( "getimagesize() failed. path=[$file]", $prev );
-	}
+    public function __construct( Charcoal_File $file, $prev = NULL )
+    {
+        parent::__construct( "getimagesize() failed. path=[$file]", $prev );
+    }
 
 }
 

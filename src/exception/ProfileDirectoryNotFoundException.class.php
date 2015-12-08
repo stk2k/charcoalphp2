@@ -11,10 +11,10 @@
 
 class Charcoal_ProfileDirectoryNotFoundException extends Charcoal_RuntimeException
 {
-	public function __construct( $profile_dir, $prev = NULL )
-	{
-		parent::__construct( "Profile directory not found: [$profile_dir]", $prev );
-	}
+    public function __construct( $profile_dir, $prev = NULL )
+    {
+        parent::__construct( "Profile directory not found: [$profile_dir]", $prev );
+    }
 }
 
 

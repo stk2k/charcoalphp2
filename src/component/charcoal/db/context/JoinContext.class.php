@@ -10,37 +10,37 @@
 */
 class Charcoal_JoinContext extends Charcoal_AbstractWrapperContext
 {
-	private $_join;
+    private $_join;
 
-	/**
-	 *  Constructor
-	 */
-	public function __construct( $context, $join )
-	{
-		parent::__construct( $context );
+    /**
+     *  Constructor
+     */
+    public function __construct( $context, $join )
+    {
+        parent::__construct( $context );
 
-		$this->_join = $join;
-	}
+        $this->_join = $join;
+    }
 
-	/**
-	 *  INNER/LEFT/RIGHT JOIN
-	 */
-	public function on( $condition )
-	{
-		$this->_join->setCondition( $condition );
+    /**
+     *  INNER/LEFT/RIGHT JOIN
+     */
+    public function on( $condition )
+    {
+        $this->_join->setCondition( $condition );
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 *  indicates WHERE clause and switches to where context
-	 *
-	 * @return Charcoal_WhereContext    where context
-	 */
-	public function where()
-	{
-		return new Charcoal_WhereContext( $this->getContext() );
-	}
+    /**
+     *  indicates WHERE clause and switches to where context
+     *
+     * @return Charcoal_WhereContext    where context
+     */
+    public function where()
+    {
+        return new Charcoal_WhereContext( $this->getContext() );
+    }
 
 }
 

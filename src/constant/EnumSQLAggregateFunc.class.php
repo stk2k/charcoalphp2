@@ -11,10 +11,10 @@
 
 class Charcoal_EnumSQLAggregateFunc extends Charcoal_Enum
 {
-	const FUNC_MIN        = 1;	// MIN()
-	const FUNC_MAX        = 2;	// MAX()
-	const FUNC_SUM        = 3;	// SUM()
-	const FUNC_COUNT      = 4;	// COUNT()
-	const FUNC_AVG        = 5;	// AVG()
+    const FUNC_MIN        = 1;    // MIN()
+    const FUNC_MAX        = 2;    // MAX()
+    const FUNC_SUM        = 3;    // SUM()
+    const FUNC_COUNT      = 4;    // COUNT()
+    const FUNC_AVG        = 5;    // AVG()
 }
 

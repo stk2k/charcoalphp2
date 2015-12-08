@@ -10,26 +10,26 @@
 */
 interface Charcoal_IRecordset extends Iterator
 {
-	const FETCHMODE_NUM = 1;
-	const FETCHMODE_ASSOC = 2;
-	const FETCHMODE_BOTH  = 3;
-	const FETCHMODE_INTO  = 4;
-	const FETCHMODE_CLASS  = 5;
-	const FETCHMODE_COLUMN  = 6;
+    const FETCHMODE_NUM = 1;
+    const FETCHMODE_ASSOC = 2;
+    const FETCHMODE_BOTH  = 3;
+    const FETCHMODE_INTO  = 4;
+    const FETCHMODE_CLASS  = 5;
+    const FETCHMODE_COLUMN  = 6;
 
-	const FETCHMODE_DEFAULT  = self::FETCHMODE_ASSOC;
+    const FETCHMODE_DEFAULT  = self::FETCHMODE_ASSOC;
 
-	/**
-	 * fetch record
-	 *
-	 * @return mixed        fetch result
-	 */
-	public function fetch();
+    /**
+     * fetch record
+     *
+     * @return mixed        fetch result
+     */
+    public function fetch();
 
-	/**
-	 * close cursor
-	 *
-	 */
-	public function close();
+    /**
+     * close cursor
+     *
+     */
+    public function close();
 }
 

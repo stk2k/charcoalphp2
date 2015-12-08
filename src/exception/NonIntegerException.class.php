@@ -11,10 +11,10 @@
 
 class Charcoal_NonIntegerException extends Charcoal_RuntimeException
 {
-	public function __construct( $value, $prev = NULL )
-	{
-		parent::__construct( "can't convert to integer object: $value", $prev );
-	}
+    public function __construct( $value, $prev = NULL )
+    {
+        parent::__construct( "can't convert to integer object: $value", $prev );
+    }
 }
 
 
