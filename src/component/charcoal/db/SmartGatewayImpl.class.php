@@ -670,18 +670,23 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_String|string $comment       comment text
      * @param int $aggregate_func                   identify aggregate function tpype
      * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria        criteria object
-     * @param Charcoal_String|string $fields        comma-separated field list: like 'A,B,C...'
+     * @param Charcoal_SQLCriteria|NULL $criteria        criteria object
+     * @param Charcoal_String|string|NULL $fields        comma-separated field list: like 'A,B,C...'
      *
      * @return mixed
      */
-    private  function execAggregateQuery( $comment, $aggregate_func, $query_target, $criteria, $fields = NULL )
+    private  function execAggregateQuery( $comment, $aggregate_func, $query_target, $criteria = NULL, $fields = NULL )
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateInteger( 2, $aggregate_func );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
+        Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 5, $fields, TRUE );
+
+        // default criteria
+        if ( $criteria === NULL ){
+            $criteria = new Charcoal_SQLCriteria();
+        }
 
         // default count fields
         if ( $fields === NULL ){
@@ -728,16 +733,16 @@ class Charcoal_SmartGatewayImpl
      *
      * @param Charcoal_String|string $comment       comment text
      * @param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria        criteria object
-     * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+     * @param Charcoal_SQLCriteria|NULL $criteria        criteria object
+     * @param Charcoal_String|string|NULL $fields         comma-separated field list: like 'A,B,C...'
      *
      * @return int
      */
-    public function count( $comment, $query_target, $criteria, $fields = NULL )
+    public function count( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
+        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         if ( $fields === NULL ){
@@ -756,16 +761,16 @@ class Charcoal_SmartGatewayImpl
      *
      * @param Charcoal_String|string $comment       comment text
      * @param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria        criteria object
-     * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+     * @param Charcoal_SQLCriteria|NULL $criteria        criteria object
+     * @param Charcoal_String|string|NULL $fields         comma-separated field list: like 'A,B,C...'
      *
      * @return mixed
      */
-    public function max( $comment, $query_target, $criteria, $fields = NULL )
+    public function max( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
+        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_MAX, $query_target, $criteria, $fields );
@@ -780,17 +785,17 @@ class Charcoal_SmartGatewayImpl
      *
      * @param Charcoal_String|string $comment       comment text
      * @param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria        criteria object
-     * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+     * @param Charcoal_SQLCriteria|NULL $criteria        criteria object
+     * @param Charcoal_String|string|NULL $fields         comma-separated field list: like 'A,B,C...'
      *
      * @return mixed
      */
-    public function min( $comment, $query_target, $criteria, $fields = NULL )
+    public function min( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-        Charcoal_ParamTrait::validateString( 4, $fields );
+        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
+        Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_MIN, $query_target, $criteria, $fields );
 
@@ -804,17 +809,17 @@ class Charcoal_SmartGatewayImpl
      *
      * @param Charcoal_String|string $comment        comment text
      * @param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria         criteria object
-     * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+     * @param Charcoal_SQLCriteria|NULL $criteria         criteria object
+     * @param Charcoal_String|string|NULL $fields         comma-separated field list: like 'A,B,C...'
      *
      * @return mixed
      */
-    public function sum( $comment, $query_target, $criteria, $fields = NULL )
+    public function sum( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-        Charcoal_ParamTrait::validateString( 4, $fields );
+        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
+        Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_SUM, $query_target, $criteria, $fields );
 
@@ -828,17 +833,17 @@ class Charcoal_SmartGatewayImpl
      *
      * @param Charcoal_String|string $comment        comment text
      * @param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria         criteria object
-     * @param Charcoal_String|string $fields         comma-separated field list: like 'A,B,C...'
+     * @param Charcoal_SQLCriteria|NULL $criteria         criteria object
+     * @param Charcoal_String|string|NULL $fields         comma-separated field list: like 'A,B,C...'
      *
      * @return mixed
      */
-    public function avg( $comment, $query_target, $criteria, $fields = NULL )
+    public function avg( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
-        Charcoal_ParamTrait::validateString( 4, $fields );
+        Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
+        Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_AVG, $query_target, $criteria, $fields );
 

@@ -956,12 +956,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment           comment text
      * @param Charcoal_String|string $query_target      description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria            criteria object
-     * @param Charcoal_String|string $fields            fields to be included result set
+     * @param Charcoal_SQLCriteria|NULL $criteria            criteria object
+     * @param Charcoal_String|string|NULL $fields            fields to be included result set
      *
      * @return int
      */
-    public function count( $comment, $query_target, $criteria, $fields = NULL )
+    public function count( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         $result = NULL;
 
@@ -989,12 +989,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment         comment text
      * @param Charcoal_String|string $query_target    description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria          criteria object
-     * @param Charcoal_String|string $fields          fields to be included result set
+     * @param Charcoal_SQLCriteria|NULL $criteria          criteria object
+     * @param Charcoal_String|string|NULL $fields          fields to be included result set
      *
      * @return mixed
      */
-    public function max( $comment, $query_target, $criteria, $fields = NULL )
+    public function max( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         $result = NULL;
 
@@ -1022,12 +1022,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment          comment text
      * @param Charcoal_String|string $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria           criteria object
-     * @param Charcoal_String|string $fields           fields to be included result set
+     * @param Charcoal_SQLCriteria|NULL $criteria           criteria object
+     * @param Charcoal_String|string|NULL $fields           fields to be included result set
      *
      * @return mixed
      */
-    public function min( $comment, $query_target, $criteria, $fields = NULL )
+    public function min( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         $result = NULL;
 
@@ -1055,12 +1055,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment          comment text
      * @param Charcoal_String|string $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria           criteria object
-     * @param Charcoal_String|string $fields           fields to be included result set
+     * @param Charcoal_SQLCriteria|NULL $criteria           criteria object
+     * @param Charcoal_String|string|NULL $fields           fields to be included result set
      *
      * @return mixed
      */
-    public function sum( $comment, $query_target, $criteria, $fields = NULL )
+    public function sum( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         $result = NULL;
 
@@ -1088,12 +1088,12 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment          comment text
      * @param Charcoal_String|string $query_target     description about target model, alias, or joins
-     * @param Charcoal_SQLCriteria $criteria           criteria object
-     * @param Charcoal_String|string $fields           fields to be included result set
+     * @param Charcoal_SQLCriteria|NULL $criteria           criteria object
+     * @param Charcoal_String|string|NULL $fields           fields to be included result set
      *
      * @return mixed
      */
-    public function avg( $comment, $query_target, $criteria, $fields = NULL )
+    public function avg( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
         $result = NULL;
 

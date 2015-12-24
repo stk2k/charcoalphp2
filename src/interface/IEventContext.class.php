@@ -41,8 +41,6 @@ interface Charcoal_IEventContext
     /**
      *    Get current sequence object
      *
-     *    @return Charcoal_IEvent
-     *
      * @return Charcoal_ISequence
      */
     public function getSequence();

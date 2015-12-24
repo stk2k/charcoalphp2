@@ -434,12 +434,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             _throw( new Charcoal_DBDataSourceException( $msg ) );
         }
 
-        $this->num_rows = $stmt->rowCount();
-        log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows={$this->num_rows})", __METHOD__ );
+        $this->num_rows = $rows = $stmt->rowCount();
+        log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows=$rows)", __METHOD__ );
 
         // ログ
         $elapse = Charcoal_Benchmark::stop( $timer_handle );
         log_debug( 'data_source,sql,debug', "[ID]$command_id _prepareExecute() end. time=[$elapse]msec.", __METHOD__ );
+
+        // SQL benchmark
+        ini_set('serialize_precision', 16);
+        log_debug( 'sql_bench', var_export(array($sql, $rows, $elapse), true), __METHOD__ );
 
         return $stmt;
     }
