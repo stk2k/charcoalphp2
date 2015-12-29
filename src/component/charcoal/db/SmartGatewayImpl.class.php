@@ -531,7 +531,7 @@ class Charcoal_SmartGatewayImpl
 
         $criteria = new Charcoal_SQLCriteria( $where_clause, $params );
 
-        $query_target = new Charcoal_QueryTarget( $model->getTableName() );
+        //$query_target = new Charcoal_QueryTarget( $model->getTableName() );
 
         $result = $this->findAll( $comment, $query_target, $criteria );
 
@@ -1340,6 +1340,5 @@ class Charcoal_SmartGatewayImpl
         // SQL実行
         $this->data_source->prepareExecute( $sql, $params );
     }
-
 }
 

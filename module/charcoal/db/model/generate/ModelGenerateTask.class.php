@@ -15,10 +15,15 @@ class ModelGenerateTask extends Charcoal_Task
     const SPACE_COUNT     = 30;
 
     /**
-     * イベントを処理する
+     * process ecent
+     *
+     * @param Charcoal_IEventContext $context
+     *
+     * @return boolean|Charcoal_Boolean
      */
     public function processEvent( $context )
     {
+        /** @var ModelGenerateEvent $event */
         $event   = $context->getEvent();
 
         // パラメータを取得
@@ -34,7 +39,7 @@ class ModelGenerateTask extends Charcoal_Task
         $table_dto_class_name = "{$entity}TableDTO";
         $date_now_y = date("Y");
 
-        // SmartGateway
+        /** @var Charcoal_SmartGateway $gw */
         $gw = $context->getComponent( 'smart_gateway@:charcoal:db' );
 
         //=======================================
@@ -48,7 +53,7 @@ class ModelGenerateTask extends Charcoal_Task
         // Genarate  table model file
         //=======================================
 
-        $colmn_attr_list = $gw->query( __FILE__ . '(' . __LINE__ . ')', 'SHOW COLUMNS FROM ' . $table );
+        $colmn_attr_list = $gw->query( NULL, 'SHOW COLUMNS FROM ' . $table );
 
         $lines = NULL;
 
