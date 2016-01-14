@@ -37,6 +37,15 @@ class Charcoal_CookieWriter extends Charcoal_Object
     }
 
     /*
+     * Get cookie value
+     */
+    public function getValue( $name )
+    {
+        $name = us($name);
+        return isset($this->values[$name]) ? $this->values[$name] : null;
+    }
+
+    /*
      * Set cookie value
      */
     public function setValue( $name, $value )

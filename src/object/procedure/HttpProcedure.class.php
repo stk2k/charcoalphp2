@@ -37,8 +37,10 @@ class Charcoal_HttpProcedure extends Charcoal_AbstractProcedure
         }
     }
 
-    /*
+    /**
      * レイアウトマネージャを取得
+     *
+     * @return Charcoal_ILayoutManager
      */
     public function getLayoutManager()
     {

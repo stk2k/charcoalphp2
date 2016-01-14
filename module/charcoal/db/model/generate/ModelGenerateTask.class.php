@@ -15,7 +15,7 @@ class ModelGenerateTask extends Charcoal_Task
     const SPACE_COUNT     = 30;
 
     /**
-     * process ecent
+     * process event
      *
      * @param Charcoal_IEventContext $context
      *

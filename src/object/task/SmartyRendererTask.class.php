@@ -8,6 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
+/** @noinspection PhpIncludeInspection */
 require_once( 'Smarty/Smarty.class.php' );
 
 class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITask
@@ -27,6 +28,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
         $this->template_files = array();
         $this->smarty = new Smarty();
+        log_debug( "smarty", "smarty=" . spl_object_hash($this->smarty), self::TAG );
     }
 
     /**
@@ -50,9 +52,16 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
         $this->smarty->right_delimiter         = us( $config->getString( 'right_delimiter', '}', FALSE ) );
 //        $this->smarty->default_modifiers     = $config->getArray( 'default_modifiers', array() )->unbox();
 
-        $this->smarty->plugins_dir = uv( $config->getArray( 'plugins_dir', array(), TRUE ) );
+        $plugins_dir = uv( $config->getArray( 'plugins_dir', array(), TRUE ) );
 
-        $this->smarty->plugins_dir    = empty($this->smarty->plugins_dir) ? 'plugins' : $this->smarty->plugins_dir;
+        // add default plugins_dir: Smarty/Smarty/plugins
+        $reflector = new ReflectionClass($this->smarty);
+        $plugins_dir[] = dirname($reflector->getFileName()) . '/plugins';
+
+        $this->smarty->plugins_dir = $plugins_dir;
+
+        log_debug( "smarty", "smarty->plugins_dir=" . print_r($this->smarty->plugins_dir, true), self::TAG );
+        log_debug( "smarty", "smarty=" . spl_object_hash($this->smarty), self::TAG );
 
         if ( $this->debug_mode )
         {
@@ -81,10 +90,16 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
      * Process events
      *
      * @param Charcoal_IEventContext $context   event context
+     *
+     * @return boolean
      */
     public function processEvent( $context )
     {
+        log_debug( "smarty", "smarty=" . spl_object_hash($this->smarty), self::TAG );
+
+        /** @var Charcoal_RenderLayoutEvent $event */
         $event    = $context->getEvent();
+        /** @var Charcoal_HttpResponse $response */
         $response = $context->getResponse();
         $sequence = $context->getSequence();
 
@@ -94,13 +109,14 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
         // retrieve layout
         $layout = $event->getLayout();
 
-//        log_info( "system,renderer", "renderer", "Rendering by smarty. Layout:" . print_r($layout,true) );
+        log_debug( "smarty", "Rendering by smarty. Layout:" . print_r($layout,true), self::TAG );
 
-//        log_info( "smarty", "caching=" . $this->smarty->caching );
-//        log_info( "smarty", "template_dir=" . $this->smarty->template_dir );
-//        log_info( "smarty", "compile_dir=" . $this->smarty->compile_dir );
-//        log_info( "smarty", "config_dir=" . $this->smarty->config_dir );
-//        log_info( "smarty", "cache_dir=" . $this->smarty->cache_dir );
+        log_debug( "smarty", "caching=" . print_r($this->smarty->caching, true), self::TAG );
+        log_debug( "smarty", "template_dir=" . print_r($this->smarty->template_dir, true), self::TAG );
+        log_debug( "smarty", "compile_dir=" . print_r($this->smarty->compile_dir, true), self::TAG );
+        log_debug( "smarty", "config_dir=" . print_r($this->smarty->config_dir, true), self::TAG );
+        log_debug( "smarty", "cache_dir=" . print_r($this->smarty->cache_dir, true), self::TAG );
+        log_debug( "smarty", "plugins_dir=" . print_r($this->smarty->plugins_dir, true), self::TAG );
 
         $error_handler_old = NULL;
 
@@ -114,21 +130,21 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
 
                 $response->redirect( s($url) );
 
-//                log_info( "system,renderer", "renderer", "Redirected to: $url" );
+                log_debug( "smarty", "Redirected to: $url", self::TAG );
             }
             elseif ( $event instanceof Charcoal_URLRedirectEvent ){
-
+                /** @var Charcoal_URLRedirectEvent $event */
                 $url = $event->getURL();
 
                 $response->redirect( s($url) );
 
-//                log_info( "system,renderer", "renderer", "Redirected to: $url" );
+                log_debug( "smarty", "Redirected to: $url", self::TAG );
             }
             elseif ( $event instanceof Charcoal_RenderLayoutEvent ){
 
                 // Page information
                 $page_info = $layout->getAttribute( s('page_info') );
-                log_info( "smarty","page_info=" . print_r($page_info,true) );
+                log_debug( "smarty", "page_info=" . print_r($page_info,true), self::TAG );
 
                 // Profile information
                 $profile_config = $this->getSandbox()->getProfile()->getAll();
@@ -189,19 +205,19 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
                 $error_handler_old = set_error_handler( array($this,"onUnhandledError") );
 
                 // compile and output template
-                log_info( "smarty","template=$template" );
+                log_debug( "smarty", "template=$template", self::TAG );
                 $html = $smarty->fetch( $template );
-                log_info( "smarty","html=$html" );
+                log_debug( "smarty", "html=$html", self::TAG );
 
                 // output to rendering target
                 $render_target = $event->getRenderTarget();
                 if ( $render_target ){
                     $render_target->render( $html );
-                    log_debug( "system,renderer", "Rendered by render target: " . get_class($render_target), self::TAG );
+                    log_debug( "smarty", "Rendered by render target: $render_target", self::TAG );
                 }
                 else{
                     echo $html;
-                    log_debug( "system,renderer", "Output by echo.", self::TAG );
+                    log_debug( "smarty", "Output by echo.", self::TAG );
                 }
             }
         }

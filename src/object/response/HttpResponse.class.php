@@ -14,8 +14,11 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
     const TAG = 'http_response';
 
     private $status;
+
+    /** @var  Charcoal_CookieWriter $cookie */
     private $cookie;
 
+    /** @var array Charcoal_HttpHeader[] $headers */
     private $headers;    // array of Charcoal_HttpHeader
 
     /**
@@ -47,8 +50,6 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
      */
     public function terminate()
     {
-        parent::terminate();
-
         log_debug( 'system, debug, response', "terminating response.", self::TAG );
 
         $this->flushHeaders();
@@ -81,6 +82,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
 
         // output headers
         foreach( $this->headers as $h ){
+            /** @var Charcoal_HttpHeader $h */
             header( $h->getHeader(), $h->getReplace() );
             log_debug( 'system, debug, response', "header flushed: $h", self::TAG );
         }
@@ -109,8 +111,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
     /**
      *  output HTTP header
      *
-     * @param Charcoal_String $header            header to output
-     * @param Charcoal_Boolean $flush_now        flushes header immediately
+     * @param Charcoal_String|string $header            header to output
+     * @param Charcoal_Boolean|boolean $flush_now        flushes header immediately
      */
     public function header( $header, $flush_now = TRUE )
     {
@@ -124,8 +126,8 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
     /**
      *  HTTP redirect(weak API)
      *
-     * @param Charcoal_URL $url   Redirect URL
-     * @param Charcoal_Boolean $flush_now   Flushes header immediately
+     * @param Charcoal_URL|string|Charcoal_String $url   Redirect URL
+     * @param Charcoal_Boolean|boolean $flush_now   Flushes header immediately
      */
     public function redirect( $url, $flush_now = TRUE )
     {
@@ -185,11 +187,11 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
     /**
      *  Set HTTP status code
      *
-     * @return Charcoal_Integer $status_code   HTTP status code
+     * @param Charcoal_Integer|integer $status_code   HTTP status code
      */
     public function setStatusCode( $status_code )
     {
-        $this->status = ui(status_code);
+        $this->status = ui($status_code);
     }
 
 

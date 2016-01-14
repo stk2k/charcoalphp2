@@ -175,6 +175,7 @@ class Charcoal_Bootstrap
                 'Charcoal_ProfileLoadingException'                => 'exception',
                 'Charcoal_ProfileConfigFileNotFoundException'    => 'exception',
                 'Charcoal_ProfileConfigFileFormatException'        => 'exception',
+                'Charcoal_RegistryException'                    => 'exception',
                 'Charcoal_RuntimeException'                     => 'exception',
                 'Charcoal_SandboxNotLoadedException'            => 'exception',
                 'Charcoal_StringFormatException'                => 'exception',

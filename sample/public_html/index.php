@@ -22,6 +22,7 @@ default:
     define( 'CHARCOAL_BASE_DIR',  dirname(dirname(dirname(dirname(__FILE__)))) );
     define( 'CHARCOAL_HOME', CHARCOAL_BASE_DIR . '/charcoal' );
     define( 'CHARCOAL_WEBAPP_DIR', CHARCOAL_BASE_DIR . "/charcoal/sample/web_app" );
+    define( 'CHARCOAL_CONFIG_EXPIRES', 30 );
     break;
 }
 

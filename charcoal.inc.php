@@ -13,6 +13,9 @@ if ( !defined('CHARCOAL_TMP_DIR') ){
 if ( !defined('CHARCOAL_DEBUG_OUTPUT') ){
     define( 'CHARCOAL_DEBUG_OUTPUT', 'html' );
 }
+if ( !defined('CHARCOAL_CONFIG_EXPIRES') ){
+    define( 'CHARCOAL_CONFIG_EXPIRES', 10 );    // config cache will expire in 10 minutes
+}
 
 // タイムゾーン
 date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );

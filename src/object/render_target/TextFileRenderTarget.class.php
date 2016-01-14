@@ -60,5 +60,18 @@ class Charcoal_TextFileRenderTarget extends Charcoal_AbstractRenderTarget implem
 
         }
     }
+
+    /*
+     *  String expression of this object
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        $clazz = get_class($this);
+        $path = $this->file_path;
+
+        return "[$clazz $path]";
+    }
 }
 
