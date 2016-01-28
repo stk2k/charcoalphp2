@@ -22,7 +22,7 @@ class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRendere
     {
         parent::configure( $config );
 
-        $this->clear_buffer = b( $config->getBoolean( 'clear_buffer', TRUE ) );
+        $this->clear_buffer = b( $config->getBoolean( 'clear_buffer', FALSE ) );
     }
 
     /**

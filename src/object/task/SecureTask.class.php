@@ -45,24 +45,30 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
     /**
      * check if the client is authorized.
      *
-     * @param Charcoal_EventContext $context      event ontext
+     * @param Charcoal_IEventContext $context      event ontext
      */
     public abstract function isAuthorized( $context );
 
     /**
      * check if the client has permission.
      *
-     * @param Charcoal_EventContext $context      event ontext
+     * @param Charcoal_IEventContext $context      event ontext
      */
     public abstract function hasPermission( $context );
 
     /**
-     * ログインが必要なページでイベントを処理する
+     * process event in secure task
+     *
+     * @param Charcoal_IEventContext $context      event ontext
      */
     public abstract function processEventSecure( $context );
 
     /**
-     * パーミッションがない場合の処理をする
+     * process when access is denied
+     *
+     * @param Charcoal_IEventContext $context      event ontext
+     *
+     * @return mixed
      */
     public function permissionDenied( $context )
     {
@@ -73,31 +79,37 @@ abstract class Charcoal_SecureTask extends Charcoal_Task implements Charcoal_ITa
      * Process events
      *
      * @param Charcoal_IEventContext $context   event context
+     *
+     * @return boolean|Charcoal_Boolean
      */
     public function processEvent( $context )
     {
         if ( $this->is_secure )
         {
-            // ログインチェック
+            // check if the access is granted
             $auth = $this->isAuthorized( $context );
             if ( ub($auth) !== TRUE )
             {
-                // セキュリティ違反イベントを作成
-                return $this->getSandbox()->createEvent( s('security_fault') );
+                // create security fault event
+                /** @var Charcoal_Event $event */
+                $event = $this->getSandbox()->createEvent( 'security_fault' );
+                $context->pushEvent($event);
+                return b(TRUE);
             }
 
-            // 権限チェック
+            // check permissions
             $has_permission = $this->hasPermission( $context );
             if ( ub($has_permission) !== TRUE )
             {
-                // パーミッションがない場合の処理
                 $event = $this->permissionDenied( $context );
                 if ( $event ){
                     return $event;
                 }
 
-                // パーミッション拒否イベントを生成
-                return $this->getSandbox()->createEvent( 'permission_denied' );
+                /** @var Charcoal_Event $event */
+                $event = $this->getSandbox()->createEvent( 'permission_denied' );
+                $context->pushEvent($event);
+                return b(TRUE);
             }
         }
 

@@ -22,6 +22,10 @@ class CalcTask extends Charcoal_Task
      * process event
      *
      * @param Charcoal_IEventContext $context   event context
+     *
+     * @return boolean|Charcoal_Boolean
+     *
+     * @throws DivisionByZeroException
      */
     public function processEvent( $context )
     {
@@ -80,13 +84,16 @@ class CalcTask extends Charcoal_Task
      * execute exception handlers
      *
      * @param Exception $e     exception to handle
+     * @param Charcoal_IEventContext $context   event context
      *
      * @return boolean        TRUE means the exception is handled, otherwise FALSE
+     *
+     * @throws Charcoal_HttpStatusException
      */
-    public function handleException( $e )
+    public function handleException( $e, $context )
     {
         echo "Exception:" . $e->getMessage() . "<br>";
-        throw new Charcoal_HttpException(500);
+        throw new Charcoal_HttpStatusException(500);
     }
 
 }

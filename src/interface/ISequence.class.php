@@ -10,6 +10,15 @@
 */
 interface Charcoal_ISequence
 {
+    /*
+     *  Get parameter
+     *
+     * @param string $key   Key string to get
+     *
+     * @return mixed   Returns NULL if key does not exist
+     */
+    public function get( $key );
+
     /**
      *  Get a global parameter
      *

@@ -50,7 +50,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
         $cache_file = $obj_path->getObjectName() . '.config.php';
         $cache_file_path = CHARCOAL_CACHE_DIR . '/' . $base_dir . '/' . $cache_file;
 
-        // if cache file is not found, read config file
+        // if cache file is not found, read config file.
         if ( !is_readable($cache_file_path) ){
             goto LOAD_CONFIG_FROM_FILE;
         }
@@ -92,18 +92,19 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
                 // read config file date
                 $config_date = $provider->getConfigDate( $key );
 
-                // check if the config file exists
-                if ( $config_date !== false ){
-                    // check config file's date
-                    if ( $config_date > $cache_date ){
-                        goto LOAD_CONFIG_FROM_FILE;
-                    }
-
-                    // correct cached data
-                    $cache_data = $cached_config['config'][$key];
-                    $config_all = is_array($cache_data) ? array_merge( $config_all, $cache_data ) : $config_all;
+                // if config file does not exist, then load from file
+                if ( !$config_date ){
+                    goto LOAD_CONFIG_FROM_FILE;
                 }
 
+                // check config file's date
+                if ( $config_date > $cache_date ){
+                    goto LOAD_CONFIG_FROM_FILE;
+                }
+
+                // correct cached data
+                $cache_data = $cached_config['config'][$key];
+                $config_all = is_array($cache_data) ? array_merge( $config_all, $cache_data ) : $config_all;
             }
 
             // if cache is not modified, return cache data
@@ -123,6 +124,14 @@ LOAD_CONFIG_FROM_FILE:
             }
             else{
                 $config_by_key[$key] = array();
+            }
+        }
+
+        // create cache root directory if not exists
+        if ( !file_exists(CHARCOAL_CACHE_DIR) ){
+            $res = @mkdir(CHARCOAL_CACHE_DIR);
+            if ( !$res ) {
+                _throw( new Charcoal_RegistryException('file_system', 'mkdir failed:'.CHARCOAL_CACHE_DIR) );
             }
         }
 

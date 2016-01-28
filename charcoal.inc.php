@@ -13,9 +13,6 @@ if ( !defined('CHARCOAL_TMP_DIR') ){
 if ( !defined('CHARCOAL_DEBUG_OUTPUT') ){
     define( 'CHARCOAL_DEBUG_OUTPUT', 'html' );
 }
-if ( !defined('CHARCOAL_CONFIG_EXPIRES') ){
-    define( 'CHARCOAL_CONFIG_EXPIRES', 10 );    // config cache will expire in 10 minutes
-}
 
 // タイムゾーン
 date_default_timezone_set( CHARCOAL_DEFAULT_TIMEZONE );
@@ -312,13 +309,55 @@ function _catch( $e, $log_error = TRUE, $log_backtrace = FALSE )
         if ( $log_error ){
             log_error( "error", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
             if ( $log_backtrace ){
-                log_error( "error", "backtrace:" . print_r($e->getTrace(),true), "exception" );
+                log_error( "error", "backtrace:" . print_simple_exception_trace($e->getTrace(),true), "exception" );
             }
         }
     }
     catch( Exception $ex ){
         echo "exeption while wrting log:" . $e->getMessage() . eol();
         exit;
+    }
+}
+
+function print_simple_exception_trace($trace, $return = false)
+{
+    $ret = '';
+    foreach($trace as $depth => $item){
+        $file = $item['file'];
+        $line = $item['line'];
+        $function = $item['function'];
+        $args = $item['args'];
+        $clazz = isset($item['class']) ? $item['class'] : '';
+        $type = isset($item['type']) ? $item['type'] : '';
+
+        $args_list = array();
+        foreach($args as $arg){
+            switch(gettype($arg)){
+                case 'array':
+                    $args_list[] = print_r($arg,true);
+                    break;
+                case 'object':
+                    $args_list[] = get_class($arg) . ' Object ()';
+                    break;
+                case 'resource':
+                    $args_list[] = ' Resouce id #' . (int)$arg;
+                    break;
+                default:
+                    $args_list[] = " $arg";
+                    break;
+            }
+
+        }
+        $args_list = implode(',',$args_list);
+
+        $function_or_method = empty($type) ? $function : $clazz . $type . $function;
+
+        $ret = '#'. $depth. ' '. $function_or_method. '(' . $args_list. ') called at ['. $file. ':'. $line. ']';
+
+        if ( $return ){
+            return $ret;
+        }
+        echo $ret, PHP_EOL;
     }
 }
 

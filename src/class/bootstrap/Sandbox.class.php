@@ -20,6 +20,7 @@ class Charcoal_Sandbox
     private $codebase;
     private $container;
     private $environment;
+    private $loaded;
 
     /** @var Charcoal_IProperties  */
     private $profile;

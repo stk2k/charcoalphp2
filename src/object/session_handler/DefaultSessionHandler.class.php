@@ -123,11 +123,6 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
     public function write( $id, $sess_data )
     {
         $file = $this->getSessionFile( $id );
-        if ( $this->getSandbox()->isDebug() ){
-            log_info( "system,session", "writing session file: $file", self::TAG );
-            $sha1 = sha1_file($file);
-            log_info( "system,session", "sha1(before): $sha1", self::TAG );
-        }
 
 //        log_info( "session", __CLASS__, __CLASS__.'#write: file=' . $file . ' id=' . $id . ' data=' . print_r($sess_data,true) );
         $fp = @fopen($file,'w');
@@ -137,11 +132,6 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
         }
         $write = fwrite($fp, $sess_data);
         fclose($fp);
-
-        if ( $this->getSandbox()->isDebug() ){
-            $sha1 = sha1_file($file);
-            log_info( "system,session", "sha1(after): $sha1", self::TAG );
-        }
 
         return $write;
     }

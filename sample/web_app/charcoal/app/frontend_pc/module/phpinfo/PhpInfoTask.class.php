@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class HelloTask extends Charcoal_Task
+class PhpInfoTask extends Charcoal_Task
 {
     /**
      * process event
@@ -20,10 +20,8 @@ class HelloTask extends Charcoal_Task
      */
     public function processEvent( $context )
     {
-        // show message
-        echo "Hello, World!<br />";
+        phpinfo();
 
-        // return TRUE if processing the procedure success.
         return TRUE;
     }
 }

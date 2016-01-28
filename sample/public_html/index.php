@@ -25,10 +25,10 @@ default:
     define( 'CHARCOAL_CONFIG_EXPIRES', 30 );
     break;
 }
-
 define( 'CHARCOAL_PROJECT', "charcoal" );
 define( 'CHARCOAL_APPLICATION', "frontend_pc" );
 define( 'CHARCOAL_DEFAULT_TIMEZONE', "Asia/Tokyo" );
+define( 'CHARCOAL_CACHE_DIR', CHARCOAL_HOME . "/cache/" . CHARCOAL_APPLICATION );
 
 //==================================================================
 // include framework globals

@@ -104,7 +104,7 @@ class Charcoal_Bootstrap
             Charcoal_Framework::handleException( $e );
         }
 
-        Charcoal_Framework::$loggers->terminate();
+        Charcoal_Framework::terminate();
     }
 
     static $bootstrap_classes  = array(

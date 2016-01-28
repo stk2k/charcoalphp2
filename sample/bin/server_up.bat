@@ -1,1 +1,1 @@
-php -S localhost:8000 -t %cd%\..\public_html
+php -S localhost:8080 -t %cd%\..\public_html -d display_errors=1 -d error_reporting=-1

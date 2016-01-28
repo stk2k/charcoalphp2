@@ -735,7 +735,19 @@ class Charcoal_Framework
         log_debug( 'system, debug', sprintf("peak memory: [%d] bytes / [%d] bytes", $peak_usage_1, $peak_usage_2) );
 //Charcoal_Object::dump();
 
-        self::$loggers->terminate();
+        self::terminate();
+    }
+
+    /**
+     *  shutdown framework
+     *
+     */
+    public static function terminate()
+    {
+        if ( self::$loggers ){
+            self::$loggers->terminate();
+        }
+        self::$loggers = null;
     }
 }
 
