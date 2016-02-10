@@ -15,6 +15,8 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 {
     private $token_key;
     private $debug_mode;
+
+    /** @var  Charcoal_ITokenGenerator */
     private $token_generator;
 
     /*
@@ -91,16 +93,12 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
             // Generate token
             $new_token = $this->token_generator->generateToken();
 
-            if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
-                ad($new_token,array('title'=>"token generated","type"=>"div"));
-            }
             log_debug( "debug", "token generated: $new_token" );
 
             // add new token to token list.
             $token_list[] = $new_token;
-            if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
-                ad($token_list,array('title'=>"token list"));
-            }
+
+            log_debug( "debug", "token_list: ", print_r($token_list, true) );
 
             // save token list in sequence.
             $sequence->set( $token_key, $token_list );

@@ -268,6 +268,8 @@ HTML_HEADER;
         $no = 1;
         foreach( $_SERVER as $name => $value )
         {
+            if ( is_array($value) ) $value = print_r($value,true);
+
             $html .= '<tr>' . PHP_EOL;
             $html .= '  <th class="no" rowspan="2">' . $no . '</th>' . PHP_EOL;
             $html .= '  <td class="key"><span class="value">' . $name . '</span></td>' . PHP_EOL;

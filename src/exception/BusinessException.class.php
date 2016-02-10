@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_BusinessException extends Charcoal_CharcoalException
+class Charcoal_BusinessException extends Charcoal_RuntimeException
 {
 }
 

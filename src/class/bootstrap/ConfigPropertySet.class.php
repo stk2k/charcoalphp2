@@ -67,7 +67,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
      * @param string $encoding        charcter encoding
      *
-     * @return string
+     * @return Charcoal_String
      */
     public function getString( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
     {
@@ -93,7 +93,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
      * @param string $encoding        charcter encoding
      *
-     * @return string
+     * @return Charcoal_String
      */
     public function getJson( $key, $default_value = NULL, $process_macro = FALSE, $encoding = NULL )
     {
@@ -129,7 +129,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param array $default_value   default value
      * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
      *
-     * @return array
+     * @return Charcoal_Vector
      */
     public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
     {
@@ -162,7 +162,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param string $key             key string for hash map
      * @param bool $default_value   default value
      *
-     * @return bool
+     * @return Charcoal_Boolean
      */
     public function getBoolean( $key, $default_value = NULL )
     {
@@ -179,7 +179,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param string $key             key string for hash map
      * @param int $default_value   default value
      *
-     * @return int
+     * @return Charocal_Integer
      */
     public function getInteger( $key, $default_value = NULL )
     {
@@ -196,7 +196,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param string $key            Key string to get
      * @param float $default_value   default value
      *
-     * @return float
+     * @return Charcoal_Float
      */
     public function getFloat( $key, $default_value = NULL )
     {

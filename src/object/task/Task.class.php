@@ -47,6 +47,8 @@ abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal
      *
      * @param Exception $e                        exception to handle
      * @param Charcoal_EventContext $context      event context
+     *
+     * @return boolean|Charcoal_Boolean
      */
     public function handleException( $e, $context )
     {

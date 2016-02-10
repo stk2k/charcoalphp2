@@ -19,7 +19,7 @@ class Charcoal_ArrayTrait
      * @param string $default_value   default value
      * @param string $encoding        charcter encoding
      *
-     * @return string|NULL
+     * @return Charcoal_String|NULL
      */
     public static function getString( $data, $key, $default_value = NULL, $encoding = NULL )
     {
@@ -45,7 +45,7 @@ class Charcoal_ArrayTrait
      * @param string $key             key string for hash map
      * @param array $default_value   default value
      *
-     * @return array|NULL
+     * @return Charcoal_Vector|NULL
      */
     public static function getArray( $data, $key, $default_value = NULL )
     {
@@ -76,7 +76,7 @@ class Charcoal_ArrayTrait
      * @param string $key             key string for hash map
      * @param array $default_value   default value
      *
-     * @return array|NULL
+     * @return Charcoal_HashMap|NULL
      */
     public static function getHashMap( $data, $key, $default_value = NULL )
     {
@@ -107,7 +107,7 @@ class Charcoal_ArrayTrait
      * @param string $key             key string for hash map
      * @param array $default_value   default value
      *
-     * @return integer|NULL
+     * @return Charcoal_Integer|NULL
      */
     public static function getInteger( $data, $key, $default_value = NULL )
     {
@@ -138,7 +138,7 @@ class Charcoal_ArrayTrait
      * @param string $key             key string for hash map
      * @param float $default_value   default value
      *
-     * @return float|NULL
+     * @return Charcoal_Float|NULL
      */
     public static function getFloat( $data, $key, $default_value = NULL )
     {
@@ -169,7 +169,7 @@ class Charcoal_ArrayTrait
      * @param string $key             key string for hash map
      * @param bool $default_value   default value
      *
-     * @return bool|NULL
+     * @return Charcoal_Boolean|NULL
      */
     public static function getBoolean( $data, $key, $default_value = NULL )
     {

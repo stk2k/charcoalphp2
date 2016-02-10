@@ -207,7 +207,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
      * @param string $default_value   default value
      * @param string $encoding        charcter encoding
      *
-     * @return string
+     * @return Charcoal_String
      */
     public function getString( $key, $default_value = NULL, $encoding = NULL )
     {
@@ -223,7 +223,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
      * @param string $key            Key string to get
      * @param array $default_value   default value
      *
-     * @return array
+     * @return Charcoal_Vector
      */
     public function getArray( $key, $default_value = NULL )
     {
@@ -239,7 +239,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
      * @param string $key            Key string to get
      * @param array $default_value   default value
      *
-     * @return array
+     * @return Charcoal_HashMap
      */
     public function getHashMap( $key, $default_value = NULL )
     {
@@ -255,7 +255,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
      * @param string $key           Key string to get
      * @param bool $default_value   default value
      *
-     * @return bool
+     * @return Charcoal_Boolean
      */
     public function getBoolean( $key, $default_value = NULL )
     {
@@ -271,7 +271,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
      * @param string $key          Key string to get
      * @param int $default_value   default value
      *
-     * @return int
+     * @return Charcoal_Integer
      */
     public function getInteger( $key, $default_value = NULL )
     {
@@ -287,7 +287,7 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
      * @param string $key            Key string to get
      * @param float $default_value   default value
      *
-     * @return float
+     * @return Charcoal_Float
      */
     public function getFloat( $key, $default_value = NULL )
     {

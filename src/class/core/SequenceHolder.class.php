@@ -252,7 +252,6 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
      *  Get element value
      *
      * @param string $key            Key string to get
-     * @param array $default_value   default value
      *
      * @return mixed
      */
@@ -351,6 +350,16 @@ class Charcoal_SequenceHolder extends Charcoal_Object implements Charcoal_ISeque
     {
         $this->_local->set( $key, $value );
     }
+
+    /**
+     *    Remove all elements
+     */
+    public function clear()
+    {
+        $this->_global->clear();
+        $this->_local->clear();
+    }
+
 }
 
 

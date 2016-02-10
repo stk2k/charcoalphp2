@@ -105,7 +105,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
         if ( !is_readable($file) ){
             log_warning( "system,session", "can't read session file[$file]", self::TAG );
-            return NULL;
+            return '';
         }
         if ( $this->getSandbox()->isDebug() ){
             $sha1 = sha1_file($file);
@@ -114,7 +114,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
         $session_data = (string)@file_get_contents( $file );
 
-        return  $session_data;
+        return  $session_data === FALSE ? '' : $session_data;
     }
 
     /**
@@ -133,7 +133,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
         $write = fwrite($fp, $sess_data);
         fclose($fp);
 
-        return $write;
+        return $write !== FALSE ? TRUE : FALSE;
     }
 
     /**
