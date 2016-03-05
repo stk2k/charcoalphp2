@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalObject implements Charcoal_IProcedure
+abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalComponent implements Charcoal_IProcedure
 {
     const TAG = 'abstract_procedure';
 

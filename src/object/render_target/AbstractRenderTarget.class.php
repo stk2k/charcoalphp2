@@ -9,7 +9,7 @@
 * @copyright  2014 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractRenderTarget extends Charcoal_CharcoalObject implements Charcoal_IRenderTarget
+abstract class Charcoal_AbstractRenderTarget extends Charcoal_CharcoalComponent implements Charcoal_IRenderTarget
 {
 }
 

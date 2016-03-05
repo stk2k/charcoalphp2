@@ -927,7 +927,7 @@ class Charcoal_SmartGatewayImpl
     {
         Charcoal_ParamTrait::validateString( 1, $comment );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
-        Charcoal_ParamTrait::validateHashMapOrDTO( 3, $data );
+        Charcoal_ParamTrait::validateDTO( 3, $data );
 
         $new_id = 0;
 
@@ -1181,6 +1181,54 @@ class Charcoal_SmartGatewayImpl
     }
 
     /**
+     *    real implementation of Charcoal_SmartGateway::incrementFieldBy()
+     *
+     * @param Charcoal_String|string $comment                comment text
+     * @param Charcoal_QueryTarget $query_target           description about target model, alias, or joins
+     * @param Charcoal_String|string $increment_field            field name to increment
+     * @param Charcoal_String|string $query_field            field name to query
+     * @param mixed $query_value                   field value to query
+     * @param Charcoal_Integer|int $increment_by       amount of increment
+     */
+    public function incrementFieldBy( $comment, $query_target, $increment_field, $query_field, $query_value, $increment_by = 1 )
+    {
+        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
+        Charcoal_ParamTrait::validateString( 3, $increment_field );
+        Charcoal_ParamTrait::validateString( 4, $query_field );
+        Charcoal_ParamTrait::validateScalar( 5, $query_value );
+        Charcoal_ParamTrait::validateInteger( 6, $increment_by, TRUE );
+
+        $model = $this->getModel( $query_target->getModelName() );
+        $alias = $query_target->getAlias();
+
+        if ( !$model->fieldExists($increment_field) ){
+            _throw( new Charcoal_InvalidArgumentException("field=[$increment_field]") );
+        }
+        if ( !$model->fieldExists($query_field) ){
+            _throw( new Charcoal_InvalidArgumentException("field=[$query_field]") );
+        }
+
+        $increment_field = us($increment_field);
+        $query_field = us($query_field);
+
+        $override[$increment_field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('increment', $increment_by) );
+
+        $where = "$query_field = ?";
+        $params = array( $query_value );
+        $criteria = new Charcoal_SQLCriteria( $where, $params );
+
+        list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $model->createDTO(), $criteria, $override );
+
+        $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
+
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+
+        $this->data_source->prepareExecute( $sql, $params );
+    }
+
+    /**
      *    real implementation of Charcoal_SmartGateway::decrementField()
      *
      * @param Charcoal_String|string $comment                comment text
@@ -1211,6 +1259,54 @@ class Charcoal_SmartGatewayImpl
         $pk = $model->getPrimaryKey();
         $where = "$pk = ?";
         $params = array( ui($data_id) );
+        $criteria = new Charcoal_SQLCriteria( $where, $params );
+
+        list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $model->createDTO(), $criteria, $override );
+
+        $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
+
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+
+        $this->data_source->prepareExecute( $sql, $params );
+    }
+
+    /**
+     *    real implementation of Charcoal_SmartGateway::incrementFieldBy()
+     *
+     * @param Charcoal_String|string $comment                comment text
+     * @param Charcoal_QueryTarget $query_target           description about target model, alias, or joins
+     * @param Charcoal_String|string $decrement_field            field name to decrement
+     * @param Charcoal_String|string $query_field            field name to query
+     * @param mixed $query_value                   field value to query
+     * @param Charcoal_Integer|int $decrement_by       amount of decrement
+     */
+    public function decrementFieldBy( $comment, $query_target, $decrement_field, $query_field, $query_value, $decrement_by = 1 )
+    {
+        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
+        Charcoal_ParamTrait::validateString( 3, $decrement_field );
+        Charcoal_ParamTrait::validateString( 4, $query_field );
+        Charcoal_ParamTrait::validateScalar( 5, $query_value );
+        Charcoal_ParamTrait::validateInteger( 6, $decrement_by, TRUE );
+
+        $model = $this->getModel( $query_target->getModelName() );
+        $alias = $query_target->getAlias();
+
+        if ( !$model->fieldExists($decrement_field) ){
+            _throw( new Charcoal_InvalidArgumentException("field=[$decrement_field]") );
+        }
+        if ( !$model->fieldExists($query_field) ){
+            _throw( new Charcoal_InvalidArgumentException("field=[$query_field]") );
+        }
+
+        $decrement_field = us($decrement_field);
+        $query_field = us($query_field);
+
+        $override[$decrement_field]['update'] = new Charcoal_AnnotationValue( 'update', 'function', array('decrement', $decrement_by) );
+
+        $where = "$query_field = ?";
+        $params = array( $query_value );
         $criteria = new Charcoal_SQLCriteria( $where, $params );
 
         list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $model->createDTO(), $criteria, $override );

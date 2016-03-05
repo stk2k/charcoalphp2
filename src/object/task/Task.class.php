@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_Task extends Charcoal_CharcoalObject implements Charcoal_ITask
+abstract class Charcoal_Task extends Charcoal_CharcoalComponent implements Charcoal_ITask
 {
     const TAG = "Task";
 

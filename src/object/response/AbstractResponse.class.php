@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_AbstractResponse extends Charcoal_CharcoalObject implements Charcoal_IResponse
+class Charcoal_AbstractResponse extends Charcoal_CharcoalComponent implements Charcoal_IResponse
 {
     private $values;
     private $filters;

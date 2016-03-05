@@ -396,7 +396,9 @@ class Charcoal_Framework
 
         self::setHookStage( Charcoal_EnumCoreHookStage::BEFORE_REG_EXTLIB_DIR );
 
-        if ( $profile->getBoolean( 'USE_EXTLIB', FALSE ) ){
+        $use_extlib = b( $profile->getBoolean( 'USE_EXTLIB', FALSE ) );
+
+        if ( $use_extlib->isTrue() ){
             $lib_dirs = $profile->getArray( 'EXTLIB_DIR', array(), TRUE );
             if ( $lib_dirs ){
                 foreach( $lib_dirs as $dir ){

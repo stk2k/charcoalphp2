@@ -13,6 +13,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 {
     const VALUE_NULL = 'null';
 
+    /** @var  Charcoal_SmartGatewayImpl */
+    private $impl;
+
     /**
      * Constructor
      */
@@ -134,7 +137,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     /**
      * Set auto commit flag
      *
-     * @param bool $on          If TRUE, transaction will be automatically comitted.
+     * @param Charcoal_Boolean|boolean $on          If TRUE, transaction will be automatically comitted.
      */
     public function autoCommit( $on )
     {
@@ -286,10 +289,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *    increment field value
      *
      * @param Charcoal_String|string|NULL $comment                comment text
-     * @param string $query_target    description about target model, alias, or joins
-     * @param int $data_id            identify database entity
-     * @param string $field           field name to increment
-     * @param int $increment_by       amount of increment
+     * @param Charcoal_String|string $query_target    description about target model, alias, or joins
+     * @param Charcoal_Integer|integer $data_id            identify database entity
+     * @param Charcoal_String|string $field           field name to increment
+     * @param Charcoal_Integer|integer $increment_by       amount of increment
      */
     public function incrementField( $comment, $query_target, $data_id, $field, $increment_by = 1 )
     {
@@ -312,13 +315,43 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     }
 
     /**
+     *    increment field value by specified field
+     *
+     * @param Charcoal_String|string|NULL $comment       comment text
+     * @param Charcoal_String|string $query_target           description about target model, alias, or joins
+     * @param Charcoal_String|string $increment_field            field name to increment
+     * @param Charcoal_String|string $query_field            field name to query
+     * @param mixed $query_value                   field value to query
+     * @param Charcoal_Integer|int $increment_by       amount of increment
+     */
+    public function incrementFieldBy( $comment, $query_target, $increment_field, $query_field, $query_value, $increment_by = 1 )
+    {
+        if ( $comment === NULL ){
+            list( $file, $line ) = Charcoal_System::caller(0);
+            $comment = basename($file) . '(' . $line . ')';
+        }
+        try{
+            if ( !($query_target instanceof Charcoal_QueryTarget) ){
+                $query_target = new Charcoal_QueryTarget( $query_target );
+            }
+
+            $this->impl->incrementFieldBy( $comment, $query_target, $increment_field, $query_field, $query_value, $increment_by );
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e, TRUE, TRUE );
+            _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+        }
+    }
+
+    /**
      *    decrement field value
      *
      * @param Charcoal_String|string|NULL $comment                comment text
-     * @param string $query_target    description about target model, alias, or joins
-     * @param int $data_id            identify database entity
-     * @param string $field           field name to decrement
-     * @param int $decrement_by       amount of decrement
+     * @param Charcoal_String|string $query_target    description about target model, alias, or joins
+     * @param Charcoal_Integer|integer $data_id            identify database entity
+     * @param Charcoal_String|string $field           field name to decrement
+     * @param Charcoal_Integer|integer $decrement_by       amount of decrement
      */
     public function decrementField( $comment, $query_target, $data_id, $field, $decrement_by = 1 )
     {
@@ -332,6 +365,36 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
             }
 
             $this->impl->decrementField( $comment, $query_target, $data_id, $field, $decrement_by );
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e, TRUE, TRUE );
+            _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+        }
+    }
+
+    /**
+     *    decrement field value by specified field
+     *
+     * @param Charcoal_String|string|NULL $comment       comment text
+     * @param Charcoal_String|string $query_target           description about target model, alias, or joins
+     * @param Charcoal_String|string $decrement_field            field name to decrement
+     * @param Charcoal_String|string $query_field            field name to query
+     * @param mixed $query_value                   field value to query
+     * @param Charcoal_Integer|int $decrement_by       amount of decrement
+     */
+    public function decrementFieldBy( $comment, $query_target, $decrement_field, $query_field, $query_value, $decrement_by = 1 )
+    {
+        if ( $comment === NULL ){
+            list( $file, $line ) = Charcoal_System::caller(0);
+            $comment = basename($file) . '(' . $line . ')';
+        }
+        try{
+            if ( !($query_target instanceof Charcoal_QueryTarget) ){
+                $query_target = new Charcoal_QueryTarget( $query_target );
+            }
+
+            $this->impl->decrementFieldBy( $comment, $query_target, $decrement_field, $query_field, $query_value, $decrement_by );
         }
         catch ( Exception $e )
         {
@@ -371,10 +434,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     /**
      *    update record with multiple fields
      *
-     * @param Charcoal_String|string|NULL $comment                comment text
-     * @param string $query_target    description about target model, alias, or joins
-     * @param int $data_id            identify database entity
-     * @param array $data             associative array or HashMap object to update
+     * @param Charcoal_String|string|NULL $comment       comment text
+     * @param string $query_target                       description about target model, alias, or joins
+     * @param int $data_id                               identify database entity
+     * @param Charcoal_HashMap|array $data               associative array or HashMap object to update
      */
     public function updateFields( $comment, $query_target, $data_id, $data )
     {
@@ -387,7 +450,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
                 $query_target = new Charcoal_QueryTarget( $query_target );
             }
 
-            $this->impl->updateFields( $comment, $query_target, $data );
+            $this->impl->updateFields( $comment, $query_target, $data_id, $data );
         }
         catch ( Exception $e )
         {
@@ -399,9 +462,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     /**
      *    insert DTO into specified table
      *
-     * @param Charcoal_String|string|NULL $comment                comment text
+     * @param Charcoal_String|string|NULL $comment           comment text
      * @param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
-     * @param array $data                                    associative array/HashMap/DTO object to insert
+     * @param Charcoal_DTO $data                             associative array/HashMap/DTO object to insert
      *
      * @return int         new data id
      */
@@ -458,9 +521,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     /**
      *    insert or update DTO into specified table
      *
-     * @param Charcoal_String|string|NULL $comment          comment text
+     * @param Charcoal_String|string|NULL $comment     comment text
      * @param string $query_target                     description about target model, alias, or joins
-     * @param array|ArrayAccess $data                  associative array/HashMap/DTO object to update
+     * @param Charcoal_DTO $data                       associative array/HashMap/DTO object to update
      *
      * @return int          new data id
      */
@@ -764,7 +827,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
                 $query_target = new Charcoal_QueryTarget( $query_target );
             }
 
-            $result = $this->impl->findAllDistinct( $query_target, $criteria, $fields, $recordsetFactory, $driver_options );
+            $result = $this->impl->findAllDistinct( $comment, $query_target, $criteria, $fields, $recordsetFactory, $driver_options );
         }
         catch ( Exception $e )
         {
@@ -874,7 +937,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment       comment text
      * @param string $query_target                  description about target model, alias, or joins
-     * @param array|Charcoal_Vector $data_ids       array of primary key values for the entity
+     * @param array|Charcoal_Vector $ids       array of primary key values for the entity
      */
     public function deleteByIds( $comment, $query_target, $ids )
     {

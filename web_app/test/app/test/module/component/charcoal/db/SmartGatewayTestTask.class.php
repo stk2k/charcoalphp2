@@ -23,6 +23,10 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 
     /**
      * check if action will be processed
+     *
+     * @param string $action
+     *
+     * @return boolean
      */
     public function isValidAction( $action )
     {
@@ -54,6 +58,10 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "nested_recordset_find":
         case "delete_by_id":
         case "delete_by_ids":
+        case "increment_field":
+        case "increment_field_by":
+        case "decrement_field":
+        case "decrement_field_by":
             return TRUE;
         }
         return FALSE;
@@ -61,6 +69,9 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 
     /**
      * セットアップ
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function setUp( $action, $context )
     {
@@ -98,6 +109,12 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "recordset_find":
         case "nested_recordset_query":
         case "nested_recordset_find":
+        case "delete_by_id":
+        case "delete_by_ids":
+        case "increment_field":
+        case "increment_field_by":
+        case "decrement_field":
+        case "decrement_field_by":
 
             // truncate all tables
             $this->gw->execute( "", "TRUNCATE blogs" );
@@ -159,6 +176,9 @@ SQL;
 
     /**
      * クリーンアップ
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function cleanUp( $action, $context )
     {
@@ -166,7 +186,11 @@ SQL;
 
     /**
      * テスト
-         * @var Charcoal_SmartGateway $this->gw
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
+     *
+     * @return boolean
      */
     public function test( $action, $context )
     {
@@ -179,6 +203,7 @@ SQL;
 
             $default_ds = $this->gw->getDataSource();
 
+            /** @var Charcoal_IDataSource $another_ds */
             $another_ds = $context->createObject( 'PDO', 'data_source' );
 
             $data = array(
@@ -200,8 +225,8 @@ SQL;
             // デフォルトコネクションで更新
             $this->gw->execute( "commit #4", "UPDATE posts set post_user = 'hoge' where post_id = 1" );
 
-            $result2 = $this->gw->query( "commit #5", "SELECT * FROM posts WHERE post_id=1");
-            $post_user2 = $result2[0]['post_user'];
+            $this->gw->query( "commit #5", "SELECT * FROM posts WHERE post_id=1");
+            //$post_user2 = $result2[0]['post_user'];
 
             // commit前に違うコネクションで確認
             $this->gw->setDataSource( $another_ds );
@@ -213,8 +238,8 @@ SQL;
 
             // commit後に違うコネクションで確認
             $this->gw->setDataSource( $another_ds );
-            $result4 = $this->gw->query( "commit #7", "SELECT * FROM posts WHERE post_id=1");
-            $post_user4 = $result4[0]['post_user'];
+            $this->gw->query( "commit #7", "SELECT * FROM posts WHERE post_id=1");
+            //$post_user4 = $result4[0]['post_user'];
 
             $this->assertEquals( $post_user, $post_user3 );
 
@@ -224,6 +249,7 @@ SQL;
             $sql = "SELECT * FROM blogs WHERE blog_id = 1";
             $result = $this->gw->query( "query #1", $sql );
 
+            $blog_name = '';
             foreach( $result as $row ){
                 $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
@@ -239,8 +265,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "select #1", 'blogs', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -254,8 +281,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "select_alias #1", 'blogs as b', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -280,8 +308,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "inner_join #1", 'blogs + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -296,8 +325,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "left_join #1", 'blogs (+ posts on "blogs.blog_id = posts.blog_id"', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -312,8 +342,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "right_join #1", 'blogs +) posts on "blogs.blog_id = posts.blog_id"', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -329,8 +360,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "inner_join_alias #1", 'blogs as b + posts as p on "b.blog_id = p.blog_id"', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -345,8 +377,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "inner_join_multi #1", 'blogs  + posts on "blogs.blog_id = posts.blog_id" + comments on "posts.post_id = comments.post_id"', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -361,8 +394,9 @@ SQL;
             $criteria = new Charcoal_SQLCriteria( $where, array(1) );
             $result = $this->gw->findAll( "inner_join_multi_alias #1", 'blogs as b + posts as p on "b.blog_id = p.blog_id" + comments as c on "p.post_id = c.post_id"', $criteria );
 
+            $blog_name = '';
             foreach( $result as $row ){
-                $blog_name = $row->blog_name;
+                $blog_name = $row['blog_name'];
                 echo "blog_name:$blog_name" . eol();
             }
 
@@ -447,9 +481,9 @@ SQL;
 
             $result = $this->gw->findFirst( "find_first #1",'posts', $criteria );
 
-            echo "result:" . $result->post_title . eol();
+            echo "result:" . $result['post_title'] . eol();
 
-            $this->assertEquals( 'How does it work?', $result->post_title );
+            $this->assertEquals( 'How does it work?', $result['post_title'] );
 
             return TRUE;
 
@@ -476,14 +510,14 @@ SQL;
             $dto->post_body = 'New Post Body';
             $dto->user = 'Ichiro';
 
-            $count = $this->gw->count( "save #1",'posts', new Charcoal_SQLCriteria(), NULL, 'save #1' );
+            $count = $this->gw->count( "save #1",'posts', new Charcoal_SQLCriteria(), NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             echo "count(before save):" . $count . eol();
             $this->assertEquals( 3, $count );
 
-            $new_id = $this->gw->save( "save #2","posts", $dto, 'save #2' );
+            $new_id = $this->gw->save( "save #2","posts", $dto );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -501,14 +535,14 @@ SQL;
 
             echo "count(after save):" . $count . eol();
             $this->assertEquals( 4, $count );
-            $this->assertEquals( 'New Post', $new_record->post_title );
-            $this->assertEquals( 'New Post Body', $new_record->post_body );
+            $this->assertEquals( 'New Post', $new_record['post_title'] );
+            $this->assertEquals( 'New Post Body', $new_record['post_body'] );
 
             return TRUE;
 
         case "fluent_api":
 
-            $rs = $this->gw
+            $this->gw
                         ->select( "b.blog_name, b.post_total, p.post_user, p.post_title" )
                         ->from(s("blogs"),s("b"))
                         ->leftJoin(s("posts"),s("p"))->on( "b.blog_id = p.blog_id" )
@@ -535,7 +569,7 @@ SQL;
             $rsfactory1 = $this->gw->createRecordsetFactory();        // fetch mode: FETCHMODE_BOTH
 
             $sql = "SELECT * FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( "recordset_query #1", $sql, NULL, $rsfactory1, NULL, 'recordset_query #1' );
+            $result = $this->gw->query( "recordset_query #1", $sql, NULL, $rsfactory1, NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -546,7 +580,7 @@ SQL;
             $rsfactory2 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_ASSOC );
 
             $sql = "SELECT * FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( "recordset_query #2", $sql, NULL, $rsfactory2, NULL, 'recordset_query #2' );
+            $result = $this->gw->query( "recordset_query #2", $sql, NULL, $rsfactory2, NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -557,7 +591,7 @@ SQL;
             $rsfactory3 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_NUM );
 
             $sql = "SELECT blog_id, blog_name, post_total FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( "recordset_query #3", $sql, NULL, $rsfactory3, NULL, 'recordset_query #3' );
+            $result = $this->gw->query( "recordset_query #3", $sql, NULL, $rsfactory3, NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -573,7 +607,7 @@ SQL;
             $rsfactory1 = $this->gw->createRecordsetFactory();        // fetch mode: FETCHMODE_ASSOC
 
             $sql = "SELECT * FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( "recordset_find #1", $sql, NULL, $rsfactory1, NULL, 'recordset_find #1' );
+            $result = $this->gw->query( "recordset_find #1", $sql, NULL, $rsfactory1, NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -584,7 +618,7 @@ SQL;
             $rsfactory2 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_ASSOC );
 
             $sql = "SELECT * FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( "recordset_find #2", $sql, NULL, $rsfactory2, NULL, 'recordset_find #2' );
+            $result = $this->gw->query( "recordset_find #2", $sql, NULL, $rsfactory2, NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -595,7 +629,7 @@ SQL;
             $rsfactory3 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_NUM );
 
             $sql = "SELECT blog_id, blog_name, post_total FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( "recordset_find #3", $sql, NULL, $rsfactory3, NULL, 'recordset_find #3' );
+            $result = $this->gw->query( "recordset_find #3", $sql, NULL, $rsfactory3, NULL );
 
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
@@ -673,7 +707,7 @@ SQL;
 
             //ad($default_ds_config);
 
-            $config = $context->createConfig( $default_ds_config );
+            $config = $context->createConfig( $default_ds_config->getAll() );
 
             $GLOBALS['hoge'] = true;
 
@@ -721,6 +755,141 @@ SQL;
 
             return TRUE;
 
+        case "increment_field":
+
+            // increment post_toal by 1
+            $this->gw->incrementField( "increment_field #1", 'blogs', 1, 'post_total' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 2 => 3
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 3, $post_total );
+
+            // increment post_toal by 2
+            $this->gw->incrementField( "increment_field #1", 'blogs', 1, 'post_total', 2 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 3 => 5
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 5, $post_total );
+
+            // increment post_toal by -5
+            $this->gw->incrementField( "increment_field #1", 'blogs', 1, 'post_total', -5 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 5 => 0
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 0, $post_total );
+
+            return TRUE;
+
+        case "increment_field_by":
+
+            // increment post_toal by 1
+            $this->gw->incrementFieldBy( "increment_field_by #1", 'blogs', 'post_total', 'blog_name', 'my blog' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 2 => 3
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 3, $post_total );
+
+            // increment post_toal by 2
+            $this->gw->incrementFieldBy( "increment_field_by #2", 'blogs', 'post_total', 'blog_name', 'my blog', 2 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 3 => 5
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 5, $post_total );
+
+            // increment post_toal by -5
+            $this->gw->incrementFieldBy( "increment_field_by #3", 'blogs', 'post_total', 'blog_name', 'my blog', -5 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 5 => 0
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 0, $post_total );
+
+            return TRUE;
+
+        case "decrement_field":
+
+            // decrement post_toal by 1
+            $this->gw->decrementField( "decrement_field #1", 'blogs', 1, 'post_total' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 2 => 1
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 1, $post_total );
+
+            // decrement post_toal by 2
+            $this->gw->decrementField( "decrement_field #2", 'blogs', 1, 'post_total', 2 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 1 => -1
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( -1, $post_total );
+
+            // decrement post_toal by -5
+            $this->gw->decrementField( "decrement_field #3", 'blogs', 1, 'post_total', -5 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be -1 => 4
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 4, $post_total );
+
+            return TRUE;
+
+        case "decrement_field_by":
+
+            // decrement post_toal by 1
+            $this->gw->decrementFieldBy( "decrement_field_by #1", 'blogs', 'post_total', 'blog_name', 'my blog' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 2 => 1
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 1, $post_total );
+
+            // decrement post_toal by 2
+            $this->gw->decrementFieldBy( "decrement_field_by #2", 'blogs', 'post_total', 'blog_name', 'my blog', 2 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be 1 => -1
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( -1, $post_total );
+
+            // decrement post_toal by -5
+            $this->gw->decrementFieldBy( "decrement_field_by #3", 'blogs', 'post_total', 'blog_name', 'my blog', -5 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // post_total must be -1 => 4
+            $pdo = new SimplePdo($this->gw);
+            $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
+            var_dump($post_total);
+            $this->assertEquals( 4, $post_total );
+
+            return TRUE;
         }
 
         return FALSE;

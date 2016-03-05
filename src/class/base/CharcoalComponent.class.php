@@ -14,12 +14,35 @@ class Charcoal_CharcoalComponent extends Charcoal_CharcoalObject
 {
     private $component_name;
 
+    /** @var Charcoal_Config */
+    private $config;
+
     /*
      *    コンストラクタ
      */
     public function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * Get configurations
+     *
+     * @return Charcoal_Config   configuration data
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config )
+    {
+        $this->config = $config;
     }
 
     /**

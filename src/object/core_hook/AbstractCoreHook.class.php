@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractCoreHook extends Charcoal_CharcoalObject implements Charcoal_ICoreHook
+abstract class Charcoal_AbstractCoreHook extends Charcoal_CharcoalComponent implements Charcoal_ICoreHook
 {
     /**
      * Convert corehook stage constant value into display string

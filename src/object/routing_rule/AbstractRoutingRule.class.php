@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-abstract class Charcoal_AbstractRoutingRule extends Charcoal_CharcoalObject implements Charcoal_IRoutingRule
+abstract class Charcoal_AbstractRoutingRule extends Charcoal_CharcoalComponent implements Charcoal_IRoutingRule
 {
 }
 

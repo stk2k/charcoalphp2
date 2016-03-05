@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalObject implements Charcoal_IClassLoader
+abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalComponent implements Charcoal_IClassLoader
 {
     /*
      *    コンストラクタ

@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractTaskManager extends Charcoal_CharcoalObject implements Charcoal_ITaskManager
+abstract class Charcoal_AbstractTaskManager extends Charcoal_CharcoalComponent implements Charcoal_ITaskManager
 {
 }
 

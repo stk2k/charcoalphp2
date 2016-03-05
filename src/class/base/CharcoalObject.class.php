@@ -33,26 +33,6 @@ class Charcoal_CharcoalObject extends Charcoal_Object
     }
 
     /**
-     * Get configurations
-     *
-     * @return array   configuration data
-     */
-    public function getConfig()
-    {
-        return get_object_vars( $this );
-    }
-
-    /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-    public function configure( $config )
-    {
-//        Charcoal_ParamTrait::validateConfig( 1, $config );
-    }
-
-    /**
      *  get object name
      *
      * @return string           object name

@@ -48,27 +48,6 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
     }
 
     /**
-     * Get configurations
-     *
-     * @return array   configuration data
-     */
-    public function getConfig()
-    {
-        return array(
-                'backend' => $this->backend,
-                'user' => $this->user,
-                'password' => $this->password,
-                'db_name' => $this->db_name,
-                'server' => $this->server,
-                'port' => $this->port,
-                'charset' => $this->charset,
-                'autocommit' => $this->autocommit,
-                'set_names' => $this->set_names,
-                'buffered_query' => $this->buffered_query,
-            );
-    }
-
-    /**
      * Initialize instance
      *
      * @param Charcoal_Config $config   configuration data
@@ -220,9 +199,12 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
     /*
      *    自動コミット機能をON/OFF
+     *
+     * @param boolean|Charcoal_Boolean $on
      */
     public function autoCommit( $on )
     {
+        $on = ub($on);
         try {
             Charcoal_ParamTrait::validateBoolean( 1, $on );
 

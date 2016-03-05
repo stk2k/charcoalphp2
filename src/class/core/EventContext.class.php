@@ -216,7 +216,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
      *    @param array $args             constructor arguments
      *    @param array $config           object configuration parameters
      *
-     * @return Charcoal_CharcoalObject        object instance
+     * @return Charcoal_CharcoalComponent        object instance
      */
     public function createObject( $obj_path, $type_name, $args = array(), $config = NULL )
     {

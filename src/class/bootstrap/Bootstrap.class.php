@@ -142,6 +142,7 @@ class Charcoal_Bootstrap
                 'Charcoal_CharcoalObject'                        => 'class/base',
                 'Charcoal_File'                                    => 'class/base',
                 'Charcoal_Interface'                             => 'class/base',
+                'Charcoal_CharcoalComponent'                     => 'class/base',
 
                 // Basic exception classes
                 'Charcoal_ArrayFormatException'                    => 'exception',

@@ -32,13 +32,6 @@ interface Charcoal_ICharcoalObject extends Charcoal_IObject
     public function setObjectPath( $obj_path );
 
     /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-    public function configure( $config );
-
-    /**
      *   returns sandbox
      *
      * @return Charcoal_Sandbox           sandbox object

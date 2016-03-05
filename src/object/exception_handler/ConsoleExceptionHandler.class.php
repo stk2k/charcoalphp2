@@ -25,7 +25,7 @@ class Charcoal_ConsoleExceptionHandler extends Charcoal_AbstractExceptionHandler
         log_info( "system, debug", "exception", "handled a framework exception!" );
 
         try{
-            // create debugtrace rederer
+            /** @var Charcoal_IDebugtraceRenderer $renderer */
             $renderer = $this->getSandbox()->createObject( 'console', 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
 
             // Render exception
@@ -37,7 +37,7 @@ class Charcoal_ConsoleExceptionHandler extends Charcoal_AbstractExceptionHandler
         {
             _catch( $e );
 
-            log_info( "system, debug", "exception", "debugtrace_renderer[$renderer] creation failed." );
+            log_info( "system, debug", "exception", "debugtrace_renderer creation failed." );
         }
 
         return FALSE;

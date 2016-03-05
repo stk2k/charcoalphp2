@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractSessionHandler extends Charcoal_CharcoalObject implements Charcoal_ISessionHandler
+abstract class Charcoal_AbstractSessionHandler extends Charcoal_CharcoalComponent implements Charcoal_ISessionHandler
 {
 }
 

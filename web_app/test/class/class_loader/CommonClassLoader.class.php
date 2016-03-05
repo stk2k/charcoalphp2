@@ -12,6 +12,7 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
 
                 // layout manager classes
                 // service classes
+
                 // events classes
 
                 // component classes
@@ -34,6 +35,9 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
                 // exception classes
 
                 // exception handler classes
+
+                // another classes
+                "SimplePdo"                => "class/pdo",
 
             );
     }

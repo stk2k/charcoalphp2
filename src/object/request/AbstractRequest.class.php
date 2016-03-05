@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalObject implements Charcoal_IRequest
+abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalComponent implements Charcoal_IRequest
 {
     protected $values;
     protected $proc_key;

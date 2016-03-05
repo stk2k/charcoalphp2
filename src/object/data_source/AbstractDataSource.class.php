@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractDataSource extends Charcoal_CharcoalObject implements Charcoal_IDataSource
+abstract class Charcoal_AbstractDataSource extends Charcoal_CharcoalComponent implements Charcoal_IDataSource
 {
 }
 

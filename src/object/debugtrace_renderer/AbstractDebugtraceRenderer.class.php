@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-abstract class Charcoal_AbstractDebugtraceRenderer extends Charcoal_CharcoalObject implements Charcoal_IDebugtraceRenderer
+abstract class Charcoal_AbstractDebugtraceRenderer extends Charcoal_CharcoalComponent implements Charcoal_IDebugtraceRenderer
 {
 }
 

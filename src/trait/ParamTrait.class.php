@@ -268,6 +268,18 @@ class Charcoal_ParamTrait
     }
 
     /**
+     *    validate a parameter if its type is DTO
+     *
+     *    @param int $key                parameter id
+     *    @param mixed $actual           data to validate
+     *    @param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
+     */
+    public static function validateDTO( $key, $actual, $null_allowed = FALSE )
+    {
+        self::validateType( $key, self::TYPE_O_DTO, $actual, $null_allowed );
+    }
+
+    /**
      *    validate a parameter if its type is a properties object
      *
      *    @param int $key                parameter id

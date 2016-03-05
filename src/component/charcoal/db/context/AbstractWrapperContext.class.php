@@ -14,6 +14,8 @@ class Charcoal_AbstractWrapperContext extends Charcoal_Object
 
     /**
      *  Constructor
+     *
+     * @param Charcoal_QueryContext $context
      */
     public function __construct( Charcoal_QueryContext $context )
     {

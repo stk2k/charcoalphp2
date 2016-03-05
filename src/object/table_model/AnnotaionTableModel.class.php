@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalObject
+class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalComponent
 {
     private $_class_vars;
     private $_primary_key;

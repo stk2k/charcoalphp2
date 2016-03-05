@@ -1,0 +1,76 @@
+<?php
+/**
+*
+* PHP version 5
+*
+* @package    renderers
+* @author     stk2k <stk2k@sazysoft.com>
+* @copyright  2008 stk2k, sazysoft
+*/
+
+class SimplePdo extends PDO
+{
+    const TAG = 'simple_pdo';
+
+    /**
+     * constructor
+     *
+     * @param Charcoal_SmartGateway $gw
+     * @param array $options
+     */
+    public function __construct($gw, $options = array())
+    {
+        /** @var Charcoal_Config $config */
+        $config = $gw->getDataSource()->getConfig();
+
+        // 接続情報を取得
+        $backend = $config->getString('backend');
+        $server = $config->getString('server');
+        $user = $config->getString('user');
+        $password = $config->getString('password');
+        $db_name = $config->getString('db_name');
+        $port = $config->getString('port');
+        $charset = $config->getString('charset');
+
+        //ad($config->getAll());
+
+        // PDOオブジェクトを作成
+        $dsn = "$backend:host=$server;{$port}dbname=$db_name;charset={$charset};";
+        //echo "DSN:$dsn" . PHP_EOL;
+        $default_options = array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        );
+        $options = array_merge($default_options, $options);
+        parent::__construct( $dsn, $user, $password, $options );
+    }
+
+    /**
+     * get one value
+     *
+     * @param Charcoal_String|string $sql
+     * @param array $params
+     *
+     * @return mixed
+     */
+    public function queryValue( $sql, $params = array() ){
+
+        $stmt = parent::prepare($sql);
+        if ( $stmt === FALSE ){
+            throw new RuntimeException("prepare SQL failed: $sql");
+        }
+
+        $result = $stmt->execute($params);
+        if ( $stmt === FALSE ){
+            throw new RuntimeException("executing SQL failed: $sql");
+        }
+
+        $result = $stmt->fetchAll();
+        if ( count($result) < 1 ){
+            throw new RuntimeException("no result: $sql");
+        }
+
+        return isset($result[0][0]) ? $result[0][0] : '';
+    }
+
+}

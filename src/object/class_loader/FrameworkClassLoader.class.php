@@ -9,13 +9,12 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalObject implements Charcoal_IClassLoader
+class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implements Charcoal_IClassLoader
 {
     static $class_paths = array(
 
         // base classes
                 'Charcoal_DTO'                        => 'class/base',
-                'Charcoal_CharcoalComponent'        => 'class/base',
                 'Charcoal_ImageFile'                => 'class/base',
                 'Charcoal_Position'                    => 'class/base',
                 'Charcoal_PositionFloat'            => 'class/base',

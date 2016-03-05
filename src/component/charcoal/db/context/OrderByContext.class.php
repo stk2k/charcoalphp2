@@ -12,6 +12,8 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 {
     /**
      *  Constructor
+     *
+     * @param Charcoal_QueryContext $context
      */
     public function __construct( $context )
     {
@@ -29,7 +31,9 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
     /**
      *  switch to limit context
      *
-     *  @param integer $limit       integer data used after LIMIT clause
+     *  @param integer|Charcoal_Integer $limit       integer data used after LIMIT clause
+     *
+     * @return Charcoal_LimitContext
      */
     public function limit( $limit )
     {
@@ -40,6 +44,10 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 
     /**
      *  switch to offset context
+     *
+     * @param mixed $offset
+     *
+     * @return Charcoal_OffsetContext
      */
     public function offset( $offset )
     {
@@ -50,6 +58,10 @@ class Charcoal_OrderByContext extends Charcoal_AbstractWrapperContext
 
     /**
      *  switch to group by context
+     *
+     * @param string|Charcoal_String $group_by
+     *
+     * @return Charcoal_GroupByContext
      */
     public function groupBy( $group_by )
     {

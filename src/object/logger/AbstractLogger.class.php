@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_AbstractLogger extends Charcoal_CharcoalObject
+class Charcoal_AbstractLogger extends Charcoal_CharcoalComponent
 {
     private $log_format;
     private $converter;

@@ -12,6 +12,20 @@
 interface Charcoal_IComponent extends Charcoal_ICharcoalObject
 {
     /**
+     * Get configurations
+     *
+     * @return Charcoal_Config   configuration data
+     */
+    public function getConfig();
+
+    /**
+     * Initialize instance
+     *
+     * @param Charcoal_Config $config   configuration data
+     */
+    public function configure( $config );
+
+    /**
      *   get component name
      */
     public function getComponentName();

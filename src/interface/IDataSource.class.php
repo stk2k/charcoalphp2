@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-interface Charcoal_IDataSource extends Charcoal_ICharcoalObject
+interface Charcoal_IDataSource extends Charcoal_IComponent
 {
     /*
      *    接続済みか
