@@ -399,7 +399,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
             if ( $debug ) log_debug( 'system,event', "event loop end. time=[$elapse]msec.");
         }
         catch( Charcoal_RuntimeException $e ){
-            _catch( $e );
+            _catch( $e, true );
             if ( $debug ) log_debug( 'system,event,debug', "an exception occured while processing event." );
             _throw( new Charcoal_ProcessEventAtTaskManagerException( $e ) );
         }

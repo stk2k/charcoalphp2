@@ -21,6 +21,8 @@ class BlogTableModel extends Charcoal_DefaultTableModel
     public $blog_category_id  = '@field @type:int(11) @insert:no @update:no @fk:blog_category';
     public $blog_name         = '@field @type:vachar(255) @insert:value @update:value';
     public $post_total        = '@field @type:int(11) @insert:value @update:value';
+    public $created_date      = '@field @type:datetime @insert:value @update:value';
+    public $modified_date     = '@field @type:datetime @insert:value @update:value';
 
     // returns model's own DTO
     public function createDTO( $values = array() )

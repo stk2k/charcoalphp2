@@ -257,6 +257,66 @@ abstract class Charcoal_TestTask extends Charcoal_Task
     }
 
     /**
+     * assert if greater than
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     */
+    public function assertGreaterThan( $expected, $actual )
+    {
+        $this->tests ++;
+        if ( $expected >= $actual ){
+            $expected = Charcoal_System::toString($expected,TRUE);
+            $this->messageExpectedActual( "Less than or equal", ">= $expected", $actual );
+        }
+    }
+
+    /**
+     * assert if greater than or equal
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     */
+    public function assertGreaterThanOrEqual( $expected, $actual )
+    {
+        $this->tests ++;
+        if ( $expected > $actual ){
+            $expected = Charcoal_System::toString($expected,TRUE);
+            $this->messageExpectedActual( "Less than", "> $expected", $actual );
+        }
+    }
+
+    /**
+     * assert if less than
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     */
+    public function assertLessThan( $expected, $actual )
+    {
+        $this->tests ++;
+        if ( $expected <= $actual ){
+            $expected = Charcoal_System::toString($expected,TRUE);
+            $this->messageExpectedActual( "Greater than or equal", "<= $expected", $actual );
+        }
+    }
+
+    /**
+     * assert if less than or equal
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     */
+    public function assertLessThanOrEqual( $expected, $actual )
+    {
+        $this->tests ++;
+        if ( $expected < $actual ){
+            $expected = Charcoal_System::toString($expected,TRUE);
+            $this->messageExpectedActual( "Less than", "< $expected", $actual );
+        }
+    }
+
+    /**
      * Process events
      *
      * @param Charcoal_IEventContext $context   event context

@@ -58,10 +58,25 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "nested_recordset_find":
         case "delete_by_id":
         case "delete_by_ids":
+            return TRUE;
+
+        /* ------------------------------
+            increment/decrement test
+        */
         case "increment_field":
         case "increment_field_by":
         case "decrement_field":
         case "decrement_field_by":
+            return TRUE;
+
+        /* ------------------------------
+            update test
+        */
+        case "update_field":
+        case "update_fields":
+        case "update_field_by":
+        case "update_field_now":
+        case "update_field_null":
             return TRUE;
         }
         return FALSE;
@@ -115,6 +130,11 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "increment_field_by":
         case "decrement_field":
         case "decrement_field_by":
+        case "update_field":
+        case "update_fields":
+        case "update_field_by":
+        case "update_field_now":
+        case "update_field_null":
 
             // truncate all tables
             $this->gw->execute( "", "TRUNCATE blogs" );
@@ -124,9 +144,9 @@ class SmartGatewayTestTask extends Charcoal_TestTask
 
             // blogs entries
             $sql = <<< SQL
-INSERT INTO `blogs` (`blog_id`, `blog_category_id`, `blog_name`, `post_total`) VALUES
-(1, 1, 'my blog', 2),
-(2, 2, 'another blog', 1);
+INSERT INTO `blogs` (`blog_id`, `blog_category_id`, `blog_name`, `post_total`, `created_date`, `modified_date`) VALUES
+(1, 1, 'my blog', 2, '2010-01-02 12:56:12', '2010-01-02 12:56:12'),
+(2, 2, 'another blog', 1, '2010-01-12 02:12:32', '2010-01-15 11:42:02');
 SQL;
             $this->gw->execute( "", $sql );
 
@@ -755,6 +775,9 @@ SQL;
 
             return TRUE;
 
+        /* ------------------------------
+            increment/decrement test
+        */
         case "increment_field":
 
             // increment post_toal by 1
@@ -890,6 +913,179 @@ SQL;
             $this->assertEquals( 4, $post_total );
 
             return TRUE;
+
+        /* ------------------------------
+            update test
+        */
+        case "update_field":
+
+            // update a field
+            $this->gw->updateField( 'update_field #1', 'blogs', 1, 'post_total', 5 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // confirm result
+            $pdo = new SimplePdo($this->gw);
+            $rows = $pdo->queryRows("SELECT * FROM blogs");
+            //var_dump($rows);
+            foreach( $rows as $row ){
+                switch($row['blog_id']){
+                    case 1:
+                        $this->assertEquals( 1, $row['blog_category_id'] );
+                        $this->assertEquals( 'my blog', $row['blog_name'] );
+                        $this->assertEquals( 5, $row['post_total'] );
+                        break;
+                    case 2:
+                        $this->assertEquals( 2, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 1, $row['post_total'] );
+                        break;
+                }
+            }
+
+            return TRUE;
+
+        case "update_fields":
+
+            // update fields
+            $fields = array(
+                'post_total' => 999,
+                'blog_name' => 'super popular blog',
+            );
+            $this->gw->updateFields( 'update_fields #1', 'blogs', 1, $fields );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // confirm result
+            $pdo = new SimplePdo($this->gw);
+            $rows = $pdo->queryRows("SELECT * FROM blogs");
+            //var_dump($rows);
+            foreach( $rows as $row ){
+                switch($row['blog_id']){
+                    case 1:
+                        $this->assertEquals( 1, $row['blog_category_id'] );
+                        $this->assertEquals( 'super popular blog', $row['blog_name'] );
+                        $this->assertEquals( 999, $row['post_total'] );
+                        break;
+                    case 2:
+                        $this->assertEquals( 2, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 1, $row['post_total'] );
+                        break;
+                }
+            }
+            return TRUE;
+
+        case "update_field_by":
+            // update fields in a row
+            $rows = $this->gw->updateFieldBy( 'update_field_by #1', 'blogs', 'blog_name', 'another blog', 'blog_id', 1 );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+            $this->assertEquals( 1, $rows );
+
+            // confirm result
+            $pdo = new SimplePdo($this->gw);
+            $rows = $pdo->queryRows("SELECT * FROM blogs");
+            //var_dump($rows);
+            foreach( $rows as $row ){
+                switch($row['blog_id']){
+                    case 1:
+                        $this->assertEquals( 1, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 2, $row['post_total'] );
+                        break;
+                    case 2:
+                        $this->assertEquals( 2, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 1, $row['post_total'] );
+                        break;
+                }
+            }
+
+            // update fields in multiple rows
+            $rows = $this->gw->updateFieldBy( 'update_field_by #1', 'blogs', 'post_total', 3, 'blog_name', 'another blog' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+            $this->assertEquals( 2, $rows );
+
+            // confirm result
+            $pdo = new SimplePdo($this->gw);
+            $rows = $pdo->queryRows("SELECT * FROM blogs");
+            //var_dump($rows);
+            foreach( $rows as $row ){
+                switch($row['blog_id']){
+                    case 1:
+                        $this->assertEquals( 1, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 3, $row['post_total'] );
+                        break;
+                    case 2:
+                        $this->assertEquals( 2, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 3, $row['post_total'] );
+                        break;
+                }
+            }
+
+            return TRUE;
+
+        case "update_field_now":
+
+            $start_time = time();
+
+            // update field to current time
+            $this->gw->updateFieldNow( 'update_field_now #1', 'blogs', 1, 'modified_date' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // confirm result
+            $pdo = new SimplePdo($this->gw);
+            $rows = $pdo->queryRows("SELECT * FROM blogs");
+            //var_dump($rows);
+            foreach( $rows as $row ){
+                switch($row['blog_id']){
+                    case 1:
+                        $this->assertEquals( 1, $row['blog_category_id'] );
+                        $this->assertEquals( 'my blog', $row['blog_name'] );
+                        $this->assertEquals( 2, $row['post_total'] );
+                        $this->assertEquals( '2010-01-02 12:56:12', $row['created_date'] );
+                        $this->assertLessThanOrEqual( $start_time, strtotime($row['modified_date']) );
+                        $this->assertGreaterThanOrEqual( time(), strtotime($row['modified_date']) );
+                        break;
+                    case 2:
+                        $this->assertEquals( 2, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 1, $row['post_total'] );
+                        $this->assertEquals( '2010-01-12 02:12:32', $row['created_date'] );
+                        $this->assertEquals( '2010-01-15 11:42:02', $row['modified_date'] );
+                        break;
+                }
+            }
+            return TRUE;
+
+        case "update_field_null":
+
+            // update fields in a row
+            $this->gw->updateFieldNull( 'update_field_null #1', 'blogs', 1, 'blog_name' );
+            echo $this->gw->popSQLHistory() . PHP_EOL;
+
+            // confirm result
+            $pdo = new SimplePdo($this->gw);
+            $rows = $pdo->queryRows("SELECT * FROM blogs");
+            //var_dump($rows);
+            foreach( $rows as $row ){
+                switch($row['blog_id']){
+                    case 1:
+                        $this->assertEquals( 1, $row['blog_category_id'] );
+                        $this->assertEquals( null, $row['blog_name'] );
+                        $this->assertEquals( 2, $row['post_total'] );
+                        break;
+                    case 2:
+                        $this->assertEquals( 2, $row['blog_category_id'] );
+                        $this->assertEquals( 'another blog', $row['blog_name'] );
+                        $this->assertEquals( 1, $row['post_total'] );
+                        break;
+                }
+            }
+            return TRUE;
+
+        default:
+            break;
         }
 
         return FALSE;

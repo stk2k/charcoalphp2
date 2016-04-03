@@ -61,16 +61,71 @@ class SimplePdo extends PDO
         }
 
         $result = $stmt->execute($params);
-        if ( $stmt === FALSE ){
+        if ( $result === FALSE ){
             throw new RuntimeException("executing SQL failed: $sql");
         }
 
         $result = $stmt->fetchAll();
-        if ( count($result) < 1 ){
-            throw new RuntimeException("no result: $sql");
+        if ( $result === FALSE ){
+            throw new RuntimeException("fetchAll failed: $sql");
         }
 
         return isset($result[0][0]) ? $result[0][0] : '';
     }
 
+    /**
+     * execute query and return selected rows
+     *
+     * @param Charcoal_String|string $sql
+     * @param array $params
+     *
+     * @return array rows selected
+     */
+    public function queryRows( $sql, $params = array() ){
+
+        $stmt = parent::prepare($sql);
+        if ( $stmt === FALSE ){
+            throw new RuntimeException("prepare SQL failed: $sql");
+        }
+
+        $result = $stmt->execute($params);
+        if ( $result === FALSE ){
+            throw new RuntimeException("executing SQL failed: $sql");
+        }
+
+        $rows = $stmt->fetchAll();
+        if ( $rows === FALSE ){
+            throw new RuntimeException("fetchAll failed: $sql");
+        }
+
+        return $rows;
+    }
+
+    /**
+     * execute query and return a selected row
+     *
+     * @param Charcoal_String|string $sql
+     * @param array $params
+     *
+     * @return array|null rows selected
+     */
+    public function queryRow( $sql, $params = array() ){
+
+        $stmt = parent::prepare($sql);
+        if ( $stmt === FALSE ){
+            throw new RuntimeException("prepare SQL failed: $sql");
+        }
+
+        $result = $stmt->execute($params);
+        if ( $result === FALSE ){
+            throw new RuntimeException("executing SQL failed: $sql");
+        }
+
+        $rows = $stmt->fetchAll();
+        if ( $rows === FALSE ){
+            throw new RuntimeException("fetchAll failed: $sql");
+        }
+
+        return isset($rows[0]) ? $rows[0] : null;
+    }
 }

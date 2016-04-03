@@ -751,5 +751,31 @@ class Charcoal_Framework
         }
         self::$loggers = null;
     }
+
+    /**
+     *  dump framework
+     *
+     * @param callable $dump_func
+     */
+    public static function dump( $dump_func = null )
+    {
+        if ( !$dump_func ){
+            $dump_func = function ($title, $obj){
+                $options = array(
+                    'output' => CHARCOAL_RUNMODE == 'http' ? 'html' : 'shell',
+                );
+                Charcoal_System::dump( $obj, 0, $options, false, 5 );
+            };
+        }
+        $dump_func( 'proc_stack', self::$proc_stack );
+        $dump_func( 'proc_path', self::$proc_path );
+        $dump_func( 'request', self::$request );
+        $dump_func( 'loaded_files', self::$loaded_files );
+        $dump_func( 'exception_handlers', self::$exception_handlers );
+        $dump_func( 'debugtrace_renderers', self::$debugtrace_renderers );
+        $dump_func( 'loggers', self::$loggers );
+        $dump_func( 'corehooks', self::$corehooks );
+        $dump_func( 'cache_drivers', self::$cache_drivers );
+    }
 }
 

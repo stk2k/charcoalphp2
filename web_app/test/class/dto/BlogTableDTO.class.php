@@ -12,13 +12,12 @@
  */
 class BlogTableDTO extends Charcoal_TableDTO
 {
-    public $posts;
-    public $blog_category;
-
     public $blog_id;
     public $blog_category_id;
     public $blog_name;
     public $post_total;
+    public $created_date;
+    public $modified_date;
 }
 
 return __FILE__;    // end of file

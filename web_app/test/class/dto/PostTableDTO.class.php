@@ -12,8 +12,6 @@
  */
 class PostTableDTO extends Charcoal_TableDTO
 {
-    public $comments;
-
     public $post_id;
     public $blog_id;
     public $post_title;

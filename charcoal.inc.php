@@ -293,9 +293,9 @@ function _throw( $e, $log_error = TRUE )
 
 //==================================================================
 // 例外をキャッチ
-function _catch( $e, $log_error = TRUE, $log_backtrace = FALSE )
+function _catch( $e, $log_backtrace = FALSE )
 {
-    if ( $e instanceof Charcoal_BusinessException || !($e instanceof Exception) ){
+    if ( !($e instanceof Exception) ){
         return;
     }
 
@@ -305,12 +305,9 @@ function _catch( $e, $log_error = TRUE, $log_backtrace = FALSE )
     $message = $e->getMessage();
 
     try{
-        log_debug( "system,debug", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
-        if ( $log_error ){
-            log_error( "error", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
-            if ( $log_backtrace ){
-                log_error( "error", "backtrace:" . print_simple_exception_trace($e->getTrace(),true), "exception" );
-            }
+        log_error( "system, debug, error", "_catch $clazz ($id) $message catched at $file($line)", "exception" );
+        if ( $log_backtrace ){
+            log_error( "error", "backtrace:" . print_simple_exception_trace($e->getTrace(),true), "exception" );
         }
     }
     catch( Exception $ex ){

@@ -616,6 +616,8 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
      * @param Charcoal_String|string $field         field name to query
      * @param Charcoal_Scalar $value                field value to query
+     *
+     * @return int deleted rows
      */
     public function deleteBy( $comment, $query_target, $field, $value )
     {
@@ -631,7 +633,7 @@ class Charcoal_SmartGatewayImpl
 
         $criteria = new Charcoal_SQLCriteria( $where, $params );
 
-        $this->deleteAll( $comment, $query_target, $criteria );
+        return $this->deleteAll( $comment, $query_target, $criteria );
     }
 
     /**
@@ -640,6 +642,8 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_String|string $comment       comment text
      * @param Charcoal_QueryTarget $query_target     description about target model, alias, or joins
      * @param Charcoal_SQLCriteria $criteria         criteria object
+     *
+     * @return int deleted rows
      */
     public function deleteAll( $comment, $query_target, $criteria )
     {
@@ -660,6 +664,8 @@ class Charcoal_SmartGatewayImpl
 //            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
 
         $this->data_source->prepareExecute( $sql, $params );
+
+        return $this->data_source->numRows();
     }
 
     /**
@@ -1041,6 +1047,8 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_String|string $comment                comment text
      * @param string|Charcoal_QueryTarget $query_target      description about target model, alias, or joins
      * @param array|Charcoal_Vector $data_set                array of array or DTO value to insert
+     *
+     * @return integer count of affected rows
      */
     public function insertAll( $comment, $query_target, $data_set )
     {
@@ -1056,6 +1064,8 @@ class Charcoal_SmartGatewayImpl
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
         $this->data_source->prepareExecute( $sql, $params );
+
+        return $this->data_source->numRows();
     }
 
     /**
@@ -1189,6 +1199,8 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_String|string $query_field            field name to query
      * @param mixed $query_value                   field value to query
      * @param Charcoal_Integer|int $increment_by       amount of increment
+     *
+     * @return integer
      */
     public function incrementFieldBy( $comment, $query_target, $increment_field, $query_field, $query_value, $increment_by = 1 )
     {
@@ -1226,6 +1238,8 @@ class Charcoal_SmartGatewayImpl
 //        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
 
         $this->data_source->prepareExecute( $sql, $params );
+
+        return $this->data_source->numRows();
     }
 
     /**
@@ -1405,12 +1419,63 @@ class Charcoal_SmartGatewayImpl
     }
 
     /**
+     *    real implementation of Charcoal_SmartGateway::updateFieldBy()
+     *
+     * @param Charcoal_String|string $comment                comment text
+     * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
+     * @param Charcoal_String|string $update_field            field name to update
+     * @param mixed $update_value                             scalar primitive data to update
+     * @param Charcoal_String|string $query_field             field name to query
+     * @param mixed $query_value                              field value to query
+     *
+     * @return integer count of affected rows
+     */
+    public function updateFieldBy( $comment, $query_target, $update_field, $update_value, $query_field, $query_value )
+    {
+        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
+        Charcoal_ParamTrait::validateString( 3, $update_field );
+        Charcoal_ParamTrait::validateScalar( 4, $update_value );
+        Charcoal_ParamTrait::validateString( 5, $query_field );
+        Charcoal_ParamTrait::validateScalar( 6, $query_value );
+
+        $model = $this->getModel( $query_target->getModelName() );
+        $alias = $query_target->getAlias();
+
+        $dto = $model->createDTO();
+
+        $dto->$update_field = ($update_value instanceof Charcoal_Scalar) ? $update_value->unbox() : $update_value;
+
+//        log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
+
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+
+        $where = "$query_field = ?";
+        $params = array( $query_value );
+        $criteria = new Charcoal_SQLCriteria( $where, $params );
+
+        list( $sql, $params ) = $this->sql_builder->buildUpdateSQL( $model, $alias, $dto, $criteria );
+
+        $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
+
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+
+        $this->data_source->prepareExecute( $sql, $params );
+
+        return $this->data_source->numRows();
+    }
+
+    /**
      *    real implementation of Charcoal_SmartGateway::updateAll()
      *
      * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
      * @param Charcoal_SQLCriteria $criteria        criteria object
      * @param Charcoal_HashMap|array $data      associative array or HashMap object to update
      * @param Charcoal_String|string $comment                comment text
+     *
+     * @return integer count of affected rows
      */
     public function updateAll( $comment, $query_target, $criteria, $data )
     {
@@ -1433,6 +1498,8 @@ class Charcoal_SmartGatewayImpl
 
         // SQL実行
         $this->data_source->prepareExecute( $sql, $params );
+
+        return $this->data_source->numRows();
     }
 }
 

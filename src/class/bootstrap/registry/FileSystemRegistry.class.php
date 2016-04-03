@@ -70,9 +70,15 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 
         // eval contents
         $cached_config = null;
-        eval('$cached_config='.$contents.';');
+        $retval = null;
+        try{
+            $retval = @eval('$cached_config='.$contents.'; return true;');
+        }
+        catch( ParseError $e ){
+            goto LOAD_CONFIG_FROM_FILE;
+        }
 
-        if ( is_array($cached_config) )
+        if ( $retval && is_array($cached_config) )
         {
             // read cache created date
             $cache_date = isset($cached_config['cache_date']) ? $cached_config['cache_date'] : false;
