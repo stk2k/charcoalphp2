@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class FileSystemTestTask extends Charcoal_TestTask
+class TempFileTestTask extends Charcoal_TestTask
 {
     /**
      * check if action will be processed
@@ -21,8 +21,9 @@ class FileSystemTestTask extends Charcoal_TestTask
     public function isValidAction( $action )
     {
         switch( $action ){
-        case "create_dir":
-        case "create_file":
+        case "create":
+        case "get_contents":
+        case "put_contents":
             return TRUE;
         }
         return FALSE;
@@ -75,23 +76,45 @@ class FileSystemTestTask extends Charcoal_TestTask
     {
         $action = us($action);
 
-        // file system component
-        /** @var Charcoal_FileSystemComponent $fs */
-        $fs = $context->getComponent( 'file_system@:charcoal:file' );
+        $this->setVerbose( true );
+
+        // temp file component
+        /** @var Charcoal_TempFileComponent $tf */
+        $tf = $context->getComponent( 'temp_file@:charcoal:file' );
 
         switch( $action ){
-        case "create_dir":
-            $dir = $fs->createDirectory( "hoge", "707" );
-            echo "created dir: $dir" . PHP_EOL;
+        case "create":
+            $file = $tf->create( "test" );
+
+            $this->assertTrue( $file->exists() );
+            $this->assertTrue( $file->canRead() );
+            $this->assertEquals( "test", $file->getContents() );
 
             return TRUE;
 
-        case "create_file":
-            $file = $fs->createFile( "test.txt", "Hello, File System!" );
-            echo "created file: $file" . PHP_EOL;
+        case "get_contents":
+            $temp_file = new Charcoal_File( CHARCOAL_TMP_DIR . '/tmpfile.txt' );
+
+            $temp_file->putContents( "test" );
+
+            $tf->setFile( $temp_file );
+
+            $this->assertEquals( "test", $tf->getContents() );
 
             return TRUE;
 
+
+        case "put_contents":
+            $temp_file = new Charcoal_File( CHARCOAL_TMP_DIR . '/tmpfile.txt' );
+
+            $tf->setFile( $temp_file );
+            $tf->putContents( "cat" );
+
+            $this->assertTrue( $temp_file->exists() );
+            $this->assertTrue( $temp_file->canRead() );
+            $this->assertEquals( "cat", $temp_file->getContents() );
+
+            return TRUE;
         }
 
         return FALSE;

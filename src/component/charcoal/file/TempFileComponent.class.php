@@ -12,12 +12,9 @@ require_once( 'TempFileComponentException.class.php' );
 
 class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
-    private $base_root;
     private $mode;
     private $overwrite;
-    private $contents;
-    private $parent_dir;
-    private $file_name;
+    private $file;
 
     /**
      *    Construct object
@@ -36,10 +33,30 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
     {
         parent::configure( $config );
 
-        $this->base_root  = us( $config->getString( 'base_root', CHARCOAL_BASE_DIR, TRUE ) );
         $this->mode       = us( $config->getString( 'mode', '777' ) );
         $this->overwrite  = ub( $config->getBoolean( 'overwrite', TRUE ) );
-        $this->parent_dir = us( $config->getString( 'parent_dir' ) );
+    }
+
+    /**
+     * Set temporary file object
+     *
+     * @param Charcoal_File $file file object
+     */
+    public function setFile( $file )
+    {
+        Charcoal_ParamTrait::validateFile( 1, $file );
+
+        $this->file = $file;
+    }
+
+    /**
+     * Get temporary file object
+     *
+     * @return Charcoal_File|null
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**
@@ -47,11 +64,15 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
      *
      * @param string|Charcoal_String $contents file contents
      */
-    public function setContents( $contents )
+    public function putContents( $contents )
     {
         Charcoal_ParamTrait::validateString( 1, $contents );
 
-        $this->contents = us($contents);
+        /** @var Charcoal_File $file */
+        $file = $this->file;
+        if ( $file && $file->canWrite() ){
+            $file->putContents( $contents );
+        }
     }
 
     /**
@@ -61,7 +82,12 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
      */
     public function getContents()
     {
-        return $this->contents;
+        /** @var Charcoal_File $file */
+        $file = $this->file;
+        if ( $file && $file->canRead() ){
+            return $file->getContents();
+        }
+        return '';
     }
 
     /**
@@ -87,57 +113,13 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
     }
 
     /**
-     * Set parent directory path
-     *
-     * @param string|Charcoal_String $path parent directory path
-     */
-    public function setParentDir( $parent_dir )
-    {
-        Charcoal_ParamTrait::validateString( 1, $parent_dir );
-
-        $this->parent_dir = us($parent_dir);
-    }
-
-    /**
-     * Get parent directory path
-     *
-     * @return string
-     */
-    public function getParentDir()
-    {
-        return $this->parent_dir;
-    }
-
-    /**
-     * Set file name
-     *
-     * @param string|Charcoal_String $file_name file name
-     */
-    public function setFileName( $file_name )
-    {
-        Charcoal_ParamTrait::validateString( 1, $file_name );
-
-        $this->file_name = us($file_name);
-    }
-
-    /**
-     * Get file name
-     *
-     * @return string
-     */
-    public function getFileName()
-    {
-        return $this->file_name;
-    }
-
-    /**
      * Set overwrite mode
      *
      * @param bool|Charcoal_Boolean $overwrite TRUE if the temporary file should be overwritten, FALSE otherwise.
      */
     public function setOverwrite( $overwrite )
     {
-        Charcoal_ParamTrait::validateBoolean( 1, $file_name );
+        Charcoal_ParamTrait::validateBoolean( 1, $overwrite );
 
         $this->overwrite = ub($overwrite);
     }
@@ -155,26 +137,42 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
     /**
      * create file
      *
-     * @return Charcoal_File file object of created file
+     * @param string|Charcoal_String $contents
+     * @param Charcoal_File $dir
+     * @param string|Charcoal_String $file_name
+     *
+     * @return Charcoal_File
      */
-    public function create()
+    public function create( $contents, $dir = null, $file_name = null )
     {
-        $obj = Charcoal_File::create( s($this->base_root) )->getChild( s($this->parent_dir) )->getChild( s($this->file_name) );
-
-        if ( $this->isOverwrite() ){
-            if ( $obj->exists() && !$obj->canWrite() ){
-                _throw( new Charcoal_FileSystemComponentException( s('specified file is not writeable.') ) );
-            }
+        if ( $file_name === null ){
+            $tmp_filename = Charcoal_System::hash() . '.tmp';
         }
-        elseif ( $obj->exists() ){
-            _throw( new Charcoal_FileSystemComponentException( s('specified file is already exists.') ) );
+        if ( $dir === null ){
+            $dir = Charcoal_ResourceLocator::getFile( $this->getSandbox()->getEnvironment(), "%TMP_DIR%" );
+        }
+
+        $tmp_file = new Charcoal_File( $file_name, $dir );
+
+        if ( $tmp_file->isDirectory() ){
+            _throw( new Charcoal_FileSystemComponentException( 'specified path is directory.' ) );
+        }
+        if ( $tmp_file->exists() ){
+            _throw( new Charcoal_FileSystemComponentException( 'specified file is already exists.' ) );
+        }
+        if ( $this->overwrite ){
+            if ( $tmp_file->exists() && !$tmp_file->canWrite() ){
+                _throw( new Charcoal_FileSystemComponentException( 'specified file is not writeable.' ) );
+            }
         }
 
         try{
-            // create file with parent directory
-            $obj->makeFile( $this->mode, $this->contents, TRUE );
+            // create file
+            $tmp_file->makeFile( $this->mode, $contents, TRUE );
 
-            return $obj;
+            $this->file = $tmp_file;
+
+            return $tmp_file;
         }
         catch( Exception $e )
         {
@@ -182,6 +180,7 @@ class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements C
 
             _throw( new Charcoal_TempFileComponentException( s('creating file failed.'), $e ) );
         }
+        return null;
     }
 }
 

@@ -12,11 +12,14 @@
 class Charcoal_FileSystemComponentException extends Charcoal_RuntimeException
 {
     /***
-     *    コンストラクタ
+     *  construct
+     *
+     * @param string|Charcoal_String $message
+     * @param Exception|null $prev
      **/
-    public function __construct( Charcoal_String $messsage, Exception $previous = NULL )
+    public function __construct( $message, $prev = NULL )
     {
-        if ( $previous ) parent::__construct( s($messsage), $previous ); else parent::__construct( s($messsage) );
+        if ( $prev ) parent::__construct( $message, $prev ); else parent::__construct( $message );
     }
 }
 

@@ -271,7 +271,7 @@ class Charcoal_Sandbox
             // constructor args
             $obj_name = $obj_path->getObjectName();
 
-            /** @var Charcoal_CharcoalObject $object */
+            /** @var Charcoal_CharcoalComponent $object */
             $object = $klass->newInstance( $args );
 
             // confirm implementation of the instance
