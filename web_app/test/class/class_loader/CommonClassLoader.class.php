@@ -23,14 +23,16 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
                 "BlogTableDTO"                => "class/dto",
                 "BlogCategoryTableDTO"        => "class/dto",
                 "PostTableDTO"                => "class/dto",
-                "CommentTableDTO"            => "class/dto",
+                "CommentTableDTO"             => "class/dto",
+                "ItemTableDTO"                => "class/dto",
 
                 // table model classes
 
                 "BlogTableModel"            => "class/table_model",
                 "BlogCategoryTableModel"    => "class/table_model",
                 "PostTableModel"            => "class/table_model",
-                "CommentTableModel"            => "class/table_model",
+                "CommentTableModel"         => "class/table_model",
+                "ItemTableModel"            => "class/table_model",
 
                 // exception classes
 
@@ -38,6 +40,7 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
 
                 // another classes
                 "SimplePdo"                => "class/pdo",
+                "DuplicatedPdo"            => "class/pdo",
 
             );
     }

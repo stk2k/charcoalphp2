@@ -157,6 +157,40 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
     }
 
     /**
+     * Get as hash map value
+     *
+     * @param string $key             key string for hash map
+     * @param array $default_value   default value
+     * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
+     *
+     * @return Charcoal_HashMap
+     */
+    public function getHashMap( $key, $default_value = NULL, $process_macro = FALSE )
+    {
+//        Charcoal_ParamTrait::validateString( 1, $key );
+//        Charcoal_ParamTrait::validateVector( 2, $default_value, TRUE );
+//        Charcoal_ParamTrait::validateBoolean( 3, $process_macro );
+
+        $key = us($key);
+        $items = parent::getHashMap( $key, $default_value );
+
+        if ( $items === NULL ){
+            return NULL;
+        }
+
+        // remove empty entry
+        foreach( $items as $key => $item ){
+            if ( empty($item) )    unset($items[$key]);
+        }
+
+        if ( $process_macro ){
+            $items = Charcoal_ResourceLocator::processMacro( $this->env, $items );
+        }
+
+        return m($items);
+    }
+
+    /**
      * Get as boolean value
      *
      * @param string $key             key string for hash map
@@ -179,7 +213,7 @@ class Charcoal_ConfigPropertySet extends Charcoal_HashMap
      * @param string $key             key string for hash map
      * @param int $default_value   default value
      *
-     * @return Charocal_Integer
+     * @return Charcoal_Integer
      */
     public function getInteger( $key, $default_value = NULL )
     {

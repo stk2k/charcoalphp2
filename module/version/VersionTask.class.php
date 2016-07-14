@@ -15,6 +15,8 @@ class VersionTask extends Charcoal_Task
      * Process events
      *
      * @param Charcoal_IEventContext $context   event context
+     *
+     * @return boolean
      */
     public function processEvent( $context )
     {

@@ -15,13 +15,12 @@ class SimplePdo extends PDO
     /**
      * constructor
      *
-     * @param Charcoal_SmartGateway $gw
+     * @param array $config
      * @param array $options
      */
-    public function __construct($gw, $options = array())
+    public function __construct($config, $options = array())
     {
-        /** @var Charcoal_Config $config */
-        $config = $gw->getDataSource()->getConfig();
+        $config = new Charcoal_HashMap($config);
 
         // 接続情報を取得
         $backend = $config->getString('backend');

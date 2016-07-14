@@ -13,6 +13,8 @@ require_once( 'EnumQueryOption.class.php' );
 
 class Charcoal_SmartGatewayImpl
 {
+    const TAG = 'smart_gateway';
+    
     private $sandbox;
     private $data_source;
     private $sql_builder;
@@ -136,6 +138,16 @@ class Charcoal_SmartGatewayImpl
     }
 
     /**
+     * select database
+     *
+     * @param string $database_key
+     */
+    public function selectDatabase( $database_key = null )
+    {
+        $this->data_source->selectDatabase( $database_key );
+    }
+
+    /**
      *   create recordset factory
      *
      * @param integer $fetch_mode    fetch mode(defined at Charcoal_IRecordset::FETCHMODE_XXX)
@@ -144,6 +156,36 @@ class Charcoal_SmartGatewayImpl
     public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL )
     {
         return $this->data_source->createRecordsetFactory( $fetch_mode, $options );
+    }
+
+    /*
+     *   check if the table exists
+     *
+     * @param Charcoal_String|string $model_name
+     *
+     * @return boolean
+     */
+    public function existsTable( $model_name )
+    {
+        /** @var Charcoal_IDataSource $ds */
+        $ds = $this->data_source;
+
+        try{
+            $model = $this->getModel( $model_name );
+
+            $sql = $this->sql_builder->buildExistsTableSQL( $ds->getDatabaseName(), $model );
+
+            $count = $this->queryValue( null, $sql );
+
+            return $count > 0 ? true : false;
+        }
+        catch ( Exception $e )
+        {
+            _catch( $e );
+            _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
+        }
+
+        return false;
     }
 
     /**
@@ -190,7 +232,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function execute( $comment, $sql, $params = NULL, $driver_options = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateString( 2, $sql );
         Charcoal_ParamTrait::validateHashMap( 3, $params, TRUE );
         Charcoal_ParamTrait::validateHashMap( 4, $driver_options, TRUE );
@@ -213,7 +255,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function query( $comment, $sql, $params = NULL, $recordsetFactory = NULL, $driver_options = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateString( 2, $sql );
         Charcoal_ParamTrait::validateHashMap( 3, $params, TRUE );
         Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_IRecordsetFactory', $recordsetFactory, TRUE );
@@ -251,7 +293,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function queryValue( $comment, $sql, $params = NULL, $driver_options = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateString( 2, $sql );
         Charcoal_ParamTrait::validateHashMap( 3, $params, TRUE );
         Charcoal_ParamTrait::validateHashMap( 4, $driver_options, TRUE );
@@ -262,7 +304,7 @@ class Charcoal_SmartGatewayImpl
 
         while( $row = $this->data_source->fetchAssoc( $result ) ){
             $value = array_shift($row);
-            log_debug( "debug,smart_gateway,sql", "queryValue:$value" );
+            log_debug( "debug,smart_gateway,sql", "queryValue:$value", self::TAG );
             return $value;
         }
 
@@ -288,7 +330,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function find( $comment, $query_target, $options, $criteria, $fields = NULL, $recordsetFactory = NULL, $driver_options = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $options );
         Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria );
@@ -353,23 +395,18 @@ class Charcoal_SmartGatewayImpl
 
         // SQLの作成
         $sql = $this->sql_builder->buildSelectSQL( $current_model, $current_model_alias, $options, $criteria, $current_model_joins, $fields );
-//            log_debug( "debug,smart_gateway,sql", "SQL: $sql" );
+//            log_debug( "debug,smart_gateway,sql", "SQL: $sql", self::TAG );
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
         // パラメータ
         $params = $criteria->getParams();
-//            log_debug( "debug,smart_gateway,sql", "params: $params" );
+//            log_debug( "debug,smart_gateway,sql", "params: $params", self::TAG );
 
         // 実行
         $result = $this->data_source->prepareExecute( $sql, $params, $driver_options );
 
-//            log_debug( "debug,smart_gateway,sql", "executed SQL: $sql" );
-
-        // 実行結果件数取得
-        $num_rows = $this->data_source->numRows();
-
-        log_debug( "debug,smart_gateway,sql", "num_rows: $num_rows" );
+//            log_debug( "debug,smart_gateway,sql", "executed SQL: $sql", self::TAG );
 
         if ( $recordsetFactory )
         {
@@ -381,6 +418,7 @@ class Charcoal_SmartGatewayImpl
             {
                 $rows[] = new Charcoal_HashMap( $row );
             }
+            log_debug( "debug,smart_gateway,sql", "rows:" . print_r($rows,true), self::TAG );
 
             $this->data_source->free( $result );
 
@@ -518,7 +556,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function findById( $comment, $query_target, $id )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateScalar( 3, $id );
 
@@ -545,7 +583,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function deleteById( $comment, $query_target, $data_id )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateScalar( 3, $data_id );
 
@@ -565,8 +603,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-///            log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+///            log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -580,7 +618,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function deleteByIds( $comment, $query_target, $data_ids )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateVector( 3, $data_ids );
 
@@ -603,8 +641,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-///            log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+///            log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -621,7 +659,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function deleteBy( $comment, $query_target, $field, $value )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateString( 3, $field );
         Charcoal_ParamTrait::validateScalar( 4, $value );
@@ -647,7 +685,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function deleteAll( $comment, $query_target, $criteria )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
 
@@ -660,8 +698,8 @@ class Charcoal_SmartGatewayImpl
 
         $params = $criteria ? $criteria->getParams() : NULL;
 
-//            log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//            log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
 
@@ -681,7 +719,7 @@ class Charcoal_SmartGatewayImpl
      */
     private  function execAggregateQuery( $comment, $aggregate_func, $query_target, $criteria = NULL, $fields = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateInteger( 2, $aggregate_func );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 4, 'Charcoal_SQLCriteria', $criteria, TRUE );
@@ -717,8 +755,8 @@ class Charcoal_SmartGatewayImpl
 
         $params = $criteria->getParams();
 
-//            log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//            log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         // SQL実行
         $result = $this->data_source->prepareExecute( $sql, $params );
@@ -744,7 +782,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function count( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
@@ -755,7 +793,7 @@ class Charcoal_SmartGatewayImpl
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_COUNT, $query_target, $criteria, $fields );
 
-        log_debug( "debug,sql,smart_gateway", "smart_gateway", "COUNT result: $result" );
+        log_debug( "debug,sql,smart_gateway", "COUNT result: $result", self::TAG );
 
         return intval($result);
     }
@@ -772,14 +810,14 @@ class Charcoal_SmartGatewayImpl
      */
     public function max( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_MAX, $query_target, $criteria, $fields );
 
-        log_debug( "debug,sql,smart_gateway", "smart_gateway", "MAX result: $result" );
+        log_debug( "debug,sql,smart_gateway", "MAX result: $result", self::TAG );
 
         return $result;
     }
@@ -796,14 +834,14 @@ class Charcoal_SmartGatewayImpl
      */
     public function min( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_MIN, $query_target, $criteria, $fields );
 
-        log_debug( "debug,sql,smart_gateway", "smart_gateway", "MIN result: $result" );
+        log_debug( "debug,sql,smart_gateway", "MIN result: $result", self::TAG );
 
         return $result;
     }
@@ -820,14 +858,14 @@ class Charcoal_SmartGatewayImpl
      */
     public function sum( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_SUM, $query_target, $criteria, $fields );
 
-        log_debug( "debug,sql,smart_gateway", "smart_gateway", "SUM result: $result" );
+        log_debug( "debug,sql,smart_gateway", "SUM result: $result", self::TAG );
 
         return $result;
     }
@@ -844,14 +882,14 @@ class Charcoal_SmartGatewayImpl
      */
     public function avg( $comment, $query_target, $criteria = NULL, $fields = NULL )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria, TRUE );
         Charcoal_ParamTrait::validateString( 4, $fields, TRUE );
 
         $result = $this->execAggregateQuery( $comment, Charcoal_EnumSQLAggregateFunc::FUNC_AVG, $query_target, $criteria, $fields );
 
-        log_debug( "debug,sql,smart_gateway", "smart_gateway", "AVG result: $result" );
+        log_debug( "debug,sql,smart_gateway", "AVG result: $result", self::TAG );
 
         return $result;
     }
@@ -865,7 +903,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function createTable( $comment, $model_name, $if_not_exists = false )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateString( 2, $model_name );
         Charcoal_ParamTrait::validateBoolean( 3, $if_not_exists );
 
@@ -887,7 +925,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function dropTable( $comment, $model_name, $if_exists = false )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateString( 2, $model_name );
         Charcoal_ParamTrait::validateBoolean( 3, $if_exists );
 
@@ -908,7 +946,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function truncateTable( $comment, $model_name )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateString( 2, $model_name );
 
         $model = $this->getModel( $model_name );
@@ -931,7 +969,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function save( $comment, $query_target, $data )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateDTO( 3, $data );
 
@@ -992,7 +1030,7 @@ class Charcoal_SmartGatewayImpl
                 $new_id = $data[$pk];
             }
 
-            log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
+            log_debug( "debug,smart_gateway,sql", "new_id:$new_id", self::TAG );
         }
         catch ( Exception $e )
         {
@@ -1014,7 +1052,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function insert( $comment, $query_target, $data )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateHashMapOrDTO( 3, $data );
 
@@ -1036,7 +1074,7 @@ class Charcoal_SmartGatewayImpl
         $row = $this->data_source->fetchArray( $result );
 
         $new_id = $row[0];
-        log_debug( "debug,smart_gateway,sql", "new_id:$new_id" );
+        log_debug( "debug,smart_gateway,sql", "new_id:$new_id", self::TAG );
 
         return $new_id;
     }
@@ -1052,7 +1090,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function insertAll( $comment, $query_target, $data_set )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateVector( 3, $data_set );
 
@@ -1078,7 +1116,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function updateFields( $comment, $query_target, $data_id, $data )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $data_id );
         Charcoal_ParamTrait::validateHashMap( 4, $data );
@@ -1088,7 +1126,7 @@ class Charcoal_SmartGatewayImpl
 
         $dto = $data instanceof Charcoal_DTO ? $data :  $model->createDTO( um($data) );
 
-//        log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
+//        log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true), self::TAG );
 
         $pk = $model->getPrimaryKey();
         $where = "$pk = ?";
@@ -1099,8 +1137,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         // SQL実行
         $this->data_source->prepareExecute( $sql, $params );
@@ -1116,7 +1154,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function updateFieldNow( $comment, $query_target, $data_id, $field )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $data_id );
         Charcoal_ParamTrait::validateString( 4, $field );
@@ -1141,8 +1179,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -1158,7 +1196,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function incrementField( $comment, $query_target, $data_id, $field, $increment_by = 1 )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $data_id );
         Charcoal_ParamTrait::validateString( 4, $field );
@@ -1184,8 +1222,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -1204,7 +1242,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function incrementFieldBy( $comment, $query_target, $increment_field, $query_field, $query_value, $increment_by = 1 )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateString( 3, $increment_field );
         Charcoal_ParamTrait::validateString( 4, $query_field );
@@ -1234,8 +1272,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
 
@@ -1253,7 +1291,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function decrementField( $comment, $query_target, $data_id, $field, $decrement_by = 1 )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $data_id );
         Charcoal_ParamTrait::validateString( 4, $field );
@@ -1279,8 +1317,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -1297,7 +1335,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function decrementFieldBy( $comment, $query_target, $decrement_field, $query_field, $query_value, $decrement_by = 1 )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateString( 3, $decrement_field );
         Charcoal_ParamTrait::validateString( 4, $query_field );
@@ -1327,8 +1365,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -1343,7 +1381,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function updateFieldNull( $comment, $query_target, $data_id, $field )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $data_id );
         Charcoal_ParamTrait::validateString( 4, $field );
@@ -1368,8 +1406,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -1385,7 +1423,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function updateField( $comment, $query_target, $data_id, $field, $value )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateInteger( 3, $data_id );
         Charcoal_ParamTrait::validateString( 4, $field );
@@ -1400,8 +1438,8 @@ class Charcoal_SmartGatewayImpl
 
 //        log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $pk = $model->getPrimaryKey();
         $where = "$pk = ?";
@@ -1412,8 +1450,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
     }
@@ -1432,7 +1470,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function updateFieldBy( $comment, $query_target, $update_field, $update_value, $query_field, $query_value )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateString( 3, $update_field );
         Charcoal_ParamTrait::validateScalar( 4, $update_value );
@@ -1448,8 +1486,8 @@ class Charcoal_SmartGatewayImpl
 
 //        log_debug( "debug,smart_gateway,sql", "dto:" . print_r($dto,true) );
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $where = "$query_field = ?";
         $params = array( $query_value );
@@ -1459,8 +1497,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
 
@@ -1479,7 +1517,7 @@ class Charcoal_SmartGatewayImpl
      */
     public function updateAll( $comment, $query_target, $criteria, $data )
     {
-        Charcoal_ParamTrait::validateString( 1, $comment );
+        Charcoal_ParamTrait::validateString( 1, $comment , TRUE );
         Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_QueryTarget', $query_target );
         Charcoal_ParamTrait::validateIsA( 3, 'Charcoal_SQLCriteria', $criteria );
         Charcoal_ParamTrait::validateHashMap( 4, $data );
@@ -1493,8 +1531,8 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-//        log_debug( "debug,smart_gateway,sql", "sql:$sql" );
-//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true) );
+//        log_debug( "debug,smart_gateway,sql", "sql:$sql", self::TAG );
+//        log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         // SQL実行
         $this->data_source->prepareExecute( $sql, $params );

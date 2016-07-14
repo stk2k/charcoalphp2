@@ -77,6 +77,11 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "update_field_by":
         case "update_field_now":
         case "update_field_null":
+
+        /* ------------------------------
+            select db test
+        */
+        case "select_db":
             return TRUE;
         }
         return FALSE;
@@ -135,6 +140,7 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "update_field_by":
         case "update_field_now":
         case "update_field_null":
+        case "select_db":
 
             // truncate all tables
             $this->gw->execute( "", "TRUNCATE blogs" );
@@ -192,6 +198,20 @@ SQL;
 
         }
 
+        if ( $action == "select_db" ){
+            $config = $this->gw->getDataSource()->getConfig()->getAll();
+            $pdo = new SimplePdo($config['test2']);
+
+            $pdo->query( "TRUNCATE `item`" );
+
+            $sql = <<< SQL
+INSERT INTO `item` (`item_name`, `price`, `stock`) VALUES
+('apple', 100, 10),
+('banana', 200, 5),
+('melon', 90, 0);
+SQL;
+            $pdo->query( $sql );
+        }
     }
 
     /**
@@ -660,11 +680,11 @@ SQL;
             return TRUE;
 
         case "nested_recordset_query":
-/*
+
             $rsfactory1 = $this->gw->createRecordsetFactory();        // fetch mode: FETCHMODE_BOTH
 
             $sql = "SELECT * FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( $sql, NULL, $rsfactory1 );
+            $result = $this->gw->query( NULL, $sql, NULL, $rsfactory1 );
 
             foreach( $result as $row ){
                 $this->assertEquals( 1, $row['blog_id'] );
@@ -673,54 +693,54 @@ SQL;
                 $blog_category_id = $row['blog_category_id'];
 
                 $sql = "SELECT * FROM blog_category WHERE blog_category_id = ?";
-                $result2 = $this->gw->query( $sql, array($blog_category_id), $rsfactory1 );
+                $result2 = $this->gw->query( NULL, $sql, array($blog_category_id), $rsfactory1 );
 
-                foreach( $result2 as $row ){
-                    $this->assertEquals( $blog_category_id, $row['blog_category_id'] );
-                    $this->assertEquals( $this->category_name_expected[$blog_category_id], $row['blog_category_name'] );
+                foreach( $result2 as $row2 ){
+                    $this->assertEquals( $blog_category_id, $row2['blog_category_id'] );
+                    $this->assertEquals( $this->category_name_expected[$blog_category_id], $row2['blog_category_name'] );
                 }
             }
+            /*
+                        $rsfactory2 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_ASSOC );
 
-            $rsfactory2 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_ASSOC );
+                        $sql = "SELECT * FROM blogs WHERE blog_id = 1";
+                        $result = $this->gw->query( $sql, NULL, $rsfactory2 );
 
-            $sql = "SELECT * FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( $sql, NULL, $rsfactory2 );
+                        foreach( $result as $row ){
+                            $this->assertEquals( 1, $row['blog_id'] );
+                            $this->assertEquals( $this->blog_name_expected[1], $row['blog_name'] );
 
-            foreach( $result as $row ){
-                $this->assertEquals( 1, $row['blog_id'] );
-                $this->assertEquals( $this->blog_name_expected[1], $row['blog_name'] );
+                            $blog_category_id = $row['blog_category_id'];
 
-                $blog_category_id = $row['blog_category_id'];
+                            $sql = "SELECT * FROM blog_category WHERE blog_category_id = ?";
+                            $result2 = $this->gw->query( $sql, array($blog_category_id), $rsfactory2 );
 
-                $sql = "SELECT * FROM blog_category WHERE blog_category_id = ?";
-                $result2 = $this->gw->query( $sql, array($blog_category_id), $rsfactory2 );
+                            foreach( $result2 as $row ){
+                                $this->assertEquals( $blog_category_id, $row['blog_category_id'] );
+                                $this->assertEquals( $this->category_name_expected[$blog_category_id], $row['blog_category_name'] );
+                            }
+                        }
 
-                foreach( $result2 as $row ){
-                    $this->assertEquals( $blog_category_id, $row['blog_category_id'] );
-                    $this->assertEquals( $this->category_name_expected[$blog_category_id], $row['blog_category_name'] );
-                }
-            }
+                        $rsfactory3 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_NUM );
 
-            $rsfactory3 = $this->gw->createRecordsetFactory( Charcoal_IRecordset::FETCHMODE_NUM );
+                        $sql = "SELECT blog_id, blog_name, post_total, blog_category_id FROM blogs WHERE blog_id = 1";
+                        $result = $this->gw->query( $sql, NULL, $rsfactory3 );
 
-            $sql = "SELECT blog_id, blog_name, post_total, blog_category_id FROM blogs WHERE blog_id = 1";
-            $result = $this->gw->query( $sql, NULL, $rsfactory3 );
+                        foreach( $result as $row ){
+                            $this->assertEquals( 1, $row[0] );
+                            $this->assertEquals( $this->blog_name_expected[1], $row[1] );
 
-            foreach( $result as $row ){
-                $this->assertEquals( 1, $row[0] );
-                $this->assertEquals( $this->blog_name_expected[1], $row[1] );
+                            $blog_category_id = $row[3];
 
-                $blog_category_id = $row[3];
+                            $sql = "SELECT blog_category_id, blog_category_name FROM blog_category WHERE blog_category_id = ?";
+                            $result2 = $this->gw->query( $sql, array($blog_category_id), $rsfactory3 );
 
-                $sql = "SELECT blog_category_id, blog_category_name FROM blog_category WHERE blog_category_id = ?";
-                $result2 = $this->gw->query( $sql, array($blog_category_id), $rsfactory3 );
-
-                foreach( $result2 as $row ){
-                    $this->assertEquals( $blog_category_id, $row[0] );
-                    $this->assertEquals( $this->category_name_expected[$blog_category_id], $row[1] );
-                }
-            }
-*/
+                            foreach( $result2 as $row ){
+                                $this->assertEquals( $blog_category_id, $row[0] );
+                                $this->assertEquals( $this->category_name_expected[$blog_category_id], $row[1] );
+                            }
+                        }
+            */
             $another_ds = $context->createObject( 'PDO', 'data_source' );
 
             $default_ds_config = $this->gw->getDataSource()->getConfig();
@@ -785,7 +805,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 2 => 3
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 3, $post_total );
@@ -795,7 +815,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 3 => 5
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 5, $post_total );
@@ -805,7 +825,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 5 => 0
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 0, $post_total );
@@ -819,7 +839,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 2 => 3
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 3, $post_total );
@@ -829,7 +849,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 3 => 5
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 5, $post_total );
@@ -839,7 +859,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 5 => 0
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 0, $post_total );
@@ -853,7 +873,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 2 => 1
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 1, $post_total );
@@ -863,7 +883,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 1 => -1
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( -1, $post_total );
@@ -873,7 +893,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be -1 => 4
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 4, $post_total );
@@ -887,7 +907,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 2 => 1
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 1, $post_total );
@@ -897,7 +917,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be 1 => -1
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( -1, $post_total );
@@ -907,7 +927,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // post_total must be -1 => 4
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $post_total = $pdo->queryValue("SELECT post_total FROM blogs WHERE blog_id = ?", [1]);
             var_dump($post_total);
             $this->assertEquals( 4, $post_total );
@@ -924,7 +944,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // confirm result
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $rows = $pdo->queryRows("SELECT * FROM blogs");
             //var_dump($rows);
             foreach( $rows as $row ){
@@ -955,7 +975,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // confirm result
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $rows = $pdo->queryRows("SELECT * FROM blogs");
             //var_dump($rows);
             foreach( $rows as $row ){
@@ -981,7 +1001,7 @@ SQL;
             $this->assertEquals( 1, $rows );
 
             // confirm result
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $rows = $pdo->queryRows("SELECT * FROM blogs");
             //var_dump($rows);
             foreach( $rows as $row ){
@@ -1005,7 +1025,7 @@ SQL;
             $this->assertEquals( 2, $rows );
 
             // confirm result
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $rows = $pdo->queryRows("SELECT * FROM blogs");
             //var_dump($rows);
             foreach( $rows as $row ){
@@ -1034,7 +1054,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // confirm result
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $rows = $pdo->queryRows("SELECT * FROM blogs");
             //var_dump($rows);
             foreach( $rows as $row ){
@@ -1065,7 +1085,7 @@ SQL;
             echo $this->gw->popSQLHistory() . PHP_EOL;
 
             // confirm result
-            $pdo = new SimplePdo($this->gw);
+            $pdo = new DuplicatedPdo($this->gw);
             $rows = $pdo->queryRows("SELECT * FROM blogs");
             //var_dump($rows);
             foreach( $rows as $row ){
@@ -1082,6 +1102,22 @@ SQL;
                         break;
                 }
             }
+            return TRUE;
+
+        case "select_db":
+
+            $exists = $this->gw->existsTable('item');
+
+            $this->assertEquals( false, $exists );
+
+            $this->gw->selectDatabase('test2');
+
+            $exists = $this->gw->existsTable('item');
+
+            $this->assertEquals( true, $exists );
+
+
+
             return TRUE;
 
         default:

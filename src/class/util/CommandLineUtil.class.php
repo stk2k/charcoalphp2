@@ -12,8 +12,11 @@
 class Charcoal_CommandLineUtil
 {
     /*
-     * 引数を空白で分割（ダブルクウォート、シングルクウォート対応）
+     * Split aruments by white space
      *
+     * @param string $args
+     *
+     * @return array
      */
     public static function splitParams( $args )
     {
@@ -99,6 +102,7 @@ class Charcoal_CommandLineUtil
 
     /*
      * 引数をパースし、連想配列にして返却する。
+     * Parse arguments and returns as an associative array
      *
      *    command -param1 value1 -param2 value2 ...
      */

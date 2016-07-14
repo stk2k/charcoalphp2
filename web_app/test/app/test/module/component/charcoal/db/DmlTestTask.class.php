@@ -12,7 +12,7 @@
 class DmlTestTask extends Charcoal_TestTask
 {
     const DB_HOST = '127.0.0.1';
-    const DB_NAME = 'charcoal';
+    const DB_NAME = 'charcoal_test';
     const DB_USER = 'root';
     const DB_PASS = '';
 
@@ -20,6 +20,10 @@ class DmlTestTask extends Charcoal_TestTask
 
     /**
      * check if action will be processed
+     *
+     * @param string $action
+     *
+     * @return boolean
      */
     public function isValidAction( $action )
     {
@@ -32,7 +36,10 @@ class DmlTestTask extends Charcoal_TestTask
     }
 
     /**
-     * セットアップ
+     * set up tests
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function setUp( $action, $context )
     {
@@ -62,50 +69,74 @@ class DmlTestTask extends Charcoal_TestTask
     }
 
     /**
-     * クリーンアップ
+     * clean up tests
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function cleanUp( $action, $context )
     {
     }
 
     /**
-     * テーブルのデータ数をカウント
+     * count all rows in a table
+     *
+     * @param string $table
+     *
+     * @return int
      */
     public function countTableRows( $table )
     {
         try {
             $sql = 'select count(*) from ' . $table;
-            $result = $this->pdo->query($sql)->fetch(PDO::FETCH_NUM);
+
+            /** @var PDO $pdo */
+            $pdo = $this->pdo;
+            $result = $pdo->query($sql)->fetch(PDO::FETCH_NUM);
 
             return $result[0];
         } catch (PDOException $e){
             echo $e->getMessage();
         }
+        return 0;
     }
 
     /**
-     * SQLのデータ数をカウント
+     * count rows which are selected by a SQL
+     *
+     * @param string $table
+     * @param string $where
+     *
+     * @return int
      */
     public function countRows( $table, $where )
     {
         try {
             $sql = 'select count(*) from ' . $table . ' where ' . $where;
-            $result = $this->pdo->query($sql)->fetch(PDO::FETCH_NUM);
+            /** @var PDO $pdo */
+            $pdo = $this->pdo;
+            $result = $pdo->query($sql)->fetch(PDO::FETCH_NUM);
 
             return $result[0];
         } catch (PDOException $e){
             echo $e->getMessage();
         }
+        return 0;
     }
 
     /**
-     * テスト
+     * execute tests
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
+     *
+     * @return boolean
      */
     public function test( $action, $context )
     {
         $action = us($action);
 
-        // SmartGateway
+        /** @var Charcoal_SmartGateway $gw */
         $gw = $context->getComponent( 'smart_gateway@:charcoal:db' );
 
         switch( $action ){
@@ -142,7 +173,7 @@ class DmlTestTask extends Charcoal_TestTask
                     new Charcoal_DTO( ['name' => 'melon', 'price' => 1800 ] ),
                 );
 
-            $gw->insertAll( __FILE__ . '(' . __LINE__ . ')', 'test', $data_set );
+            $gw->insertAll( null, 'test', $data_set );
 
             // テーブルの行数は5になっているはず
             $this->assertEquals( 5, $this->countTableRows('test'));

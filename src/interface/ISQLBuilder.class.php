@@ -124,6 +124,16 @@ interface Charcoal_ISQLBuilder extends Charcoal_ICharcoalObject
     public  function buildTruncateTableSQL( $model );
 
     /**
+     *    Generate RDBMS-specific SQL for TABLE EXISTS
+     *
+     *    @param string $database                   table schema
+     *    @param Charcoal_ITableModel $model        table model object related with th query
+     *
+     *    @return string                            SQL
+     */
+    public  function buildExistsTableSQL( $database, $model );
+
+    /**
      *    add RDBMS-specific comment after the specified SQL
      *
      *    @param string|Charcoal_String             SQL

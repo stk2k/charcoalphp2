@@ -15,6 +15,8 @@ class ShellTask extends Charcoal_Task
      * process event
      *
      * @param Charcoal_IEventContext $context   event context
+     *
+     * @return boolean
      */
     public function processEvent( $context )
     {
@@ -35,6 +37,7 @@ class ShellTask extends Charcoal_Task
         $context->loadModule( $target_module );
 
         // create shell_command event and push it into the event queue
+        /** @var Charcoal_IEvent $event */
         $event = $context->createEvent( 'shell_command' );
         $context->pushEvent( $event );
 

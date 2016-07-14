@@ -123,6 +123,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         return $this->impl->numRows();
     }
 
+    /**
+     * select database
+     *
+     * @param string $database_key
+     */
+    public function selectDatabase( $database_key = null )
+    {
+        $this->impl->selectDatabase( $database_key );
+    }
+
     /*
      *   create recordset factory
      *
@@ -132,6 +142,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     public function createRecordsetFactory( $fetch_mode = NULL, $options = NULL )
     {
         return $this->impl->createRecordsetFactory( $fetch_mode, $options );
+    }
+
+    /*
+     *   check if the table exists
+     *
+     * @param Charcoal_String|string $model_name
+     *
+     * @return boolean
+     */
+    public function existsTable( $model_name )
+    {
+        return $this->impl->existsTable( $model_name );
     }
 
     /**
@@ -147,7 +169,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBAutoCommitException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -163,7 +185,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBBeginTransactionException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -179,7 +201,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBCommitTransactionException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -195,7 +217,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBRollbackTransactionException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -223,7 +245,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -252,7 +274,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -284,9 +306,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
+        return 0;
     }
 
     /**
@@ -312,7 +335,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -341,7 +364,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -371,7 +394,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -400,7 +423,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -430,7 +453,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -458,7 +481,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -486,7 +509,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -517,7 +540,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $new_id;
@@ -547,9 +570,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
+        return 0;
     }
 
     /**
@@ -578,7 +602,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $new_id;
@@ -603,7 +627,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -631,7 +655,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $value;
@@ -661,7 +685,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -689,7 +713,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
 
@@ -725,7 +749,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -760,7 +784,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -795,7 +819,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -830,7 +854,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -865,7 +889,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -901,7 +925,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -933,7 +957,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -961,7 +985,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -988,7 +1012,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
     }
@@ -1018,9 +1042,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
+        return 0;
     }
 
     /**
@@ -1047,9 +1072,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
+        return 0;
     }
 
     /**
@@ -1079,7 +1105,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -1112,7 +1138,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -1145,7 +1171,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -1178,7 +1204,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -1211,7 +1237,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
         return $result;
@@ -1237,7 +1263,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
 
@@ -1264,7 +1290,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
 
@@ -1290,7 +1316,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
         catch ( Exception $e )
         {
-            _catch( $e, TRUE, TRUE );
+            _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
 

@@ -89,6 +89,7 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
         {
             _throw( new Charcoal_SQLBuilderException( "MySQL_SQLBuilder#buildCreateTableSQL failed" ) );
         }
+        return '';
     }
 
     /**
@@ -101,5 +102,31 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
         return "select LAST_INSERT_ID()";
     }
 
+    /**
+     *    Generate RDBMS-specific SQL for TABLE EXISTS
+     *
+     *    @param string $database                   table schema
+     *    @param Charcoal_ITableModel $model        table model object related with th query
+     *
+     *    @return string                            SQL
+     */
+    public  function buildExistsTableSQL( $database, $model )
+    {
+        Charcoal_ParamTrait::validateString( 1, $database );
+        Charcoal_ParamTrait::validateIsA( 2, 'Charcoal_ITableModel', $model );
+
+        try{
+            $table_name = $model->getTableName();
+            $sql = "SELECT count(*) FROM information_schema.columns WHERE TABLE_NAME = '$table_name'";
+            $sql .= " AND TABLE_SCHEMA = '$database'";
+
+            return $sql;
+        }
+        catch ( Exception $e )
+        {
+            _throw( new Charcoal_SQLBuilderException( "MySQL_SQLBuilder#buildCreateTableSQL failed" ) );
+        }
+        return '';
+    }
 }
 

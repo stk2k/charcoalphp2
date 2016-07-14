@@ -11,10 +11,13 @@
 
 class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 {
-    private $connected = false;
+    const TAG = 'pdo_db_datasource';
 
-    /** @var PDO */
-    private $connection;
+    const DEFAULT_DATABASE_KEY = 'default';
+
+    private $connections;
+
+    private $selected_db;
 
     private $backend;
     private $user;
@@ -33,15 +36,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
     private $num_rows;
 
+    private $saved_config;
+
     /*
-     *    コンストラクタ
+     *  Constructor
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->connected     = false;
-        $this->connection     = null;
+        $this->connections    = array();
         $this->command_id     = 0;
 
         $this->sql_histories = new Charcoal_Stack();
@@ -56,16 +60,72 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
     {
         parent::configure( $config );
 
-        $this->backend   = us( $config->getString( 'backend' ) );
-        $this->user      = us( $config->getString( 'user' ) );
-        $this->password  = us( $config->getString( 'password' ) );
-        $this->db_name   = us( $config->getString( 'db_name' ) );
-        $this->server    = us( $config->getString( 'server' ) );
-        $this->port      = ui( $config->getInteger( 'port' ) );
-        $this->charset   = us( $config->getString( 'charset' ) );
-        $this->autocommit = ub( $config->getBoolean( 'autocommit', TRUE ) );
-        $this->set_names  = ub( $config->getBoolean( 'set_names', FALSE ) );
-        $this->buffered_query  = ub( $config->getBoolean( 'buffered_query', TRUE ) );
+        $default_config = um( $config->getHashMap( self::DEFAULT_DATABASE_KEY, array() ) );
+
+        if ( empty($default_config) ){
+            _throw( new Charcoal_DataSourceConfigException('', 'Maybe missing default section in data source config?') );
+        }
+
+        $this->loadDatabaseConfig( $default_config );
+
+        $this->selected_db = self::DEFAULT_DATABASE_KEY;
+
+        // back up config
+        $this->saved_config = $config;
+    }
+
+    /**
+     * select database
+     *
+     * @param string $database_key
+     */
+    public function selectDatabase( $database_key = null )
+    {
+        if ( !$database_key ){
+            $database_key = self::DEFAULT_DATABASE_KEY;
+        }
+
+        /** @var Charcoal_Config $config */
+        $config = $this->saved_config;
+
+        $db_config = um( $config->getHashMap( $database_key, array() ) );
+
+        if ( empty($db_config) ){
+            _throw( new Charcoal_DataSourceConfigException('', 'Missing database config: ' . $database_key) );
+        }
+
+        $this->loadDatabaseConfig( $db_config );
+
+        $this->selected_db = $database_key;
+    }
+
+    /**
+     * get active connection
+     *
+     * @return PDO
+     */
+    private function getConnection()
+    {
+        return isset($this->connections[$this->selected_db]) ? $this->connections[$this->selected_db] : null;
+    }
+
+    /**
+     * load database config
+     *
+     * @param array $config
+     */
+    public function loadDatabaseConfig( $config )
+    {
+        $this->backend   = isset($config['backend']) ? $config['backend'] : '';
+        $this->user      = isset($config['user']) ? $config['user'] : '';
+        $this->password  = isset($config['password']) ? $config['password'] : '';
+        $this->db_name   = isset($config['db_name']) ? $config['db_name'] : '';
+        $this->server    = isset($config['server']) ? $config['server'] : '';
+        $this->port      = isset($config['port']) ? $config['port'] : '';
+        $this->charset   = isset($config['charset']) ? $config['charset'] : '';
+        $this->autocommit = isset($config['autocommit']) ? $config['autocommit'] : TRUE;
+        $this->set_names  = isset($config['set_names']) ? $config['set_names'] : FALSE;
+        $this->buffered_query  = isset($config['buffered_query']) ? $config['buffered_query'] : TRUE;
 
         if ( strlen($this->backend) === 0 ){
             _throw( new Charcoal_ComponentConfigException( 'backend', 'mandatory' ) );
@@ -82,16 +142,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
         if ( $this->getSandbox()->isDebug() )
         {
-            log_debug( 'data_source', "backend=" . $this->backend, __METHOD__ );
-            log_debug( 'data_source', "user=" . $this->user, __METHOD__ );
-            log_debug( 'data_source', "password=" . $this->password, __METHOD__ );
-            log_debug( 'data_source', "db_name=" . $this->db_name, __METHOD__ );
-            log_debug( 'data_source', "server=" . $this->server, __METHOD__ );
-            log_debug( 'data_source', "port=" . $this->port, __METHOD__ );
-            log_debug( 'data_source', "charset=" . $this->charset, __METHOD__ );
-            log_debug( 'data_source', "autocommit=" . $this->autocommit, __METHOD__ );
-            log_debug( 'data_source', "set_names=" . $this->set_names, __METHOD__ );
-            log_debug( 'data_source', "buffered_query=" . $this->buffered_query, __METHOD__ );
+            log_debug( 'data_source', "backend=" . $this->backend, self::TAG );
+            log_debug( 'data_source', "user=" . $this->user, self::TAG );
+            log_debug( 'data_source', "password=" . $this->password, self::TAG );
+            log_debug( 'data_source', "db_name=" . $this->db_name, self::TAG );
+            log_debug( 'data_source', "server=" . $this->server, self::TAG );
+            log_debug( 'data_source', "port=" . $this->port, self::TAG );
+            log_debug( 'data_source', "charset=" . $this->charset, self::TAG );
+            log_debug( 'data_source', "autocommit=" . $this->autocommit, self::TAG );
+            log_debug( 'data_source', "set_names=" . $this->set_names, self::TAG );
+            log_debug( 'data_source', "buffered_query=" . $this->buffered_query, self::TAG );
         }
     }
 
@@ -137,7 +197,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
      */
     public function isConnected()
     {
-        return $this->connected;
+        return $this->getConnection() != null;
     }
 
     /*
@@ -211,7 +271,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             // 接続処理
             $this->connect();
 
-            $this->connection->setAttribute( PDO::ATTR_AUTOCOMMIT, $on );
+            $this->getConnection()->setAttribute( PDO::ATTR_AUTOCOMMIT, $on );
 
         }
         catch ( Exception $e )
@@ -231,7 +291,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             // 接続処理
             $this->connect();
 
-            $this->connection->beginTransaction();
+            $this->getConnection()->beginTransaction();
         }
         catch ( Exception $e )
         {
@@ -250,7 +310,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             // 接続処理
             $this->connect();
 
-            $this->connection->commit();
+            $this->getConnection()->commit();
         }
         catch ( Exception $e )
         {
@@ -269,7 +329,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             // 接続処理
             $this->connect();
 
-            $this->connection->rollback();
+            $this->getConnection()->rollback();
         }
         catch ( Exception $e )
         {
@@ -279,15 +339,20 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
     }
 
     /*
-     *    接続
+     *  conenct database
+     *
+     * @param boolean $force
+     *
+     * @return PDO
      */
     public function connect( $force = FALSE )
     {
         $DSN = NULL;
 
-        // 接続済みなら何もしない
-        if ( $this->connected && !$force ){
-            return;
+        // if conection exists, do nothing
+        $conn = $this->getConnection();
+        if ( $conn && !$force ){
+            return $conn;
         }
 
         $backend   = $this->backend;
@@ -312,7 +377,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             $charset = $charset_db ? "charset={$charset_db};" : '';
             $DSN = "$backend:host=$server;{$port}dbname=$db_name;{$charset}";
 
-            log_info( 'debug, sql, data_source', "DSN=[$DSN]", __METHOD__ );
+            log_info( 'debug, sql, data_source', "DSN=[$DSN]", self::TAG );
 
             $options = array(
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -320,19 +385,18 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
                     PDO::ATTR_AUTOCOMMIT => $this->autocommit,
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => $this->buffered_query,
                 );
-            log_info( 'debug, sql, data_source', 'driver options:' . print_r($options, true), __METHOD__ );
+            log_info( 'debug, sql, data_source', 'driver options:' . print_r($options, true), self::TAG );
 
             $th_connect = Charcoal_Benchmark::start();
 
             $pdo = new PDO( $DSN, $user, $password, $options );
 
             $bench_score = Charcoal_Benchmark::stop( $th_connect );
-            log_debug( 'data_source,sql,debug', sprintf("connected in [%0.4f] msec",$bench_score), __METHOD__ );
+            log_debug( 'data_source,sql,debug', sprintf("connected in [%0.4f] msec",$bench_score), self::TAG );
 
-            $this->connection = $pdo;
-            $this->connected = true;
+            $this->connections[$this->selected_db] = $pdo;
 
-            log_info( 'debug, sql, data_source', "connected database: DSN=[$DSN]", __METHOD__ );
+            log_info( 'debug, sql, data_source', "connected database: DSN=[$DSN]", self::TAG );
 
             if ( $this->set_names ){
                 switch( strtolower($this->charset) ){
@@ -343,33 +407,33 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
                         _throw( new Charcoal_DataSourceConfigException( 'charset', "invalid charset: $charset" ) );
                 }
             }
+
+            return $pdo;
         }
         catch ( Exception $e )
         {
             _catch( $e );
 
-            log_error( 'data_source,sql,debug', __METHOD__ . " failed: DSN=[$DSN]", __METHOD__ );
+            log_error( 'data_source,sql,debug', __METHOD__ . " failed: DSN=[$DSN]", self::TAG );
 
             _throw( new Charcoal_DBConnectException( __METHOD__ . " failed: DSN=[$DSN]", $e ) );
         }
-
+        return null;
     }
 
     /*
-     *    接続を閉じる
+     *  disconnect from database
      */
     public function disconnect()
     {
-
-        // 接続していないなら何もしない
-        if ( !$this->connected ){
+        // if connection does not exists, do nothing.
+        $conn = $this->getConnection();
+        if ( !$conn ){
             return;
         }
 
-        // 切断
-        $this->connection = NULL;
-
-        $this->connected = FALSE;
+        // remove connection map entry
+        unset($this->connections[$this->selected_db]);
     }
 
     /**
@@ -399,11 +463,11 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
         $params_disp = $params ? implode( ',' , $params ) :'';
 
-        log_debug( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", __METHOD__ );
-        log_debug( 'data_source,sql,debug', "[ID]$command_id [params]$params_disp", __METHOD__ );
+        log_debug( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", self::TAG );
+        log_debug( 'data_source,sql,debug', "[ID]$command_id [params]$params_disp", self::TAG );
 
         /** @var PDOStatement $stmt */
-        $stmt = $this->connection->prepare( $sql, $driver_options );
+        $stmt = $this->getConnection()->prepare( $sql, $driver_options );
 
         $this->sql_histories->push( new Charcoal_SQLHistory($sql, $params) );
 
@@ -412,20 +476,20 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
         if ( !$success ){
             list( $sqlstate, $err_code, $err_msg ) = $stmt->errorInfo();
             $msg = "PDO#execute failed. [ID]$command_id [SQL]$sql [params]$params_disp [SQLSTATE]$sqlstate [ERR_CODE]$err_code [ERR_MSG]$err_msg";
-            log_error( 'data_source,sql,debug', "...FAILED: $msg", __METHOD__ );
+            log_error( 'data_source,sql,debug', "...FAILED: $msg", self::TAG );
             _throw( new Charcoal_DBDataSourceException( $msg ) );
         }
 
         $this->num_rows = $rows = $stmt->rowCount();
-        log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows=$rows)", __METHOD__ );
+        log_info( 'data_source,sql,debug', "[ID]$command_id ...success(numRows=$rows)", self::TAG );
 
         // ログ
         $elapse = Charcoal_Benchmark::stop( $timer_handle );
-        log_debug( 'data_source,sql,debug', "[ID]$command_id _prepareExecute() end. time=[$elapse]msec.", __METHOD__ );
+        log_debug( 'data_source,sql,debug', "[ID]$command_id _prepareExecute() end. time=[$elapse]msec.", self::TAG );
 
         // SQL benchmark
         ini_set('serialize_precision', 16);
-        log_debug( 'sql_bench', var_export(array($sql, $rows, $elapse), true), __METHOD__ );
+        log_debug( 'sql_bench', var_export(array($sql, $rows, $elapse), true), self::TAG );
 
         return $stmt;
     }
@@ -441,11 +505,11 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
         $command_id = $this->command_id++;
 
-        log_info( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", __METHOD__ );
+        log_info( 'data_source,sql,debug', "[ID]$command_id [SQL]$sql", self::TAG );
 
         $this->sql_histories->push( new Charcoal_SQLHistory($sql) );
 
-        $stmt = $this->connection->query( $sql );
+        $stmt = $this->getConnection()->query( $sql );
 
         return $stmt;
     }
@@ -514,7 +578,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             $msg .= ' [params]' . ($params ? v($params)->join(',',TRUE) : '');
             $msg .= ' [message]' . $e->getMessage();
 
-            log_error( 'data_source,sql,debug', $msg, __METHOD__ );
+            log_error( 'data_source,sql,debug', $msg, self::TAG );
 
             _throw( new Charcoal_DBDataSourceException( $msg, $e ) );
         }
