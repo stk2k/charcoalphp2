@@ -13,6 +13,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 {
     const VALUE_NULL = 'null';
 
+
     /** @var  Charcoal_SmartGatewayImpl */
     private $impl;
 
@@ -103,6 +104,18 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     public function getAllSQLHistories()
     {
         return $this->impl->getAllSQLHistories();
+    }
+
+    /**
+     *    List models
+     *
+     * @param int $find_path
+     *
+     * @return Charcoal_ITableModel[]
+     */
+    public function listModels( $find_path = Charcoal_EnumFindPath::FIND_PATH_ALL )
+    {
+        return $this->impl->listModels( $this->getSandbox(), $find_path );
     }
 
     /**
@@ -1250,7 +1263,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      * @param string $model_name
      * @param boolean|Charcoal_Boolean $if_not_exists        If TRUE, output SQL includes "IF NOT EXISTS" wuth "CREATE TABLE"
      *
-     * @return Charcoal_TableContext
+     * @return int
      */
     public function createTable( $comment, $model_name, $if_not_exists = false )
     {
@@ -1259,15 +1272,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
             $comment = basename($file) . '(' . $line . ')';
         }
         try{
-            $this->impl->createTable( $comment, $model_name, $if_not_exists );
+            return $this->impl->createTable( $comment, $model_name, $if_not_exists );
         }
         catch ( Exception $e )
         {
             _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
-
-        return new Charcoal_TableContext( $this, $model_name );
+        return 0;
     }
 
     /**
@@ -1277,7 +1289,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      * @param string $model_name
      * @param boolean|Charcoal_Boolean $if_exists        If TRUE, output SQL includes "IF EXISTS" wuth
      *
-     * @return Charcoal_TableContext
+     * @return int
      */
     public function dropTable( $comment, $model_name, $if_exists = false )
     {
@@ -1286,15 +1298,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
             $comment = basename($file) . '(' . $line . ')';
         }
         try{
-            $this->impl->dropTable( $comment, $model_name, $if_exists );
+            return $this->impl->dropTable( $comment, $model_name, $if_exists );
         }
         catch ( Exception $e )
         {
             _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
-
-        return new Charcoal_TableContext( $this, $model_name );
+        return 0;
     }
 
     /**
@@ -1303,7 +1314,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      * @param Charcoal_String|string|NULL $comment          comment text
      * @param string $model_name
      *
-     * @return Charcoal_TableContext
+     * @return int
      */
     public function truncateTable( $comment, $model_name )
     {
@@ -1312,15 +1323,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
             $comment = basename($file) . '(' . $line . ')';
         }
         try{
-            $this->impl->truncateTable( $comment, $model_name );
+            return $this->impl->truncateTable( $comment, $model_name );
         }
         catch ( Exception $e )
         {
             _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
-
-        return new Charcoal_TableContext( $this, $model_name );
+        return 0;
     }
 
     /**

@@ -83,7 +83,17 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         */
         case "select_db":
             return TRUE;
+
+        /* ------------------------------
+            list models test
+        */
+        case "list_models_all":
+        case "list_models_framework":
+        case "list_models_project":
+        case "list_models_application":
+            return TRUE;
         }
+
         return FALSE;
     }
 
@@ -141,6 +151,10 @@ class SmartGatewayTestTask extends Charcoal_TestTask
         case "update_field_now":
         case "update_field_null":
         case "select_db":
+        case "list_models_all":
+        case "list_models_framework":
+        case "list_models_project":
+        case "list_models_application":
 
             // truncate all tables
             $this->gw->execute( "", "TRUNCATE blogs" );
@@ -1116,11 +1130,89 @@ SQL;
 
             $this->assertEquals( true, $exists );
 
+            return TRUE;
 
+        case "list_models_all":
+
+            $models = $this->gw->listModels();
+
+            $this->assertEquals( 7, count($models) );
+
+            $bundled_models = array(
+                'Charcoal_SessionTableModel',
+                'BlogCategoryTableModel',
+                'BlogTableModel',
+                'CommentTableModel',
+                'ItemTableModel',
+                'PostTableModel',
+                'TestTableModel',
+            );
+
+            foreach( $models as $model ){
+
+                $this->assertTrue( $model instanceof Charcoal_ITableModel );
+
+                $clazz = get_class($model);
+                echo $clazz . PHP_EOL;
+                $this->assertTrue( in_array($clazz,$bundled_models) );
+            }
 
             return TRUE;
 
-        default:
+        case "list_models_framework":
+            $models = $this->gw->listModels( Charcoal_EnumFindPath::FIND_PATH_FRAMEWORK );
+
+            $this->assertEquals( 1, count($models) );
+
+            $bundled_models = array(
+                'Charcoal_SessionTableModel',
+            );
+
+            foreach( $models as $model ){
+
+                $this->assertTrue( $model instanceof Charcoal_ITableModel );
+
+                $clazz = get_class($model);
+                echo $clazz . PHP_EOL;
+                $this->assertTrue( in_array($clazz,$bundled_models) );
+            }
+
+            return TRUE;
+
+        case "list_models_project":
+            $models = $this->gw->listModels( Charcoal_EnumFindPath::FIND_PATH_PROJECT );
+
+            $this->assertEquals( 6, count($models) );
+
+            $bundled_models = array(
+                'BlogCategoryTableModel',
+                'BlogTableModel',
+                'CommentTableModel',
+                'ItemTableModel',
+                'PostTableModel',
+                'TestTableModel',
+            );
+
+            foreach( $models as $model ){
+
+                $this->assertTrue( $model instanceof Charcoal_ITableModel );
+
+                $clazz = get_class($model);
+                echo $clazz . PHP_EOL;
+                $this->assertTrue( in_array($clazz,$bundled_models) );
+            }
+            return TRUE;
+
+        case "list_models_application":
+            $models = $this->gw->listModels( Charcoal_EnumFindPath::FIND_PATH_APPLICATION );
+
+            $this->assertEquals( 0, count($models) );
+
+            return TRUE;
+
+
+
+            default:
             break;
         }
 

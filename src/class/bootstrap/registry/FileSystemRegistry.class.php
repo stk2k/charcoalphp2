@@ -178,5 +178,20 @@ LOAD_CONFIG_FROM_FILE:
         return $config_all;
     }
 
+    /**
+     * list objects in target directory
+     *
+     * @param string $path             path
+     * @param string $type_name        type name of the object
+     *
+     * @return string[]            virtual paths of found objects
+     */
+    public function listObjects( $path, $type_name )
+    {
+        // get config povier
+        $provider = $this->sandbox->getConfigProvider();
+
+        return $provider->listObjects( $path, $type_name );
+    }
 }
 

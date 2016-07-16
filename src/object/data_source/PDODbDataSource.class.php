@@ -494,13 +494,37 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
         return $stmt;
     }
 
-    /*
-     *    SQLをそのまま発行
+    /**
+     *  Execute a SQL and return statement object
+     *
+     * @param string $sql
+     *
+     * @return PDOStatement
      */
     private function _query( $sql )
     {
-        Charcoal_ParamTrait::validateString( 1, $sql );
+        $sql = us( $sql );
 
+        $command_id = $this->command_id++;
+
+        $this->sql_histories->push( new Charcoal_SQLHistory($sql) );
+
+        $stmt = $this->getConnection()->query( $sql );
+
+        log_info( 'data_source,sql,debug', "query executed: [ID]$command_id [SQL]$sql", self::TAG );
+
+        return $stmt;
+    }
+
+    /**
+     *   Execute an SQL statement and return the number of affected rows
+     *
+     * @param string $sql
+     *
+     * @return int
+     */
+    private function _exec( $sql )
+    {
         $sql = us( $sql );
 
         $command_id = $this->command_id++;
@@ -509,18 +533,22 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
         $this->sql_histories->push( new Charcoal_SQLHistory($sql) );
 
-        $stmt = $this->getConnection()->query( $sql );
+        $rows_affected = $this->getConnection()->exec( $sql );
 
-        return $stmt;
+        log_info( 'data_source,sql,debug', "execute SQL: [ID]$command_id [SQL]$sql [rows]$rows_affected", self::TAG );
+
+        return $rows_affected;
     }
 
-    /*
-     *    SQLをそのまま発行（結果セットあり）
+    /**
+     *  Execute a SQL and return statement object
+     *
+     * @param string $sql
+     *
+     * @return PDOStatement
      */
     public function query( $sql )
     {
-        Charcoal_ParamTrait::validateString( 1, $sql );
-
         // 接続処理
         $this->connect();
 
@@ -533,20 +561,22 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
         return $stmt;
     }
 
-    /*
-     *    SQLをそのまま発行（結果セットなし）
+    /**
+     *   Execute an SQL statement and return the number of affected rows
+     *
+     * @param string $sql
+     *
+     * @return int
      */
     public function execute( $sql )
     {
-        Charcoal_ParamTrait::validateString( 1, $sql );
-
         // 接続処理
         $this->connect();
 
         $this->sql_histories->push( new Charcoal_SQLHistory($sql) );
 
         // SQLを実行
-        $this->_query( $sql );
+        return $this->_exec( $sql );
     }
 
     /**

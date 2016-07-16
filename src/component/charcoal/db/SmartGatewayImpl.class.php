@@ -80,6 +80,60 @@ class Charcoal_SmartGatewayImpl
     }
 
     /**
+     *    List models
+     *
+     * @param Charcoal_Sandbox $sandbox
+     * @param int $find_path
+     *
+     * @return Charcoal_ITableModel[]
+     */
+    public function listModels( $sandbox, $find_path )
+    {
+        // get root path of framework,project,web_app
+        $dir_framework = Charcoal_ResourceLocator::getFrameworkPath();
+        $dir_project = Charcoal_ResourceLocator::getProjectPath();
+        $dir_application = Charcoal_ResourceLocator::getApplicationPath();
+
+        // get module root path of framework,project,web_app
+        $dir_framework_module = $dir_framework . '/module';
+        $dir_project_module = $dir_project . '/module';
+        $dir_application_module = $dir_application . '/module';
+
+        $config_target_list = array();
+
+        if ( Charcoal_System::isAnyBitSet( $find_path, Charcoal_EnumFindPath::FIND_PATH_FRAMEWORK ) ){
+            $config_target_list[] = $dir_framework . '/config/table_model';
+            $config_target_list[] = $dir_framework_module . '/config/table_model';
+        }
+        if ( Charcoal_System::isAnyBitSet( $find_path, Charcoal_EnumFindPath::FIND_PATH_PROJECT ) ){
+            $config_target_list[] = $dir_project . '/config/table_model';
+            $config_target_list[] = $dir_project_module . '/config/table_model';
+        }
+        if ( Charcoal_System::isAnyBitSet( $find_path, Charcoal_EnumFindPath::FIND_PATH_APPLICATION ) ){
+            $config_target_list[] = $dir_application . '/config/table_model';
+            $config_target_list[] = $dir_application_module . '/config/table_model';
+        }
+
+        // find model names in target directory
+        $table_model_names = array();
+        foreach( $config_target_list as $path ){
+            $found_models = $sandbox->getRegistry()->listObjects( $path, 'table_model' );
+            $table_model_names = array_merge( $table_model_names, $found_models );
+        }
+
+        // convert model name into table model instance
+        $table_models = array();
+        foreach( $table_model_names as $model_name ){
+            $model = $this->getModel( $model_name );
+            if ( $model && $model instanceof Charcoal_ITableModel ){
+                $table_models[$model_name] = $model;
+            }
+        }
+
+        return $table_models;
+    }
+
+    /**
      *    Close connection and destory components
      */
     public function terminate()
@@ -108,7 +162,7 @@ class Charcoal_SmartGatewayImpl
     }
 
     /**
-     *    get table model
+     *    get model
      *
      * @param string $model_name       table model name
      *
@@ -913,7 +967,11 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-        $this->data_source->execute( $sql );
+        $rows_affected = $this->data_source->execute( $sql );
+
+        log_debug( "debug,sql,smart_gateway", "createTable result: $rows_affected", self::TAG );
+
+        return $rows_affected;
     }
 
     /**
@@ -935,7 +993,11 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-        $this->data_source->execute( $sql );
+        $rows_affected = $this->data_source->execute( $sql );
+
+        log_debug( "debug,sql,smart_gateway", "dropTable result: $rows_affected", self::TAG );
+
+        return $rows_affected;
     }
 
     /**
@@ -955,7 +1017,11 @@ class Charcoal_SmartGatewayImpl
 
         $sql = !empty($comment) ? $this->sql_builder->prependComment( $sql, $comment ) : $sql;
 
-        $this->data_source->execute( $sql );
+        $rows_affected = $this->data_source->execute( $sql );
+
+        log_debug( "debug,sql,smart_gateway", "truncateTable result: $rows_affected", self::TAG );
+
+        return $rows_affected;
     }
 
     /**

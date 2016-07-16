@@ -59,8 +59,6 @@ class Charcoal_PhpConfigProvider extends Charcoal_AbstractConfigProvider
 
 //        ob_end_clean();
 
-//print System::arrayToString($config) . "<BR>";
-
         log_info( "config",  "設定ファイル[$config_name]を読み込みました。" );
 
         return $config;

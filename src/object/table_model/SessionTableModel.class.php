@@ -15,8 +15,8 @@ class Charcoal_SessionTableModel extends Charcoal_DefaultTableModel
     /**
      *  returns own table DTO
      */
-    public function createDTO()
+    public function createDTO( $values = array() )
     {
-        return new Charcoal_SessionTableDTO();
+        return new Charcoal_SessionTableDTO( $values );
     }
 }

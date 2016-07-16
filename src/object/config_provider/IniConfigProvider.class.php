@@ -11,6 +11,8 @@
 */
 class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
 {
+    const TAG = 'ini_config_provider';
+
     private $debug;
 
     /**
@@ -85,5 +87,36 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
         return $result;
     }
 
+    /**
+     * list objects in target directory
+     *
+     * @param string $path             path
+     * @param string $type_name        type name of the object
+     *
+     * @return string[]            virtual paths of found objects
+     */
+    public function listObjects( $path, $type_name )
+    {
+        $config_file_tail = '.' . $type_name . '.ini';
+        $tail_length = strlen($config_file_tail);
+
+        $object_list = array();
+        if ( is_dir($path) && $dh = opendir($path) )
+        {
+            log_debug( "system, debug, config", "open directory: $path", self::TAG );
+            while( ($file = readdir($dh)) !== FALSE )
+            {
+                if ( $file === '.' || $file === '..' )    continue;
+
+                if ( strrpos($file,$config_file_tail) === strlen($file) - $tail_length ){
+                    $object_name = substr( $file, 0, strlen($file) - $tail_length );
+                    $object_list[] = $object_name;
+                }
+            }
+            closedir($dh);
+        }
+
+        return $object_list;
+    }
 }
 

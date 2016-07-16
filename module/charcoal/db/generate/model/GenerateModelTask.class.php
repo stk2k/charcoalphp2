@@ -60,7 +60,7 @@ class GenerateModelTask extends Charcoal_Task
         //=======================================
         // Retrieve column information
         //=======================================
-        $sql = "SELECT COLUMN_NAME, COLUMN_TYPE, IS_NULLABLE, COLUMN_KEY, COLUMN_DEFAULT, EXTRA ";
+        $sql = "SELECT COLUMN_NAME, COLUMN_TYPE, IS_NULLABLE, COLUMN_KEY, COLUMN_DEFAULT, EXTRA, COLUMN_COMMENT ";
         $sql .= " FROM information_schema.COLUMNS WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ? ";
         $params = array( $table_name, $db_name );
         $colmn_attr_list = $gw->query( NULL, $sql, $params );
@@ -128,23 +128,48 @@ class GenerateModelTask extends Charcoal_Task
         $lines[] = "    public \$___table_name      = '{$table_name}';";
         $lines[] = "";
 
+        $conv = Charcoal_EncodingConverter::fromString( $this->getSandbox(), 'DB', 'PHP' );
+
         foreach( $colmn_attr_list as $colmn_attr ){
             $field     = $colmn_attr['COLUMN_NAME'];
             $type      = $colmn_attr['COLUMN_TYPE'];
-            //$null      = $colmn_attr['IS_NULLABLE'];
+            $null      = $colmn_attr['IS_NULLABLE'];
             $key       = $colmn_attr['COLUMN_KEY'];
-            //$default   = $colmn_attr['COLUMN_DEFAULT'];
-            //$extra     = $colmn_attr['EXTRA'];
+            $default   = $colmn_attr['COLUMN_DEFAULT'];
+            $extra     = $colmn_attr['EXTRA'];
+            $comment   = $colmn_attr['COLUMN_COMMENT'];
 
             $spaces = str_repeat( " ", self::SPACE_COUNT - strlen($field) );
 
-            if ( $key == "PRI" ){
-                $lines[] = "    public \${$field}{$spaces}= '@field @type:$type @pk @insert:no @update:no @serial';";
+            // make field spec
+            $fieldspec = array( '@field', '@type:'.$type );
+
+            if ( strtolower($null) == 'yes' ){
+                $fieldspec[] = '@notnull';
+            }
+            if ( strlen($default) !== 0 ){
+                $fieldspec[] = '@default:' . $default;
+            }
+            if ( strtolower($key) == "pri" ){
+                $fieldspec[] = '@pk';
+                $fieldspec[] = '@insert:no';
+                $fieldspec[] = '@update:no';
             }
             else{
-                $lines[] = "    public \${$field}{$spaces}= '@field @type:$type @insert:value @update:value';";
+                $fieldspec[] = '@insert:value';
+                $fieldspec[] = '@update:value';
             }
-//echo "Field:$field Type:$type Null:$null Key:$key Default:$default Extra:$extra" . PHP_EOL;
+            if ( strtolower($extra) == 'auto_increment' ){
+                $fieldspec[] = '@serial';
+            }
+            if ( !empty($comment) ){
+                $fieldspec[] = '@comment:' . $conv->convert($comment);
+            }
+
+            // make line
+            $line = "    public \${$field}{$spaces}= '" . implode(' ', $fieldspec) . "';";
+
+            $lines[] = $line;
         }
 
         $lines[] = "";

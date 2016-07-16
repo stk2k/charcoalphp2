@@ -21,5 +21,15 @@ interface Charcoal_IRegistry
      */
     public function get( array $keys, $obj_path, $type_name );
 
+    /**
+     * list objects in target directory
+     *
+     * @param string $path             path
+     * @param string $type_name        type name of the object
+     *
+     * @return string[]            virtual paths of found objects
+     */
+    public function listObjects( $path, $type_name );
+
 }
 

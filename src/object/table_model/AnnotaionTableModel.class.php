@@ -179,56 +179,54 @@ class Charcoal_AnnotaionTableModel extends Charcoal_CharcoalComponent
     /**
      *    parse annotations
      *
-     * @param Charcoal_String|string $field
-     * @param Charcoal_String|string $field_value
+     * @param string $field
+     * @param string $field_spec
      *
      * @return array         annotation map
      */
-    private function parseAnnotation( $field, $field_value )
+    private function parseAnnotation( $field, $field_spec )
     {
-        $phrase_list = explode( ' ', $field_value );
+        $phrase_list = explode( ' @', " $field_spec" );
 
         $annot_map = array();
 
         foreach( $phrase_list as $phrase ){
-            if ( strpos($phrase,'@') === 0 ){
-                $value = '';
-                $params = array();
-                // :までがアノテーション名
-                $phrase = substr($phrase,1);
-                $pos = strpos($phrase,':');
-                if ( $pos === false ){
-                    // 値とパラメータはなし
-                    $name = $phrase;
+            $value = '';
+            $params = array();
+            // :までがアノテーション名
+            $phrase = substr($phrase,0);
+            $pos = strpos($phrase,':');
+            if ( $pos === false ){
+                // 値とパラメータはなし
+                $name = $phrase;
+            }
+            else{
+                // 値とパラメータを分ける
+                $name = substr($phrase,0,$pos);
+                $value_and_params = substr($phrase,$pos+1);
+                $open = strpos($value_and_params,'[');
+                $close = strpos($value_and_params,']');
+                // パラメータがあるか
+                if ( $open === false && $close === false ){
+                    // パラメータなし
+                    $value = $value_and_params;
+                    $params = array();
+                }
+                elseif ( $open > 0 && $close > 0 ){
+                    // パラメータあり
+                    $value = substr($value_and_params,0,$open);
+                    $params = substr($value_and_params,$open+1,$close-$open-1);
+                    $params = explode( ',', $params );
                 }
                 else{
-                    // 値とパラメータを分ける
-                    $name = substr($phrase,0,$pos);
-                    $value_and_params = substr($phrase,$pos+1);
-                    $open = strpos($value_and_params,'[');
-                    $close = strpos($value_and_params,']');
-                    // パラメータがあるか
-                    if ( $open === false && $close === false ){
-                        // パラメータなし
-                        $value = $value_and_params;
-                        $params = array();
-                    }
-                    elseif ( $open > 0 && $close > 0 ){
-                        // パラメータあり
-                        $value = substr($value_and_params,0,$open);
-                        $params = substr($value_and_params,$open+1,$close-$open-1);
-                        $params = explode( ',', $params );
-                    }
-                    else{
-                        // アノテーションフォーマット例外
-                        _throw( new Charcoal_AnnotaionException( get_class($this), $field, $name, 'illegal format' ) );
-                    }
+                    // アノテーションフォーマット例外
+                    _throw( new Charcoal_AnnotaionException( get_class($this), $field, $name, 'illegal format' ) );
                 }
-                // アノテーション追加
-                $new_annot = new Charcoal_AnnotationValue( s($name), s($value), v($params) );
-
-                $annot_map[$name] = $new_annot;
             }
+            // アノテーション追加
+            $new_annot = new Charcoal_AnnotationValue( s($name), s($value), v($params) );
+
+            $annot_map[$name] = $new_annot;
         }
 
         return $annot_map;

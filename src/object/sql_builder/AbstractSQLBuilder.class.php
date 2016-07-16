@@ -60,7 +60,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
 
         $fields = v($fields)->join(",");
 
-        if ( Charcoal_System::isBitSet( $options, Charcoal_EnumQueryOption::DISTINCT ) ){
+        if ( Charcoal_System::isAnyBitSet( $options, Charcoal_EnumQueryOption::DISTINCT ) ){
             $sql = "SELECT DISTINCT {$fields} FROM " . us($table);
         }
         else{
@@ -72,12 +72,17 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
         }
 
         foreach( $joins as $join ){
+
+            /** @var Charcoal_QueryJoin $join */
+
             $join_type  = $join->getJoinType();
             $join_model_name = $join->getModelName();
             $join_alias = $join->getAlias();
             $join_cond  = $join->getCondition();
 
             $join_model = $this->getSandbox()->createObject( $join_model_name, 'table_model' );
+
+            /** @var Charcoal_ITableModel $join_model */
 
             switch( $join_type ){
             case Charcoal_EnumSQLJoinType::INNER_JOIN:
@@ -122,7 +127,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
             $sql .= ' OFFSET ' . $offset;
         }
 
-        if ( Charcoal_System::isBitSet( $options, Charcoal_EnumQueryOption::FOR_UPDATE ) ){
+        if ( Charcoal_System::isAnyBitSet( $options, Charcoal_EnumQueryOption::FOR_UPDATE ) ){
             $sql .= " FOR UPDATE";
         }
 
@@ -207,6 +212,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                 case 'function':
                     // 関数を決定
                     $params = uv( $update->getParameters() );
+                    $function = 'NULL';
                     if ( count($params) >= 1 ){
                         switch( $params[0] ){
                         case 'now':            $function = 'NOW()';    break;
@@ -227,7 +233,8 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                                 $function = 'NULL';
                             }
                             break;
-                        default:            $function = 'NULL';        break;
+                        default:
+                            break;
                         }
                     }
                     // 関数で更新
@@ -270,6 +277,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
         {
             _throw( new Charcoal_SQLBuilderException( "DefaultSQLBuilder#buildUpdateSQL failed" ) );
         }
+        return array();
     }
 
     /**
@@ -327,10 +335,12 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                 case 'function':
                     // 関数を決定
                     $params = uv( $insert->getParameters() );
+                    $function = 'NULL';
                     if ( count($params) == 1 ){
                         switch( $params[0] ){
                         case 'now':        $function = 'NOW()';    break;
-                        default:        $function = 'NULL';        break;
+                        default:
+                            break;
                         }
                     }
                     // 関数で更新
@@ -358,6 +368,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
         {
             _throw( new Charcoal_SQLBuilderException( "DefaultSQLBuilder#buildInsertSQL failed" ) );
         }
+        return array();
     }
 
     /**
@@ -442,10 +453,12 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                     case 'function':
                         // 関数を決定
                         $params = uv( $insert->getParameters() );
+                        $function = 'NULL';
                         if ( count($params) == 1 ){
                             switch( $params[0] ){
                             case 'now':        $function = 'NOW()';    break;
-                            default:        $function = 'NULL';        break;
+                            default:
+                                break;
                             }
                         }
                         // 関数で更新
@@ -479,6 +492,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
         {
             _throw( new Charcoal_SQLBuilderException( "DefaultSQLBuilder#buildInsertSQL failed" ) );
         }
+        return array();
     }
 
     /**
@@ -504,6 +518,7 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
 
         $table_name = $model->getTableName();
 
+        /** @var int $aggregate_func */
         $aggregate_func = ui($aggregate_func);
 
         $aggregate_func_map = array(
@@ -525,12 +540,18 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
         }
 
         foreach( $joins as $join ){
+            /** @var Charcoal_QueryJoin $join */
+
             $join_type  = $join->getJoinType();
             $join_model_name = $join->getModelName();
             $join_alias = $join->getAlias();
             $join_cond  = $join->getCondition();
 
             $join_model = $this->getSandbox()->createObject( $join_model_name, 'table_model' );
+
+            /** @var Charcoal_ITableModel $join_model */
+            /** @var Charcoal_String $join_alias */
+            /** @var Charcoal_String $join_cond */
 
             switch( $join_type ){
             case Charcoal_EnumSQLJoinType::INNER_JOIN:

@@ -39,13 +39,11 @@ class Charcoal_System
      *  @param int $target              target value to test
      *  @param int $flag                target flag to test
      *  @param int $mode                test mode(see BITTEST_MODE_XXX constants)
+     *
+     * @return boolean
      */
-    public static function isBitSet( $target, $flag, $mode = self::BITTEST_MODE_ALL )
+    public static function isBitSet( $target, $flag, $mode )
     {
-//        Charcoal_ParamTrait::validateInteger( 1, $target );
-//        Charcoal_ParamTrait::validateInteger( 2, $flag );
-//        Charcoal_ParamTrait::validateInteger( 3, $mode );
-
         switch( ui($mode) ){
         case self::BITTEST_MODE_ALL:
             return ($target & $flag) === $flag;
@@ -53,6 +51,34 @@ class Charcoal_System
         case self::BITTEST_MODE_ANY:
             return ($target & $flag) != 0;
         }
+
+        return false;
+    }
+
+    /**
+     *  Test if specified bit flag is set(any bit set returns true)
+     *
+     *  @param int $target              target value to test
+     *  @param int $flag                target flag to test
+     *
+     * @return boolean
+     */
+    public static function isAnyBitSet( $target, $flag )
+    {
+        return self::isBitSet( $target, $flag, self::BITTEST_MODE_ANY );
+    }
+
+    /**
+     *  Test if specified bit flag is set(all bits set returns true)
+     *
+     *  @param int $target              target value to test
+     *  @param int $flag                target flag to test
+     *
+     * @return boolean
+     */
+    public static function isAllBitSet( $target, $flag )
+    {
+        return self::isBitSet( $target, $flag, self::BITTEST_MODE_ALL );
     }
 
     /*
@@ -82,7 +108,7 @@ class Charcoal_System
 
         $errors_desc = array();
         foreach( $errors as $key => $value ){
-            if ( self::isBitSet($errno,$key) ){
+            if ( self::isAnyBitSet($errno,$key) ){
                 $errors_desc[] = $value;
             }
         }
@@ -104,6 +130,11 @@ class Charcoal_System
 
     /**
      *    swap two values
+     *
+     * @param mixed $a
+     * @param mixed $b
+     *
+     * @return array
      */
     public static function swap( $a, $b )
     {
@@ -112,6 +143,10 @@ class Charcoal_System
 
     /**
      *    make a string to snake case
+     *
+     * @param string $str
+     *
+     * @return string
      */
     public static function snakeCase( $str )
     {
@@ -120,6 +155,10 @@ class Charcoal_System
 
     /**
      *    make a string to pascal case
+     *
+     * @param string $str
+     *
+     * @return string
      */
     public static function pascalCase( $str )
     {
@@ -128,8 +167,14 @@ class Charcoal_System
 
     /**
      *    format byte size
+     *
+     * @param int $size
+     * @param int $precision
+     * @param array $symbols
+     *
+     * @return string
      */
-    public static function formatByteSize( $size, $precision = 1, array $symbols = NULL )
+    public static function formatByteSize( $size, $precision = 1, $symbols = NULL )
     {
         if ( $symbols === NULL ){
             $symbols = array('B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb');
@@ -143,8 +188,11 @@ class Charcoal_System
     }
 
     /**
-     *    ハッシュ値を生成
+     *  generate hash value
      *
+     * @param string $algorithm
+     *
+     * @return string
      */
     public static function hash( $algorithm = 'sha1' )
     {
@@ -160,8 +208,11 @@ class Charcoal_System
     }
 
     /**
-     *    HTML中の特殊文字を変換する
+     *  escape variable for HTML
      *
+     * @param mixed $value
+     *
+     * @return mixed
      */
     public static function escape( $value )
     {
@@ -189,8 +240,11 @@ class Charcoal_System
     }
 
     /**
-     *    エスケープされた文字をHTMLに戻す
+     * decode escaped value
      *
+     * @param mixed $value
+     *
+     * @return mixed
      */
     public static function decode( $value )
     {
@@ -215,14 +269,17 @@ class Charcoal_System
     }
 
     /**
-     *    文字列中のタグを除去（再帰メソッド）
+     *  remove HTML tags
      *
+     * @param mixed $value
+     * @param string $allowable_tags
+     *
+     * @return mixed
      */
     public static function stripTags( $value, $allowable_tags = NULL )
     {
         if ( is_string($value) ){
             $res = strip_tags($value, $allowable_tags);
-//log_debug( "debug", "stripTags:" . print_r($res,true) );
             return $res;
         }
         elseif ( is_array($value) ){
@@ -244,8 +301,11 @@ class Charcoal_System
     }
 
     /**
-     *    文字列中のバックスラッシュを除去（再帰メソッド）
+     *  remove backslashes
      *
+     * @param mixed $value
+     *
+     * @return mixed
      */
     public static function stripSlashes( $value )
     {
@@ -271,8 +331,12 @@ class Charcoal_System
     }
 
     /**
-     *    文字列をエスケープ処理する
+     *   escape string for HTML
      *
+     * @param string $string_data
+     * @param array $options
+     *
+     * @return mixed
      */
     public static function escapeString( $string_data, $options = NULL )
     {
@@ -293,24 +357,12 @@ class Charcoal_System
     }
 
     /**
-     *    配列をマージ
+     *  make random string
      *
-     */
-    public static function arrayMerge( $array1, $array2 )
-    {
-        if ( $array1 === NULL ){
-            $array1 = array();
-        }
-        if ( $array2 === NULL ){
-            $array2 = array();
-        }
-
-        return array_merge( $array1, $array2 );
-    }
-
-    /**
-     *    ランダムな文字列を取得
+     * @param int $length
+     * @param string $char_set
      *
+     * @return string
      */
     public static function makeRandomString( $length, $char_set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_' )
     {
@@ -327,9 +379,11 @@ class Charcoal_System
     }
 
     /**
-     *    呼び出し箇所
+     *  return file and line number of called position
      *
-     *    @return list($file,$line) ファイル名、行番号の配列
+     * @param int $back
+     *
+     *    @return array
      */
     public static function caller( $back = 0 )
     {
@@ -344,81 +398,12 @@ class Charcoal_System
         return array( $file, $line );
     }
 
-    /*
-     *    現在時間を取得
-     */
-    public static function now(){
-        list($msec,$sec) = explode(' ',microtime());
-        return ( (float)$msec + (float)$sec );
-    }
-
-    /**
-     * 年月日から日付を作成
-     */
-    public static function makeTime( $year, $month, $day, $hour = 0, $minute = 0, $second = 0 )
-    {
-        return mktime( $hour, $minute, $second, $month, $day, $year );
-    }
-
-    /**
-     *    日付に日を加算
-     */
-    public static function dateAdd( $year, $month, $day, $add )
-    {
-        $new_date = strtotime( "$year/$month/$day + $add days");
-
-        return array( date('Y',$new_date), date('n',$new_date), date('j',$new_date) );
-    }
-
-    /**
-     *    日付から日を減算
-     */
-    public static function dateSub( $year, $month, $day, $sub )
-    {
-        $new_date = strtotime( "$year/$month/$day - $sub days");
-
-        return array( date('Y',$new_date), date('n',$new_date), date('j',$new_date) );
-    }
-
-
-    /**
-     *    ２つの日付の差分を日単位で求める
-     */
-    public static function dateDiff( $date1, $date2 = NULL ){
-        if ( $date2 == NULL ){
-            // 今日の日付
-            $date2 = date("Y/m/d");
-        }
-        $result = strtotime($date2) - strtotime($date1);
-        $result = intval( $result / (24 * 60 * 60));
-        return $result;
-    }
-
-    /**
-     *    ２つの日付を比較
-     */
-    public static function compareDate( $date1, $date2 = NULL )
-    {
-        if ( $date2 == NULL ){
-            // 今日の日付
-            $date2 = date("Y/m/d");
-        }
-        $result = strtotime($date1) - strtotime($date2);
-        return $result;
-    }
-
-    /**
-     *    ２つの日付を比較
-     */
-    public static function compareDateYMD( $year1, $month1, $day1, $year2, $month2, $day2 )
-    {
-        $result = strtotime("$year1/$month1/$day1") - strtotime("$year2/$month2/$day2");
-        return $result;
-    }
-
     /**
      *    get type of primitive, resource, array, or object
      *
+     * @param mixed $value
+     *
+     * @return string
      */
     public static function getType( $value )
     {
@@ -430,7 +415,7 @@ class Charcoal_System
         case 'integer':
         case 'float':
         case 'boolean':
-            return $type . '(' . $value . ')';;
+            return $type . '(' . $value . ')';
             break;
         case 'NULL':
         case 'unknown type':
@@ -449,11 +434,18 @@ class Charcoal_System
             return get_class( $value );
             break;
         }
+        return '';
     }
 
     /**
-     *    toStringのラッパー
+     *  make string expression about a variable
      *
+     * @param mixed $value
+     * @param boolean $with_type
+     * @param int $max_size
+     * @param string $tostring_methods
+     *
+     * @return string
      */
     public static function toString( $value, $with_type = FALSE, $max_size = self::TOSTRING_MAX_LENGTH, $tostring_methods = '__toString,toString' )
     {
@@ -512,17 +504,15 @@ class Charcoal_System
     }
 
     /**
-     *    配列を文字列に変換
-     *
-     */
-    public static function arrayToString( $ary )
-    {
-        return self::implodeArray( ',', $ary );
-    }
-
-    /**
      *    implodeのラッパー（5.1.6でクラスの__toStringが自動で呼ばれないため
      *
+     * @param string $glue
+     * @param array $pieces
+     * @param boolean $with_type
+     * @param int $max_size
+     * @param string $tostring_methods
+     *
+     * @return string
      */
     public static function implodeArray( $glue, $pieces, $with_type = FALSE, $max_size = self::TOSTRING_MAX_LENGTH, $tostring_methods = '__toString,toString' )
     {
@@ -545,6 +535,13 @@ class Charcoal_System
     /**
      *    implodeのラッパー（5.1.6でクラスの__toStringが自動で呼ばれないため
      *
+     * @param string $glue
+     * @param array $pieces
+     * @param boolean $with_type
+     * @param int $max_size
+     * @param string $tostring_methods
+     *
+     * @return string
      */
     public static function implodeAssoc( $glue, array $pieces, $with_type = FALSE, $max_size = self::TOSTRING_MAX_LENGTH, $tostring_methods = '__toString,toString' )
     {
@@ -561,8 +558,15 @@ class Charcoal_System
     }
 
     /**
-     *    変数をダンプする
+     *  dump a variable
      *
+     * @param mixed $var
+     * @param int $back
+     * @param array $options
+     * @param boolean $return
+     * @param int $max_depth
+     *
+     * @return string
      */
     public static function dump( $var, $back = 0, $options = NULL, $return = FALSE, $max_depth = 6 )
     {
@@ -613,12 +617,12 @@ class Charcoal_System
             break;
         }
 
-
         if ( $return ){
             return $output;
         }
         else{
             echo $output;
+            return null;
         }
     }
 
@@ -696,8 +700,15 @@ class Charcoal_System
     }
 
     /**
-     *    変数の木構造をダンプする
+     *  dump a tree structured variable
      *
+     * @param mixed $var
+     * @param int $back
+     * @param array $options
+     * @param boolean $return
+     * @param int $max_depth
+     *
+     * @return string
      */
     public static function tree_dump( $var, $back = 1, $options = NULL, $return = FALSE, $max_depth = 6 )
     {
@@ -722,6 +733,7 @@ class Charcoal_System
         $lines = array();
         self::_tree_dump( '-', $var, 0, $max_string_length, $lines, $max_depth );
 
+        $output = '';
         switch( CHARCOAL_RUNMODE )
         {
         case "shell":
@@ -745,6 +757,7 @@ class Charcoal_System
         }
         else{
             echo $output;
+            return null;
         }
     }
 
@@ -770,10 +783,10 @@ class Charcoal_System
         case 'array':
             {
                 $lines[] = str_repeat( '-', $depth * 4 ) . "[$key:array(" . count($value) . ')]';
-                foreach( $value as $key => $value ){
-                    $type = gettype($value);
+                foreach( $value as $k => $v ){
+                    $type = gettype($v);
                     if ( $type == 'array' || $type == 'object' ){
-                        self::_tree_dump( $key, $value, $depth + 1, $max_string_length, $lines, $max_depth );
+                        self::_tree_dump( $k, $v, $depth + 1, $max_string_length, $lines, $max_depth );
                     }
                 }
             }
@@ -808,6 +821,11 @@ class Charcoal_System
 
     /**
      *    get object's property using reflection
+     *
+     * @param mixed $obj
+     * @param string $field
+     *
+     * @return mixed
      */
     public static function getObjectVar( $obj, $field )
     {
@@ -822,6 +840,10 @@ class Charcoal_System
 
     /**
      *    improved version of get_object_vars
+     *
+     * @param mixed $obj
+     *
+     * @return array
      */
     public static function getObjectVars( $obj )
     {
@@ -832,6 +854,11 @@ class Charcoal_System
 
     /**
      *    recursive function for getObjectVars
+     *
+     * @param mixed $obj
+     * @param ReflectionClass $class_obj
+     *
+     * @return array
      */
     public static function _getObjectVars( $obj, ReflectionClass $class_obj )
     {
@@ -863,17 +890,14 @@ class Charcoal_System
         return $vars;
     }
 
-
     /**
-     *    文字列のエンコーディング判定
-     */
-    public static function detectEncoding( $str, $detect_order = "EUC-JP, SJIS, JIS, UTF-8" )
-    {
-        return mb_detect_encoding( $str, $detect_order, TRUE );
-    }
-
-    /**
-     *    エンコード変換
+     *  convert encoding
+     *
+     * @param string $str
+     * @param string $to_encoding
+     * @param string $from_encoding
+     *
+     * @return string
      */
     public static function convertEncoding( $str, $to_encoding = NULL, $from_encoding = NULL )
     {
@@ -886,7 +910,13 @@ class Charcoal_System
     }
 
     /**
-     *    再帰エンコード変換
+     *  convert encoding recursively
+     *
+     * @param mixed $var
+     * @param string $to_encoding
+     * @param string $from_encoding
+     *
+     * @return mixed
      */
     public static function convertEncodingRecursive( $var, $to_encoding = NULL, $from_encoding = NULL )
     {
@@ -916,7 +946,7 @@ class Charcoal_System
         case 'object':
             {
                 $newObject = clone $var;
-                if ( $var instanceof Charcoal_Iterator ){
+                if ( $var instanceof Traversable ){
                     foreach( $var as $key => $value ){
                         $value = self::convertEncodingRecursive( $value, $to_encoding, $from_encoding );
                         $newObject->$key = $value;
@@ -936,60 +966,6 @@ class Charcoal_System
         }
 
         return $var;
-    }
-
-    /**
-     *    再帰配列変換
-     */
-    public static function convertArrayRecursive( $var )
-    {
-        $type = gettype($var);
-        switch( $type ){
-        case 'string':
-        case 'integer':
-        case 'double':
-        case 'boolean':
-        case 'NULL':
-        case 'unknown type':
-            {
-                return $var;
-            }
-            break;
-        case 'array':
-            {
-                $newArray = array();
-                foreach( $var as $key => $value ){
-                    $value = self::convertArrayRecursive( $value );
-                    $newArray[ $key ] = $value;
-                }
-                return $newArray;
-            }
-            break;
-        case 'object':
-            {
-                $newArray = array();
-                $obj_vars = get_object_vars( $var );
-                foreach( $obj_vars as $key => $value ){
-                    $value = self::convertArrayRecursive( $value );
-                    $newArray[$key] = $value;
-                }
-                return $newArray;
-            }
-            break;
-        }
-
-        return $var;
-    }
-
-    /*
-     *  difference of two values which is retrieved by microtime(FALSE)
-     */
-    public static function diffMicrotime( $a, $b )
-    {
-        list( $ma, $sa ) = explode( ' ', $a );
-        list( $mb, $sb ) = explode( ' ', $b );
-
-        return ((float)$ma - (float)$mb) + ((float)$sa - (float)$sb);
     }
 
 }

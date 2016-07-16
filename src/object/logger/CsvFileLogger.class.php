@@ -76,7 +76,7 @@ class Charcoal_CsvFileLogger extends Charcoal_FileLogger implements Charcoal_ILo
     {
         $req_path= $this->getSandbox()->getEnvironment()->get( '%REQUEST_PATH%' );
         $req_id  = $this->getSandbox()->getEnvironment()->get( '%REQUEST_ID%' );
-        $ip      = $_SERVER['REMOTE_ADDR'];
+        $ip      = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-';
         $level   = $msg->getLevel();
         $message = $msg->getMessage();
         $file    = $msg->getFile();

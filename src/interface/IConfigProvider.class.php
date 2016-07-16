@@ -36,5 +36,15 @@ interface Charcoal_IConfigProvider extends Charcoal_ICharcoalObject
      */
     public function loadConfig( $key );
 
+    /**
+     * list objects in target directory
+     *
+     * @param string $path             path
+     * @param string $type_name        type name of the object
+     *
+     * @return string[]            virtual paths of found objects
+     */
+    public function listObjects( $path, $type_name );
+
 }
 

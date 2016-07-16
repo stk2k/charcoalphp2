@@ -28,6 +28,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_EnumHttpMethod'            => 'constant',
                 'Charcoal_EnumSQLJoinType'            => 'constant',
                 'Charcoal_EnumSQLAggregateFunc'        => 'constant',
+                'Charcoal_EnumFindPath'                => 'constant',
 
         // core classes
                 'Charcoal_AnnotationValue'            => 'class/core',
@@ -54,7 +55,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_StringUtil'                => 'class/util',
                 'Charcoal_SQLUtil'                    => 'class/util',
                 'Charcoal_URLUtil'                    => 'class/util',
-                'Charcoal_XmlUtil'                    => 'class/util',
                 'Charcoal_ErrorReportingSwitcher'    => 'class/util',
 
         // interface classes
@@ -289,7 +289,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_BindedContext'                    => 'component/charcoal/db/context',
                 'Charcoal_ResultContext'                    => 'component/charcoal/db/context',
                 'Charcoal_QueryContext'                        => 'component/charcoal/db/context',
-                'Charcoal_TableContext'                        => 'component/charcoal/db/context',
 
         // transformer classes
                 'Charcoal_AbstractTransformer'                => 'object/transformer',

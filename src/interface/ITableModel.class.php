@@ -27,5 +27,15 @@ interface Charcoal_ITableModel extends Charcoal_IModel
      *  @param Charcoal_DTO $dto         target record
      */
     public function validatePrimaryKeyValue( $dto );
+
+    /**
+     *  Get annotated value by specified field name
+     *
+     * @param Charcoal_String|string $field
+     * @param Charcoal_String|string $annotation_key
+     *
+     * @return Charcoal_AnnotationValue|NULL
+     */
+    public function getAnnotationValue( $field, $annotation_key );
 }
 

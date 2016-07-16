@@ -11,6 +11,8 @@
 */
 class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
 {
+    const TAG = 'mysql_sql_builder';
+
     /**
      *    Generate RDBMS-specific SQL for CREATE TABLE
      *
@@ -34,22 +36,19 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
             {
                 $name = s($name);
 
-                $pk       = $model->getAnnotation( $name, s('pk') );
-                $type     = $model->getAnnotation( $name, s('type') );
-                $notnull  = $model->getAnnotation( $name, s('notnull') );
-                $charset  = $model->getAnnotation( $name, s('charset') );
-                $serial   = $model->getAnnotation( $name, s('serial') );
-                $default  = $model->getAnnotation( $name, s('default') );
+                $pk       = $model->getAnnotationValue( $name, s('pk') );
+                $type     = $model->getAnnotationValue( $name, s('type') );
+                $notnull  = $model->getAnnotationValue( $name, s('notnull') );
+                $charset  = $model->getAnnotationValue( $name, s('charset') );
+                $serial   = $model->getAnnotationValue( $name, s('serial') );
+                $default  = $model->getAnnotationValue( $name, s('default') );
+                $comment  = $model->getAnnotationValue( $name, s('comment') );
+
+                /** @var Charcoal_AnnotationValue $type */
 
                 $type_name = $this->mapType( $type->getValue() );
-                $length    = $type->getParameter();
 
-                if ( $length && !$length->isEmpty() ){
-                    $field_expr = "`$name` $type_name($length)";
-                }
-                else{
-                    $field_expr = "`$name` $type_name";
-                }
+                $field_expr = "`$name` $type_name";
 
                 if ( $pk ){
                     $SQL_pk_list[] = "`$name`";
@@ -58,6 +57,9 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
                     }
                     if ( $serial ){
                         $field_expr .= ' AUTO_INCREMENT';
+                    }
+                    if ( $comment ){
+                        $field_expr .= " COMMENT '" . $comment->getValue() . "'";
                     }
                 }
                 else{
@@ -69,6 +71,9 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
                     }
                     if ( $notnull ){
                         $field_expr .= ' NOT NULL';
+                    }
+                    if ( $comment ){
+                        $field_expr .= " COMMENT '" . $comment->getValue() . "'";
                     }
                 }
 
@@ -82,6 +87,8 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
             $if_not_exists = ub($if_not_exists) ? 'IF NOT EXISTS' : '';
 
             $sql = "CREATE TABLE $if_not_exists `$table_name` (\n $SQL_field_list \n ,PRIMARY KEY( $SQL_pk_list ) )";
+
+            log_debug( "debug,sql,smart_gateway", "buildCreateTableSQL result: $sql", self::TAG );
 
             return $sql;
         }
@@ -99,7 +106,10 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
      */
     public  function buildLastIdSQL()
     {
-        return "select LAST_INSERT_ID()";
+        $sql = "select LAST_INSERT_ID()";
+        log_debug( "debug,sql,smart_gateway", "buildLastIdSQL result: $sql", self::TAG );
+
+        return $sql;
     }
 
     /**
@@ -118,7 +128,9 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
         try{
             $table_name = $model->getTableName();
             $sql = "SELECT count(*) FROM information_schema.columns WHERE TABLE_NAME = '$table_name'";
-            $sql .= " AND TABLE_SCHEMA = '$database'";
+            $sql .= " AND SCHEMA_NAME = '$database'";
+
+            log_debug( "debug,sql,smart_gateway", "buildExistsTableSQL result: $sql", self::TAG );
 
             return $sql;
         }
