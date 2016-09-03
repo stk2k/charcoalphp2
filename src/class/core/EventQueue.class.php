@@ -31,5 +31,23 @@ class Charcoal_EventQueue extends Charcoal_Queue implements Charcoal_IEventQueue
 
         $this->setValue( $array );
     }
+
+    /**
+     * dump events
+     */
+    public function dumpEvents()
+    {
+        $array = $this->getValue();
+
+        if ( !$array ){
+            return;
+        }
+
+        foreach ( $array as $key => $event ){
+            /** @var Charcoal_Event $event */
+            $event_name = $event->getObjectName();
+            echo $event_name . PHP_EOL;
+        }
+    }
 }
 

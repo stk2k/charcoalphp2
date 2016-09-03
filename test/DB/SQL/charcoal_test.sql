@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS `blogs` (
 CREATE TABLE IF NOT EXISTS `blog_category` (
   `blog_category_id` int(11) NOT NULL AUTO_INCREMENT,
   `blog_category_name` varchar(255) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime NOT NULL,
   PRIMARY KEY (`blog_category_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
@@ -21,6 +23,8 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `comment_title` text,
   `comment_body` text,
   `comment_user` varchar(255) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime NOT NULL,
   PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
@@ -31,11 +35,19 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `post_body` text,
   `post_user` varchar(255) DEFAULT NULL,
   `favorite` int(11) DEFAULT '0',
+  `post_date` datetime NOT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime NOT NULL,
   PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
-CREATE TABLE IF NOT EXISTS `test` (
-  `name` text NOT NULL,
-  `price` int(11) NOT NULL
+CREATE TABLE IF NOT EXISTS `item` (
+  `item_id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_name` text NOT NULL,
+  `price` int(11) NOT NULL,
+  `stock` int(11) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime NOT NULL,
+  PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -17,6 +17,8 @@ class CommentTableDTO extends Charcoal_TableDTO
     public $comment_title;
     public $comment_body;
     public $comment_user;
+    public $created_date;
+    public $modified_date;
 
 }
 

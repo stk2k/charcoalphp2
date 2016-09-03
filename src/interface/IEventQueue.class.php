@@ -10,5 +10,9 @@
 */
 interface Charcoal_IEventQueue extends Charcoal_IQueue
 {
+    /**
+     * dump events
+     */
+    public function dumpEvents();
 }
 

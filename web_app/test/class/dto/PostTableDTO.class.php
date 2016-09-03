@@ -18,6 +18,9 @@ class PostTableDTO extends Charcoal_TableDTO
     public $post_body;
     public $post_user;
     public $favorite;
+    public $post_date;
+    public $created_date;
+    public $modified_date;
 }
 
 return __FILE__;    // end of file

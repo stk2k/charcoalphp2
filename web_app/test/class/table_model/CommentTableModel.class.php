@@ -16,11 +16,13 @@ class CommentTableModel extends Charcoal_DefaultTableModel
 
     public $post            = '@relation @target:posts @linkage:inner[post_id] @extract:field';
 
-    public $comment_id      = '@field @type:int(11) @pk @insert:no @update:no @serial';
-    public $post_id         = '@field @type:int(11) @insert:value @update:value @fk:posts';
-    public $comment_title   = '@field @type:text @insert:value @update:value';
-    public $comment_body    = '@field @type:text @insert:value @update:value';
-    public $comment_user    = '@field @type:vachar(255) @insert:value @update:value';
+    public $comment_id                    = '@field @type:int(11) @pk @insert:no @update:no @serial';
+    public $post_id                       = '@field @type:int(11) @insert:value @update:value @fk:posts';
+    public $comment_title                 = '@field @type:text @insert:value @update:value';
+    public $comment_body                  = '@field @type:text @insert:value @update:value';
+    public $comment_user                  = '@field @type:vachar(255) @insert:value @update:value';
+    public $created_date                  = '@field @type:datetime @insert:function[now] @update:no';
+    public $modified_date                 = '@field @type:datetime @insert:function[now] @update:function[now]';
 
     // returns model's own DTO
     public function createDTO( $values = array() )

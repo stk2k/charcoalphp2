@@ -25,6 +25,7 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
                 "PostTableDTO"                => "class/dto",
                 "CommentTableDTO"             => "class/dto",
                 "ItemTableDTO"                => "class/dto",
+                "Item2TableDTO"                => "class/dto",
 
                 // table model classes
 
@@ -33,6 +34,7 @@ class CommonClassLoader extends Charcoal_UserClassLoader implements Charcoal_ICl
                 "PostTableModel"            => "class/table_model",
                 "CommentTableModel"         => "class/table_model",
                 "ItemTableModel"            => "class/table_model",
+                "Item2TableModel"           => "class/table_model",
 
                 // exception classes
 

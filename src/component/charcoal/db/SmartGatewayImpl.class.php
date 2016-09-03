@@ -134,6 +134,16 @@ class Charcoal_SmartGatewayImpl
     }
 
     /**
+     *    Reset component
+     */
+    public function reset()
+    {
+        if ( $this->data_source ){
+            $this->data_source->reset();
+        }
+    }
+
+    /**
      *    Close connection and destory components
      */
     public function terminate()
@@ -199,6 +209,16 @@ class Charcoal_SmartGatewayImpl
     public function selectDatabase( $database_key = null )
     {
         $this->data_source->selectDatabase( $database_key );
+    }
+
+    /**
+     * get selected database
+     *
+     * @return string $database_key
+     */
+    public function getSelectedDatabase()
+    {
+        return $this->data_source->getSelectedDatabase();
     }
 
     /**

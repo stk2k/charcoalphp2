@@ -74,6 +74,12 @@ class TestDispatcherTask extends Charcoal_Task
 //        $sequence  = $context->getSequence();
 //        $procedure = $context->getProcedure();
 
+        echo PHP_EOL;
+        echo "==========================================" . PHP_EOL;
+        echo "CharcoalPHP Test Runner" . PHP_EOL;
+        echo "   Framework Version:" . Charcoal_Framework::getVersion() . PHP_EOL;
+        echo "==========================================" . PHP_EOL;
+
         // get paramter from command line
         $scenario       = $request->getString( 'scenario' );
 
@@ -81,14 +87,14 @@ class TestDispatcherTask extends Charcoal_Task
         log_debug( "debug,scenario", "scenario: $scenario" );
 
         if ( $scenario === NULL ){
-            echo "actions or scenario parameter must be specified." . eol();
+            echo "actions or scenario parameter must be specified." . PHP_EOL;
             log_error( "debug,error,scenario", "actions or scenario parameter must be specified." );
             return TRUE;
         }
 
         $scenario_file = $this->scenario_dir . '/' . $scenario . '.scenario.ini';
         if ( !is_file($scenario_file) ){
-            echo "scenario file not found: $scenario_file" . eol();
+            echo "scenario file not found: $scenario_file" . PHP_EOL;
             log_error( "debug,error,scenario", "scenario file not found: $scenario_file" );
             return TRUE;
         }
@@ -96,7 +102,7 @@ class TestDispatcherTask extends Charcoal_Task
         log_debug( "debug,scenario", "scenario_data: " . print_r($scenario_data,true) );
 
         if ( empty($scenario_data) ){
-            echo "couldn't read scenario file: $scenario_file" . eol();
+            echo "couldn't read scenario file: $scenario_file" . PHP_EOL;
             log_error( "debug,error,scenario", "couldn't read scenario file: $scenario_file" );
             return TRUE;
         }
@@ -112,17 +118,17 @@ class TestDispatcherTask extends Charcoal_Task
             log_debug( "debug,scenario", "enabled: $enabled" );
 
             if ( in_array(strtolower($enabled),array('0','false','no')) ){
-                echo "section[$section] is DISABLED. will skip." . eol();
+                echo "section[$section] is DISABLED. will skip." . PHP_EOL;
                 log_warning( "debug, scenario", "section[$section] is DISABLED." );
                 continue;
             }
             if ( empty($target) ){
-                echo "[WARNING] 'target' is not found at section[$section]" . eol();
+                echo "[WARNING] 'target' is not found at section[$section]" . PHP_EOL;
                 log_warning( "debug, scenario", "'target' is not found at section[$section]" );
                 continue;
             }
             if ( empty($actions) ){
-                echo "[WARNING] 'actions' is not found at section[$section]" . eol();
+                echo "[WARNING] 'actions' is not found at section[$section]" . PHP_EOL;
                 log_warning( "debug, scenario", "'actions' is not found at section[$section]" );
                 continue;
             }
@@ -139,6 +145,11 @@ class TestDispatcherTask extends Charcoal_Task
             log_debug( "debug,scenario", "event_args: " . print_r($event_args,true) );
             log_debug( "debug,scenario", "pushed event: " . print_r($event,true) );
         }
+
+        // request fo test summary
+        /** @var Charcoal_IEvent $event */
+        $event = $context->createEvent( 'test_summary' );
+        $context->pushEvent( $event );
 
         return TRUE;
     }

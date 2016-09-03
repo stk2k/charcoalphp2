@@ -76,8 +76,6 @@ class TempFileTestTask extends Charcoal_TestTask
     {
         $action = us($action);
 
-        $this->setVerbose( true );
-
         // temp file component
         /** @var Charcoal_TempFileComponent $tf */
         $tf = $context->getComponent( 'temp_file@:charcoal:file' );

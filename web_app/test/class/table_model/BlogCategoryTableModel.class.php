@@ -14,8 +14,10 @@ class BlogCategoryTableModel extends Charcoal_DefaultTableModel
 {
     public $___table_name     = 'blog_category';
 
-    public $blog_category_id    = '@field @type:int(11) @pk @insert:no @update:no @serial';
-    public $blog_category_name  = '@field @type:vachar(255) @insert:value @update:value';
+    public $blog_category_id              = '@field @type:int(11) @pk @insert:no @update:no @serial';
+    public $blog_category_name            = '@field @type:vachar(255) @insert:value @update:value';
+    public $created_date                  = '@field @type:datetime @insert:function[now] @update:no';
+    public $modified_date                 = '@field @type:datetime @insert:function[now] @update:function[now]';
 
     // returns model's own DTO
     public function createDTO( $values = array() )

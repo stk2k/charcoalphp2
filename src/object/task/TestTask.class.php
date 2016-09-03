@@ -8,14 +8,17 @@
 * @author     stk2k <stk2k@sazysoft.com>
 * @copyright  2008 stk2k, sazysoft
 */
-
 abstract class Charcoal_TestTask extends Charcoal_Task
 {
     private $tests;
     private $asserts;
+    private $failures;
+    private $section;
     private $action;
     private $expected_exception;
-    private $verbose;
+    private $context;
+
+
 
     /**
      * Initialize instance
@@ -33,24 +36,6 @@ abstract class Charcoal_TestTask extends Charcoal_Task
         {
             log_debug( "debug", "Task[$this] post actions: " . $this->getPostActions(), self::TAG );
         }
-    }
-
-    /**
-     * set verbose flag
-     *
-     * @param boolean|Charcoal_Boolean $verbose
-     */
-    public function setVerbose( $verbose ){
-        $this->verbose = ub($verbose);
-    }
-
-    /**
-     * get verbose flag
-     *
-     * @return boolean
-     */
-    public function getVerbose(){
-        return $this->verbose;
     }
 
     /**
@@ -107,12 +92,19 @@ abstract class Charcoal_TestTask extends Charcoal_Task
     {
         list( $file, $line ) = Charcoal_System::caller(2);
 
-        echo "[ASSERT] $result" . eol();
-        echo "  $value1_title: " . $value1 . eol();
-        echo "  $value2_title: " . Charcoal_System::toString($value2,TRUE) . eol();
-        echo "  $file($line)" . eol();
+        echo "[ASSERT] $result" . PHP_EOL;
+        echo "  $value1_title: " . $value1 . PHP_EOL;
+        echo "  $value2_title: " . Charcoal_System::toString($value2,TRUE) . PHP_EOL;
+        echo "  $file($line)" . PHP_EOL;
 
-        $this->asserts ++;
+        $this->failures ++;
+
+        $event_args = array( $this->section, $this->action, false );
+        /** @var Charcoal_IEventContext $context */
+        $context = $this->context;
+        /** @var Charcoal_IEvent $event */
+        $event = $context->createEvent( 'test_result', $event_args );
+        $context->pushEvent( $event );
     }
     public function messageExpectedActual( $result, $expected, $actual )
     {
@@ -124,19 +116,36 @@ abstract class Charcoal_TestTask extends Charcoal_Task
     }
 
     /**
+     * test success
+     */
+    public function success()
+    {
+        $event_args = array( $this->section, $this->action, true );
+        /** @var Charcoal_IEventContext $context */
+        $context = $this->context;
+        /** @var Charcoal_IEvent $event */
+        $event = $context->createEvent( 'test_result', $event_args );
+        $context->pushEvent( $event );
+    }
+
+    /**
      * assert if NULL
      *
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertNull( $actual )
+    public function assertNull( $actual, $verbose = false )
     {
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $actual !== NULL ){
             $this->messageExpectedActual( "Null", "=== NULL", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -144,16 +153,20 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      * assert if NOT NULL
      *
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertNotNull( $actual )
+    public function assertNotNull( $actual, $verbose = false )
     {
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $actual === NULL ){
             $this->messageExpectedActual( "Not Null", "=== NULL", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -161,16 +174,20 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      * assert if empty
      *
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertEmpty( $actual )
+    public function assertEmpty( $actual, $verbose = false )
     {
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( !empty($actual) ){
             $this->messageExpectedActual( "Empty", "''", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -178,16 +195,20 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      * assert if NOT empty
      *
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertNotEmpty( $actual )
+    public function assertNotEmpty( $actual, $verbose = false )
     {
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( empty($actual) ){
             $this->messageExpectedActual( "Not Empty", "''", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -196,17 +217,21 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertEquals( $expected, $actual )
+    public function assertEquals( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected != $actual ){
             $this->messageExpectedActual( "Not Equal", "== $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -215,18 +240,22 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertNotEquals( $expected, $actual )
+    public function assertNotEquals( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected == $actual ){
-            $expected = Charcoal_System::toString($expected,TRUE);
+            //$expected = Charcoal_System::toString($expected,TRUE);
             $this->messageExpectedActual( "Equal", "!= $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -235,18 +264,22 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertSame( $expected, $actual )
+    public function assertSame( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected !== $actual ){
-            $expected = Charcoal_System::toString($expected,TRUE);
+            //$expected = Charcoal_System::toString($expected,TRUE);
             $this->messageExpectedActual( "Not Same", "=== $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -255,18 +288,22 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertNotSame( $expected, $actual )
+    public function assertNotSame( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected === $actual ){
-            $expected = Charcoal_System::toString($expected,TRUE);
+            //$expected = Charcoal_System::toString($expected,TRUE);
             $this->messageExpectedActual( "Same", "!== $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -274,16 +311,20 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      * assert if FALSE
      *
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertFalse( $actual )
+    public function assertFalse( $actual, $verbose = false )
     {
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $actual !== FALSE ){
             $this->messageExpectedActual( "Not FALSE", "=== FALSE", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -291,16 +332,20 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      * assert if TRUE
      *
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertTrue( $actual )
+    public function assertTrue( $actual, $verbose = false )
     {
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $actual !== TRUE ){
             $this->messageExpectedActual( "Not TRUE", "=== TRUE", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -309,17 +354,21 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $needle
      * @param array $haystack
+     * @param boolean $verbose
      */
-    public function assertCotains( $needle, $haystack )
+    public function assertCotains( $needle, $haystack, $verbose = false )
     {
         $needle_s = Charcoal_System::toString($needle,TRUE);
         $haystack_s = Charcoal_System::toString($haystack,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($needle_s, $haystack_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($needle_s, $haystack_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( in_array($needle, $haystack) ){
             $this->messageNeedleHaystack( "Not Contains", $needle_s, $haystack_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -328,17 +377,21 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertGreaterThan( $expected, $actual )
+    public function assertGreaterThan( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected >= $actual ){
             $this->messageExpectedActual( "Less than or equal", ">= $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -347,17 +400,21 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertGreaterThanOrEqual( $expected, $actual )
+    public function assertGreaterThanOrEqual( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected > $actual ){
             $this->messageExpectedActual( "Less than", "> $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -366,17 +423,21 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertLessThan( $expected, $actual )
+    public function assertLessThan( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected <= $actual ){
             $this->messageExpectedActual( "Greater than or equal", "<= $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -385,17 +446,21 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      *
      * @param mixed $expected
      * @param mixed $actual
+     * @param boolean $verbose
      */
-    public function assertLessThanOrEqual( $expected, $actual )
+    public function assertLessThanOrEqual( $expected, $actual, $verbose = false )
     {
         $expected_s = Charcoal_System::toString($expected,TRUE);
         $actual_s = Charcoal_System::toString($actual,TRUE);
-        if ( $this->verbose ){
-            echo __METHOD__ . "($expected_s, $actual_s)" . eol();
+        if ( $verbose ){
+            echo __METHOD__ . "($expected_s, $actual_s)" . PHP_EOL;
         }
-        $this->tests ++;
+        $this->asserts ++;
         if ( $expected < $actual ){
             $this->messageExpectedActual( "Less than", "< $expected_s", $actual_s );
+        }
+        else{
+            $this->success();
         }
     }
 
@@ -408,6 +473,8 @@ abstract class Charcoal_TestTask extends Charcoal_Task
      */
     public function processEvent( $context )
     {
+        $this->context = $context;
+
         /** @var Charcoal_TestEvent $event */
         $event   = $context->getEvent();
 
@@ -417,6 +484,8 @@ abstract class Charcoal_TestTask extends Charcoal_Task
         $section       = $event->getSection();
         $target        = $event->getTarget();
         $actions       = $event->getActions();
+
+        $this->section = $section;
 
         if ( $is_debug ) log_debug( "debug,event", "event section: $section" );
         if ( $is_debug ) log_debug( "debug,event", "event target: $target" );
@@ -449,17 +518,10 @@ abstract class Charcoal_TestTask extends Charcoal_Task
         // テスト実行
         $this->tests = 0;
         $this->asserts = 0;
-        $errors = 0;
+        $this->failures = 0;
 
-        echo eol();
-        echo "==========================================" . eol();
-        echo "CharcoalPHP Test Runner" . eol();
-        echo "   Framework Version:" . Charcoal_Framework::getVersion() . eol();
-        echo "==========================================" . eol();
-
-        echo "Title:" . $section . eol();
-        echo "TargetTask:" . $this->getObjectName() . eol();
-        echo "Test started(total=$total_actions)." . eol();
+        echo PHP_EOL . "===================================================" . PHP_EOL;
+        echo "Section[$section](total actions:$total_actions)" . PHP_EOL . PHP_EOL;
 
         foreach( $actions as $action ){
             $action = trim( $action );
@@ -469,22 +531,25 @@ abstract class Charcoal_TestTask extends Charcoal_Task
 
             if ( !$this->isValidAction( $action ) )    continue;
 
-            echo "-------------------------------------" . eol();
-            echo "$action" . eol();
+            //echo "-------------------------------------" . PHP_EOL;
+            echo "Doing action: [$action] ..." . PHP_EOL;
 
             try{
                 $this->setUp( $action, $context );
             }
             catch( Exception $e ){
-                echo "Test execution failed while setup:" . $e . eol();
+                echo "Test execution failed while setup:" . $e . PHP_EOL;
                 return TRUE;
             }
 
             try{
-                $this->test( $action, $context );
+                $tested = $this->test( $action, $context );
+                if ( $tested ){
+                    $this->tests ++;
+                }
             }
             catch( Exception $e ){
-                echo "[Info]Caught exception:" . get_class($e) . eol();
+                echo "[Info]Caught exception:" . get_class($e) . PHP_EOL;
                 if ( $this->expected_exception ){
                     if ( $this->expected_exception != get_class($e) ){
                         $expected = $this->expected_exception;
@@ -493,7 +558,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
                     }
                 }
                 else{
-                    echo "[Warning]Test execution failed while test:" . $e . eol();
+                    echo "[Warning]Test execution failed while test:" . $e . PHP_EOL;
                 }
             }
 
@@ -501,21 +566,22 @@ abstract class Charcoal_TestTask extends Charcoal_Task
                 $this->cleanUp( $action, $context );
             }
             catch( Exception $e ){
-                echo "Test execution failed while clean up:" . $e . eol();
+                echo "Test execution failed while clean up:" . $e . PHP_EOL;
                 return TRUE;
             }
 
+            echo "Action finished: [$action]" . PHP_EOL . PHP_EOL;
         }
 
         // 終了メッセージ
-        echo "-------------------------------------" . eol();
         if ( $this->tests > 0 ){
-            echo "Tests complete!" . eol();
-            echo "Tests: {$this->tests} Assertions: {$this->asserts} Errors: $errors" . eol();
+            echo "Tests complete! : [$section]" . PHP_EOL . PHP_EOL;
+            echo "Tests: {$this->tests} Assertions: {$this->asserts} Failures: {$this->failures}" . PHP_EOL;
         }
         else{
-            echo "No tests were processed." . eol();
+            echo "No tests were processed." . PHP_EOL;
         }
+        echo "===================================================" . PHP_EOL . PHP_EOL;
 
         return TRUE;
     }

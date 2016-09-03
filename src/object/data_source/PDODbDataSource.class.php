@@ -100,6 +100,16 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
     }
 
     /**
+     * get selected database
+     *
+     * @return string $database_key
+     */
+    public function getSelectedDatabase()
+    {
+        return $this->selected_db;
+    }
+
+    /**
      * get active connection
      *
      * @return PDO
@@ -407,7 +417,6 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
                         _throw( new Charcoal_DataSourceConfigException( 'charset', "invalid charset: $charset" ) );
                 }
             }
-
             return $pdo;
         }
         catch ( Exception $e )
@@ -419,6 +428,23 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             _throw( new Charcoal_DBConnectException( __METHOD__ . " failed: DSN=[$DSN]", $e ) );
         }
         return null;
+    }
+
+    /*
+     *  clean up connections and its own data
+     */
+    public function reset()
+    {
+        $this->connections    = array();
+        $this->command_id     = 0;
+
+        //$this->selected_db = null;
+
+        $this->command_id = null;
+
+        $this->sql_histories = new Charcoal_Stack();
+
+        $this->num_rows = null;
     }
 
     /*

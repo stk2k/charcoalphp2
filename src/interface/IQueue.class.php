@@ -24,5 +24,12 @@ interface Charcoal_IQueue
      */
     public function enqueue( $item );
 
+    /*
+     * Checks whether the queue is empty.
+     *
+     * @return boolean    whether the queue is empty.
+     */
+    public function isEmpty();
+
 }
 

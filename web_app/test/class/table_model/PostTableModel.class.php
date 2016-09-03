@@ -14,14 +14,15 @@ class PostTableModel extends Charcoal_DefaultTableModel
 {
     public $___table_name      = 'posts';
 
-    public $comments           = '@relation @target:comments @linkage:outer[comment_id] @extract:array';
-
-    public $post_id            = '@field @type:int(11) @pk @insert:no @update:no @serial';
-    public $blog_id            = '@field @type:int(11) @insert:value @update:value @fk:blogs';
-    public $post_title         = '@field @type:text @insert:value @update:value';
-    public $post_body          = '@field @type:text @insert:value @update:value';
-    public $post_user          = '@field @type:vachar(255) @insert:value @update:value';
-    public $favorite           = '@field @type:int(11) @insert:value @update:value';
+    public $post_id                       = '@field @type:int(11) @pk @insert:no @update:no @serial';
+    public $blog_id                       = '@field @type:int(11) @insert:value @update:value @fk:blogs';
+    public $post_title                    = '@field @type:text @insert:value @update:value';
+    public $post_body                     = '@field @type:text @insert:value @update:value';
+    public $post_user                     = '@field @type:vachar(255) @insert:value @update:value';
+    public $favorite                      = '@field @type:int(11) @insert:value @update:value';
+    public $post_date                     = '@field @type:datetime @insert:value @update:value';
+    public $created_date                  = '@field @type:datetime @insert:function[now] @update:no';
+    public $modified_date                 = '@field @type:datetime @insert:function[now] @update:function[now]';
 
     // returns model's own DTO
     public function createDTO( $values = array() )

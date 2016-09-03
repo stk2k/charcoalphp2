@@ -191,5 +191,11 @@ interface Charcoal_IEventContext
      */
     public function pushEvent( $event );
 
+    /**
+     *  returns event queue
+     *
+     * @return Charcoal_IEventQueue
+     */
+    public function getEventQueue();
 }
 

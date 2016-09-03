@@ -23,14 +23,17 @@ class DuplicatedPdo extends PDO
         /** @var Charcoal_Config $config */
         $config = $gw->getDataSource()->getConfig();
 
+        // デフォルトの接続先設定を取得
+        $defult_config = $config->getHashMap('default');
+
         // 接続情報を取得
-        $backend = $config->getString('backend');
-        $server = $config->getString('server');
-        $user = $config->getString('user');
-        $password = $config->getString('password');
-        $db_name = $config->getString('db_name');
-        $port = $config->getString('port');
-        $charset = $config->getString('charset');
+        $backend = $defult_config->getString('backend');
+        $server = $defult_config->getString('server');
+        $user = $defult_config->getString('user');
+        $password = $defult_config->getString('password');
+        $db_name = $defult_config->getString('db_name');
+        $port = $defult_config->getString('port');
+        $charset = $defult_config->getString('charset');
 
         //ad($config->getAll());
 

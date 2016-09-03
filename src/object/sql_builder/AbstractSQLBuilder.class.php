@@ -193,19 +193,34 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                 case 'value':
                     // 値で更新
                     $value = $dto->$field;
-                    if ( $value instanceof Charcoal_DbFieldUpdateMethod ){
-                        switch( $value->getValueType() ){
-                        case Charcoal_DbFieldUpdateMethod::UPDATE_BY_NULL:
-                            $SQL_set[] = $field . ' = NULL';
-                            break;
-                        case Charcoal_DbFieldUpdateMethod::UPDATE_BY_NOW:
-                            $SQL_set[] = $field . ' = NOW()';
-                            break;
+                    if ( is_array($value) ) {
+                        $type = isset($value[0]) ? $value[0] : NULL;
+                        $arg = isset($value[1]) ? $value[1] : NULL;
+                        $processed = false;
+                        if ( is_string($type) && is_string($arg) ){
+                            switch(strtolower($type)){
+                                case 'value':
+                                    if ( strtolower($arg) == 'null' ){
+                                        $SQL_set[] = $field . ' = NULL';
+                                        $processed = true;
+                                    }
+                                    break;
+                                case 'function':
+                                    if ( strtolower($arg) == 'now' ){
+                                        $SQL_set[] = $field . ' = NOW()';
+                                        $processed = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        // is not processed, save the array as a JSON string
+                        if (!$processed){
+                            $SQL_set[] = $field . ' = ?';
+                            $SQL_params[] = json_encode($value, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
                         }
                     }
                     elseif ( $value !== NULL ){
                         $SQL_set[] = $field . ' = ?';
-                        // パラメータを追加
                         $SQL_params[] = $value;
                     }
                     break;
@@ -325,10 +340,38 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                 case 'value':
                     // 値で更新
                     $value = $dto->$field;
-                    if ( $value !== NULL ){
+                    if ( is_array($value) ) {
+                        $type = isset($value[0]) ? $value[0] : NULL;
+                        $arg = isset($value[1]) ? $value[1] : NULL;
+                        $processed = false;
+                        if ( is_string($type) && is_string($arg) ) {
+                            switch (strtolower($type)) {
+                                case 'value':
+                                    if (strtolower($arg) == 'null') {
+                                        $SQL_field_list[] = $field;
+                                        $SQL_value_list[] = 'NULL';
+                                        $processed = true;
+                                    }
+                                    break;
+                                case 'function':
+                                    if (strtolower($arg) == 'now') {
+                                        $SQL_field_list[] = $field;
+                                        $SQL_value_list[] = 'NOW()';
+                                        $processed = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        // is not processed, save the array as a JSON string
+                        if (!$processed){
+                            $SQL_field_list[] = $field;
+                            $SQL_value_list[] = '?';
+                            $SQL_params[] = json_encode($value, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+                        }
+                    }
+                    elseif ( $value !== NULL ){
                         $SQL_field_list[] = $field;
                         $SQL_value_list[] = '?';
-                        // パラメータを追加
                         $SQL_params[] = $value;
                     }
                     break;
@@ -447,8 +490,37 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                     switch ( $insert_anno ){
                     case 'value':
                         // 値で更新
-                        $SQL_value_list_line[] = '?';
-                        $SQL_params[] = $dto->$field;
+                        $value = $dto->$field;
+                        if ( is_array($value) ) {
+                            $type = isset($value[0]) ? $value[0] : NULL;
+                            $arg = isset($value[1]) ? $value[1] : NULL;
+                            $processed = false;
+                            if ( is_string($type) && is_string($arg) ) {
+                                switch (strtolower($type)) {
+                                    case 'value':
+                                        if (strtolower($value) == 'null') {
+                                            $SQL_value_list_line[] = 'NULL';
+                                            $processed = true;
+                                        }
+                                        break;
+                                    case 'function':
+                                        if (strtolower($value) == 'now') {
+                                            $SQL_value_list_line[] = 'NOW()';
+                                            $processed = true;
+                                        }
+                                        break;
+                                }
+                            }
+                            // is not processed, save the array as a JSON string
+                            if (!$processed){
+                                $SQL_value_list_line[] = '?';
+                                $SQL_params[] = json_encode($value, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+                            }
+                        }
+                        elseif ( $value !== NULL ){
+                            $SQL_value_list_line[] = '?';
+                            $SQL_params[] = $value;
+                        }
                         break;
                     case 'function':
                         // 関数を決定

@@ -300,9 +300,11 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                     }
                     elseif ( $result === FALSE || ($result instanceof Charcoal_Boolean) && $result->isFalse() ){
                         $result_str = 'FALSE';
+                        $result = FALSE;
                     }
                     elseif ( $result === TRUE || ($result instanceof Charcoal_Boolean) && $result->isTrue() ){
                         $result_str = 'TRUE';
+                        $result = TRUE;
                     }
                     else{
                         $msg = "processEvent() must return a [boolean] value. but returned:" . print_r($result,true);
@@ -318,7 +320,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                     $post_actions = $task->getPostActions();
 
                     if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );
-                    if ( $post_actions )
+                    if ( $result && $post_actions )
                     {
                         foreach( $post_actions as $key => $action )
                         {

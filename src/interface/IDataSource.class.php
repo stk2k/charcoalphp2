@@ -76,12 +76,24 @@ interface Charcoal_IDataSource extends Charcoal_IComponent
      */
     public function disconnect();
 
+    /*
+     *  clean up connections and its own data
+     */
+    public function reset();
+
     /**
      * select database
      *
      * @param string $database_key
      */
     public function selectDatabase( $database_key = null );
+
+    /**
+     * get selected database
+     *
+     * @return string $database_key
+     */
+    public function getSelectedDatabase();
 
     /*
      *    SQLをそのまま発行（結果セットあり）

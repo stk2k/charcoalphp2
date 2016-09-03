@@ -470,6 +470,15 @@ class Charcoal_EventContext implements Charcoal_IEventContext
         $this->task_manager->pushEvent( $event );
     }
 
+    /**
+     *  returns event queue
+     *
+     * @return Charcoal_IEventQueue
+     */
+    public function getEventQueue()
+    {
+        return $this->task_manager->getEventQueue();
+    }
 }
 
 

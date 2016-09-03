@@ -13,7 +13,6 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
 {
     const VALUE_NULL = 'null';
 
-
     /** @var  Charcoal_SmartGatewayImpl */
     private $impl;
 
@@ -57,6 +56,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     }
 
     /**
+     *    Reset component
+     */
+    public function reset()
+    {
+        $this->impl->reset();
+    }
+
+    /**
      *    Close connection and destory components
      */
     public function terminate()
@@ -82,6 +89,16 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     public function setDataSource( $data_source )
     {
         $this->impl->setDataSource( $data_source );
+    }
+
+    /**
+     * get selected database
+     *
+     * @return string $database_key
+     */
+    public function getSelectedDatabase()
+    {
+        return $this->impl->getSelectedDatabase();
     }
 
     /**

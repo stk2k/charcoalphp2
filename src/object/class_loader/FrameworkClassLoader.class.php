@@ -110,6 +110,8 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_UserEvent'                            => 'object/event',
                 'Charcoal_RequestEvent'                            => 'object/event',
                 'Charcoal_TestEvent'                            => 'object/event',
+                'Charcoal_TestResultEvent'                     => 'object/event',
+                'Charcoal_TestSummaryEvent'                     => 'object/event',
                 'Charcoal_ShellCommandEvent'                    => 'object/event',
 
         // exception classes
@@ -274,7 +276,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_QueryJoin'                        => 'component/charcoal/db',
                 'Charcoal_QueryTarget'                        => 'component/charcoal/db',
                 'Charcoal_QueryTargetElement'                => 'component/charcoal/db',
-                'Charcoal_DbFieldUpdateMethod'                => 'component/charcoal/db',
 
                 'Charcoal_AbstractWrapperContext'            => 'component/charcoal/db/context',
                 'Charcoal_SelectContext'                    => 'component/charcoal/db/context',

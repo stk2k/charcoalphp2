@@ -146,7 +146,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
     /**
      * Get component(generate if not exists)
      *
-     * @param string $component_name      component path
+     * @param string|Charcoal_String $component_name      component path
      * @param Charcoal_Vector $args       constructor arguments
      *
      * @return Charcoal_IComponent        component instance

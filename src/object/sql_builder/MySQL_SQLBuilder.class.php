@@ -128,7 +128,7 @@ class Charcoal_MySQL_SQLBuilder extends Charcoal_AbstractSQLBuilder
         try{
             $table_name = $model->getTableName();
             $sql = "SELECT count(*) FROM information_schema.columns WHERE TABLE_NAME = '$table_name'";
-            $sql .= " AND SCHEMA_NAME = '$database'";
+            $sql .= " AND TABLE_SCHEMA = '$database'";
 
             log_debug( "debug,sql,smart_gateway", "buildExistsTableSQL result: $sql", self::TAG );
 
