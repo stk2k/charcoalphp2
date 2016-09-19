@@ -343,17 +343,16 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
      */
     public function loadClass( $class_name )
     {
-//        log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] FrameworkClassLoader#loadClass() called: class_name=[$class_name]" );
+        $debug = $this->getSandbox()->isDebug();
 
         $class_name = us($class_name);
-
-//print "loadClass($class_name)<br>";
 
         $class_paths = self::$class_paths;
 
         // フレームワークのクラスではない場合はFALSEを返却
         if ( !isset($class_paths[ $class_name ]) ){
 //            log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] Can not load class: [$class_name]" );
+            if ( $debug )    echo "Class NOT found in framework class loader: $class_name" . eol();
             return FALSE;
         }
 
@@ -369,7 +368,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
         // ソース読み込み
         Charcoal_Framework::loadSourceFile( $class_path );
 
-//        log_info( "system,debug,class_loader", "class_loader", "[FrameworkClassLoader] Class file loaded: class=[$class_name] file=[$class_path]" );
+        if ( $debug )    echo "Class found in framework class loader: $class_name" . eol();
 
         return TRUE;
     }

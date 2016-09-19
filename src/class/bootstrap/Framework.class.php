@@ -304,9 +304,6 @@ class Charcoal_Framework
             _throw( $ex );
         }
 
-        $is_debug = $profile->getBoolean( 'DEBUG_MODE', false );
-        $sandbox->setDebug( ub($is_debug) );
-
         //=======================================
         // Start bootstrap
 

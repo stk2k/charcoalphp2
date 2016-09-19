@@ -591,6 +591,7 @@ SQL;
             // save by UPDATE
             $dto->post_id = $new_id;
             $dto->post_date = array('function','now');
+            $dto->post_user = array('value','null');
             $dto->post_body = array(
                 1, 2, "apple",
                 array( 'name'=> 'stk2k' ),
@@ -610,14 +611,17 @@ SQL;
             $criteria = new Charcoal_SQLCriteria();
             $criteria->setWhere( "post_id = ?" );
             $criteria->setParams( array($dto->post_id) );
-            $new_record = $gw->findFirst( NULL,'posts', $criteria );
+            $the_record = $gw->findFirst( NULL,'posts', $criteria );
 
             // check post date
-            $this->assertGreaterThan( $time_before_update, strtotime($new_record['post_date']) );
-            $this->assertLessThan( $time_after_update, strtotime($new_record['post_date']) );
+            $this->assertGreaterThan( $time_before_update, strtotime($the_record['post_date']) );
+            $this->assertLessThan( $time_after_update, strtotime($the_record['post_date']) );
+
+            // check post user
+            $this->assertEquals( NULL, $the_record['post_user'] );
 
             // check post body(JSON)
-            $post_body = json_decode($new_record['post_body'],true);
+            $post_body = json_decode($the_record['post_body'],true);
             $expeced = array(
                 1, 2, "apple",
                 array( 'name'=> 'stk2k' ),

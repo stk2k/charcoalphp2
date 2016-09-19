@@ -308,7 +308,7 @@ class Charcoal_Bootstrap
     public static function loadClass( $class_name )
     {
         if ( !isset(self::$bootstrap_classes[$class_name]) ){
-            if ( self::$debug )    echo "Class not found in bootstrap class loader: $class_name" . eol();
+            if ( self::$debug )    echo "Class NOT found in bootstrap class loader: $class_name" . eol();
             return FALSE;
         }
 
@@ -324,6 +324,8 @@ class Charcoal_Bootstrap
 
         /** @noinspection PhpIncludeInspection */
         include( $class_path );
+
+        if ( self::$debug )    echo "Class found in bootstrap class loader: $class_name" . eol();
 
         return TRUE;
     }

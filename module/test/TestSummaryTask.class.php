@@ -85,16 +85,18 @@ class TestSummaryTask extends Charcoal_Task
 
             echo PHP_EOL;
             echo "==========================================" . PHP_EOL;
-            echo "Test Summary" . PHP_EOL;
+            echo "Test Result Summary" . PHP_EOL;
             echo " --------------------------------------- " . PHP_EOL;
 
+            echo " Tests/Assertions/Failures by section:" . PHP_EOL . PHP_EOL;
             foreach( $this->section_map as $section => $map ){
                 list( $tests, $assertions, $failures ) = $map;
 
-                echo "   [$section]: Tests:" . count($tests) . " Assertions: $assertions Failures: $failures" . PHP_EOL;
+                echo "   [$section] " . count($tests) . " / $assertions / $failures" . PHP_EOL;
             }
 
             echo " --------------------------------------- " . PHP_EOL;
+            echo " Total:" . PHP_EOL . PHP_EOL;
             echo "  Tests: " . $this->tests . PHP_EOL;
             echo "  Assertions: " . $this->assertions . PHP_EOL;
             echo "  Failures: " . $this->failures . PHP_EOL;
