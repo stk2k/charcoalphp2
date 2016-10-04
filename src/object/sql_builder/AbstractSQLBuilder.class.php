@@ -498,13 +498,13 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                             if ( is_string($type) && is_string($arg) ) {
                                 switch (strtolower($type)) {
                                     case 'value':
-                                        if (strtolower($value) == 'null') {
+                                        if (strtolower($arg) == 'null') {
                                             $SQL_value_list_line[] = 'NULL';
                                             $processed = true;
                                         }
                                         break;
                                     case 'function':
-                                        if (strtolower($value) == 'now') {
+                                        if (strtolower($arg) == 'now') {
                                             $SQL_value_list_line[] = 'NOW()';
                                             $processed = true;
                                         }
