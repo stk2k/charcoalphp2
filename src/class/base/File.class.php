@@ -24,6 +24,9 @@ class Charcoal_File extends Charcoal_Object
 //        Charcoal_ParamTrait::validateString( 1, $file_name );
 //        Charcoal_ParamTrait::validateFile( 2, $parent, TRUE );
 
+        assert( $file_name instanceof Charcoal_String || is_string($file_name), 'Paremeter 1 must be string or Charcoal_String' );
+        assert( $parent instanceof Charcoal_File || $parent === NULL, 'Paremeter 2 must be NULL or Charcoal_File' );
+
         parent::__construct();
 
         $path = $parent ? $parent->getPath() . '/' . us($file_name) : us($file_name);
@@ -243,16 +246,6 @@ class Charcoal_File extends Charcoal_Object
     }
 
     /**
-     *  Parent directory
-     *
-     * @return Charcoal_File
-     */
-    public function getDir()
-    {
-        return new Charcoal_File( dirname($this->path) );
-    }
-
-    /**
      *  Name of parent directory
      *
      * @return Charcoal_String
@@ -272,6 +265,16 @@ class Charcoal_File extends Charcoal_Object
     public function getChild( $file_or_dir_name )
     {
         return new Charcoal_File( $this->path . DIRECTORY_SEPARATOR . $file_or_dir_name );
+    }
+
+    /**
+     *  Parent of the file or directory
+     *
+     * @return Charcoal_File
+     */
+    public function getParent()
+    {
+        return new Charcoal_File( dirname($this->path) );
     }
 
     /**
@@ -324,19 +327,17 @@ class Charcoal_File extends Charcoal_Object
      *
      * @param string $mode File mode
      * @param string $contents File contents
-     * @param bool $drilldown If TRUE, all of parent directory may be created automatically.
      *
      * @return void
      */
-    public function makeFile( $mode, $contents, $drilldown = TRUE )
+    public function makeFile( $mode, $contents )
     {
 //        Charcoal_ParamTrait::validateString( 1, $mode );
 //        Charcoal_ParamTrait::validateString( 2, $contents );
-//        Charcoal_ParamTrait::checkBool( 3, $drilldown );
 
-        $parent_dir = $this->getDir();
+        $parent_dir = $this->getParent();
 
-        $parent_dir->makeDirectory( $mode, $drilldown );
+        $parent_dir->makeDirectory( $mode );
 
         $path = $this->path;
 
@@ -350,22 +351,31 @@ class Charcoal_File extends Charcoal_Object
      *  Create empty directory
      *
      * @param string $mode                  File mode.If this parameter is set NULL, 0777 will be applied.
-     * @param bool $drilldown               If TRUE, all of parent directory may be created automatically.
      *
      * @return void
      */
-    public function makeDirectory( $drilldown = TRUE, $mode = NULL )
+    public function makeDirectory( $mode = NULL )
     {
-//        Charcoal_ParamTrait::validateBoolean( 1, $drilldown );
 //        Charcoal_ParamTrait::validateInteger( 2, $mode, TRUE );
 
         $path = $this->path;
         $mode = $mode ? ui( $mode ) : 0777;
-        $drilldown = ub( $drilldown );
 
-        if ( file_exists($path) )    return;
+        if ( file_exists($path) ){
+            if ( is_file($path) ){
+                _throw( new Charcoal_MakeDirectoryException( $path ) );
+            }
+            return;
+        }
 
-        $res = mkdir( $path, $mode, $drilldown );
+        $parent_dir = $this->getParent();
+
+        if ( !$parent_dir->exists() ){
+            $parent_dir->makeDirectory( $mode );
+        }
+
+        log_debug( "import_file_csv", "path:$path\n" );
+        $res = mkdir( $path, $mode );
         if ( $res === FALSE ){
             _throw( new Charcoal_MakeDirectoryException( $path ) );
         }

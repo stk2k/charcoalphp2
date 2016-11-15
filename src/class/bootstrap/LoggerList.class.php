@@ -32,6 +32,8 @@ class Charcoal_LoggerList extends Charcoal_Object
 
     /**
      *  Constructor
+     *
+     * @param Charcoal_Sandbox $sandbox
      */
     public function __construct( $sandbox )
     {
@@ -192,6 +194,7 @@ class Charcoal_LoggerList extends Charcoal_Object
         {
             // 登録されていて、かつプロファイルにエントリがあるログだけに出力する
             if ( isset($this->loggers[$key]) && isset($output_loggers[$key]) ){
+                /** @var Charcoal_ILogger $logger */
                 $logger = $this->loggers[ $key ];
                 $logger->writeln( $msg );
             }
@@ -209,6 +212,8 @@ class Charcoal_LoggerList extends Charcoal_Object
         {
             foreach( $this->loggers as $logger )
             {
+                /** @var Charcoal_ILogger $logger */
+
                 // output footer
                 $logger->writeFooter();
 
@@ -244,6 +249,8 @@ class Charcoal_LoggerList extends Charcoal_Object
 //        Charcoal_ParamTrait::validateString( 1, $key );
 //        Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_ILogger', $logger );
 //
+        /** @var Charcoal_ILogger $logger */
+
         $key = us( $key );
 
         // set a logger to array

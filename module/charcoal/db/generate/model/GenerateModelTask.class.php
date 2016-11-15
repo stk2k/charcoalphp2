@@ -157,7 +157,7 @@ class GenerateModelTask extends Charcoal_Task
             $is_created_date = (strtolower($field) == 'created_date') ? true : false;
             $is_modified_date = (strtolower($field) == 'modified_date') ? true : false;
 
-            if ( $is_nullable ){
+            if ( !$is_nullable ){
                 $fieldspec[] = '@notnull';
             }
             if ( $has_default ){
