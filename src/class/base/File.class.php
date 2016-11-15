@@ -374,7 +374,6 @@ class Charcoal_File extends Charcoal_Object
             $parent_dir->makeDirectory( $mode );
         }
 
-        log_debug( "import_file_csv", "path:$path\n" );
         $res = mkdir( $path, $mode );
         if ( $res === FALSE ){
             _throw( new Charcoal_MakeDirectoryException( $path ) );
