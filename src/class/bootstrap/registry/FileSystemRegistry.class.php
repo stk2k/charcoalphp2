@@ -164,7 +164,7 @@ LOAD_CONFIG_FROM_FILE:
         $lines = var_export($new_cache, true);
 
         // create cache file
-        $fp = fopen($cache_file_path, 'c');
+        $fp = @fopen($cache_file_path, 'c');
         if ( !$fp ) {
             _throw( new Charcoal_RegistryException('file_system', 'failed to open cache file:'.$cache_file_path) );
         }
