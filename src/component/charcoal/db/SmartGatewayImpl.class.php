@@ -654,6 +654,8 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_String|string $comment       comment text
      * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
      * @param int|bool|float|string $data_id        primary key value of the entity
+     *
+     * @return int deleted rows
      */
     public function deleteById( $comment, $query_target, $data_id )
     {
@@ -681,6 +683,8 @@ class Charcoal_SmartGatewayImpl
 //            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
+    
+        return $this->data_source->numRows();
     }
 
     /**
@@ -689,6 +693,8 @@ class Charcoal_SmartGatewayImpl
      * @param Charcoal_String|string $comment       comment text
      * @param Charcoal_QueryTarget $query_target    description about target model, alias, or joins
      * @param array|Charcoal_Vector $data_ids       array of primary key values for the entity
+     *
+     * @return int deleted rows
      */
     public function deleteByIds( $comment, $query_target, $data_ids )
     {
@@ -719,6 +725,8 @@ class Charcoal_SmartGatewayImpl
 //            log_debug( "debug,smart_gateway,sql", "params:" . print_r($params,true), self::TAG );
 
         $this->data_source->prepareExecute( $sql, $params );
+    
+        return $this->data_source->numRows();
     }
 
     /**
@@ -1067,13 +1075,16 @@ class Charcoal_SmartGatewayImpl
 
             // primary key
             $pk      = $model->getPrimaryKey();
+            log_debug( "debug,smart_gateway,sql", "pk:$pk", self::TAG );
 
             // validate primary key value
             $valid = $model->validatePrimaryKeyValue( $data );
+            log_debug( "debug,smart_gateway,sql", "pk valid:$valid", self::TAG );
 
             if ( $valid ){
                 // find entity
                 $obj = self::findById( $comment, $query_target, $data->$pk );
+                log_debug( "debug,smart_gateway,sql", "found entity:" . print_r($obj,true), self::TAG );
                 // if not found, dto is regarded as a new entity
                 $is_new = empty($obj);
             }
@@ -1081,6 +1092,7 @@ class Charcoal_SmartGatewayImpl
                 // if promary key value is invalid, dto id rebgarded as a new entity
                 $is_new = true;
             }
+            log_debug( "debug,smart_gateway,sql", "is_new:$is_new", self::TAG );
 
             // build SQL
             if ( !$is_new ){

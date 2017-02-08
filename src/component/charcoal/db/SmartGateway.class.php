@@ -11,6 +11,8 @@
 */
 class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
 {
+    const TAG = 'smart_gateway';
+
     const VALUE_NULL = 'null';
 
     /** @var  Charcoal_SmartGatewayImpl */
@@ -194,6 +196,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     public function autoCommit( $on )
     {
         try{
+            log_debug( "debug,smart_gateway,sql", "autoCommit($on) called from:" . Charcoal_System::callerAsString(1), self::TAG );
             $this->impl->autoCommit( $on );
             log_debug( "debug,smart_gateway,sql", "done: autoCommit" );
         }
@@ -210,8 +213,9 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     public function beginTrans()
     {
         try{
+            log_debug( "debug,smart_gateway,sql", "beginTrans called from:" . Charcoal_System::callerAsString(1), self::TAG );
             $this->impl->beginTrans();
-            log_debug( "debug,smart_gateway,sql", "done: beginTrans" );
+            log_debug( "debug,smart_gateway,sql", "done: beginTrans", self::TAG );
         }
         catch ( Exception $e )
         {
@@ -226,6 +230,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     public function commitTrans()
     {
         try{
+            log_debug( "debug,smart_gateway,sql", "commitTrans called from:" . Charcoal_System::callerAsString(1), self::TAG );
             $this->impl->commitTrans();
             log_debug( "debug,smart_gateway,sql", "done: commitTrans" );
         }
@@ -999,6 +1004,8 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      * @param Charcoal_String|string|NULL $comment       comment text
      * @param string $query_target                  description about target model, alias, or joins
      * @param int $id                               identify database entity
+     *
+     * @return int deleted rows
      */
     public function deleteById( $comment, $query_target, $id )
     {
@@ -1011,13 +1018,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
                 $query_target = new Charcoal_QueryTarget( $query_target );
             }
 
-            $this->impl->deleteById( $comment, $query_target, $id );
+            return $this->impl->deleteById( $comment, $query_target, $id );
         }
         catch ( Exception $e )
         {
             _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
+        return 0;
     }
 
     /**
@@ -1026,6 +1034,8 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      * @param Charcoal_String|string|NULL $comment       comment text
      * @param string $query_target                  description about target model, alias, or joins
      * @param array|Charcoal_Vector $ids       array of primary key values for the entity
+     *
+     * @return int deleted rows
      */
     public function deleteByIds( $comment, $query_target, $ids )
     {
@@ -1038,13 +1048,14 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
                 $query_target = new Charcoal_QueryTarget( $query_target );
             }
 
-            $this->impl->deleteByIds( $comment, $query_target, $ids );
+            return $this->impl->deleteByIds( $comment, $query_target, $ids );
         }
         catch ( Exception $e )
         {
             _catch( $e, TRUE );
             _throw( new Charcoal_DBException( __METHOD__." Failed.", $e ) );
         }
+        return 0;
     }
 
     /**

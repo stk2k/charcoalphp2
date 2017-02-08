@@ -11,11 +11,16 @@
 
 class Charcoal_ExceptionHandlerList extends Charcoal_Object
 {
+    /** @var  Charcoal_IExceptionHandler[] */
     private $handlers;
+
+    /** @var  Charcoal_Sandbox */
     private $sandbox;
 
     /**
      *  Constructor
+     *
+     * @param Charcoal_Sandbox $sandbox
      */
     public function __construct( $sandbox )
     {

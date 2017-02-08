@@ -383,19 +383,40 @@ class Charcoal_System
      *
      * @param int $back
      *
-     *    @return array
+     * @return array
      */
     public static function caller( $back = 0 )
     {
         $bt =  (version_compare(PHP_VERSION,'5.4.0') >= 0 ) ?
             debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,5) : debug_backtrace();
 
-        $trace = $bt[1 + $back];
+        $trace = isset($bt[1 + $back]) ? $bt[1 + $back] : NULL;
 
         $file = isset($trace['file']) ? $trace['file'] : "";
         $line = isset($trace['line']) ? $trace['line'] : "";
 
         return array( $file, $line );
+    }
+
+    /**
+     *  return file and line number of called position as string
+     *
+     * @param int $back
+     * @param boolean $fullpath
+     *
+     * @return string
+     */
+    public static function callerAsString( $back = 0, $fullpath = FALSE )
+    {
+        list( $file, $line ) = self::caller( $back );
+
+        if ( $fullpath ){
+            return "$file($line)";
+        }
+
+        $file = basename($file);
+
+        return "$file($line)";
     }
 
     /**

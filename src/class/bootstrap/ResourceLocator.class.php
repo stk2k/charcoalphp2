@@ -13,8 +13,13 @@ class Charcoal_ResourceLocator
 {
     static $static_macro_defs;
 
-    /*
-     * マクロ展開
+    /**
+     * expand macro value
+     *
+     * @param Charcoal_IEnvironment $env
+     * @param string $value
+     *
+     * @return string
      */
     public static function processMacro( $env, $value )
     {
@@ -22,9 +27,9 @@ class Charcoal_ResourceLocator
 
         if ( is_array($value) || $value instanceof Traversable ){
             $new_array = array();
-            foreach( $value as $key => $value ){
-                $value = is_string($value) ? self::processMacro( $env, $value ) : $value;
-                $new_array[$key] = $value;
+            foreach( $value as $k => $v ){
+                $v = is_string($v) ? self::processMacro( $env, $v ) : $v;
+                $new_array[$k] = $v;
             }
             return $new_array;
         }
@@ -41,15 +46,16 @@ class Charcoal_ResourceLocator
 
         if ( !self::$static_macro_defs ){
             self::$static_macro_defs = array(
-                '%APPLICATION_DIR%'  => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/app/' . CHARCOAL_APPLICATION,
-                '%PROJECT_DIR%'      => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT,
-                '%WEBAPP_DIR%'       => CHARCOAL_WEBAPP_DIR,
-                '%CHARCOAL_HOME%'    => CHARCOAL_HOME,
-                '%PROJECT%'          => CHARCOAL_PROJECT,
-                '%APPLICATION%'      => CHARCOAL_APPLICATION,
-                '%BASE_DIR%'         => CHARCOAL_BASE_DIR,
-                '%CACHE_DIR%'        => CHARCOAL_CACHE_DIR,
-                '%TMP_DIR%'          => CHARCOAL_TMP_DIR,
+                '%APPLICATION_DIR%'   => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT . '/app/' . CHARCOAL_APPLICATION,
+                '%PROJECT_DIR%'       => CHARCOAL_WEBAPP_DIR . '/' . CHARCOAL_PROJECT,
+                '%WEBAPP_DIR%'        => CHARCOAL_WEBAPP_DIR,
+                '%CHARCOAL_HOME%'     => CHARCOAL_HOME,
+                '%CHARCOAL_BASE_DIR%' => CHARCOAL_BASE_DIR,
+                '%PROJECT%'           => CHARCOAL_PROJECT,
+                '%APPLICATION%'       => CHARCOAL_APPLICATION,
+                '%BASE_DIR%'          => CHARCOAL_BASE_DIR,
+                '%CACHE_DIR%'         => CHARCOAL_CACHE_DIR,
+                '%TMP_DIR%'           => CHARCOAL_TMP_DIR,
             );
         }
 

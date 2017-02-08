@@ -11,6 +11,7 @@
 
 class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 {
+    /** @var Charcoal_Boolean */
     private $clear_buffer;
 
     /**
@@ -27,8 +28,12 @@ class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRendere
 
     /**
      * Print HTML Header
+     *
+     * @param string $title
+     *
+     * @return string
      */
-    private static function _makeHtmlHead( $e, $title )
+    private static function _makeHtmlHead( $title )
     {
         $html = <<< HTML_HEADER
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
@@ -160,23 +165,14 @@ HTML_HEADER;
     }
 
     /**
-     * Get php.ini settings
-     */
-    private static function _getPhpValue( $key )
-    {
-        $value = ini_get($key);
-
-        switch( $key ){
-        case 'display_errors':
-            //$value = Charcoal_System::phpErrorString()
-            break;
-        }
-
-        return $value;
-    }
-
-    /**
      * Print HTML Body
+     *
+     * @param Exception $e
+     * @param string $title
+     * @param string $file
+     * @param integer $line
+     *
+     * @return string
      */
     private static function _makeHtmlBody( $e, $title, $file, $line )
     {
@@ -514,8 +510,6 @@ HTML_HEADER;
 
             $hash = s($file)->hash() . i($line)->hash();
 
-            $src_id = "'src" . $no . "'";
-
             $html .= '<tr>' . PHP_EOL;
             $html .= '  <th class="no" rowspan="3">' . $no . '</th>' . PHP_EOL;
             $html .= '  <td class="title">' . PHP_EOL;
@@ -616,8 +610,6 @@ HTML_HEADER;
 
             $hash = s($file)->hash() . i($line)->hash();
 
-            $src_id = "'src" . $call_no . "'";
-
             $html .= '<tr>' . PHP_EOL;
             $html .= '  <th class="no" rowspan="3">' . $call_no . '</th>' . PHP_EOL;
             $html .= '  <td class="title">' . PHP_EOL;
@@ -645,6 +637,9 @@ HTML_HEADER;
     /**
      * Render debug trace
      *
+     * @param Exception $e
+     *
+     * @return boolean
      */
     public function render( $e )
     {
@@ -681,14 +676,19 @@ HTML_HEADER;
     /**
      * Output HTML
      *
-     * @param Charcoal_String $title  title
+     * @param Exception $e
+     * @param string|Charcoal_String $title
+     * @param string|Charcoal_String $file
+     * @param integer|Charcoal_Integer $line
+     *
+     * @return string
      */
     private function _output( $e, $title, $file, $line )
     {
         $html  = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
         $html .= '<html lang="ja">';
         $html .= '<head>';
-        $html .= self::_makeHtmlHead( $e, $title );
+        $html .= self::_makeHtmlHead( $title );
         $html .= '</head>';
         $html .= '<body>' . PHP_EOL;
         $html .= self::_makeHtmlBody( $e, $title, $file, $line );

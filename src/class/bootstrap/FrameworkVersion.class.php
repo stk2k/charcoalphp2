@@ -11,9 +11,9 @@
 class Charcoal_FrameworkVersion extends Charcoal_Object
 {
     const VERSION_MAJOR     = 2;
-    const VERSION_MINOR     = 65;
-    const VERSION_REVISION  = 6;
-    const VERSION_BUILD     = 265;
+    const VERSION_MINOR     = 66;
+    const VERSION_REVISION  = 4;
+    const VERSION_BUILD     = 273;
 
     const VERSION_PART_ALL       = 0xFFFF;
     const VERSION_PART_MAJOR     = 0x0001;

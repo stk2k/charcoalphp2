@@ -274,6 +274,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
      */
     public function autoCommit( $on )
     {
+        //log_debug( "transaction,sql", "autoCommit($on) called from:" . Charcoal_System::callerAsString(1), self::TAG );
         $on = ub($on);
         try {
             Charcoal_ParamTrait::validateBoolean( 1, $on );
@@ -296,7 +297,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
      */
     public function beginTrans()
     {
-//        log_debug( "transaction,sql", "commitTrans", "beginTrans called from:" . print_r( Charcoal_System::caller(1), true ) );
+        //log_debug( "transaction,sql", "beginTrans called from:" . Charcoal_System::callerAsString(1), self::TAG );
         try {
             // 接続処理
             $this->connect();
@@ -315,7 +316,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
      */
     public function commitTrans()
     {
-//        log_debug( "transaction,sql", "commitTrans", "rollbackTrans called from:" . print_r( Charcoal_System::caller(1), true ) );
+        //log_debug( "transaction,sql", "commitTrans called from:" . Charcoal_System::callerAsString(1), self::TAG );
         try {
             // 接続処理
             $this->connect();

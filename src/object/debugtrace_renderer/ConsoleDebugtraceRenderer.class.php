@@ -45,6 +45,9 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRend
     /**
      * Output HTML
      *
+     * @param Exception $e
+     *
+     * @return string
      */
     public function output( $e )
     {
@@ -56,6 +59,15 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRend
         $out .= "=============================================================" . PHP_EOL;
         $out .= "CharcoalPHP Ver.{$version}: Exception stack trace " . PHP_EOL;
         $out .= "=============================================================" . PHP_EOL;
+
+        $out .= PHP_EOL;
+        $out .= "* Defined Constants *" . PHP_EOL;
+        $out .= "-------------------------------------------------------------" . PHP_EOL;
+        $declared_constants = Charcoal_System::getUserDefinedConstants();
+        foreach( $declared_constants as $key => $value ){
+            $out .= "[$key] $value" . PHP_EOL;
+        }
+        $out .= "-------------------------------------------------------------" . PHP_EOL;
 
         $out .= PHP_EOL;
         $out .= "* Exception Stack *" . PHP_EOL;

@@ -320,7 +320,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                     $post_actions = $task->getPostActions();
 
                     if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );
-                    if ( $result && $post_actions )
+                    if ( $result !== FALSE && $post_actions )
                     {
                         foreach( $post_actions as $key => $action )
                         {

@@ -15,6 +15,9 @@ class Charcoal_CharcoalException extends Exception
 
     /**
      *    Construct
+     *
+     * @param string $message
+     * @param Exception $prev
      */
     public function __construct( $message, $prev = NULL )
     {
@@ -23,7 +26,7 @@ class Charcoal_CharcoalException extends Exception
 
         parent::__construct( us($message), 0, $prev );
 
-        $this->backtrace = debug_backtrace();
+        $this->backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $this->previous = $prev;
     }
 
