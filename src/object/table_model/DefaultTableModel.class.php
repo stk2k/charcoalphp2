@@ -63,6 +63,10 @@ abstract class Charcoal_DefaultTableModel extends Charcoal_AnnotaionTableModel i
     public function validatePrimaryKeyValue( $dto )
     {
         $pk = parent::getPrimaryKey();
+        
+        if ( !property_exists($dto,$pk) ){
+            return false;
+        }
 
         $value = $dto->$pk;
 

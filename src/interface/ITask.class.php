@@ -42,6 +42,8 @@ interface Charcoal_ITask extends Charcoal_ICharcoalObject
      * Process events
      *
      * @param Charcoal_IEventContext $context   event context
+     *
+     * @return boolean|Charcoal_Boolean
      */
     public function processEvent( $context );
 
@@ -50,6 +52,8 @@ interface Charcoal_ITask extends Charcoal_ICharcoalObject
      *
      * @param Exception $e                        exception to handle
      * @param Charcoal_IEventContext $context      event context
+     *
+     * @return boolean|Charcoal_Boolean
      */
     public function handleException( $e, $context );
 }

@@ -34,6 +34,8 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
         $rules_section = $config->getSection( 'routing rules' );
 
         $patterns = $rules_section->getKeys();
+    
+        $this->proc_paths = array();
 
         foreach( $patterns as $pattern ){
             $proc_path = $rules_section->getString( $pattern );

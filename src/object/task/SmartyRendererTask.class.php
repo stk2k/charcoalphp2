@@ -91,7 +91,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
      *
      * @param Charcoal_IEventContext $context   event context
      *
-     * @return boolean
+     * @return boolean|Charcoal_Boolean
      */
     public function processEvent( $context )
     {

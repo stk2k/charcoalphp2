@@ -4,3 +4,4 @@
 /test/nbproject/private/
 composer.phar
 /cache/*
+ext_lib/*

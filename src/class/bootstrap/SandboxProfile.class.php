@@ -138,7 +138,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
      * @param array $default_value   default value
      * @param bool $process_macro     if TRUE, value will be replaced by keywords, FALSE otherwise
      *
-     * @return array
+     * @return Charcoal_Vector
      */
     public function getArray( $key, $default_value = NULL, $process_macro = FALSE )
     {
@@ -160,7 +160,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
      * @param string $key             key string for hash map
      * @param bool $default_value   default value
      *
-     * @return bool
+     * @return Charcoal_Boolean
      */
     public function getBoolean( $key, $default_value = NULL )
     {
@@ -182,7 +182,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
      * @param string $key             key string for hash map
      * @param int $default_value   default value
      *
-     * @return int
+     * @return Charcoal_Integer
      */
     public function getInteger( $key, $default_value = NULL )
     {
@@ -204,7 +204,7 @@ class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Char
      * @param string $key            Key string to get
      * @param float $default_value   default value
      *
-     * @return float
+     * @return Charcoal_Float
      */
     public function getFloat( $key, $default_value = NULL )
     {

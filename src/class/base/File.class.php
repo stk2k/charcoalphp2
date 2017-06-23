@@ -24,8 +24,8 @@ class Charcoal_File extends Charcoal_Object
 //        Charcoal_ParamTrait::validateString( 1, $file_name );
 //        Charcoal_ParamTrait::validateFile( 2, $parent, TRUE );
 
-        assert( $file_name instanceof Charcoal_String || is_string($file_name), 'Paremeter 1 must be string or Charcoal_String' );
-        assert( $parent instanceof Charcoal_File || $parent === NULL, 'Paremeter 2 must be NULL or Charcoal_File' );
+//        assert( $file_name instanceof Charcoal_String || is_string($file_name), 'Paremeter 1 must be string or Charcoal_String' );
+//        assert( $parent instanceof Charcoal_File || $parent === NULL, 'Paremeter 2 must be NULL or Charcoal_File' );
 
         parent::__construct();
 
