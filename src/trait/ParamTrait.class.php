@@ -27,9 +27,7 @@ class Charcoal_ParamTrait
     const TYPE_O_BOOLEAN     = 'Charcoal_Boolean';
     const TYPE_O_VECTOR      = 'Charcoal_Vector';
     const TYPE_O_HASHMAP     = 'Charcoal_HashMap';
-    const TYPE_O_PROPERTIES  = 'Charcoal_Properties';
     const TYPE_O_OBJECTPATH  = 'Charcoal_ObjectPath';
-    const TYPE_O_CONFIG      = 'Charcoal_Config';
     const TYPE_O_EXCEPTION   = 'Exception';
     const TYPE_O_EXCEPTION2  = 'Throwable';
     const TYPE_O_OBJECT      = 'Charcoal_Object';
@@ -280,18 +278,6 @@ class Charcoal_ParamTrait
     }
 
     /**
-     *    validate a parameter if its type is a properties object
-     *
-     *    @param int $key                parameter id
-     *    @param mixed $actual           data to validate
-     *    @param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-     */
-    public static function validateProperties( $key, $actual, $null_allowed = FALSE )
-    {
-        self::validateTypes( $key, array( self::TYPE_P_ARRAY, self::TYPE_O_PROPERTIES ), $actual, $null_allowed );
-    }
-
-    /**
      *    validate a parameter if its type is object path
      *
      *    @param int $key                parameter id
@@ -301,18 +287,6 @@ class Charcoal_ParamTrait
     public static function validateObjectPath( $key, $actual, $null_allowed = FALSE )
     {
         self::validateType( $key, self::TYPE_O_OBJECTPATH, $actual, $null_allowed );
-    }
-
-    /**
-     *    validate a parameter if its type is config
-     *
-     *    @param int $key                parameter id
-     *    @param mixed $actual           data to validate
-     *    @param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-     */
-    public static function validateConfig( $key, $actual, $null_allowed = FALSE )
-    {
-        self::validateType( $key, self::TYPE_O_CONFIG, $actual, $null_allowed );
     }
 
     /**
@@ -610,27 +584,6 @@ class Charcoal_ParamTrait
             return TRUE;
         }
         if ( self::_testType( self::TYPE_O_HASHMAP, $actual ) ){
-            return TRUE;
-        }
-        return FALSE;
-    }
-
-    /**
-     *    test if specified object is array or properties object
-     *
-     *    @param mixed $actual             data to validate
-     *    @param boolean $null_allowed   if TRUE, NULL value will be accepted. FALSE otherwise.
-     *
-     *    @return string        passed type
-     */
-    public static function isProperties( $actual, $null_allowed = FALSE )
-    {
-        if ( $null_allowed && $actual === NULL )    return 'NULL';
-
-        if ( self::_testType( self::TYPE_P_ARRAY, $actual ) ){
-            return TRUE;
-        }
-        if ( self::_testType( self::TYPE_O_PROPERTIES, $actual ) ){
             return TRUE;
         }
         return FALSE;

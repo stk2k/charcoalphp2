@@ -80,7 +80,7 @@ INI_FILE;
 
             $ini_data = parse_ini_file($temp_dir.'/test.ini',true);
 
-            $config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $ini_data );
+            $config = new Charcoal_ConfigPropertySet( $this->getSandbox()->getEnvironment(), $ini_data );
 
             $first_section  = $config->getSection( s('first_section') );
             $second_section = $config->getSection( s('second_section') );

@@ -10,8 +10,13 @@
 */
 class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charcoal_IModule
 {
+    /** @var Charcoal_Vector */
     private $tasks;
+    
+    /** @var Charcoal_Vector */
     private $events;
+    
+    /** @var Charcoal_Vector */
     private $required_modules;
 
     /*
@@ -25,11 +30,13 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
     /*
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->tasks              = $config->getArray( 'tasks', array() );
         $this->events             = $config->getArray( 'events', array() );
@@ -96,8 +103,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
         $task->setSandbox( $this->getSandbox() );
 
         // load object config
-        $config = Charcoal_ConfigLoader::loadConfig( $this->getSandbox(), $task_path, 'task' );
-        $config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $config );
+        $config = Charcoal_ConfigLoader::loadConfig( $this->getSandbox()->getRegistry(), $task_path, 'task' );
 
         // configure task
         $task->configure( $config );
@@ -115,10 +121,6 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
      */
     private function loadEvent( $obj_path, $path, $task_manager )
     {
-//        Charcoal_ParamTrait::validateObjectPath( 1, $obj_path );
-//        Charcoal_ParamTrait::validateString( 2, $path );
-//        Charcoal_ParamTrait::validateImplements( 3, 'Charcoal_ITaskManager', $task_manager );
-
         // file base name
         //$base_name = basename( $path );
 
@@ -236,25 +238,23 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
         //==================================
 
         // load tasks from config file
-//        log_info( "system,debug", "module", "loading tasks in module:" . $root_path );
-
         if ( $this->tasks ){
             foreach( $this->tasks as $task ){
+                
+                if ( empty($task) ){
+                    continue;
+                }
+                
                 $task_path = $task . '@' . $root_path->getVirtualPath();
-//                log_info( "system,debug", "module", "creating task[$task_path] in module[$root_path]");
-
+                
                 /** @var Charcoal_Itask $task */
                 $task = $this->getSandbox()->createObject( $task_path, 'task' );
-
-//                log_info( "system,debug", "module", "created task[" . get_class($task) . "/$task_path] in module[$root_path]");
 
                 $task_manager->registerTask( $task_path, $task );
 
                 $loadedtasks[] = $task;
             }
         }
-
-//        log_debug( "system,debug,event", "loaded tasks: " . print_r($loadedtasks,true), "module" );
 
         return count($loadedtasks);
     }
@@ -329,6 +329,10 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
 
         if ( $this->events ){
             foreach( $this->events as $event ){
+                if ( empty($event) ){
+                    continue;
+                }
+    
                 $event_path = $event . '@' . $root_path->getVirtualPath();
 
                 $event = $this->getSandbox()->createEvent( $event_path );

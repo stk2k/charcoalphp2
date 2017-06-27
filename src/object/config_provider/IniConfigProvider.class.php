@@ -18,16 +18,10 @@ class Charcoal_IniConfigProvider extends Charcoal_AbstractConfigProvider
     /**
      * set options
      *
-     * @param Charcoal_Properties $options   option set to apply
+     * @param Charcoal_HashMap $options   option set to apply
      */
     public function setOptions( $options )
     {
-//        Charcoal_ParamTrait::validateProperties( 1, $options, TRUE );
-
-        if ( is_array( $options ) || $options === NULL ){
-            $options = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $options );
-        }
-
         $this->debug = $options->getBoolean( 'debug', FALSE );
     }
 

@@ -36,6 +36,7 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
 
     private $num_rows;
 
+    /** @var Charcoal_HashMap */
     private $saved_config;
 
     /*
@@ -54,11 +55,13 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $default_config = um( $config->getHashMap( self::DEFAULT_DATABASE_KEY, array() ) );
 
@@ -85,7 +88,6 @@ class Charcoal_PDODbDataSource extends Charcoal_AbstractDataSource
             $database_key = self::DEFAULT_DATABASE_KEY;
         }
 
-        /** @var Charcoal_Config $config */
         $config = $this->saved_config;
 
         $db_config = um( $config->getHashMap( $database_key, array() ) );

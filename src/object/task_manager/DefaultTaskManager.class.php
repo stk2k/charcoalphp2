@@ -18,15 +18,20 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 
     /** @var Charcoal_EventQueue */
     private $queue;
+    
+    /** @var integer */
+    private $max_event_loop;
 
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->max_event_loop     = ui( $config->getInteger( 'max_event_loop', 1000 ) );
 
@@ -181,10 +186,6 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 
         if ( $debug ) log_debug( 'system,event', "processEvents start." );
 
-//        $procedure = $context->getProcedure();
-//        $request   = $context->getRequest();
-//        $sequence  = $context->getSequence();
-//        $response  = $context->getResponse();
 
         $max_event_loop = $this->max_event_loop;
 
@@ -282,7 +283,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                             throw( $e );
                         }
                     }
-                    catch( Charcoal_RuntimeException $e )
+                    catch( Exception $e )
                     {
                         // write log and handle the exception
                         _catch( $e );
@@ -341,7 +342,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                                 if ( !$target ){
                                     $target = $task_id;
                                 }
-                                if ( $target == $task_id ){
+                                if ( strcmp($target,$task_id) === 0 ){
                                     if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task[$target] is marked to remove." );
                                     $remove_tasks[] = $task_id;
                                 }
@@ -351,7 +352,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                                 if ( !$target ){
                                     $target = $event_id;
                                 }
-                                if ( $target == $event_id ){
+                                if ( strcmp($target,$event_id) === 0 ){
                                     if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$target] is marked to remove.");
                                     $delete_event |= TRUE;
                                 }

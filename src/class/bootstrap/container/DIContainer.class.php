@@ -11,84 +11,81 @@
 
 class Charcoal_DIContainer extends Charcoal_AbstractContainer
 {
-    const SCOPE_TRANSIENT        = "transient";    // 毎回新しいインスタンスが返される
-    const SCOPE_REQUEST         = "request";    // １リクエスト中は同じインスタンスが返される
-    const SCOPE_SESSION         = "session";    // セッション継続中は同じインスタンスが返される
-
+    const SCOPE_TRANSIENT       = "transient";    // returns new instance every time called loadComponent
+    const SCOPE_REQUEST         = "request";      // returns same instance while request
+    const SCOPE_SESSION         = "session";      // returns same instance where session is valid
+    
+    private $sandbox;
     private $components;
     private $component_configs;
 
     /**
      *  Constructor
+     *
+     * @param Charcoal_SandBox $sandbox
      */
     public function __construct( $sandbox )
     {
         parent::__construct();
 
-//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
-
         $this->sandbox = $sandbox;
         $this->components = array();
         $this->component_configs = array();
     }
-
-    /*
-     * DIコンテナを破棄
+    
+    /**
+     * destruct instance
      */
     public function terminate()
     {
-//        log_info( "system,container", "container", "Starting destroying container.");
-
-        // コンポーネントの破棄
         $this->destroyComponents();
-
-//        log_info( "system,container", "container", "Finished destroying container.");
     }
 
     /**
      * load component
      *
      * @param string $component_name      component path
-     * @param Charcoal_Vector $args       constructor arguments
+     * @param array $args                 constructor arguments
+     * @param array $config               object configuration parameters
+     *
+     * @return Charcoal_ICharcoalComponent
      */
-    public function loadComponent( $component_name, $args = array() )
+    public function loadComponent( $component_name, $args = array(), $config = NULL )
     {
         try{
             $component_name = us( $component_name );
 
-    //        log_info( "system,container", "container", "Loading component: [$component_name]");
-
-            // コンポーネント設定ファイルの読み込み
+            // load component config file
             $obj_path = new Charcoal_ObjectPath( $component_name );
+    
+            $config_default = Charcoal_ConfigLoader::loadConfig( $this->sandbox->getRegistry(), $obj_path, 'component' );
+    
+            $config = is_array($config) ? array_merge( $config_default, $config ) : $config_default;
 
-            $config = Charcoal_ConfigLoader::loadConfig( $this->sandbox, $obj_path, 'component' );
-            $config = new Charcoal_Config( $this->sandbox->getEnvironment(), $config );
-
-            // キャッシュに保存
+            // save config data to memory
             $this->component_configs[ $component_name ] = $config;
 
-            // クラス名を取得
-            $class_name = $config->getString( 'class_name' );
-            if ( $class_name === NULL ){
+            // get class name from config file
+            $class_name = isset($config['class_name']) ? $config['class_name'] : NULL;
+            if ( empty($class_name) ){
                 _throw( new Charcoal_ComponentConfigException( $component_name, "class_name", "mandatory" ) );
             }
 
             // create class object
             $klass = new Charcoal_Class( $class_name );
 
-            // コンポーネントスコープを取得
-            $scope = $config->getString( 'scope', self::SCOPE_REQUEST );
-            $scope = us($scope);
+            // get component scope
+            $scope = isset($config['scope']) ? $config['scope'] : self::SCOPE_REQUEST;
 
-            // コンポーネントスコープによって生成方法を変更
+            // change instantiate method by component scope
             $component = NULL;
             switch ( $scope ){
             case self::SCOPE_SESSION:
                 {
-                    // コンポーネントのインスタンスをセッションから復元
+                    // restore component from session
                     $component = unserialize( $_SESSION[ $component_name ] );
 
-                    // セッションになければ、インスタンスを生成
+                    // if not exists in session, instantiate new one
                     if ( $component == NULL ){
                         $component = $klass->newInstance( $args );
                     }
@@ -98,38 +95,31 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
             case self::SCOPE_TRANSIENT:
             case self::SCOPE_REQUEST:
                 {
-                    // コンポーネントのインスタンス生成
+                    // instantiate new one
                     $component = $klass->newInstance( $args );
                 }
                 break;
             default:
-                {
-                    // scopeに指定されたワードが不正
-                    _throw( new Charcoal_ComponentConfigException( $component_name, 'scope', "invalid scope value:$scope" ) );
-                }
-                break;
+                _throw( new Charcoal_ComponentConfigException( $component_name, 'scope', "invalid scope value:$scope" ) );
             }
 
             // initialize component
             $component->setComponentName( $component_name );
             $component->setSandbox( $this->sandbox );
 
-            // 生成したインスタンスがIComponentインタフェースを実装しているか確認
+            // validate if instance implements proper interface
             if ( !($component instanceof Charcoal_IComponent) ){
                 // 実装例外
                 _throw( new Charcoal_InterfaceImplementException( $class_name, "Charcoal_IComponent" ) );
             }
 
-            // コンポーネントを初期化
-    //        log_info( "system,container", "container", "configuring component: [$component_name]");
+            // configure object
             $component->configure( $config );
 
             // コンポーネントを配列に登録
             if ( $scope == self::SCOPE_SESSION || $scope == self::SCOPE_REQUEST ){
                 $this->components[ $component_name ] = $component;
             }
-
-    //        log_info( "system,container", "container", "loaded component: [$component_name]");
 
             // ロードしたコンポーネントを返却
             return $component;
@@ -141,24 +131,26 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
             // rethrow exception
             _throw( new Charcoal_ComponentLoadingException( $component_name, $ex ) );
         }
+        return NULL;
     }
 
     /**
      * Get component(generate if not exists)
      *
      * @param string|Charcoal_String $component_name      component path
-     * @param Charcoal_Vector $args       constructor arguments
+     * @param array $args       constructor arguments
+     * @param array $config           object configuration parameters
      *
      * @return Charcoal_IComponent        component instance
      */
-    public function getComponent( $component_name, $args = array() )
+    public function getComponent( $component_name, $args = array(), $config = array() )
     {
         $component_name = us( $component_name );
 
         // 登録されていなければロードを試みる
         if ( !isset($this->components[ $component_name ]) )
         {
-            $component = $this->loadComponent( $component_name, $args );
+            $component = $this->loadComponent( $component_name, $args, $config );
 
             if ( $component == NULL ){
                 _throw( new Charcoal_ComponentNotRegisteredException( $component_name ) );
@@ -178,14 +170,13 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
         }
 
         // コンポーネントスコープを取得
-        $scope = $component_config->getString( 'scope' );
-        $scope = us($scope);
+        $scope = isset($component_config['scope']) ? $component_config['scope'] : NULL;
 
         // 登録されていなければ例外
         if ( $scope == NULL ){
             _throw( new Charcoal_ComponentConfigException( $component_name, "scope", "mandatory" ) );
         }
-
+        
         // コンポーネントを返却
         switch ( $scope ){
         case self::SCOPE_TRANSIENT:
@@ -209,8 +200,6 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
      */
     public function destroyComponents()
     {
-//        log_info( "system,container", "container", "Starting destroying all components.");
-
         // コンポーネントの取得
         $components = $this->components;
 
@@ -221,8 +210,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
             $component_config = $this->component_configs[ $component_name ];
 
             // コンポーネントスコープを取得
-            $scope = $component_config->getString( 'scope' );
-            $scope = us($scope);
+            $scope = isset($component_config['scope']) ? $component_config['scope'] : NULL;
 
             // コンポーネントスコープによって処理を分岐
             switch ( $scope ){
@@ -235,15 +223,11 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
                 {
                     // セッションにインスタンスをセット
                     $_SESSION[ $component_name ] = serialize( $component );
-
-//                    log_info( "system,container", "container", "Component($component_name) is stored in session.");
                 }
                 break;
             }
 
         }
-
-//        log_info( "system,container", "container", "Finished destroying all components.");
     }
 }
 

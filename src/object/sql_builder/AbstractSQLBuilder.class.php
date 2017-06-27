@@ -15,11 +15,13 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->_type_mapping = $config->getArray( 'type_mappings' );
     }
@@ -157,8 +159,6 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
             $SQL_params      = array();
             $SQL_set         = array();
             $SQL_key_fields  = array();
-
-            $override = up($override);
 
             $field_list = $model->getFieldList();
 //            log_debug( "debug, smart_gateway", 'sql_builder', "field_list:" . print_r($field_list,true) );
@@ -317,8 +317,6 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
             $SQL_value_list   = NULL;
             $SQL_params       = array();
 
-            $override = up($override);
-
             $field_list = $model->getFieldList();
 
             foreach( $field_list as $field )
@@ -435,8 +433,6 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
             $SQL_field_list   = NULL;
             $SQL_value_list   = NULL;
             $SQL_params       = array();
-
-            $override = up($override);
 
             $field_list = $model->getFieldList();
 

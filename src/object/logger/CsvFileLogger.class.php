@@ -40,11 +40,13 @@ class Charcoal_CsvFileLogger extends Charcoal_FileLogger implements Charcoal_ILo
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure($config);
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->_field_order    = $config->getArray( 'field_order', array() );
         $this->_delimiter      = $config->getInteger( 'delimiter', 0 );

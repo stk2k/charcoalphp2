@@ -26,11 +26,13 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $session_name  = $config->getString( 'session_name', '' );
         $save_path     = $config->getString( 'save_path', '', TRUE );
@@ -71,6 +73,10 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
     /**
      * セッションファイルパスを取得
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function getSessionFile( $id )
     {
@@ -79,6 +85,11 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
     /**
      * open session
+     *
+     * @param string $save_path
+     * @param string $session_name
+     *
+     * @return bool
      */
     public function open( $save_path, $session_name )
     {
@@ -95,6 +106,10 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
     /**
      * read session data
+     *
+     * @param int $id
+     *
+     * @return bool
      */
     public function read( $id )
     {
@@ -119,12 +134,16 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
     /**
      * write session data
+     *
+     * @param int $id
+     * @param mixed $sess_data
+     *
+     * @return bool
      */
     public function write( $id, $sess_data )
     {
         $file = $this->getSessionFile( $id );
 
-//        log_info( "session", __CLASS__, __CLASS__.'#write: file=' . $file . ' id=' . $id . ' data=' . print_r($sess_data,true) );
         $fp = @fopen($file,'w');
         if ( !$fp ){
             log_warning( "system,debug,error,session", "fopen failed: $file", self::TAG );
@@ -138,6 +157,10 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
     /**
      * destroy session
+     *
+     * @param int $id
+     *
+     * @return bool
      */
     public function destroy( $id )
     {
@@ -148,6 +171,10 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
 
     /**
      * garbage collection
+     *
+     * @param int $max_lifetime
+     *
+     * @return bool
      */
     public function gc( $max_lifetime )
     {

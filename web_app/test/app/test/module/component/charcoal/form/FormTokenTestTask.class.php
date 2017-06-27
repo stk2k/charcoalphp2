@@ -13,6 +13,10 @@ class FormTokenTestTask extends Charcoal_TestTask
 {
     /**
      * check if action will be processed
+     *
+     * @param string $action
+     *
+     * @return bool
      */
     public function isValidAction( $action )
     {
@@ -27,6 +31,9 @@ class FormTokenTestTask extends Charcoal_TestTask
 
     /**
      * setup test
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function setUp( $action, $context )
     {
@@ -35,6 +42,9 @@ class FormTokenTestTask extends Charcoal_TestTask
 
     /**
      * clean up test
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function cleanUp( $action, $context )
     {
@@ -42,19 +52,21 @@ class FormTokenTestTask extends Charcoal_TestTask
 
     /**
      * execute tests
+     *
+     * @param string $action
+     * @param Charcoal_IEventContext $context
      */
     public function test( $action, $context )
     {
         $action = us($action);
 
-        $sequence  = new Charcoal_SequenceHolder( new Charcoal_Sequence(), new Charcoal_Sequence() );
-
         // form token component
+        /** @var Charcoal_FormTokenComponent $form_token */
         $form_token = $context->getComponent( 'form_token@:charcoal:form' );
 
-        $config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
+        $config = array();
 
-        $config->set( 'token_key', 'foo' );
+        $config['token_key'] = 'foo';
 
         $form_token->configure( $config );
 

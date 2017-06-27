@@ -11,17 +11,22 @@
 
 class Charcoal_CacheDriverList extends Charcoal_Object
 {
+    /** @var array */
     private $drivers;
+    
+    /** @var bool */
     private $init;
+    
+    /** @var Charcoal_Sandbox */
     private $sandbox;
 
     /**
      *  Constructor
+     *
+     * @param Charcoal_Sandbox $sandbox
      */
     public function __construct( $sandbox )
     {
-//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
-
         $this->sandbox = $sandbox;
 
         parent::__construct();
@@ -37,7 +42,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
             $cache_drivers = $this->sandbox->getProfile()->getArray( 'CACHE_DRIVERS', array('file') );
 
             foreach( $cache_drivers as $driver_name ){
-                $driver = $this->sandbox->createObject( $driver_name, 'cache_driver', array(), 'Charcoal_ICacheDriver' );
+                $driver = $this->sandbox->createObject( $driver_name, 'cache_driver', array(), array(), 'Charcoal_ICacheDriver' );
                 $this->drivers[] = $driver;
             }
             $this->init = TRUE;
@@ -45,7 +50,7 @@ class Charcoal_CacheDriverList extends Charcoal_Object
     }
 
     /*
-     *    add a logger
+     *    add a cache driver
      */
     public function add( Charcoal_ICacheDriver $cache_driver )
     {
@@ -61,8 +66,6 @@ class Charcoal_CacheDriverList extends Charcoal_Object
      */
     public  function getCache( $key )
     {
-//        Charcoal_ParamTrait::validateString( 1, $key );
-
         $this->init();
 
         $key = us($key);

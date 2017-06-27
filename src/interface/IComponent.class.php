@@ -14,14 +14,14 @@ interface Charcoal_IComponent extends Charcoal_ICharcoalObject
     /**
      * Get configurations
      *
-     * @return Charcoal_Config   configuration data
+     * @return array   configuration data
      */
     public function getConfig();
 
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config );
 
@@ -32,24 +32,9 @@ interface Charcoal_IComponent extends Charcoal_ICharcoalObject
 
     /**
      *   set component name
+     *
+     * @param string|Charcoal_String $component_name
      */
     public function setComponentName( $component_name );
-
-    /**
-     *   オブジェクトパスを取得
-     */
-//    public function getObjectPath();
-
-    /**
-     *   オブジェクトパスを設定
-     */
-//    public function setObjectPath( Charcoal_ObjectPath $obj_path );
-
-    /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-//    public function configure( $config );
 }
 

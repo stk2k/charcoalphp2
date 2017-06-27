@@ -31,6 +31,9 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
     /**
      * Output HTML
      *
+     * @param Exception $e
+     *
+     * @return string
      */
     public function output( $e )
     {
@@ -48,6 +51,7 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
         $out .= "-------------------------------------------------------------" . self::LOG_EOL;
 
         $no = 1;
+        $backtrace = NULL;
         while( $e )
         {
             // get exception info
@@ -103,6 +107,18 @@ class Charcoal_LogDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
             $out .= "   {$file}($line)" . self::LOG_EOL;
 
             $call_no ++;
+        }
+    
+        // list registry items
+        $registry_items = $this->getSandbox()->getRegistry()->dumpLoadedItems(TRUE);
+    
+        $out .= self::LOG_EOL;
+        $out .= "* Registry Items *" . self::LOG_EOL;
+        $out .= "-------------------------------------------------------------" . self::LOG_EOL;
+    
+        // print registry items
+        foreach( $registry_items as $item ){
+            $out .= $item . self::LOG_EOL;
         }
 
         return $out;

@@ -17,7 +17,7 @@ abstract class Charcoal_AbstractRequest extends Charcoal_CharcoalComponent imple
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {

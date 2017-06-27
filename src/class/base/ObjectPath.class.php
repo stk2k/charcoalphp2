@@ -146,7 +146,7 @@ class Charcoal_ObjectPath extends Charcoal_Object
      */
     public function getDirArray()
     {
-        return new Vector( explode( ":" , $this->_path ) );
+        return new Charcoal_Vector( explode( ":" , $this->_virtual_path ) );
     }
 
     /*

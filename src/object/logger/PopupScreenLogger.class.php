@@ -24,7 +24,7 @@ class Charcoal_PopupScreenLogger extends Charcoal_AbstractLogger implements Char
     {
         parent::__construct();
 
-        $this->_window_id = PopupScreenLogger::$id_master++;
+        $this->_window_id = self::$id_master++;
 
         $this->_window_open = FALSE;
 

@@ -11,22 +11,22 @@
 
 class Charcoal_ConfigLoader
 {
-    /*
+    /**
      * load configure file
+     *
+     * @param Charcoal_IRegistry $registry
+     * @param string|Charcoal_ObjectPath $obj_path
+     * @param string|Charcoal_String $type_name
+     *
+     * @return array;
      */
-    public static function loadConfig( $sandbox, $obj_path, $type_name )
+    public static function loadConfig( $registry, $obj_path, $type_name )
     {
-//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
-//        Charcoal_ParamTrait::validateStringOrObject( 2, 'Charcoal_ObjectPath', $obj_path );
-//        Charcoal_ParamTrait::validateString( 3, $type_name );
-
         if ( !($obj_path instanceof Charcoal_ObjectPath) ){
             $obj_path = new Charcoal_ObjectPath( $obj_path );
         }
 
         $object_name = $obj_path->getObjectName();
-
-//        log_info( "system", "config", "loading object config: path=[$obj_path] type=[$type_name]" );
 
         // get root path of framework,project,web_app
         $dir_framework = Charcoal_ResourceLocator::getFrameworkPath();
@@ -101,16 +101,13 @@ class Charcoal_ConfigLoader
             }
         }
 
-        // get registry from sandbox
-        $registry = $sandbox->getRegistry();
-
         // load all config files
         $config = $registry->get( $config_target_list, $obj_path, $type_name );
 
         // import
         if ( isset($config['import']) ){
             $import = $config['import'];
-            $data = self::loadConfig( $sandbox, $import, $type_name );
+            $data = self::loadConfig( $registry, $import, $type_name );
             if ( $data ){
                 $config = array_merge( $config, $data );
             }

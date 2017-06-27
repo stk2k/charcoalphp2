@@ -11,9 +11,15 @@
 interface Charcoal_ITransformer extends Charcoal_ICharcoalObject
 {
     /**
-     * 変換する
+     * transform DTO
+     *
+     * @param Charcoal_DTO $in
+     * @param Charcoal_DTO $out
+     * @param array $options
+     *
+     * @return Charcoal_DTO
      */
-    public function transform( DTO $in_data, DTO $out_data, Charcoal_Properties $options = NULL );
+    public function transform( $in, $out, $options = NULL );
 
 }
 

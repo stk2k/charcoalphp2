@@ -26,7 +26,7 @@ class Charcoal_ConsoleExceptionHandler extends Charcoal_AbstractExceptionHandler
 
         try{
             /** @var Charcoal_IDebugtraceRenderer $renderer */
-            $renderer = $this->getSandbox()->createObject( 'console', 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
+            $renderer = $this->getSandbox()->createObject( 'console', 'debugtrace_renderer', array(), array(), 'Charcoal_IDebugtraceRenderer' );
 
             // Render exception
             $renderer->render( $e );

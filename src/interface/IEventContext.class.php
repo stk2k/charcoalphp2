@@ -30,7 +30,7 @@ interface Charcoal_IEventContext
      *    @return Charcoal_IEvent
      */
     public function getEvent();
-
+    
     /**
      *    Set current event object
      *
@@ -39,11 +39,11 @@ interface Charcoal_IEventContext
     public function setEvent( $event );
 
     /**
-     *    Get current sequence object
+     *    Get current session object
      *
-     * @return Charcoal_ISequence
+     * @return Charcoal_Session
      */
-    public function getSequence();
+    public function getSession();
 
     /**
      *    Get current response object
@@ -82,9 +82,9 @@ interface Charcoal_IEventContext
      *    @param array $args             constructor arguments
      *    @param array $config           object configuration parameters
      *
-     * @return Charcoal_CharcoalComponent        object instance
+     * @return Charcoal_CharcoalComponent
      */
-    public function createObject( $obj_path, $type_name, $args = array(), $config = NULL );
+    public function createObject( $obj_path, $type_name, $args = array(), $config = array() );
 
     /**
      *    Create event
@@ -93,18 +93,9 @@ interface Charcoal_IEventContext
      *    @param array $args             constructor arguments
      *    @param array $config           object configuration parameters
      *
-     * @return Charcoal_CharcoalObject        object instance
+     * @return Charcoal_IEvent
      */
     public function createEvent( $obj_path, $args = array(), $config = NULL );
-
-    /**
-     *    Create condig
-     *
-     *    @param array $config           object configuration parameters
-     *
-     * @return Charcoal_Config        config object
-     */
-    public function createConfig( array $config = array() );
 
     /**
      * Create and configure a component
@@ -113,7 +104,7 @@ interface Charcoal_IEventContext
      * @param array $args             constructor arguments
      * @param array $config           object configuration parameters
      *
-     * @return Charcoal_IComponent        component instance
+     * @return Charcoal_IComponent
      */
     public function getComponent( $obj_path, $args = array(), $config = NULL );
 

@@ -26,11 +26,13 @@ class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->_base_dir    = $config->getString( 'base_dir', CHARCOAL_BASE_DIR, TRUE );
 

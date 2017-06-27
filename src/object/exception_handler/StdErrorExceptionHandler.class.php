@@ -26,7 +26,8 @@ class Charcoal_StdErrorExceptionHandler extends Charcoal_AbstractExceptionHandle
 
         try{
             // create debugtrace rederer
-            $renderer = $this->getSandbox()->createObject( 'std_error', 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
+            /** @var Charcoal_IDebugtraceRenderer $renderer */
+            $renderer = $this->getSandbox()->createObject( 'std_error', 'debugtrace_renderer', array(), array(), 'Charcoal_IDebugtraceRenderer' );
 
             // Render exception
             $renderer->render( $e );

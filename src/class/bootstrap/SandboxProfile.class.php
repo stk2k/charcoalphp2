@@ -9,7 +9,7 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
-class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet implements Charcoal_IProperties
+class Charcoal_SandboxProfile extends Charcoal_ConfigPropertySet
 {
     private $sandbox;
 

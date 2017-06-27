@@ -103,30 +103,26 @@ class Charcoal_Bootstrap
             // Delegate framework exception handling to handlers
             Charcoal_Framework::handleException( $e );
         }
-
-        Charcoal_Framework::terminate();
     }
 
     static $bootstrap_classes  = array(
 
                 // Basic enum classes
-                'Charcoal_EnumCoreHookStage'                     => 'constant',
                 'Charcoal_EnumMemoryUnit'                         => 'constant',
 
                 // Basic interface classes
                 'Charcoal_IObject'                                 => 'interface',
                 'Charcoal_ICollection'                             => 'interface',
-                'Charcoal_IProperties'                             => 'interface',
                 'Charcoal_IClassLoader'                         => 'interface',
                 'Charcoal_IConfigProvider'                        => 'interface',
                 'Charcoal_ICharcoalObject'                        => 'interface',
+                'Charcoal_ICharcoalComponent'                        => 'interface',
                 'Charcoal_IDebugtraceRenderer'                    => 'interface',
                 'Charcoal_IExceptionHandler'                    => 'interface',
                 'Charcoal_ILogger'                                => 'interface',
                 'Charcoal_IRegistry'                            => 'interface',
                 'Charcoal_ICodebase'                            => 'interface',
                 'Charcoal_IContainer'                            => 'interface',
-                'Charcoal_ICoreHook'                            => 'interface',
                 'Charcoal_IUnboxable'                             => 'interface',
                 'Charcoal_IEnvironment'                         => 'interface',
 
@@ -142,8 +138,7 @@ class Charcoal_Bootstrap
                 'Charcoal_CharcoalObject'                        => 'class/base',
                 'Charcoal_File'                                    => 'class/base',
                 'Charcoal_Interface'                             => 'class/base',
-                'Charcoal_CharcoalComponent'                     => 'class/base',
-
+        
                 // Basic exception classes
                 'Charcoal_ArrayFormatException'                    => 'exception',
                 'Charcoal_BooleanFormatException'                => 'exception',
@@ -158,6 +153,8 @@ class Charcoal_Bootstrap
                 'Charcoal_ClassNotFoundException'                 => 'exception',
                 'Charcoal_CreateClassLoaderException'            => 'exception',
                 'Charcoal_CreateObjectException'                => 'exception',
+                'Charcoal_ExceptionHandlerException'            => 'exception',
+                'Charcoal_ExceptionHandlerListInitException'     => 'exception',
                 'Charcoal_HashMapFormatException'                => 'exception',
                 'Charcoal_HttpStatusException'                    => 'exception',
                 'Charcoal_IllegalRunModeException'                => 'exception',
@@ -180,8 +177,9 @@ class Charcoal_Bootstrap
                 'Charcoal_RuntimeException'                     => 'exception',
                 'Charcoal_SandboxNotLoadedException'            => 'exception',
                 'Charcoal_StringFormatException'                => 'exception',
+                'Charcoal_SystemEnvironmentException'            => 'exception',
                 'Charcoal_UnsupportedMemoryUnitException'        => 'exception',
-
+        
                 // Primitive classes
                 'Charcoal_Scalar'                         => 'class/base',
                 'Charcoal_Number'                         => 'class/base',
@@ -196,7 +194,6 @@ class Charcoal_Bootstrap
                 'Charcoal_List'                         => 'class/base',
                 'Charcoal_Vector'                         => 'class/base',
                 'Charcoal_HashMap'                         => 'class/base',
-                'Charcoal_Properties'                     => 'class/base',
                 'Charcoal_Queue'                         => 'class/base',
                 'Charcoal_Stack'                         => 'class/base',
 
@@ -207,10 +204,10 @@ class Charcoal_Bootstrap
                 'Charcoal_PhpConfigProvider'            => 'object/config_provider',
 
                 // Bootstrap classes
+                'Charcoal_CharcoalComponent'                     => 'class/bootstrap',
                 'Charcoal_CacheDriverList'                => 'class/bootstrap',
                 'Charcoal_ClassLoader'                    => 'class/bootstrap',
                 'Charcoal_ConfigPropertySet'            => 'class/bootstrap',
-                'Charcoal_Config'                         => 'class/bootstrap',
                 'Charcoal_ConfigLoader'                 => 'class/bootstrap',
                 'Charcoal_CoreHookList'                    => 'class/bootstrap',
                 'Charcoal_DebugTraceRendererList'        => 'class/bootstrap',
@@ -224,7 +221,8 @@ class Charcoal_Bootstrap
                 'Charcoal_ResourceLocator'                 => 'class/bootstrap',
                 'Charcoal_System'                         => 'class/bootstrap',
                 'Charcoal_Sandbox'                         => 'class/bootstrap',
-
+                'Charcoal_CoreHookEventSource'             => 'class/bootstrap',
+        
                 // Class loaders
                 'Charcoal_FrameworkClassLoader'         => 'object/class_loader',
                 'Charcoal_UserClassLoader'                => 'object/class_loader',
@@ -278,7 +276,6 @@ class Charcoal_Bootstrap
                 // container classes
                 'Charcoal_AbstractContainer'                     => 'class/bootstrap/container',
                 'Charcoal_DIContainer'                             => 'class/bootstrap/container',
-                'Charcoal_AopContainer'                            => 'class/bootstrap/container',
 
                 // environment classes
                 'Charcoal_AbstractEnvironment'                     => 'class/bootstrap/environment',
@@ -287,14 +284,8 @@ class Charcoal_Bootstrap
                 'Charcoal_ShellEnvironment'                     => 'class/bootstrap/environment',
 
                 // utility classes
-                'Charcoal_DebugUtil'                            => 'class/util',
                 'Charcoal_EncodingConverter'                    => 'class/util',
                 'Charcoal_MemoryUtil'                            => 'class/util',
-
-                // core hook classes
-                'Charcoal_AbstractCoreHook'                        => 'object/core_hook',
-                'Charcoal_SimpleLogCoreHook'                    => 'object/core_hook',
-                'Charcoal_SimpleEchoCoreHook'                    => 'object/core_hook',
 
             );
 

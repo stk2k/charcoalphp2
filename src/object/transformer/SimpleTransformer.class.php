@@ -11,9 +11,15 @@
 class Charcoal_SimpleTransformer extends Charcoal_AbstractTransformer
 {
     /**
-     * 変換する
+     * transform DTO
+     *
+     * @param Charcoal_DTO $in
+     * @param Charcoal_DTO $out
+     * @param array $options
+     *
+     * @return Charcoal_DTO
      */
-    public function transform( DTO $in_data, DTO $out_data, Charcoal_Properties $options = NULL )
+    public function transform( $in, $out, $options = NULL )
     {
         $options = up($options);
 
@@ -21,7 +27,7 @@ class Charcoal_SimpleTransformer extends Charcoal_AbstractTransformer
         $overwrite = ($options && ($options['overwrite'] === TRUE)) ? TRUE : FALSE;
 
         // コピー元のフィールド一覧を取得
-        $vars = get_object_vars($out_data);
+        $vars = get_object_vars($out);
 
         // フィールドごとにコピー
         foreach( $vars as $key => $value )
@@ -32,10 +38,10 @@ class Charcoal_SimpleTransformer extends Charcoal_AbstractTransformer
             }
 
             // そのままコピー
-            $out_data->$key = $value;
+            $out->$key = $value;
         }
 
-        return $out_data;
+        return $out;
     }
 
 

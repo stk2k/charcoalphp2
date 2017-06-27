@@ -30,13 +30,15 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
 
         log_debug( "debug", "config: " . print_r($config,true) );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->token_key        = $config->getString( 'token_key', 'charcoaltoken_key' );
         $this->debug_mode       = $config->getBoolean( 'debug_mode', FALSE );
@@ -74,17 +76,19 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
     /*
      * generate token
      *
-     * @param Charcoal_ISequence $sequence    Sequence object
+     * @param Charcoal_Session $session
+     *
+     * @return string     new form token
      */
-    public function generate( $sequence )
+    public function generate( $session )
     {
-        Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ISequence', $sequence );
-
         try{
             $token_key = $this->token_key;
+            
+            /** @var Charcoal_Session $session */
 
             // get token container from session.
-            $token_list   = $sequence->get( $token_key );
+            $token_list   = $session->getArray( $token_key );
 
             if ( $token_list === NULL || !is_array($token_list) ){
                 $token_list = array();
@@ -100,10 +104,10 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 
             log_debug( "debug", "token_list: ", print_r($token_list, true) );
 
-            // save token list in sequence.
-            $sequence->set( $token_key, $token_list );
+            // save token list in session.
+            $session->set( $token_key, $token_list );
 
-            log_debug( "debug", "sequence: " . print_r($sequence,true) );
+            log_debug( "debug", "session: " . print_r($session,true) );
 
             return $new_token;
         }
@@ -113,28 +117,27 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
 
             _throw( new Charcoal_FormTokenComponentException( s(__CLASS__.'#'.__METHOD__.' failed.'), $e ) );
         }
+        return null;
     }
 
     /*
      * validate token in request and sequence
      *
-     * @param Charcoal_ISequence $sequence          Sequence object
+     * @param Charcoal_Session $session             Session object
      * @param string|Charcoal_String $form_token    Form token
      * @param boolean|Charcoal_Boolean $throws      If true, this method throws an exception on failure. Otherwise returns true/false
      */
-    public function validate( $sequence, $form_token, $throws = TRUE )
+    public function validate( $session, $form_token, $throws = TRUE )
     {
-        Charcoal_ParamTrait::validateIsA( 1, 'Charcoal_ISequence', $sequence );
-        Charcoal_ParamTrait::validateString( 2, $form_token );
-        Charcoal_ParamTrait::validateBoolean( 3, $throws );
-
         $throws = ub($throws);
+    
+        /** @var Charcoal_Session $session */
 
-        log_debug( "debug", "sequence: " . print_r($sequence,true) );
+        log_debug( "debug", "session: " . print_r($session,true) );
         log_debug( "debug", "form_token: " . print_r($form_token,true) );
 
         if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
-            ad($sequence,array('title'=>"sequence"));
+            ad($session,array('title'=>"sequence"));
         }
 
         $token_key = $this->token_key;
@@ -144,7 +147,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
         }
 
         // get token container from session.
-        $token_list   = $sequence->get( s($token_key) );
+        $token_list   = $session->getArray( $token_key );
         if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
             ad($token_list,array('title'=>"token list"));
         }
@@ -190,8 +193,8 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
             unset( $token_list[$token_index] );
         }
 
-        // update token list in sequence.
-        $sequence->set( $token_key, $token_list );
+        // update token list in session.
+        $session->set( $token_key, $token_list );
 
         // the event was successfully processed.
         return TRUE;

@@ -12,25 +12,6 @@
 abstract class Charcoal_UserClassLoader extends Charcoal_CharcoalComponent implements Charcoal_IClassLoader
 {
     /*
-     *    コンストラクタ
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-    public function configure( $config )
-    {
-        parent::configure( $config );
-
-    }
-
-    /*
      * クラスとパスの対応を表す連想配列を取得
      */
     public abstract function getClassPathAssoc();

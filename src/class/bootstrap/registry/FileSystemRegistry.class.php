@@ -12,6 +12,7 @@
 class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
 {
     private $sandbox;
+    private $loaded_items;
 
     /**
      *  Constructor
@@ -20,13 +21,11 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
      */
     public function __construct( $sandbox )
     {
-//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
-
         $this->sandbox = $sandbox;
 
         parent::__construct();
     }
-
+    
     /**
      * get configuration data by key
      *
@@ -36,10 +35,8 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
      *
      * @return mixed              configuration data
      */
-    public function get( array $keys, $obj_path, $type_name )
+    public function get( $keys, $obj_path, $type_name )
     {
-//        Charcoal_ParamTrait::validateString( 1, $key );
-
         // get config povier
         $provider = $this->sandbox->getConfigProvider();
 
@@ -49,6 +46,8 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
         $base_dir = empty($real_path) ? $base_dir : $base_dir . '/' . $obj_path->getRealPath();
         $cache_file = $obj_path->getObjectName() . '.config.php';
         $cache_file_path = CHARCOAL_CACHE_DIR . '/' . $base_dir . '/' . $cache_file;
+    
+        $this->loaded_items[] = $cache_file_path;
 
         // if cache file is not found, read config file.
         if ( !is_readable($cache_file_path) ){
@@ -67,7 +66,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
         }
         flock($fp, LOCK_UN);
         fclose($fp);
-
+        
         // eval contents
         $cached_config = null;
         $retval = null;
@@ -112,7 +111,7 @@ class Charcoal_FileSystemRegistry extends Charcoal_AbstractRegistry
                 $cache_data = $cached_config['config'][$key];
                 $config_all = is_array($cache_data) ? array_merge( $config_all, $cache_data ) : $config_all;
             }
-
+    
             // if cache is not modified, return cache data
             return $config_all;
         }
@@ -174,7 +173,7 @@ LOAD_CONFIG_FROM_FILE:
         fputs($fp, $lines);
         flock($fp, LOCK_UN);
         fclose($fp);
-
+    
         return $config_all;
     }
 
@@ -193,5 +192,24 @@ LOAD_CONFIG_FROM_FILE:
 
         return $provider->listObjects( $path, $type_name );
     }
+    
+    /**
+     * Dump loaded items
+     *
+     * @param bool|Charcoal_Boolean $return           If true, no echos and return array
+     *
+     * @return array|NULL
+     */
+    public function dumpLoadedItems( $return = FALSE )
+    {
+        $return = ub($return);
+        if ( !$return ){
+            foreach ($this->loaded_items as $item){
+                echo $item, PHP_EOL;
+            }
+        }
+        return $this->loaded_items;
+    }
+    
 }
 

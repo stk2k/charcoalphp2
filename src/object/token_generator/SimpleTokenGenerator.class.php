@@ -23,11 +23,13 @@ class Charcoal_SimpleTokenGenerator extends Charcoal_AbstractTokenGenerator
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->algorithm  = $config->getString( 'algorithm', 'sha1' );
 

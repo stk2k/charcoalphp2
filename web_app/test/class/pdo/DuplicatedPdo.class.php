@@ -20,8 +20,10 @@ class DuplicatedPdo extends PDO
      */
     public function __construct($gw, $options = array())
     {
-        /** @var Charcoal_Config $config */
+        /** @var array $config */
         $config = $gw->getDataSource()->getConfig();
+        
+        $config = new Charcoal_HashMap($config);
 
         // デフォルトの接続先設定を取得
         $defult_config = $config->getHashMap('default');

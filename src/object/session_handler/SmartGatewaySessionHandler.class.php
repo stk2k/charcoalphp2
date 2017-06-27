@@ -11,6 +11,7 @@
 
 class Charcoal_SmartGatewaySessionHandler extends Charcoal_AbstractSessionHandler
 {
+    /** @var  Charcoal_SmartGateway */
     private $gw;
     private $target;
     private $save_path;
@@ -27,15 +28,17 @@ class Charcoal_SmartGatewaySessionHandler extends Charcoal_AbstractSessionHandle
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->target = $config->getString( 'target', 'session' );
 
-        $this->gw = $this->getSandbox()->getComponent( 'smart_gateway@:charcoal:db' );
+        $this->gw = $this->getSandbox()->getContainer()->getComponent( 'smart_gateway@:charcoal:db' );
     }
 
     /**

@@ -14,8 +14,13 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
     const CACHE_FILE_EXT_META               = 'meta';
     const CACHE_FILE_EXT_DATA               = 'data';
 
+    /** @var string|Charcoal_String */
     private $_cache_root;
+    
+    /** @var Charcoal_File */
     private $_cache_root_dir;
+    
+    /** @var int */
     private $_default_duration;
 
     /*
@@ -29,11 +34,13 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $default_cache_root = Charcoal_ResourceLocator::getApplicationPath( s('cache') );
 
@@ -234,6 +241,8 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
     /**
      * Save meta data
      *
+     * @param Charcoal_File $meta_file
+     * @param
      */
     private function _writeMeta( $meta_file, $meta_data )
     {
@@ -267,24 +276,6 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
         // apply wildcard file filter
         $data_filter = new Charcoal_WildcardFileFilter($this->getCacheDataFileName($key));
         $meta_filter = new Charcoal_WildcardFileFilter($this->getCacheMetaFileName($key));
-
-        $filter = new Charcoal_CombinedFileFilter( v(array($data_filter,$meta_filter)) );
-
-        $this->_delete( $filter );
-    }
-
-    /**
-     * Remove a cache data searched by regular expression
-     *
-     * @param Charcoal_String $key         The key of the item to remove. Regular expression are accepted.
-     */
-    public function deleteRegEx( $key )
-    {
-        Charcoal_ParamTrait::validateString( 1, $key );
-
-        // apply wildcard file filter
-        $data_filter = new Charcoal_RegExFileFilter( $key, s(self::CACHE_FILE_EXT_DATA) );
-        $meta_filter = new Charcoal_RegExFileFilter( $key, s(self::CACHE_FILE_EXT_META) );
 
         $filter = new Charcoal_CombinedFileFilter( v(array($data_filter,$meta_filter)) );
 
@@ -330,38 +321,17 @@ class Charcoal_FileCacheDriver extends Charcoal_AbstractCacheDriver
     }
 
     /**
-     * Rewrite cache expiration time searched by regular expression
-     *
-     * @param string $key         The key of the item to remove. Regular expression are accepted.
-     * @param int $duration   specify expiration span which the cache will be removed.
-     */
-    public function touchRegEx( $key, $duration = NULL )
-    {
-        Charcoal_ParamTrait::validateString( 1, $key );
-        Charcoal_ParamTrait::validateInteger( 2, $duration, TRUE );
-
-        $duration = $duration ? ui($duration) : ui($this->_default_duration);
-
-        // apply wildcard file filter
-        $filter = new Charcoal_RegExFileFilter( $key, s(self::CACHE_FILE_EXT_META) );
-
-        $this->_touch( $filter, $duration );
-    }
-
-
-    /**
      * Touch internal
      *
+     * @param Charcoal_IFileFilter $filter
+     * @param int|Charcoal_Integer $duration
      */
     public function _touch( $filter, $duration )
     {
-        Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IFileFilter', $filter );
-        Charcoal_ParamTrait::validateInteger( 2, $duration, TRUE );
-
         $expire_date = date( 'Y-m-d H:i:s', strtotime("+{$duration} seconds") );
 
         // meta suffix
-        $suffix = '.' . CACHE_FILE_EXT_META;
+        $suffix = '.' . self::CACHE_FILE_EXT_META;
 
         // select files and delete them all
         $files = $this->_cache_root_dir->listFiles( $meta_filter );

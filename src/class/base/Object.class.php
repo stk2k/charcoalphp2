@@ -11,33 +11,12 @@
 
 class Charcoal_Object
 {
-//    private $_object_hash;
-//    private static $id_master;
-
     /**
      *    Constructor
      */
     public function __construct()
     {
-//        $class_name = get_class($this);
-
-//        static $id_master = 0;
-//        $this->_object_hash = ++$id_master;
-
-//        $cnt = isset(self::$id_master[$class_name]) ? self::$id_master[$class_name] : 0;
-//        $this->_object_hash = ++$cnt;
-//        self::$id_master[$class_name] = $cnt;
     }
-
-    /**
-     *
-     */
-
-    public static function dump()
-    {
-        echo nl2br(print_r(self::$id_master,true));
-    }
-
 
     /**
      *    make hash code of this object
@@ -47,11 +26,12 @@ class Charcoal_Object
     public function hash()
     {
         return spl_object_hash($this);
-//        return $this->_object_hash;
     }
 
     /**
      *    test equal objects
+     *
+     * @param mixed $object
      *
      * @return boolean   returns TRUE if this object is regarded as same object to target object.
      */
@@ -60,11 +40,13 @@ class Charcoal_Object
         if ( !($object instanceof Charcoal_Object) ){
             return FALSE;
         }
-        return $this->_object_hash === $object->_object_hash;
+        return spl_object_hash($this) === spl_object_hash($object);
     }
 
     /**
      *  Check if an object implements or extends target
+     *
+     * @param string|Charcoal_String $target
      *
      * @return boolean   returns TRUE if this object implements interface, or derived from target class.
      */

@@ -1,7 +1,6 @@
 .idea
-/src/nbproject/private/
-/nbproject/private/
-/test/nbproject/private/
 composer.phar
-/cache/*
+composer.lock
+vendor/*
+cache/*
 ext_lib/*

@@ -30,7 +30,7 @@ class Charcoal_HtmlFileLogger extends Charcoal_FileLogger implements Charcoal_IL
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {

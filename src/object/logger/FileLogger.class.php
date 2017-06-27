@@ -42,11 +42,13 @@ class Charcoal_FileLogger extends Charcoal_AbstractLogger implements Charcoal_IL
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_ConfigPropertySet( $this->getSandbox()->getEnvironment(), $config );
 
         $this->file_name   = $config->getString( 'file_name', '', TRUE );
         $this->logs_dir    = $config->getString( 'logs_dir', '%APPLICATION_DIR%/logs', TRUE );

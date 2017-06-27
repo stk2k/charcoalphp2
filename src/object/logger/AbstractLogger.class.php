@@ -28,12 +28,13 @@ class Charcoal_AbstractLogger extends Charcoal_CharcoalComponent
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
 
+        $config = new Charcoal_HashMap($config);
 
         $this->log_format   = $config->getString( 'log_format', self::DEFAULT_LOG_FORMAT );
 

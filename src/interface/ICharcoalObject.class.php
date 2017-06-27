@@ -1,6 +1,6 @@
 <?php
 /**
-* オブジェクトを定義するインタフェース
+* Interface of Charcoal framework object
 *
 * PHP version 5
 *

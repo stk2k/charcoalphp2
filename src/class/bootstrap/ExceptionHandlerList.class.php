@@ -59,7 +59,7 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
             if ( $exception_handlers ){
                 foreach( $exception_handlers as $handler_name ){
                     if ( strlen($handler_name) === 0 )    continue;
-                    $handler = $this->sandbox->createObject( $handler_name, 'exception_handler', array(), 'Charcoal_IExceptionHandler' );
+                    $handler = $this->sandbox->createObject( $handler_name, 'exception_handler', array(), array(), 'Charcoal_IExceptionHandler' );
                     $this->handlers[] = $handler;
                 }
             }
@@ -75,9 +75,12 @@ class Charcoal_ExceptionHandlerList extends Charcoal_Object
      */
     public function handleException( $e )
     {
-//        Charcoal_ParamTrait::validateException( 1, $e );
-
-        $this->init();
+        try{
+            $this->init();
+        }
+        catch(Exception $e){
+            _throw( new Charcoal_ExceptionHandlerListInitException('failed to init exception handler', $e) );
+        }
 
         foreach( $this->handlers as $handler ){
             log_info( "system, debug", "calling exception handler[$handler].", "exception" );

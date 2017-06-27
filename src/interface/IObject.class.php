@@ -10,6 +10,15 @@
 */
 interface Charcoal_IObject
 {
+    /**
+     *    test equal objects
+     *
+     * @param mixed $object
+     *
+     * @return boolean   returns TRUE if this object is regarded as same object to target object.
+     */
+    public function equals( $object );
+    
     /*
      *  String expression of this object
      *

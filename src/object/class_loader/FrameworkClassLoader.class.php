@@ -39,8 +39,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_HttpHeader'                => 'class/core',
                 'Charcoal_Layout'                    => 'class/core',
                 'Charcoal_ModuleLoader'                => 'class/core',
-                'Charcoal_Sequence'                    => 'class/core',
-                'Charcoal_SequenceHolder'            => 'class/core',
                 'Charcoal_Session'                    => 'class/core',
                 'Charcoal_SimpleModule'                => 'class/core',
                 'Charcoal_TransformerCache'            => 'class/core',
@@ -74,7 +72,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_IModel'                    => 'interface',
                 'Charcoal_IModule'                    => 'interface',
                 'Charcoal_IProcedure'                => 'interface',
-                'Charcoal_IProperties'                => 'interface',
                 'Charcoal_IQueue'                    => 'interface',
                 'Charcoal_IRecordset'                => 'interface',
                 'Charcoal_IRecordsetFactory'        => 'interface',
@@ -87,7 +84,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_IRoutingRule'                => 'interface',
                 'Charcoal_ISessionHandler'            => 'interface',
                 'Charcoal_IStateful'                => 'interface',
-                'Charcoal_ISequence'                => 'interface',
                 'Charcoal_ISQLBuilder'                => 'interface',
                 'Charcoal_ITableModel'                => 'interface',
                 'Charcoal_ITask'                    => 'interface',
@@ -217,7 +213,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
 
         // data source classes
                 'Charcoal_AbstractDataSource'                => 'object/data_source',
-                'Charcoal_PearDbDataSource'                    => 'object/data_source',
                 'Charcoal_PDODbDataSource'                    => 'object/data_source',
                 'Charcoal_PDORecordset'                        => 'object/data_source',
                 'Charcoal_PDORecordsetFactory'                => 'object/data_source',
@@ -249,23 +244,11 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_SimpleProcedure'                    => 'object/procedure',
 
         // component classes
-                'Charcoal_QdmailSender'                        => 'component/qdmail',
-                'Charcoal_QdmailAddress'                    => 'component/qdmail',
-                'Charcoal_SmartyRenderer'                    => 'component/smarty',
-                'Charcoal_CookieComponent'                    => 'component/charcoal/http',
                 'Charcoal_FileSystemComponent'                => 'component/charcoal/file',
                 'Charcoal_TempDirComponent'                    => 'component/charcoal/file',
                 'Charcoal_TempFileComponent'                => 'component/charcoal/file',
                 'Charcoal_FormTokenComponent'                => 'component/charcoal/form',
                 "Charcoal_ThumbnailComponent"                => 'component/charcoal/thumb',
-                'Charcoal_PDFWriterComponent'                => 'component/pdf',
-                'Charcoal_SimplePieComponent'                => 'component/rss/simplepie',
-                'Charcoal_FeedCreatorComponent'                => 'component/rss/feedcreator',
-                'Charcoal_SimpleHtmlDomComponent'            => 'component/html/parser/simplehtmldom',
-                'Charcoal_TidyComponent'                    => 'component/html/repair/tidy',
-                'Charcoal_PhpXmlParserComponent'            => 'component/xml/parser/php',
-                'Charcoal_PhpXmlElementHandler'                => 'component/xml/parser/php',
-                'Charcoal_PearPagerComponent'                => 'component/pear/pager',
 
         // component classes(smart gateway)
                 'Charcoal_SmartGateway'                        => 'component/charcoal/db',

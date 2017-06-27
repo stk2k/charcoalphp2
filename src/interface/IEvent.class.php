@@ -8,7 +8,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-interface Charcoal_IEvent extends Charcoal_ICharcoalObject
+interface Charcoal_IEvent extends Charcoal_ICharcoalComponent
 {
     /**
      * 実行優先度を取得する

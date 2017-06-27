@@ -30,11 +30,13 @@ class Charcoal_MemcacheCacheDriver extends Charcoal_AbstractCacheDriver
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->_host              = $config->getString( 'host', 'localhost' );
         $this->_port              = $config->getInteger( 'port', 11211 );

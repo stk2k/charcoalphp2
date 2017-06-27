@@ -11,11 +11,15 @@
 interface Charcoal_IContainer
 {
     /**
-     * get component
+     * Get component(generate if not exists)
      *
-     * @param Charcoal_String $key         key of the class
+     * @param string|Charcoal_String $component_name      component path
+     * @param array $args       constructor arguments
+     * @param array $config           object configuration parameters
+     *
+     * @return Charcoal_IComponent        component instance
      */
-    public function getComponent( $key );
+    public function getComponent( $component_name, $args = array(), $config = array() );
 
     /**
      * destruct instance

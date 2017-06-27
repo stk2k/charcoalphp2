@@ -34,7 +34,7 @@ class Charcoal_HttpResponse extends Charcoal_AbstractResponse
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {

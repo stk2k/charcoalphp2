@@ -48,14 +48,12 @@ class SimpleRouterTestTask extends Charcoal_TestTask
         $simple_router = $context->createObject( 'simple_router', 'router', 'Charcoal_IRouter' );
         $routing_rule = $context->createObject( 'array', 'routing_rule', 'Charcoal_IRoutingRule' );
 
-        $config = new Charcoal_Config(
-            $context->getEnvironment(),
-            array(
+        $config = array(
                 'routing rules' => array(
                         '/path/to/check/' => '@:path:to:check',
                         '/path/to/check/:param' => '@:path:to:check'
                     ),
-            ));
+            );
 
         $routing_rule->configure($config);
 

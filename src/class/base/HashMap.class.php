@@ -32,6 +32,10 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *  check if specified key is in the list
+     *
+     * @param mixed $key
+     *
+     * @return bool
      */
     public function keyExists( $key )
     {
@@ -50,6 +54,10 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    Get an element value
+     *
+     * @param mixed $key
+     *
+     * @return mixed|NULL
      */
     public function get( $key )
     {
@@ -68,6 +76,9 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    update an element value
+     *
+     * @param mixed $key
+     * @param mixed $value
      */
     public function set( $key, $value )
     {
@@ -76,6 +87,10 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    Get an element value
+     *
+     * @param mixed $key
+     *
+     * @return mixed|NULL
      */
     public function __get( $key )
     {
@@ -84,6 +99,9 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    Set an element value
+     *
+     * @param mixed $key
+     * @param mixed $value
      */
     public function __set( $key, $value )
     {
@@ -92,6 +110,10 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    ArrayAccess interface : offsetGet() implementation
+     *
+     * @param mixed $offset
+     *
+     * @return mixed|NULL
      */
     public function offsetGet($offset)
     {
@@ -103,6 +125,9 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    ArrayAccess interface : offsetSet() implementation
+     *
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value)
     {
@@ -114,6 +139,10 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    ArrayAccess interface : offsetExists() implementation
+     *
+     * @param mixed $offset
+     *
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -122,6 +151,8 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
 
     /**
      *    ArrayAccess interface : offsetUnset() implementation
+     *
+     * @param mixed $offset
      */
     public function offsetUnset($offset)
     {
@@ -139,25 +170,39 @@ class Charcoal_HashMap extends Charcoal_Collection implements ArrayAccess, Itera
     /**
      *    Set all array elements
      *
-     *    @param array $array   array data to set
+     *    @param array|Charcoal_Vector $array   array data to set
      */
     public function setArray( $array )
     {
-//        Charcoal_ParamTrait::validatRawArray( 1, $array );
-
         $this->values = $array;
+    
+        if ($array instanceof Charcoal_Vector){
+            $this->values = $array->toArray();
+        }
+        else if ( is_array($array) ){
+            $this->values = $array;
+        }
+        else{
+            _throw( new Charcoal_InvalidArgumentException($array) );
+        }
     }
 
     /**
      *    Set all hashmap elements
      *
-     *    @param array $array   hashmap data to set
+     *    @param array|Charcoal_HashMap $map   hashmap data to set
      */
     public function setHashMap( $map )
     {
-//        Charcoal_ParamTrait::validateHashMap( 1, $map );
-
-        $this->values = is_array($map) ? $map : $map->getAll();
+        if ($map instanceof Charcoal_HashMap){
+            $this->values = $map->toArray();
+        }
+        else if ( is_array($map) ){
+            $this->values = $map;
+        }
+        else{
+            _throw( new Charcoal_InvalidArgumentException($map) );
+        }
     }
 
     /**

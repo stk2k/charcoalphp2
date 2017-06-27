@@ -14,7 +14,7 @@ interface Charcoal_IConfigProvider extends Charcoal_ICharcoalObject
     /**
      * set options
      *
-     * @param Charcoal_Properties $options   option set to apply
+     * @param Charcoal_HashMap $options   option set to apply
      */
     public function setOptions( $options );
 

@@ -29,9 +29,9 @@ interface Charcoal_IProcedure extends Charcoal_ICharcoalObject
     /**
      * Execute procedure
      *
-     * @return Charcoal_IRequest $request      request object
-     * @return Charcoal_IResponse $response    response object
-     * @return Charcoal_Session $session       session object
+     * @param Charcoal_IRequest $request      request object
+     * @param Charcoal_IResponse $response    response object
+     * @param Charcoal_Session $session       session object
      */
     public function execute( $request, $response, $session = NULL );
 

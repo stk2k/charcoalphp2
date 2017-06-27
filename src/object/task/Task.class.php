@@ -22,11 +22,13 @@ abstract class Charcoal_Task extends Charcoal_CharcoalComponent implements Charc
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->name_space         = $config->getString( 'name_space', '' );
         $this->event_filters      = $config->getArray( 'event_filters', array() );

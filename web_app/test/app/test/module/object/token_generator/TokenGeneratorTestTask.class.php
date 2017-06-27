@@ -61,9 +61,9 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
             echo "default token: $token";
             break;
         case "simple_sha1":
-            $config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
+            $config = new Charcoal_HashMap();
             $config->set( s('algorithm'), 'sha1' );
-            $generator->configure( $config );
+            $generator->configure( $config->toArray() );
 
             $token = $generator->generateToken();
 
@@ -73,9 +73,9 @@ class TokenGeneratorTestTask extends Charcoal_TestTask
             echo "sha1 token: $token";
             break;
         case "simple_md5":
-            $config = new Charcoal_Config( $this->getSandbox()->getEnvironment() );
+            $config = new Charcoal_HashMap();
             $config->set( s('algorithm'), 'md5' );
-            $generator->configure( $config );
+            $generator->configure( $config->toArray() );
 
             $token = $generator->generateToken();
 

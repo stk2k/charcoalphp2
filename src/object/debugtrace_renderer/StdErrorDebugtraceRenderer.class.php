@@ -19,17 +19,6 @@ class Charcoal_StdErrorDebugtraceRenderer extends Charcoal_ConsoleDebugtraceRend
     }
 
     /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-    public function configure( $config )
-    {
-        parent::configure( $config );
-
-    }
-
-    /**
      * Render debug trace
      *
      */

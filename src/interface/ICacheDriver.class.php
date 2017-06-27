@@ -34,13 +34,6 @@ interface Charcoal_ICacheDriver extends Charcoal_ICharcoalObject
     public function delete( $key );
 
     /**
-     * Remove a cache data searched by regular expression
-     *
-     * @param string $key         The key of the item to remove. Regular expression are accepted.
-     */
-    public function deleteRegEx( $key );
-
-    /**
      * Rewrite cache expiration time
      *
      * @param string $key         The key of the item to remove. Shell wildcards are accepted.
@@ -48,13 +41,6 @@ interface Charcoal_ICacheDriver extends Charcoal_ICharcoalObject
      */
     public function touch( $key, $duration = NULL );
 
-    /**
-     * Rewrite cache expiration time searched by regular expression
-     *
-     * @param string $key         The key of the item to remove. Regular expression are accepted.
-     * @param int $duration   specify expiration span which the cache will be removed.
-     */
-    public function touchRegEx( $key, $duration = NULL );
 
 }
 

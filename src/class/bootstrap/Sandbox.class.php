@@ -13,16 +13,18 @@
 * @copyright  2008 stk2k, sazysoft
 */
 
+use EventStream\EventStream;
+use EventStream\Emitter\WildCardEventEmitter;
+
 class Charcoal_Sandbox
 {
-    private $sandbox_name;
     private $registry;
     private $codebase;
     private $container;
     private $environment;
     private $loaded;
 
-    /** @var Charcoal_IProperties  */
+    /** @var Charcoal_HashMap  */
     private $profile;
 
     /** @var bool  */
@@ -30,22 +32,23 @@ class Charcoal_Sandbox
 
     /** @var Charcoal_IConfigProvider */
     private $config_provider;
+    
+    /** @var Charcoal_CoreHookEventSource */
+    private $core_hook_source;
+    
+    /** @var EventStream */
+    private $core_hook_stream;
 
     /**
      *  Constructor
      *
-     * @param Charcoal_String|string $sandbox_name
      * @param boolean|NULL $debug
      * @param array $config
+     * @param callable $core_hook
      */
-    public function __construct( $sandbox_name, $debug = NULL, $config = NULL )
+    public function __construct( $debug = false, $config = null, $core_hook = null )
     {
-//        Charcoal_ParamTrait::validateString( 1, $sandbox_name );
-//        Charcoal_ParamTrait::validateBoolean( 2, $debug, TRUE );
-//        Charcoal_ParamTrait::validatRawArray( 3, $config, TRUE );
-
-        $this->sandbox_name = $sandbox_name;
-        $this->debug = $debug ? ub($debug) : FALSE;
+        $this->debug = ub($debug);
 
         $this->registry = isset($config['registry'])? $config['registry'] : new Charcoal_FileSystemRegistry( $this );
         $this->codebase = isset($config['codebase'])? $config['codebase'] : new Charcoal_PlainCodebase( $this );
@@ -53,8 +56,25 @@ class Charcoal_Sandbox
         $this->environment = isset($config['environment'])? $config['environment'] : $this->getDefaultEnvironment();
 
         $this->profile = isset($config['profile'])? $config['profile'] : new Charcoal_SandboxProfile( $this );
+    
+        $this->core_hook_source = isset($config['core_hook_source'])? $config['core_hook_source'] : new Charcoal_CoreHookEventSource( $this );
+        $this->core_hook_stream = new EventStream( $this->core_hook_source, new WildCardEventEmitter() );
+    
+        if ($core_hook){
+            $this->core_hook_stream->listen('*.*', $core_hook);
+        }
+        
+        $this->core_hook_stream->push( 'sandbox.created', CHARCOAL_RUNMODE, true );
     }
-
+    
+    /**
+     * destruct instance
+     */
+    public function terminate()
+    {
+        $this->core_hook_stream->push( 'sandbox.terminated', CHARCOAL_RUNMODE, true );
+    }
+    
     /**
      * get proper environment for current run mode
      *
@@ -108,16 +128,6 @@ class Charcoal_Sandbox
     }
 
     /**
-     * returns sandbox name
-     *
-     * @return string         sandbox name
-     */
-    public function getName()
-    {
-        return $this->sandbox_name;
-    }
-
-    /**
      * load sandbox
      *
      * @return Charcoal_SandboxProfile
@@ -126,7 +136,7 @@ class Charcoal_Sandbox
     {
 //        try{
             $this->profile->load( $this->debug, 'default' );
-            $this->profile->load( $this->debug, $this->sandbox_name );
+            $this->profile->load( $this->debug, CHARCOAL_PROFILE );
 //        }
 //        catch( Exception $e ){
 //            _catch( $e );
@@ -135,16 +145,6 @@ class Charcoal_Sandbox
         $this->loaded = TRUE;
 
         return $this->profile;
-    }
-
-    /**
-     * get sandbox name
-     *
-     * @return string         sandbox name
-     */
-    public function getSandboxName()
-    {
-        return $this->sandbox_name;
     }
 
     /**
@@ -200,17 +200,28 @@ class Charcoal_Sandbox
         }
         return $this->profile;
     }
+    
+    /**
+     * get core hook event stream
+     *
+     * @return EventStream
+     */
+    public function getCoreHookEventStream()
+    {
+        return $this->core_hook_stream;
+    }
 
     /*
      *  create event
      *
      *    @param Charcoal_String $obj_path         object path to create
      *    @param Charcoal_Vector $args             constructor arguments
+     *    @param array $config                     object configuration parameters
      *
      */
-    public function createEvent( $obj_path, $args = NULL )
+    public function createEvent( $obj_path, $args = NULL, $config = array() )
     {
-        return $this->createObject( $obj_path, 'event', $args, 'Charcoal_IEvent' );
+        return $this->createObject( $obj_path, 'event', $args, $config, 'Charcoal_IEvent' );
     }
 
     /*
@@ -218,19 +229,14 @@ class Charcoal_Sandbox
      *
      *    @param Charcoal_String $obj_path         object path to create
      *    @param Charcoal_String $type_name        type name of the object
-     *    @param Charcoal_Vector $args             constructor arguments
+     *    @param array $args                       constructor arguments
+     *    @param array $config                     object configuration parameters
      *    @param Charcoal_String $interface        interface name which will be checked implements
      *    @param Charcoal_String $default_class    default class name which will be used when class_name config property is not specified
      *
      */
-    public function createObject( $obj_path, $type_name, $args = NULL, $interface = NULL, $default_class = NULL )
+    public function createObject( $obj_path, $type_name, $args = NULL, $config = NULL, $interface = NULL, $default_class = NULL )
     {
-//        Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
-//        Charcoal_ParamTrait::validateString( 2, $type_name );
-//        Charcoal_ParamTrait::validateVector( 3, $args, TRUE );
-//        Charcoal_ParamTrait::validateStringOrObject( 4, 'Charcoal_Interface', $interface, TRUE );
-//        Charcoal_ParamTrait::validateStringOrObject( 5, 'Charcoal_Class', $default_class, TRUE );
-
         $object = NULL;
 
         if ( is_string($obj_path) || $obj_path instanceof Charcoal_String ){
@@ -243,17 +249,17 @@ class Charcoal_Sandbox
 
         try{
             $object_path_string = $obj_path->getObjectPathString();
-
+    
             // load configure file
-            $config = Charcoal_ConfigLoader::loadConfig( $this, $object_path_string, $type_name );
-
-            $config = new Charcoal_Config( $this->getEnvironment(), $config );
+            $config_default = Charcoal_ConfigLoader::loadConfig( $this->registry, $object_path_string, $type_name );
+    
+            $config = is_array($config) ? array_merge( $config_default, $config ) : $config_default;
 
             // get class name from configure file
-            $class_name = $config->getString( 'class_name' );
-
+            $class_name = isset($config['class_name']) ? $config['class_name'] : NULL;
+            
             $klass = NULL;
-            if ( $class_name && !empty($class_name) ){
+            if ( !empty($class_name) ){
                 $klass = new Charcoal_Class( $class_name );
             }
             else{
@@ -284,8 +290,8 @@ class Charcoal_Sandbox
             $object->setObjectPath( $obj_path );
             $object->setTypeName( $type_name );
             $object->setSandbox( $this );
-
-            // configure object
+    
+            // configure instantiated object
             $object->configure( $config );
         }
         catch ( Exception $e )
@@ -317,28 +323,24 @@ class Charcoal_Sandbox
      */
     public function createClassLoader( $obj_path )
     {
-//        Charcoal_ParamTrait::validateStringOrObjectPath( 1, $obj_path );
-
         $class_loader = NULL;
 
         try{
             $obj_path = is_string($obj_path) ? new Charcoal_ObjectPath( $obj_path ) : $obj_path;
-
-            // Configをロード
-            $config = Charcoal_ConfigLoader::loadConfig( $this, $obj_path, 'class_loader' );
-            $config = new Charcoal_Config( $this->environment, $config );
-
-            // クラス名を取得
-            $class_name = $config->getString( 'class_name' );
-            if ( $class_name === NULL ){
+    
+            // load configure file
+            $config = Charcoal_ConfigLoader::loadConfig( $this->registry, $obj_path, 'class_loader' );
+    
+            // get class name from configure file
+            $class_name = isset($config['class_name']) ? $config['class_name'] : NULL;
+            if ( empty($class_name) ){
                 _throw( new Charcoal_ClassLoaderConfigException( $obj_path, 'class_name', 'mandatory' ) );
             }
-            $class_name = us($class_name);
 
             // project directory
             $project_dir = Charcoal_ResourceLocator::getProjectPath();
 
-            // ソースの取り込み
+            // read class loader file
             $source_path = $project_dir . '/app/' . CHARCOAL_APPLICATION . '/class/class_loader/' . $class_name . '.class.php';
             if ( is_readable($source_path) ){
                 /** @noinspection PhpIncludeInspection */
@@ -352,7 +354,7 @@ class Charcoal_Sandbox
                 }
             }
 
-            // クラスローダのインスタンス生成
+            // instantiate class loader
             $klass = new Charcoal_Class( $class_name );
 
             /** @var Charcoal_IClassLoader $class_loader */
@@ -360,11 +362,9 @@ class Charcoal_Sandbox
 
             $class_loader->setSandbox( $this );
 
-            // インタフェース確認
+            // confirm inprements of class loader interface
             $interface = new Charcoal_Interface( 'Charcoal_IClassLoader' );
             $interface->validateImplements( $class_loader );
-
-    //        log_info( 'system', "factory", "クラスローダ[" . us($object_path) . "]を作成しました。" );
 
         }
         catch( Exception $ex )

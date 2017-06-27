@@ -24,11 +24,13 @@ abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalComponent imp
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->task_manager        = us( $config->getString( 'task_manager', '' ) );
         $this->forward_target      = us( $config->getString( 'forward_target', '' ) );
@@ -108,7 +110,7 @@ abstract class Charcoal_AbstractProcedure extends Charcoal_CharcoalComponent imp
      */
     public function getForwardTarget()
     {
-        return new ProcedurePath( $this->forward_target );
+        return new Charcoal_ObjectPath( $this->forward_target );
     }
 
 }

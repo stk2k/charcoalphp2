@@ -25,11 +25,13 @@ class Charcoal_ArrayRoutingRule extends Charcoal_AbstractRoutingRule
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_ConfigPropertySet( $this->getSandbox()->getEnvironment(), $config );
 
         $rules_section = $config->getSection( 'routing rules' );
 

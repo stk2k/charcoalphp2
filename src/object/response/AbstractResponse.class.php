@@ -314,6 +314,8 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalComponent implements Ch
      *  apply all filters
      *
      * @param mixed $value   Value to apply
+     *
+     * @return mixed
      */
     private function _applyAllFilters( $value )
     {
@@ -325,7 +327,7 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalComponent implements Ch
                 foreach( $responsefilters as $filter_name ){
                     if ( strlen($filter_name) === 0 )    continue;
 
-                    $filter = $this->getSandbox()->createObject( $filter_name, 'response_filter', array(), 'Charcoal_IResponseFilter' );
+                    $filter = $this->getSandbox()->createObject( $filter_name, 'response_filter', array(), array(), 'Charcoal_IResponseFilter' );
                     $this->filters[] = $filter;
                 }
             }
@@ -362,8 +364,9 @@ class Charcoal_AbstractResponse extends Charcoal_CharcoalComponent implements Ch
 
         if ( $this->filters && is_array($this->filters) ){
             foreach( $this->filters as $key => $f ){
+                /** @var Charcoal_IResponseFilter $f */
                 if ( $f->equals($filter) ){
-                    unnset( $this->filters[$key] );
+                    unset( $this->filters[$key] );
                     return;
                 }
             }

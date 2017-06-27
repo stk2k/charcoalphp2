@@ -16,11 +16,13 @@ class Charcoal_HttpErrorHeaderExceptionHandler extends Charcoal_AbstractExceptio
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->http_version = $config->getString( 'http_version', '1.0' );
     }

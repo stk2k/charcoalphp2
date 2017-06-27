@@ -17,11 +17,13 @@ class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRendere
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->clear_buffer = b( $config->getBoolean( 'clear_buffer', FALSE ) );
     }
@@ -33,7 +35,7 @@ class Charcoal_HtmlDebugtraceRenderer extends Charcoal_AbstractDebugtraceRendere
      *
      * @return string
      */
-    private static function _makeHtmlHead( $title )
+    private function makeHtmlHead( $title )
     {
         $html = <<< HTML_HEADER
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
@@ -174,12 +176,31 @@ HTML_HEADER;
      *
      * @return string
      */
-    private static function _makeHtmlBody( $e, $title, $file, $line )
+    private function makeHtmlBody( $e, $title, $file, $line )
     {
         $html = '';
 
         $html .= '<div id="charcoal">' . PHP_EOL;
         $html .= '<h1><div class="value">' . $title . '</div></h1>' . PHP_EOL;
+    
+        // Registry Items
+        $registry_items = $this->getSandbox()->getRegistry()->dumpLoadedItems(TRUE);
+        
+        $html .= '<h2><div class="value">Registry Items&nbsp;&nbsp;<a href="#" onclick="expand(\'registry_items\');">(' . count($registry_items) . ')</a></div></h2>' . PHP_EOL;
+    
+        $html .= '' . PHP_EOL;
+        $html .= '<table cellspacing="0" cellpadding="0" id="registry_items" style="display:none">' . PHP_EOL;
+        $no = 1;
+        foreach( $registry_items as $item )
+        {
+            $html .= '<tr>' . PHP_EOL;
+            $html .= '  <th class="no">' . $no . '</th>' . PHP_EOL;
+            $html .= '  <td class="key"><span class="value">' . $item . '</span></td>' . PHP_EOL;
+            $html .= '</tr>' . PHP_EOL;
+        
+            $no ++;
+        }
+        $html .= '</table>' . PHP_EOL;
 
         // PHP info
         $phpinfo = array(
@@ -688,10 +709,10 @@ HTML_HEADER;
         $html  = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
         $html .= '<html lang="ja">';
         $html .= '<head>';
-        $html .= self::_makeHtmlHead( $title );
+        $html .= $this->makeHtmlHead( $title );
         $html .= '</head>';
         $html .= '<body>' . PHP_EOL;
-        $html .= self::_makeHtmlBody( $e, $title, $file, $line );
+        $html .= $this->makeHtmlBody( $e, $title, $file, $line );
         $html .= '</body>' . PHP_EOL;
         $html .= '</html>' . PHP_EOL;
 

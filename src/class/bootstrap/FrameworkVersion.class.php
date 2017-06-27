@@ -10,33 +10,32 @@
 */
 class Charcoal_FrameworkVersion extends Charcoal_Object
 {
-    const VERSION_MAJOR     = 2;
-    const VERSION_MINOR     = 66;
-    const VERSION_REVISION  = 4;
-    const VERSION_BUILD     = 273;
+    const VERSION_MAJOR     = 3;
+    const VERSION_MINOR     = 1;
+    const VERSION_REVISION  = 0;
+    const VERSION_BUILD     = 275;
 
     const VERSION_PART_ALL       = 0xFFFF;
     const VERSION_PART_MAJOR     = 0x0001;
     const VERSION_PART_MINOR     = 0x0002;
     const VERSION_PART_REVISION  = 0x0004;
     const VERSION_PART_BUILD     = 0x0008;
+    
+    const VERSION_PART_SHORT     = 0x0003;      // VERSION_PART_MAJOR|VERSION_PART_MINOR
+    const VERSION_PART_LONG      = 0x0007;      // VERSION_PART_MAJOR|VERSION_PART_MINOR|VERSION_PART_REVISION
 
     const VERSION_STRING_SEPERATOR = '.';
 
-    private $major;
-    private $minor;
-    private $revision;
-    private $build;
+    private $part;
 
     /**
      *    constructor
+     *
+     * @param int $part
      */
-    public function __construct()
+    public function __construct( $part = self::VERSION_PART_ALL )
     {
-        $this->major = self::getVersion( i(self::VERSION_PART_MAJOR) );
-        $this->minor = self::getVersion( i(self::VERSION_PART_MINOR) );
-        $this->revision = self::getVersion( i(self::VERSION_PART_REVISION) );
-        $this->build = self::getVersion( i(self::VERSION_PART_BUILD) );
+        $this->part = $part;
     }
 
     /**
@@ -46,7 +45,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
      */
     public function getMajorVersion()
     {
-        return $this->major;
+        return self::getVersion( i(self::VERSION_PART_MAJOR) );
     }
 
     /**
@@ -56,7 +55,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
      */
     public function getMinorVersion()
     {
-        return $this->minor;
+        return self::getVersion( i(self::VERSION_PART_MINOR) );
     }
 
     /**
@@ -66,7 +65,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
      */
     public function getRevision()
     {
-        return $this->revision;
+        return self::getVersion( i(self::VERSION_PART_REVISION) );
     }
 
     /**
@@ -76,7 +75,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
      */
     public function getBuildNumber()
     {
-        return $this->build;
+        return self::getVersion( i(self::VERSION_PART_BUILD) );
     }
 
     /*
@@ -86,7 +85,7 @@ class Charcoal_FrameworkVersion extends Charcoal_Object
      */
     public function toString()
     {
-        return self::getVersion();
+        return self::getVersion($this->part);
     }
 
     /**

@@ -19,6 +19,23 @@ class DivisionByZeroException extends Exception
 class CalcTask extends Charcoal_Task
 {
     /**
+     * handle an exception
+     *
+     * @param Exception $e                        exception to handle
+     * @param Charcoal_EventContext $context      event context
+     *
+     * @return boolean|Charcoal_Boolean
+     */
+    public function handleException( $e, $context )
+    {
+        if ($e instanceof DivisionByZeroException){
+            echo 'You can not divide any number by zero.' . PHP_EOL;
+            return TRUE;
+        }
+        return FALSE;
+    }
+    
+    /**
      * process event
      *
      * @param Charcoal_IEventContext $context   event context
@@ -66,8 +83,8 @@ class CalcTask extends Charcoal_Task
         else{
             echo "<pre>USAGE:" . PHP_EOL;
 
-            echo "http://" . $_SERVER['SERVER_NAME'] . "/calc/value1/value2/[add/sub/mul/div]" . PHP_EOL;
-            echo "value1, value2: number" . eol();
+            echo "/calc/value1/value2/[add/sub/mul/div]" . PHP_EOL . PHP_EOL;
+            echo "value1, value2: number" . PHP_EOL;
             echo "add: shows result of 'value1 + value2'" . PHP_EOL;
             echo "sub: shows result of 'value1 - value2'" . PHP_EOL;
             echo "mul: shows result of 'value1 * value2'" . PHP_EOL;
@@ -78,22 +95,6 @@ class CalcTask extends Charcoal_Task
 
         // return TRUE if processing the procedure success.
         return TRUE;
-    }
-
-    /**
-     * execute exception handlers
-     *
-     * @param Exception $e     exception to handle
-     * @param Charcoal_IEventContext $context   event context
-     *
-     * @return boolean        TRUE means the exception is handled, otherwise FALSE
-     *
-     * @throws Charcoal_HttpStatusException
-     */
-    public function handleException( $e, $context )
-    {
-        echo "Exception:" . $e->getMessage() . "<br>";
-        throw new Charcoal_HttpStatusException(500);
     }
 
 }

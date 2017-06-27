@@ -60,7 +60,7 @@ class Charcoal_ModuleLoader
 
             /** @var Charcoal_IModule $module */
             /** @var Charcoal_Sandbox $sandbox */
-            $module = $sandbox->createObject( $module_path, 'module', array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
+            $module = $sandbox->createObject( $module_path, 'module', array(), array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
 
             // load module tasks
             $loaded_tasks = $module->loadTasks( $task_manager );

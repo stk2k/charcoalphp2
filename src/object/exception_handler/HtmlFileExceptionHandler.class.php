@@ -26,11 +26,12 @@ class Charcoal_HtmlFileExceptionHandler extends Charcoal_AbstractExceptionHandle
 
         // Create Debug Trace Renderer
         try{
-            $debugtrace_renderer = $this->getSandbox()->createObject( 'html', 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
+            /** @var Charcoal_IDebugtraceRenderer $debugtrace_renderer */
+            $debugtrace_renderer = $this->getSandbox()->createObject( 'html', 'debugtrace_renderer', array(), array(), 'Charcoal_IDebugtraceRenderer' );
             log_info( 'system, debug', "debugtrace_renderer[$debugtrace_renderer] created.", 'exception_handler' );
 
             // Render exception
-            $error_html = $debugtrace_renderer->output( $e );
+            $error_html = $debugtrace_renderer->render( $e );
             log_info( 'system, debug', "debugtrace_renderer[$debugtrace_renderer] output html.", 'exception_handler' );
 
             // generate error dump(HTML)

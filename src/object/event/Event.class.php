@@ -32,11 +32,13 @@ abstract class Charcoal_Event extends Charcoal_CharcoalComponent implements Char
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+    
+        $config = new Charcoal_HashMap($config);
 
         $this->_priority = $config->getInteger( 'priority', Charcoal_EnumEventPriority::NORMAL );
     }

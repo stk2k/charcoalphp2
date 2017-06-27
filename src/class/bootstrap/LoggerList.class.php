@@ -68,15 +68,22 @@ class Charcoal_LoggerList extends Charcoal_Object
         $this->log_loggers      = uv( $this->sandbox->getProfile()->getArray( 'LOG_LOGGERS', array() ) );
 
         $this->loggers = array();
-
+    
+        $event_stream = $this->sandbox->getCoreHookEventStream();
+    
         // create loggers on demand
         if ( $this->log_loggers ){
             foreach( $this->log_loggers as $logger_name ){
                 if ( strlen($logger_name) === 0 )    continue;
 
                 if ( !isset($this->loggers[$logger_name]) ){
-                    $logger = $this->sandbox->createObject( $logger_name, 'logger', array(), 'Charcoal_ILogger' );
+                    $logger = $this->sandbox->createObject( $logger_name, 'logger', array(), array(), 'Charcoal_ILogger' );
+    
+                    $event_stream->push( 'logger.created', $logger_name, true );
+    
                     self::register( $logger_name, $logger );
+                    
+                    $event_stream->push( 'logger.registered', $logger_name, true );
                 }
                 else{
                     log_warning( "system,debug,error", "Logger[$logger_name] is already registered!" );
@@ -112,7 +119,7 @@ class Charcoal_LoggerList extends Charcoal_Object
                 if ( strlen($logger_name) === 0 )    continue;
 
                 if ( !isset($this->loggers[$logger_name]) ){
-                    $logger = $this->sandbox->createObject( $logger_name, 'logger', array(), 'Charcoal_ILogger' );
+                    $logger = $this->sandbox->createObject( $logger_name, 'logger', array(), array(), 'Charcoal_ILogger' );
                     self::register( $logger_name, $logger );
                 }
             }

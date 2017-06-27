@@ -19,6 +19,9 @@ class Charcoal_String extends Charcoal_Scalar
 
     /**
      *    Constructor
+     *
+     * @param mixed $value
+     * @param string $encoding
      */
     public function __construct( $value = self::DEFAULT_VALUE, $encoding = NULL )
     {
@@ -53,11 +56,13 @@ class Charcoal_String extends Charcoal_Scalar
     /**
      * Retrieve default value
      *
+     * @param string $encoding
+     *
      * @return Charcoal_String        default value
      */
-    public static function defaultValue()
+    public static function defaultValue($encoding)
     {
-        return new self(self::DEFAULT_VALUE);
+        return new self(self::DEFAULT_VALUE, $encoding);
     }
 
     /**
@@ -81,7 +86,7 @@ class Charcoal_String extends Charcoal_Scalar
     /**
      *    get character encoding
      *
-     * @param string $encoding       chracter encoding
+     * @return string
      */
     public function getEncoding()
     {
@@ -125,6 +130,8 @@ class Charcoal_String extends Charcoal_Scalar
      *    split by regular expression
      *
      * @param string $regex      regular expression string
+     *
+     * @return Charcoal_Vector
      */
     public function splitRegEx( $regex )
     {
@@ -141,7 +148,7 @@ class Charcoal_String extends Charcoal_Scalar
                 $end_pos = $match_pos - 1;
                 $length = $end_pos - $start_pos + 1;
                 if ( $length > 0 ){
-                    $split_word = substr( $string, $start, $length );
+                    $split_word = substr( $string, $match_pos, $length );
                     $split_word_list[] = $split_word;
                 }
                 $start_pos = $match_pos + strlen($match_str);

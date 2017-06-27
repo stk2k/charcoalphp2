@@ -11,16 +11,19 @@
 
 class Charcoal_DebugTraceRendererList extends Charcoal_Object
 {
+    /** @var array */
     private $renderers;
+    
+    /** @var Charcoal_Sandbox */
     private $sandbox;
 
     /**
      *  Constructor
+     *
+     * @param Charcoal_Sandbox $sandbox
      */
     public function __construct( $sandbox )
     {
-//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
-
         $this->sandbox = $sandbox;
 
         parent::__construct();
@@ -33,25 +36,23 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
      */
     public function add( $renderer )
     {
-//        Charcoal_ParamTrait::validateImplements( 1, 'Charcoal_IDebugtraceRenderer', $renderer );
-
         $this->renderers[] = $renderer;
     }
 
     /**
      * Render debug trace
      *
-     * @param Charcoal_String $title  title
+     * @param Exception $e
+     *
+     * @return bool|Charcoal_Boolean
      */
     public function render( $e )
     {
-//        Charcoal_ParamTrait::validateException( 1, $e );
-
         if ( !$this->renderers ){
             $this->renderers = array();
 
             if ( !$this->sandbox->isLoaded() ){
-                return;
+                return b(TRUE);
             }
 
             // Create Debug Trace Renderer
@@ -63,7 +64,7 @@ class Charcoal_DebugTraceRendererList extends Charcoal_Object
                 {
                     if ( strlen($renderer_name) === 0 )    continue;
                     try{
-                        $renderer = $this->sandbox->createObject( $renderer_name, 'debugtrace_renderer', array(), 'Charcoal_IDebugtraceRenderer' );
+                        $renderer = $this->sandbox->createObject( $renderer_name, 'debugtrace_renderer', array(), array(), 'Charcoal_IDebugtraceRenderer' );
                         $this->renderers[] = $renderer;
                     }
                     catch ( Exception $e )

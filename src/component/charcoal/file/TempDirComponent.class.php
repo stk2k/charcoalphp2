@@ -28,11 +28,13 @@ class Charcoal_TempDirComponent extends Charcoal_CharcoalComponent implements Ch
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->_mode       = $config->getString( 'mode', '777' )->getValue();
         $this->_overwrite  = $config->getBoolean( 'overwrite', TRUE )->getValue();

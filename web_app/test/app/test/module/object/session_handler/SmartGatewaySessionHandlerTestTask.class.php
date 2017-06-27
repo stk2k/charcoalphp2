@@ -42,13 +42,14 @@ class SmartGatewaySessionHandlerTestTask extends Charcoal_TestTask
         // SmartGateway
         $this->gw = $context->getComponent( s('smart_gateway@:charcoal:db') );
 
-        $this->handler = Charcoal_Factory::createObject( s('smart_gateway'), s('session_handler') );
+        /** @var Charcoal_SmartGatewaySessionHandler handler */
+        $this->handler = $context->createObject( s('smart_gateway'), s('session_handler') );
 
         $data = array(
                 'target' => 'session',
             );
 
-        $config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $data );
+        $config = array();
 
         $this->handler->configure( $config );
 

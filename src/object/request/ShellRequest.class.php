@@ -22,14 +22,5 @@ class Charcoal_ShellRequest extends Charcoal_AbstractRequest
         $this->values  = Charcoal_CommandLineUtil::parseParams( $argv );
     }
 
-    /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-    public function configure( $config )
-    {
-        parent::configure( $config );
-    }
 }
 

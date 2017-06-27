@@ -11,6 +11,13 @@
 
 class Charcoal_InterfaceImplementException extends Charcoal_RuntimeException
 {
+    /**
+     * Charcoal_InterfaceImplementException constructor.
+     *
+     * @param string|Charcoal_String $object
+     * @param string|Charcoal_String $interface_name
+     * @param Exception $prev
+     */
     public function __construct( $object, $interface_name, $prev = NULL )
     {
         $class_name = $object instanceof Charcoal_Object ? $object->getClassName() : get_class( $object );

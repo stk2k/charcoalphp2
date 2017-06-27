@@ -67,11 +67,10 @@ class FileCacheDriverTestTask extends Charcoal_TestTask
             {
                 $cache_driver = $context->createObject( 'file', 'cache_driver', 'Charcoal_ICacheDriver' );
 
-                $this->cache_root = Charcoal_ResourceLocator::getPath( '%CHARCOAL_HOME%/tmp/test/cache/' );
+                $env = $this->getSandbox()->getEnvironment();
+                $this->cache_root = Charcoal_ResourceLocator::getPath( $env, '%CHARCOAL_HOME%/tmp/test/cache/' );
 
                 $config['cache_root'] = $this->cache_root;
-
-                $config = new Charcoal_Config( $this->getSandbox()->getEnvironment(), $config );
 
                 $cache_driver->configure( $config );
 

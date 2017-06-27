@@ -11,27 +11,12 @@
 
 class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRenderer
 {
-    /*
-     *    コンストラクタ
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Initialize instance
-     *
-     * @param Charcoal_Config $config   configuration data
-     */
-    public function configure( $config )
-    {
-        parent::configure( $config );
-
-    }
-
     /**
      * Render debug trace
      *
+     * @param Exception $e
+     *
+     * @return bool
      */
     public function render( $e )
     {
@@ -65,6 +50,15 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRend
         $out .= "-------------------------------------------------------------" . PHP_EOL;
         $declared_constants = Charcoal_System::getUserDefinedConstants();
         foreach( $declared_constants as $key => $value ){
+            $out .= "[$key] $value" . PHP_EOL;
+        }
+        $out .= "-------------------------------------------------------------" . PHP_EOL;
+    
+        $out .= PHP_EOL;
+        $out .= "* Profile Settings *" . PHP_EOL;
+        $out .= "-------------------------------------------------------------" . PHP_EOL;
+        $profile_settings = $this->getSandbox()->getProfile()->getAll();
+        foreach( $profile_settings as $key => $value ){
             $out .= "[$key] $value" . PHP_EOL;
         }
         $out .= "-------------------------------------------------------------" . PHP_EOL;
@@ -123,6 +117,19 @@ class Charcoal_ConsoleDebugtraceRenderer extends Charcoal_AbstractDebugtraceRend
 
                 $call_no ++;
             }
+        }
+    
+    
+        // list registry items
+        $registry_items = $this->getSandbox()->getRegistry()->dumpLoadedItems(TRUE);
+    
+        $out .= PHP_EOL;
+        $out .= "* Registry Items *" . PHP_EOL;
+        $out .= "-------------------------------------------------------------" . PHP_EOL;
+    
+        // print registry items
+        foreach( $registry_items as $item ){
+            $out .= $item . PHP_EOL;
         }
 
         return $out;

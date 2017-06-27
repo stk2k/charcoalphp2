@@ -11,7 +11,7 @@
 interface Charcoal_IRegistry
 {
     /**
-     * get configuration data by key
+     * Get configuration data by key
      *
      * @param string[] $keys           key list
      * @param string $obj_path         object path
@@ -19,10 +19,10 @@ interface Charcoal_IRegistry
      *
      * @return mixed              configuration data
      */
-    public function get( array $keys, $obj_path, $type_name );
+    public function get( $keys, $obj_path, $type_name );
 
     /**
-     * list objects in target directory
+     * List objects in target directory
      *
      * @param string $path             path
      * @param string $type_name        type name of the object
@@ -30,6 +30,15 @@ interface Charcoal_IRegistry
      * @return string[]            virtual paths of found objects
      */
     public function listObjects( $path, $type_name );
+    
+    /**
+     * Dump loaded items
+     *
+     * @param bool|Charcoal_Boolean $return           If true, no echos and return array
+     *
+     * @return array|NULL
+     */
+    public function dumpLoadedItems( $return = FALSE );
 
 }
 

@@ -29,11 +29,13 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $data_source = $config->getString( 'data_source' );
         $sql_builder = $config->getString( 'sql_builder' );
@@ -49,10 +51,10 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
         }
 
         /** @var Charcoal_IDataSource $ds */
-        $ds = $this->getSandbox()->createObject( $data_source, 'data_source', array(), 'Charcoal_IDataSource' );
+        $ds = $this->getSandbox()->createObject( $data_source, 'data_source', array(), array(), 'Charcoal_IDataSource' );
 
         /** @var Charcoal_ISQLBuilder $builder */
-        $builder = $this->getSandbox()->createObject( $sql_builder, 'sql_builder', array(), 'Charcoal_ISQLBuilder' );
+        $builder = $this->getSandbox()->createObject( $sql_builder, 'sql_builder', array(), array(), 'Charcoal_ISQLBuilder' );
 
         $this->impl = new Charcoal_SmartGatewayImpl( $this->getSandbox(), $ds, $builder );
     }
@@ -971,7 +973,7 @@ class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_String|string|NULL $comment       comment text
      * @param string $query_target    description about target model, alias, or joins
-     * @param array $id
+     * @param int|bool|float|string $id             primary key value of the entity
      *
      * @return Charcoal_DTO|NULL
      */

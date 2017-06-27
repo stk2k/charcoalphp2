@@ -22,7 +22,7 @@ class Charcoal_ConsoleLogger extends Charcoal_AbstractLogger implements Charcoal
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {

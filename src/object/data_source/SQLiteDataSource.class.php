@@ -33,11 +33,13 @@ class Charcoal_SQLiteDataSource extends Charcoal_AbstractDataSource
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
         parent::configure( $config );
+        
+        $config = new Charcoal_HashMap($config);
 
         $this->db_file   = $config->getString( 'db_file' );
 

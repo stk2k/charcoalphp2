@@ -1,5 +1,7 @@
 <?php
 
+require dirname(__FILE__) . '/vendor/autoload.php';
+
 //==================================================================
 // 初期化処理
 
@@ -33,13 +35,6 @@ if ( version_compare(PHP_VERSION, '5.3.0') < 0 ){
 function eol()
 {
     return CHARCOAL_DEBUG_OUTPUT == 'html' ? '<br />' : PHP_EOL;
-}
-
-//==================================================================
-// space
-function space( $multiplier = 1 )
-{
-    return str_repeat( CHARCOAL_DEBUG_OUTPUT == 'html' ? '&nbsp;' : ' ', $multiplier );
 }
 
 //==================================================================
@@ -95,12 +90,16 @@ function ad( $array, $options = NULL, $return = FALSE, $max_depth = 30 )
 }
 
 //==================================================================
-// プリミティブオブジェクト生成関数
+// Box functions
 
 /**
- *    stringをStringオブジェクトに変換
- **/
-
+ *  box value to Charcoal_String object
+ *
+ * @param mixed $value
+ * @param string $encoding
+ *
+ * @return Charcoal_String
+ */
 function s( $value, $encoding = NULL )
 {
     if ( $value instanceof Charcoal_String ){
@@ -110,8 +109,12 @@ function s( $value, $encoding = NULL )
 }
 
 /**
- *    intをIntegerオブジェクトに変換
- **/
+ *  box value to Charcoal_Integer object
+ *
+ * @param mixed $value
+ *
+ * @return Charcoal_Integer
+ */
 function i( $value )
 {
     if ( $value instanceof Charcoal_Integer ){
@@ -121,8 +124,12 @@ function i( $value )
 }
 
 /**
- *    floatをFloatオブジェクトに変換
- **/
+ *  box value to Charcoal_Float object
+ *
+ * @param mixed $value
+ *
+ * @return Charcoal_Float
+ */
 function f( $value )
 {
     if ( $value instanceof Charcoal_Float ){
@@ -132,8 +139,12 @@ function f( $value )
 }
 
 /**
- *    boolをBooleanオブジェクトに変換
- **/
+ *  box value to Charcoal_Boolean object
+ *
+ * @param mixed $value
+ *
+ * @return Charcoal_Boolean
+ */
 function b( $value )
 {
     if ( $value instanceof Charcoal_Boolean ){
@@ -143,8 +154,12 @@ function b( $value )
 }
 
 /**
- *    arrayをVectorオブジェクトに変換
- **/
+ *  box value to Charcoal_Vector object
+ *
+ * @param mixed $value
+ *
+ * @return Charcoal_Vector
+ */
 function v( $value )
 {
     if ( $value instanceof Charcoal_Vector ){
@@ -154,8 +169,12 @@ function v( $value )
 }
 
 /**
- *    arrayをListオブジェクトに変換
- **/
+ *  box value to Charcoal_List object
+ *
+ * @param mixed $value
+ *
+ * @return Charcoal_List
+ */
 function l( $value )
 {
     if ( $value instanceof Charcoal_List ){
@@ -165,8 +184,12 @@ function l( $value )
 }
 
 /**
- *    arrayをHashMapオブジェクトに変換
- **/
+ *  box value to Charcoal_HashMap object
+ *
+ * @param mixed $value
+ *
+ * @return Charcoal_HashMap
+ */
 function m( $value )
 {
     if ( $value instanceof Charcoal_HashMap ){
@@ -175,83 +198,91 @@ function m( $value )
     return $value !== NULL ? new Charcoal_HashMap( $value ) : Charcoal_HashMap::defaultValue();
 }
 
-/**
- *    arrayをPropertiesオブジェクトに変換
- **/
-function p( $value )
-{
-    if ( $value instanceof Charcoal_Properties ){
-        return $value;
-    }
-    return $value !== NULL ? new Charcoal_Properties( $value ) : Charcoal_Properties::defaultValue();
-}
-
 //==================================================================
-// プリミティブ変換関数
+// Unbox functions
 
 /**
- *    Stringオブジェクトをstringに変換
- **/
-
+ *  Unbox value from Charcoal_String
+ *
+ * @param Charcoal_String|mixed $value
+ *
+ * @return mixed
+ */
 function us( $value )
 {
     return ( $value instanceof Charcoal_String ) ? $value->getValue() : $value;
 }
 
 /**
- *    Integerオブジェクトをintに変換
- **/
+ *  Unbox value from Charcoal_Integer
+ *
+ * @param Charcoal_Integer|mixed $value
+ *
+ * @return mixed
+ */
 function ui( $value )
 {
     return ( $value instanceof Charcoal_Integer ) ? $value->getValue() : $value;
 }
 
 /**
- *    Floatオブジェクトをfloatに変換
- **/
+ *  Unbox value from Charcoal_Float
+ *
+ * @param Charcoal_Float|mixed $value
+ *
+ * @return mixed
+ */
 function uf( $value )
 {
     return ( $value instanceof Charcoal_Float ) ? $value->getValue() : $value;
 }
 
 /**
- *    Booleanオブジェクトをboolに変換
- **/
+ *  Unbox value from Charcoal_Boolean
+ *
+ * @param Charcoal_Boolean|mixed $value
+ *
+ * @return mixed
+ */
 function ub( $value )
 {
     return ( $value instanceof Charcoal_Boolean ) ? $value->getValue() : $value;
 }
 
 /**
- *    Vectorオブジェクトをarrayに変換
- **/
+ *  Unbox value from Charcoal_Vector
+ *
+ * @param Charcoal_Vector|mixed $value
+ *
+ * @return mixed
+ */
 function uv( $value )
 {
     return ( $value instanceof Charcoal_Vector ) ? $value->toArray() : $value;
 }
 
 /**
- *    Listオブジェクトをarrayに変換
- **/
+ *  Unbox value from Charcoal_List
+ *
+ * @param Charcoal_List|mixed $value
+ *
+ * @return mixed
+ */
 function ul( $value )
 {
     return ( $value instanceof Charcoal_List ) ? $value->toArray() : $value;
 }
 
 /**
- *    HashMapオブジェクトをarrayに変換
- **/
+ *  Unbox value from Charcoal_HashMap
+ *
+ * @param Charcoal_HashMap|mixed $value
+ *
+ * @return mixed
+ */
 function um( $value )
 {
     return ( $value instanceof Charcoal_HashMap ) ? $value->toArray() : $value;
-}
-
-/**
- *    Propertiesオブジェクトをarrayに変換
- **/
-function up( $value )
-{
-    return ( $value instanceof Charcoal_Properties ) ? $value->toArray() : $value;
 }
 
 //==================================================================
@@ -269,12 +300,11 @@ function _throw( $e, $log_error = TRUE )
 {
     if ( $e instanceof Charcoal_BusinessException || !($e instanceof Exception) ){
         throw $e;
-        return;
     }
 
     list( $file, $line ) = Charcoal_System::caller();
     $clazz = get_class($e);
-    $id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
+    $id = ($e instanceof Charcoal_Object) ? $e->hash() : spl_object_hash($e);
     $message = $e->getMessage();
 
     try{
@@ -301,7 +331,7 @@ function _catch( $e, $log_backtrace = FALSE )
 
     list( $file, $line ) = Charcoal_System::caller();
     $clazz = get_class($e);
-    $id = ($e instanceof Charcoal_Object) ? $e->hashCode() : spl_object_hash($e);
+    $id = ($e instanceof Charcoal_Object) ? $e->hash() : spl_object_hash($e);
     $message = $e->getMessage();
 
     try{
@@ -316,6 +346,11 @@ function _catch( $e, $log_backtrace = FALSE )
     }
 }
 
+/**
+ * @param $trace
+ * @param bool $return
+ * @return string|NULL
+ */
 function print_simple_exception_trace($trace, $return = false)
 {
     $ret = '';
@@ -349,13 +384,14 @@ function print_simple_exception_trace($trace, $return = false)
 
         $function_or_method = empty($type) ? $function : $clazz . $type . $function;
 
-        $ret = '#'. $depth. ' '. $function_or_method. '(' . $args_list. ') called at ['. $file. ':'. $line. ']';
-
-        if ( $return ){
-            return $ret;
-        }
-        echo $ret, PHP_EOL;
+        $ret = '#'. $depth. ' '. $function_or_method. '(' . $args_list. ') called at ['. $file. ':'. $line. ']' . PHP_EOL;
     }
+    
+    if ( $return ){
+        return $ret;
+    }
+    echo $ret, PHP_EOL;
+    return $ret;
 }
 
 //==================================================================

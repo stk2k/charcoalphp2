@@ -54,7 +54,7 @@ class Charcoal_HttpRequest extends Charcoal_AbstractRequest
     /**
      * Initialize instance
      *
-     * @param Charcoal_Config $config   configuration data
+     * @param array $config   configuration data
      */
     public function configure( $config )
     {
