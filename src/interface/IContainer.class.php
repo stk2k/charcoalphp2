@@ -17,7 +17,7 @@ interface Charcoal_IContainer
      * @param array $args       constructor arguments
      * @param array $config           object configuration parameters
      *
-     * @return Charcoal_IComponent        component instance
+     * @return Charcoal_ICharcoalComponent        component instance
      */
     public function getComponent( $component_name, $args = array(), $config = array() );
 

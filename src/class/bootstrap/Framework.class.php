@@ -399,9 +399,9 @@ class Charcoal_Framework
         if ( $use_session->isTrue() )
         {
             // セッションハンドラ名の取得
-            $session_handler_name = s( $profile->getString( 'SESSION_HANDLER_NAME' ) );
+            $session_handler_name = us($profile->getString('SESSION_HANDLER_NAME','default'));
 
-            if ( $session_handler_name && !$session_handler_name->isEmpty() )
+            if ( !empty($session_handler_name) )
             {
                 // セッションハンドラの作成
                 $session_handler = $sandbox->createObject( $session_handler_name, 'session_handler', array(), array(), 'Charcoal_ISessionHandler' );

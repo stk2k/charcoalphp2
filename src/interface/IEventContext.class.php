@@ -104,7 +104,7 @@ interface Charcoal_IEventContext
      * @param array $args             constructor arguments
      * @param array $config           object configuration parameters
      *
-     * @return Charcoal_IComponent
+     * @return Charcoal_ICharcoalComponent
      */
     public function getComponent( $obj_path, $args = array(), $config = NULL );
 

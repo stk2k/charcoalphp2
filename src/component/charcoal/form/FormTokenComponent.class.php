@@ -11,7 +11,7 @@
 require_once( 'FormTokenComponentException.class.php' );
 require_once( 'FormTokenValidationException.class.php' );
 
-class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
+class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements Charcoal_ICharcoalComponent
 {
     private $token_key;
     private $debug_mode;

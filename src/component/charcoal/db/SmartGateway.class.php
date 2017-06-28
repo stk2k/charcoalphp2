@@ -9,7 +9,7 @@
 * @author     CharcoalPHP Development Team
 * @copyright  2008 stk2k, sazysoft
 */
-class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_IComponent
+class Charcoal_SmartGateway extends Charcoal_CharcoalComponent implements Charcoal_ICharcoalComponent
 {
     const TAG = 'smart_gateway';
 

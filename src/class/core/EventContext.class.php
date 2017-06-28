@@ -210,7 +210,7 @@ class Charcoal_EventContext implements Charcoal_IEventContext
      * @param array $args             constructor arguments
      * @param array $config           object configuration parameters
      *
-     * @return Charcoal_IComponent        component instance
+     * @return Charcoal_ICharcoalComponent        component instance
      */
     public function getComponent( $obj_path, $args = array(), $config = NULL )
     {

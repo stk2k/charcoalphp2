@@ -32,7 +32,7 @@ class Charcoal_DefaultSessionHandler extends Charcoal_AbstractSessionHandler
     {
         parent::configure( $config );
         
-        $config = new Charcoal_HashMap($config);
+        $config = new Charcoal_ConfigPropertySet($this->getSandbox()->getEnvironment(), $config);
 
         $session_name  = $config->getString( 'session_name', '' );
         $save_path     = $config->getString( 'save_path', '', TRUE );

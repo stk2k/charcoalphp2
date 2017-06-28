@@ -18,9 +18,7 @@ class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
      */
     public function __construct( $url )
     {
-        Charcoal_ParamTrait::validateString( 1, $url );
-
-        parent::__construct( p(array()) );
+        parent::__construct( array() );
 
         $this->url = $url;
     }
@@ -46,7 +44,7 @@ class Charcoal_URLRedirectLayout extends Charcoal_AbstractLayout
      */
     public function toString()
     {
-        return "[RedirectWebPage:" . us($this->_obj_path->getPathString()) . "]";
+        return "[RedirectWebPage:" . $this->url . "]";
     }
 }
 

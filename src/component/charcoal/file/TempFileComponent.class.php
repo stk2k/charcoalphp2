@@ -10,7 +10,7 @@
 */
 require_once( 'TempFileComponentException.class.php' );
 
-class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
+class Charcoal_TempFileComponent extends Charcoal_CharcoalComponent implements Charcoal_ICharcoalComponent
 {
     private $mode;
     private $overwrite;

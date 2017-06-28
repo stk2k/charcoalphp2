@@ -59,7 +59,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_ICacheDriver'                => 'interface',
                 'Charcoal_ICharcoalObject'            => 'interface',
                 'Charcoal_IClassLoader'                => 'interface',
-                'Charcoal_IComponent'                => 'interface',
                 'Charcoal_IDataSource'                => 'interface',
                 'Charcoal_IEvent'                    => 'interface',
                 'Charcoal_IEventContext'            => 'interface',

@@ -10,7 +10,7 @@
 */
 require_once( 'FileSystemComponentException.class.php' );
 
-class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
+class Charcoal_FileSystemComponent extends Charcoal_CharcoalComponent implements Charcoal_ICharcoalComponent
 {
     private $_base_dir;
     private $_base_dir_obj;

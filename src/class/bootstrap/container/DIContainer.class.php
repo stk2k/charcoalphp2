@@ -108,9 +108,9 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
             $component->setSandbox( $this->sandbox );
 
             // validate if instance implements proper interface
-            if ( !($component instanceof Charcoal_IComponent) ){
+            if ( !($component instanceof Charcoal_ICharcoalComponent) ){
                 // 実装例外
-                _throw( new Charcoal_InterfaceImplementException( $class_name, "Charcoal_IComponent" ) );
+                _throw( new Charcoal_InterfaceImplementException( $class_name, "Charcoal_ICharcoalComponent" ) );
             }
 
             // configure object
@@ -141,7 +141,7 @@ class Charcoal_DIContainer extends Charcoal_AbstractContainer
      * @param array $args       constructor arguments
      * @param array $config           object configuration parameters
      *
-     * @return Charcoal_IComponent        component instance
+     * @return Charcoal_ICharcoalComponent        component instance
      */
     public function getComponent( $component_name, $args = array(), $config = array() )
     {

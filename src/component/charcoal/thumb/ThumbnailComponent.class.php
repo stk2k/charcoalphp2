@@ -11,7 +11,7 @@
 require_once( 'ThumbnailComponentException.class.php' );
 
 
-class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements Charcoal_IComponent
+class Charcoal_ThumbnailComponent extends Charcoal_CharcoalComponent implements Charcoal_ICharcoalComponent
 {
     /*
      *    コンストラクタ
