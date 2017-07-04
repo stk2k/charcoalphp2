@@ -121,7 +121,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
     }
 
     /*
-     * validate token in request and sequence
+     * validate token in request and session
      *
      * @param Charcoal_Session $session             Session object
      * @param string|Charcoal_String $form_token    Form token
@@ -137,7 +137,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
         log_debug( "debug", "form_token: " . print_r($form_token,true) );
 
         if ( $this->getSandbox()->isDebug() && $this->debug_mode ){
-            ad($session,array('title'=>"sequence"));
+            ad($session,array('title'=>"session"));
         }
 
         $token_key = $this->token_key;
@@ -178,7 +178,7 @@ class Charcoal_FormTokenComponent extends Charcoal_CharcoalComponent implements 
             }
 
             if ( $throws ){
-                _throw( new Charcoal_FormTokenValidationException( 'token not found in sequence:'.$form_token ), FALSE );
+                _throw( new Charcoal_FormTokenValidationException( 'token not found in session:'.$form_token ), FALSE );
             }
             return FALSE;
         }

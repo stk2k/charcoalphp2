@@ -12,13 +12,6 @@ interface Charcoal_ITask extends Charcoal_ICharcoalObject
 {
 
     /**
-     * Name space for sequence
-     *
-     * @return string
-     */
-    public function getNameSpace();
-
-    /**
      * Guard conditions in task scheduling
      */
     public function getGuardConditions();

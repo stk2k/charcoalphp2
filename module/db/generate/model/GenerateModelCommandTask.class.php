@@ -18,7 +18,7 @@ class GenerateModelCommandTask extends Charcoal_Task
      *
      * @param Charcoal_IEventContext $context
      *
-     * @return boolean
+     * @return boolean|Charcoal_Boolean
      */
     public function processEvent( $context )
     {

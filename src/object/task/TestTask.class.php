@@ -72,7 +72,7 @@ abstract class Charcoal_TestTask extends Charcoal_Task
     /**
      * Set expected exception class name
      *
-     * @param Exception $expected_exception
+     * @param string $expected_exception
      */
     public function setExpectedException( $expected_exception )
     {

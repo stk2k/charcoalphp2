@@ -38,12 +38,12 @@ class Charcoal_ModuleLoader
      */
     public static function loadModule( $sandbox, $module_path, $task_manager )
     {
-//        Charcoal_ParamTrait::validateSandbox( 1, $sandbox );
-//        Charcoal_ParamTrait::validateStringOrObjectPath( 2, $module_path );
-//        Charcoal_ParamTrait::validateImplements( 3, 'Charcoal_ITaskManager', $task_manager );
-
+        /** @var Charcoal_Sandbox $sandbox */
+        $event_stream = $sandbox->getCoreHookEventStream();
+    
         try{
             log_debug( 'debug, event', "loading module: $module_path" );
+            $event_stream->push( 'module.loading', $module_path, true );
 
             if ( $module_path instanceof Charcoal_ObjectPath ){
                 $module_path = $module_path->toString();
@@ -59,14 +59,15 @@ class Charcoal_ModuleLoader
             }
 
             /** @var Charcoal_IModule $module */
-            /** @var Charcoal_Sandbox $sandbox */
             $module = $sandbox->createObject( $module_path, 'module', array(), array(), 'Charcoal_IModule', 'Charcoal_SimpleModule' );
 
             // load module tasks
             $loaded_tasks = $module->loadTasks( $task_manager );
+            $event_stream->push( 'module.loaded_tasks', $loaded_tasks, true );
 
             // load module events source code
             $loaded_events = $module->loadEvents( $task_manager );
+            $event_stream->push( 'module.loaded_events', $loaded_events, true );
 
             // if no tasks or events are loaded, you maybe passed a wrong module path
             if ( empty($loaded_tasks) && empty($loaded_events) ){
@@ -79,14 +80,17 @@ class Charcoal_ModuleLoader
                 $loaded_modules = NULL;
                 foreach( $required_modules as $module_name ){
                     if ( strlen($module_name) === 0 )    continue;
-
+    
+                    $event_stream->push( 'module.loading_required_module', $module_name, true );
                     self::loadModule( $sandbox, $module_name, $task_manager );
+                    $event_stream->push( 'module.loaded_required_module', $module_name, true );
                 }
             }
 
             self::$loaded_paths[$module_path] = $module_path;
 
             log_debug( 'debug, event, module', "loaded module: $module_path" );
+            $event_stream->push( 'module.loaded', $module_path, true );
 
         }
         catch( Exception $ex ){

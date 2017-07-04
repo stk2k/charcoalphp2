@@ -24,7 +24,6 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
 
         // enum constant classes
                 'Charcoal_EnumSmtpStatusCode'        => 'constant',
-                'Charcoal_EnumEventPriority'        => 'constant',
                 'Charcoal_EnumHttpMethod'            => 'constant',
                 'Charcoal_EnumSQLJoinType'            => 'constant',
                 'Charcoal_EnumSQLAggregateFunc'        => 'constant',
@@ -161,6 +160,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_NonStringException'                    => 'exception',
                 'Charcoal_NotSupportedOperationException'        => 'exception',
                 'Charcoal_ObjectPathFormatException'            => 'exception',
+                'Charcoal_PermissionDeniedException'              => 'exception',
                 'Charcoal_ProfileConfigException'                => 'exception',
                 'Charcoal_RenderTargetException'                => 'exception',
                 'Charcoal_RoutingRuletConfigException'            => 'exception',
@@ -170,6 +170,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_ProcessEventAtTaskException'            => 'exception',
                 'Charcoal_ProcessEventAtTaskManagerException'    => 'exception',
                 'Charcoal_QueryTargetException'                    => 'exception',
+                'Charcoal_SecurityFaultException'                => 'exception',
                 'Charcoal_SessionHandlerException'                => 'exception',
                 'Charcoal_SmartyRendererTaskException'            => 'exception',
                 'Charcoal_StackEmptyException'                    => 'exception',
@@ -181,7 +182,7 @@ class Charcoal_FrameworkClassLoader extends Charcoal_CharcoalComponent implement
                 'Charcoal_UnsupportedImageFormatException'        => 'exception',
                 'Charcoal_URLFormatException'                    => 'exception',
                 'Charcoal_ComponentLoadingException'            => 'exception',
-
+        
         // I/O classes
                 'Charcoal_FileWriter'                        => 'class/io',
                 'Charcoal_AbstractFileFilter'                    => 'class/io',

@@ -127,8 +127,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
         foreach( $this->tasks as $task ){
             if ( $task instanceof Charcoal_IStateful ){
                 /** @var Charcoal_ITask|Charcoal_IStateful $task */
-                $namespace = $task->getNameSpace();
-                $data_id = !empty($namespace) ? "task://{$namespace}/" . $task->getObjectPath() : "task://" . $task->getObjectPath();
+                $data_id = "task://" . $task->getObjectPath();
                 $session->set( $data_id, $task->serializeContents() );
             }
         }
@@ -145,8 +144,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
         foreach( $this->tasks as $task ){
             if ( $task instanceof Charcoal_IStateful ){
                 /** @var Charcoal_ITask|Charcoal_IStateful $task */
-                $namespace = $task->getNameSpace();
-                $data_id = !empty($namespace) ? "task://{$namespace}/" . $task->getObjectPath() : "task://" . $task->getObjectPath();
+                $data_id = "task://" . $task->getObjectPath();
                 if ( isset($_SESSION[ $data_id ]) ){
                     $data = $_SESSION[ $data_id ];
                     $task->deserializeContents( unserialize($data) );
@@ -182,10 +180,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
      */
     public function processEvents( $context )
     {
-        $debug = $this->getSandbox()->isDebug() || $context->getProcedure()->isDebugMode();
-
-        if ( $debug ) log_debug( 'system,event', "processEvents start." );
-
+        log_debug( 'system,event', "processEvents start." );
 
         $max_event_loop = $this->max_event_loop;
 
@@ -194,18 +189,13 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
         try{
             $queue = $this->queue;
 
-            $timer_all = Charcoal_Benchmark::start();
-
             $loop_id = 0;
             while( !$queue->isEmpty() )
             {
-                if ( $debug ) log_debug( 'system,event', "event queue(" . count($queue) . "): $queue");
+                log_debug( 'system,event', "event queue(" . count($queue) . "): $queue");
 
                 // increment loop counter
                 $loop_id ++;
-
-                // イベント一覧を優先度でソートする
-                $queue->sortByPriority();
 
                 /** @var Charcoal_IEvent $event */
                 $event      = $queue->dequeue();
@@ -227,7 +217,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                     _throw( new Charcoal_EventLoopCounterOverflowException( $max_event_loop ) );
                 }
 
-                if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] event loop start.");
+                log_debug( 'system,event', "[loop:$loop_id/$event_name] event loop start.");
 
                 // タスク一覧を優先度でソートする
                 $key_priority = array();
@@ -242,17 +232,17 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                 $remove_tasks = NULL;
 
                 // すべてのタスクにイベントをディスパッチする
-                if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] task list: [$this->tasks]" );
+                log_debug( 'system,event', "[loop:$loop_id/$event_name] task list: [$this->tasks]" );
                 foreach( $this->tasks as $task )
                 {
                     $task_name = $task->getObjectName();
                     $task_id   = $task->getObjectPath();
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is dispatching to task[$task_name].");
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is dispatching to task[$task_name].");
 
                     // イベントフィルタ
                     $process = FALSE;
                     $event_filters = $task->getEventFilters();
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task event filter: " . $event_filters );
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task event filter: " . $event_filters );
                     foreach( $event_filters as $filter ){
                         if ( $event_id->getObjectPathString() == us($filter) ){
                             $process = TRUE;
@@ -261,18 +251,16 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                     }
 
                     if ( !$process ){
-                        if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is NOT found in task's event filters: [$event_filters]. Passing this task.");
+                        log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is NOT found in task's event filters: [$event_filters]. Passing this task.");
                         continue;
                     }
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is found in task's event filters: [$event_filters].");
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$event_name] is found in task's event filters: [$event_filters].");
 
-                    // task timer start
-                    $timer_task = Charcoal_Benchmark::start();
-
+                    // process event
                     $result = NULL;
                     try{
                         $result = $task->processEvent( $context );
-                        if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] returned from processEvent with result:" . print_r($result,true) );
+                        log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] returned from processEvent with result:" . print_r($result,true) );
                     }
                     catch( Charcoal_BusinessException $e )
                     {
@@ -313,14 +301,13 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                         _throw( new Charcoal_ProcessEventAtTaskException( $event, $task, $result, $msg ) );
                     }
 
-                    // task timer stop
-                    $elapse = Charcoal_Benchmark::stop( $timer_task );
-                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event was processed by task. result=[$result_str] time=[$elapse]msec." );
+                    // end of processing event
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name] event was processed by task[$task_name]. result=[$result_str]" );
 
-                    // ポストアクション
+                    // process post action
                     $post_actions = $task->getPostActions();
 
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task post actions: $post_actions" );
                     if ( $result !== FALSE && $post_actions )
                     {
                         foreach( $post_actions as $key => $action )
@@ -330,11 +317,11 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
 
                             if ( strpos(":",$action) !== FALSE ){
                                 list( $action, $target ) = explode( ":", trim($action) );
-                                if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] post action[$action] with target[$target].");
+                                log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] post action[$action] with target[$target].");
                             }
                             else{
                                 $action = trim($action);
-                                if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] post action[$action].");
+                                log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] post action[$action].");
                             }
                             switch( $action ){
                             case "remove_task";
@@ -343,7 +330,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                                     $target = $task_id;
                                 }
                                 if ( strcmp($target,$task_id) === 0 ){
-                                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task[$target] is marked to remove." );
+                                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] task[$target] is marked to remove." );
                                     $remove_tasks[] = $task_id;
                                 }
                                 break;
@@ -353,7 +340,7 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                                     $target = $event_id;
                                 }
                                 if ( strcmp($target,$event_id) === 0 ){
-                                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$target] is marked to remove.");
+                                    log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] event[$target] is marked to remove.");
                                     $delete_event |= TRUE;
                                 }
                                 break;
@@ -364,10 +351,10 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                         }
                     }
                     else{
-                        if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] no post action is  defined for event.");
+                         log_debug( 'system,event', "[loop:$loop_id/$event_name/$task_name] no post action is  defined for event.");
                     }
 
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] task loop end.");
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name] task loop end.");
 
                 } // task loop end
 
@@ -375,9 +362,9 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                 if ( $remove_tasks ){
                     foreach( $remove_tasks as $task_id ){
                         unset($this->tasks["$task_id"]);
-                        if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] removed task: $task_id" );
+                        log_debug( 'system,event', "[loop:$loop_id/$event_name] removed task: $task_id" );
                     }
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] next task list: [$this->tasks]" );
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name] next task list: [$this->tasks]" );
                 }
 
                 if ( !$delete_event ){
@@ -385,29 +372,28 @@ class Charcoal_DefaultTaskManager extends Charcoal_AbstractTaskManager
                     $this->pushEvent( $event );
                 }
                 else{
-                    if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] event[$event] is removed." );
+                    log_debug( 'system,event', "[loop:$loop_id/$event_name] event[$event] is removed." );
                 }
 
-                if ( $debug ) log_debug( 'system,event', "[loop:$loop_id/$event_name] event loop end.");
+                log_debug( 'system,event', "[loop:$loop_id/$event_name] event loop end.");
 
             } // event loop end
 
             if ( $queue->isEmpty() ){
-                if ( $debug ) log_debug( 'system,event', "event queue is empty.");
+                log_debug( 'system,event', "event queue is empty.");
                 $exit_code = Charcoal_Event::EXIT_CODE_OK;
             }
 
             // ログ
-            $elapse = Charcoal_Benchmark::stop( $timer_all );
-            if ( $debug ) log_debug( 'system,event', "event loop end. time=[$elapse]msec.");
+            log_debug( 'system,event', "event loop end.");
         }
         catch( Charcoal_RuntimeException $e ){
             _catch( $e, true );
-            if ( $debug ) log_debug( 'system,event,debug', "an exception occured while processing event." );
+            log_debug( 'system,event,debug', "an exception occured while processing event." );
             _throw( new Charcoal_ProcessEventAtTaskManagerException( $e ) );
         }
 
-        if ( $debug ) log_debug( 'system,event', "processEvents end: exit_code=" . print_r($exit_code,true) );
+        log_debug( 'system,event', "processEvents end: exit_code=" . print_r($exit_code,true) );
 
         return $exit_code;
     }

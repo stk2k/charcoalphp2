@@ -490,7 +490,7 @@ class Charcoal_SmartGatewayImpl
             $rows = array();
             while( $row = $this->data_source->fetchAssoc( $result ) )
             {
-                $rows[] = new Charcoal_HashMap( $row );
+                $rows[] = $row;
             }
             log_debug( "debug,smart_gateway,sql", "rows:" . print_r($rows,true), self::TAG );
 

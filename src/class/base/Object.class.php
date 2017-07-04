@@ -73,7 +73,7 @@ class Charcoal_Object
         return new Charcoal_Class( get_class( $this ) );
     }
 
-    /*
+    /**
      *  String expression of this object
      *
      * @return string
@@ -83,7 +83,7 @@ class Charcoal_Object
         return $this->toString();    // __toString() must return string type only!
     }
 
-    /*
+    /**
      *  String expression of this object
      *
      * @return string

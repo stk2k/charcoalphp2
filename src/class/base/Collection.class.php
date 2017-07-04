@@ -25,7 +25,7 @@ abstract class Charcoal_Collection extends Charcoal_Object implements Countable,
                 $this->values = $values;
             }
             else{
-                _throw( new NonArrayException($values) );
+                _throw( new Charcoal_NonArrayException($values) );
             }
         }
         else{
@@ -86,7 +86,9 @@ abstract class Charcoal_Collection extends Charcoal_Object implements Countable,
     /**
      *    Applies a callback to all elements
      *
-     * @return array
+     * @param callable $callable
+     *
+     * @return Charcoal_Collection
      */
     public function map( $callable )
     {

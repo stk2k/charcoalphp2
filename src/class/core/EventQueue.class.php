@@ -11,27 +11,6 @@
 
 class Charcoal_EventQueue extends Charcoal_Queue implements Charcoal_IEventQueue
 {
-    /*
-     * イベントのキューを優先度でソートする
-     *
-     */
-    public function sortByPriority()
-    {
-        $array = $this->getValue();
-
-        if ( !$array ){
-            return;
-        }
-
-        $key_priority = NULL;
-        foreach ( $array as $key => $event ){
-            $key_priority[$key] = ui( $event->getPriority() );
-        }
-        array_multisort( $key_priority,SORT_DESC, $array );
-
-        $this->setValue( $array );
-    }
-
     /**
      * dump events
      */

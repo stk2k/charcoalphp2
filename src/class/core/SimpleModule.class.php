@@ -41,10 +41,6 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
         $this->tasks              = $config->getArray( 'tasks', array() );
         $this->events             = $config->getArray( 'events', array() );
         $this->required_modules   = $config->getArray( 'required_modules', array() );
-
-//        log_info( "system, debug", "module", "tasks:" . print_r($this->tasks,true) );
-//        log_info( "system, debug", "module", "events:" . print_r($this->events,true) );
-//        log_info( "system, debug", "module", "required_modules:" . print_r($this->extends,true) );
     }
 
     /*
@@ -56,20 +52,18 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
     }
 
     /**
-     * load a rask
+     * load a task
      *
      * @param Charcoal_ObjectPath $obj_path
      * @param Charcoal_String|string $path
      * @param Charcoal_ITaskManager $task_manager
      *
-     * @return Charcoal_ITask|NULL
+     * @return Charcoal_ObjectPath
      */
     private function loadTask( $obj_path, $path, $task_manager )
     {
-//        Charcoal_ParamTrait::validateObjectPath( 1, $obj_path );
-//        Charcoal_ParamTrait::validateString( 2, $path );
-//        Charcoal_ParamTrait::validateImplements( 3, 'Charcoal_ITaskManager', $task_manager );
-
+        $event_stream = $this->getSandbox()->getCoreHookEventStream();
+    
         // file base name
         $base_name = basename( $path );
 
@@ -80,6 +74,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
 
         // include source file
         Charcoal_Framework::loadSourceFile( $path );
+        $event_stream->push( 'simple_module.loaded_module', $path, true );
 
         // create new instance
         $klass = new Charcoal_Class( $class_name );
@@ -113,13 +108,18 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
         $task_manager->registerTask( $task_path, $task );
         log_info( 'system, event, debug', "task[$class_name] registered as: [$task_path]");
 
-        return $task;
+        return $task->getObjectPath();
     }
 
-    /*
-     * load a rask
+    /**
+     * load an event
+     *
+     * @param Charcoal_ObjectPath $obj_path
+     * @param string|Charcoal_String $path
+     *
+     * @return Charcoal_ObjectPath
      */
-    private function loadEvent( $obj_path, $path, $task_manager )
+    private function loadEvent( $obj_path, $path )
     {
         // file base name
         //$base_name = basename( $path );
@@ -168,7 +168,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_ITaskManager $task_manager
      *
-     * @return int           count of loaded tasks
+     * @return Charcoal_ITask[]            loaded tasks
      */
     public function loadTasks( $task_manager )
     {
@@ -185,10 +185,6 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
         $webapp_path    = Charcoal_ResourceLocator::getApplicationPath( 'module' . $real_path );
         $project_path   = Charcoal_ResourceLocator::getProjectPath( 'module' . $real_path );
         $framework_path = Charcoal_ResourceLocator::getFrameworkPath( 'module' . $real_path );
-
-        //log_info( 'system, event, debug', "module", "webapp_path: $webapp_path");
-        //log_info( 'system, event, debug', "module", "project_path: $project_path");
-        //log_info( 'system, event, debug', "module", "framework_path: $framework_path");
 
         $task_class_suffix = 'Task.class.php';
 
@@ -256,7 +252,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
             }
         }
 
-        return count($loadedtasks);
+        return $loadedtasks;
     }
 
     /**
@@ -264,7 +260,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
      *
      * @param Charcoal_ITaskManager $task_manager
      *
-     * @return int           count of loaded events
+     * @return Charcoal_IEvent[]            loaded events
      */
     public function loadEvents( $task_manager )
     {
@@ -290,7 +286,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
             {
                 if ( $file === '.' || $file === '..' )    continue;
                 if ( strpos($file,$event_class_suffix) !== FALSE ){
-                    $loadedevents[] = $this->loadEvent( $root_path, "$webapp_path/$file", $task_manager );
+                    $loadedevents[] = $this->loadEvent( $root_path, "$webapp_path/$file" );
                 }
             }
             closedir($dh);
@@ -302,7 +298,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
             {
                 if ( $file === '.' || $file === '..' )    continue;
                 if ( strpos($file,$event_class_suffix) !== FALSE ){
-                    $loadedevents[] = $this->loadEvent( $root_path, "$project_path/$file", $task_manager );
+                    $loadedevents[] = $this->loadEvent( $root_path, "$project_path/$file" );
                 }
             }
             closedir($dh);
@@ -314,7 +310,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
             {
                 if ( $file === '.' || $file === '..' )    continue;
                 if ( strpos($file,$event_class_suffix) !== FALSE ){
-                    $loadedevents[] = $this->loadEvent( $root_path, "$framework_path/$file", $task_manager );
+                    $loadedevents[] = $this->loadEvent( $root_path, "$framework_path/$file" );
                 }
             }
             closedir($dh);
@@ -345,7 +341,7 @@ class Charcoal_SimpleModule extends Charcoal_CharcoalComponent implements Charco
 
 //        log_info( "system,debug", "module", "loaded events: " . print_r($loadedevents,true) );
 
-        return count($loadedevents);
+        return $loadedevents;
     }
 
 }

@@ -11,34 +11,41 @@
 
 class Charcoal_AbortEvent extends Charcoal_SystemEvent 
 {
-    private $_exit_code;
-    private $_abort_type;
+    private $abort_type;
+    private $exit_code;
 
     /**
-     *    コンストラクタ
+     *   Consructor
+     *
+     * @param integer $abort_type
+     * @param integer $exit_code
      */
-    public function __construct( Charcoal_Integer $abort_type = NULL, Charcoal_Integer $exit_code = NULL )
+    public function __construct( $abort_type = NULL, $exit_code = NULL )
     {
         parent::__construct();
-
-        $this->_exit_code = $exit_code ? $exit_code : i(Event::EXIT_CODE_ABORT);
-        $this->_abort_type = $abort_type ? $abort_type : i(Event::ABORT_TYPE_AFTER_THIS_LOOP);
+    
+        $this->abort_type = $abort_type ? $abort_type : Charcoal_Event::ABORT_TYPE_AFTER_THIS_LOOP;
+        $this->exit_code = $exit_code ? $exit_code : Charcoal_Event::EXIT_CODE_ABORT;
+    }
+    
+    /**
+     *    アボートタイプを取得
+     *
+     * @return integer
+     */
+    public function getAbortType()
+    {
+        return $this->abort_type;
     }
 
     /**
      *    結果コードを取得
+     *
+     * @return integer
      */
     public function getExitCode()
     {
-        return $this->_exit_code;
-    }
-
-    /**
-     *    アボートタイプを取得
-     */
-    public function getAbortType()
-    {
-        return $this->_abort_type;
+        return $this->exit_code;
     }
 }
 

@@ -216,7 +216,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
         if ( $layout instanceof Charcoal_IRedirectLayout ){
         
             $url = $layout->makeRedirectURL();
-        
+    
             $response->redirect( s($url) );
         
             log_debug( "system, debug, smarty, redirect", "redirected to URL: $url", self::TAG );
@@ -226,7 +226,7 @@ class Charcoal_SmartyRendererTask extends Charcoal_Task implements Charcoal_ITas
         elseif ( $event instanceof Charcoal_URLRedirectEvent ){
             /** @var Charcoal_URLRedirectEvent $event */
             $url = $event->getURL();
-        
+            
             $response->redirect( s($url) );
         
             log_debug( "system, debug, smarty, redirect", "redirected to URL: $url", self::TAG );

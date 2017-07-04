@@ -15,28 +15,6 @@ class Charcoal_RenderLayoutEvent extends Charcoal_UserEvent implements Charcoal_
     private $values;
     private $render_target;
 
-    /*
-     *    コンストラクタ
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Initialize instance
-     *
-     * @param array $config   configuration data
-     */
-    public function configure( $config )
-    {
-        parent::configure( $config );
-    
-        $config = new Charcoal_HashMap($config);
-
-        $config->set( 'priority', Charcoal_EnumEventPriority::VIEW_RENDERING );
-    }
-
     /**
      * get layout name or key which is specified by the template system
      *

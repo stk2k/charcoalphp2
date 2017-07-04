@@ -11,20 +11,5 @@
 
 class Charcoal_SetupEvent extends Charcoal_SystemEvent implements Charcoal_IEvent
 {
-    /**
-     * Initialize instance
-     *
-     * @param array $config   configuration data
-     */
-    public function configure( $config )
-    {
-        parent::configure( $config );
-        
-        $config = new Charcoal_HashMap($config);
-
-        $config->set( s('priority'), Charcoal_EnumEventPriority::SYSTEM );
-
-        parent::configure( $config->toArray() );
-    }
 }
 

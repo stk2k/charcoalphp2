@@ -633,11 +633,11 @@ abstract class Charcoal_AbstractSQLBuilder extends Charcoal_CharcoalComponent im
                 break;
             }
 
-            if ( $join_alias && !$join_alias->isEmpty() ){
+            if ( $join_alias && !empty($join_alias) ){
                 $sql .= ' AS ' . $join_alias;
             }
 
-            if ( $join_cond && !$join_cond->isEmpty() ){
+            if ( $join_cond && !empty($join_cond) ){
                 $sql .= ' ON ' . $join_cond;
             }
         }

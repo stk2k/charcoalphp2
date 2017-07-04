@@ -46,10 +46,6 @@ class Charcoal_QueryTarget extends Charcoal_Object
      */
     public function __construct( $expression )
     {
-        Charcoal_ParamTrait::validateString( 1, $expression );
-
-        $expression = us($expression);
-
         parent::__construct();
 
         $tokens = $this->tokenize( $expression );
@@ -63,6 +59,8 @@ class Charcoal_QueryTarget extends Charcoal_Object
         foreach( $tokens as $token )
         {
             if ( strlen($token) === 0 )    continue;
+    
+            $token = strtolower($token);
 
             if ( $state === NULL ){
                 $element_list[] = new Charcoal_QueryTargetElement( i(Charcoal_EnumQueryTargetType::TARGET_MODEL), s($token) );
@@ -114,15 +112,16 @@ class Charcoal_QueryTarget extends Charcoal_Object
         $join_stack = new Charcoal_Stack();
         foreach( $element_list as $element )
         {
+            /** @var Charcoal_QueryTargetElement $element */
             if ( $state === "main model" ){
 
                 switch( $element->getType() )
                 {
                 case Charcoal_EnumQueryTargetType::TARGET_MODEL:
-                    $main_model = $element->getString();
+                    $main_model = $element->getExpression();
                     break;
                 case Charcoal_EnumQueryTargetType::TARGET_AS_NAME:
-                    $alias = $element->getString();
+                    $alias = $element->getExpression();
                     break;
                 case Charcoal_EnumQueryTargetType::TARGET_INNER_JOIN:
                     $join_stack->push( new Charcoal_QueryJoin(i(Charcoal_EnumSQLJoinType::INNER_JOIN)) );
@@ -144,14 +143,15 @@ class Charcoal_QueryTarget extends Charcoal_Object
                 switch( $element->getType() )
                 {
                 case Charcoal_EnumQueryTargetType::TARGET_MODEL:
-                    $join->setModelName( s($element->getString()) );
+                    $join->setModelName( s($element->getExpression()) );
                     break;
                 case Charcoal_EnumQueryTargetType::TARGET_AS_NAME:
-                    $join->setAlias( s($element->getString()) );
+                    $join->setAlias( s($element->getExpression()) );
                     break;
                 case Charcoal_EnumQueryTargetType::TARGET_ON_CONDITION:
-                    $join_cond = $join->getCondition();
-                    $join->setCondition( s($join_cond . $element->getString()) );
+                    $prev_cond = $join->getCondition();
+                    $condition = $prev_cond ?  $prev_cond . ' ' . $element->getExpression() : $element->getExpression();
+                    $join->setCondition( $condition );
                     break;
                 case Charcoal_EnumQueryTargetType::TARGET_INNER_JOIN:
                     $join_stack->push( $join );
@@ -178,7 +178,6 @@ class Charcoal_QueryTarget extends Charcoal_Object
         $this->model_name  = $main_model;
         $this->alias       = $alias;
         $this->joins       = $joins;
-
 //        log_debug( "debug, smart_gateway", "query_target_list: " . print_r($this,true) );
     }
 
@@ -284,6 +283,30 @@ class Charcoal_QueryTarget extends Charcoal_Object
 
         return $tokens;
     }
-
+    
+    /**
+     *  String expression of this object
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        $json = array();
+        
+        $joins = array();
+        foreach($this->joins as $j){
+            /** @var Charcoal_QueryJoin $j */
+            $joins['join_type'] = $j->getJoinType();
+            $joins['model_name'] = us($j->getModelName());
+            $joins['alias'] = us($j->getAlias());
+            $joins['condition'] = us($j->getCondition());
+        }
+    
+        $json['model_name'] = $this->model_name;
+        $json['alias'] = $this->alias;
+        $json['joins'] = $joins;
+        
+        return json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+    }
 }
 

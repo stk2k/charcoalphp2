@@ -58,6 +58,8 @@ class FormTokenTestTask extends Charcoal_TestTask
      */
     public function test( $action, $context )
     {
+        $session = $context->getSession();
+        
         $action = us($action);
 
         // form token component
@@ -72,27 +74,27 @@ class FormTokenTestTask extends Charcoal_TestTask
 
         switch( $action ){
         case "form_token1":
-            $token = $form_token->generate( $sequence );
+            $token = $form_token->generate( $session );
             echo "token: $token" . PHP_EOL;
             $this->assertNotNull( $token );
             $this->assertNotEmpty( $token );
             break;
         case "form_token2":
-            // save my ticket into sequence
-            $token_list   = $sequence->get( 'token_key' );
+            // save my ticket into session
+            $token_list   = $session->get( 'token_key' );
             $token_list[] = 'my-ticket';
-            $sequence->set( 'foo', $token_list );
+            $session->set( 'foo', $token_list );
             // validation token will success
-            $form_token->validate( $sequence, 'my-ticket' );
+            $form_token->validate( $session, 'my-ticket' );
             break;
         case "form_token3":
-            // save my ticket into sequence
-            $token_list   = $sequence->get( 'token_key' );
+            // save my ticket into session
+            $token_list   = $session->get( 'token_key' );
             $token_list[] = 'my-ticket';
-            $sequence->set( 'foo', $token_list );
+            $session->set( 'foo', $token_list );
             // validation token will fail
             $this->setExpectedException( 'Charcoal_FormTokenValidationException' );
-            $form_token->validate( $sequence, 'another-ticket' );
+            $form_token->validate( $session, 'another-ticket' );
             break;
         }
     }

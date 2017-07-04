@@ -215,23 +215,29 @@ class Charcoal_Vector extends Charcoal_Collection implements ArrayAccess
      */
     public function keys()
     {
-        return new Vector( array_keys( $this->values ) );
+        return array_keys( $this->values );
     }
 
-    /*
-     *    配列の先頭を取り出す
+    /**
+     *  get item from head
+     *
+     * @return mixed
      */
     public function shift()
     {
         return array_shift( $this->values );
     }
 
-    /*
-     *    配列の最後尾に追加する
+    /**
+     *  add item to tail
+     *
+     * @param mixed $item
+     *
+     * @return integer
      */
-    public function push()
+    public function push( $item )
     {
-        return array_shift( $this->values );
+        return array_push( $this->values, $item );
     }
 
     /*
